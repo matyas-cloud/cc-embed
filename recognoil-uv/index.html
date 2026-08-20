@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recognoil — UV lampa</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;background:transparent;}
+  body{overflow-x:hidden;}
+  /* uvnitř iframu nechceme vnější odsazení karty */
+  .cc-embed{margin:0!important;}
+</style>
+</head>
+<body>
+<style>
+.cc-embed{
+  /* --- barvy --- */
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  /* --- shape --- */
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  /* --- font --- */
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}      /* prvek do krajů (fotka, mapa) */
+.cc-embed--bare{background:none;border:0;padding:0;} /* bez rámečku */
+/* --- typo --- */
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{margin:12px 0 0;font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);
+  letter-spacing:.02em;text-transform:uppercase;}
+.cc-embed .cc-num{font-family:var(--cc-display);font-weight:700;
+  font-size:clamp(22px,4vw,32px);color:var(--cc-blue);font-variant-numeric:tabular-nums;}
+.cc-embed a{color:var(--cc-blue);}
+/* --- UI --- */
+.cc-embed .cc-btn{
+  display:inline-block;padding:10px 20px;
+  border:1px solid var(--cc-blue);border-radius:var(--cc-radius);
+  background:var(--cc-blue);color:#fff;text-decoration:none;
+  font:700 18px/26px var(--cc-display);cursor:pointer;
+  transition:background .18s,color .18s;}
+.cc-embed .cc-btn:hover{background:var(--cc-blue-dark);border-color:var(--cc-blue-dark);}
+.cc-embed .cc-btn--ghost{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-btn--ghost:hover{background:var(--cc-blue);color:#fff;}
+.cc-embed .cc-btn--sm{padding:7px 14px;font-size:15px;line-height:22px;}
+.cc-embed .cc-btn[aria-pressed="true"]{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-card{background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);padding:14px 16px;}
+.cc-embed .cc-badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  background:var(--cc-blue);color:#fff;font:700 12px/18px var(--cc-ui);}
+.cc-embed .cc-badge--red{background:var(--cc-red);}
+.cc-embed .cc-badge--soft{background:#eaf3fd;color:var(--cc-blue-dark);}
+.cc-embed input,.cc-embed select,.cc-embed textarea{
+  font:400 16px/24px var(--cc-ui);color:var(--cc-ink);
+  padding:9px 12px;background:#fff;border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);}
+.cc-embed input[type=range]{padding:0;border:0;background:none;accent-color:var(--cc-blue);width:100%;}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed table{width:100%;border-collapse:collapse;font:400 15px/1.4 var(--cc-ui);}
+.cc-embed th{text-align:left;font-weight:700;color:var(--cc-muted);
+  text-transform:uppercase;font-size:12px;letter-spacing:.05em;padding:8px 10px;}
+.cc-embed td{padding:10px;border-top:1px solid var(--cc-line);}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-grid{display:grid;gap:var(--cc-gap);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.cc-embed .cc-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--cc-gap);}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+<div class="cc-embed cc-uv">
+  <p class="cc-kicker">Technologie Recognoil</p>
+  <h3 class="cc-title">Tenhle díl je čistý. Ale jen pro lidské oko</h3>
+  <p class="cc-lede">Tento brzdový třmen právě prošel odmaštěním a míří do lakovny. Přejeďte přes něj zařízením Recognoil, zda je tomu skutečně tak.</p>
+  <div class="cc-uv__stage">
+    <img class="cc-uv__base" src="https://cc.cz/wp-content/uploads/2026/08/caliper-clean.jpg" alt="Brzdový třmen po odmaštění: holý kov bez viditelných nečistot." loading="lazy">
+    <img class="cc-uv__reveal" src="https://cc.cz/wp-content/uploads/2026/08/caliper-fluo.jpg" alt="" aria-hidden="true" loading="lazy">
+    <div class="cc-uv__ring" aria-hidden="true"></div>
+    <button type="button" class="cc-uv__hs" data-x="19.4" data-y="56.9" data-value="Střední znečištění"
+      data-short="Film konzervačního oleje po obrábění. Lak by se na něm časem odloupl."
+      data-text="Velká rovná plocha, na které zůstal souvislý film konzervačního oleje po obrábění. Oko ho nevidí, ale lak by se na něm časem začal odlupovat."
+      aria-label="Střední znečištění, přední plocha: souvislý film konzervačního oleje po obrábění. Oko ho nevidí, ale lak by se na něm časem začal odlupovat."></button>
+    <button type="button" class="cc-uv__hs" data-x="86.5" data-y="41.6" data-value="Těžké znečištění"
+      data-short="Olej stéká do závitů, odmašťovací lázeň se k němu nedostane."
+      data-text="Okolí závitových otvorů. Tady se olej drží nejčastěji. Stéká do závitů a odmašťovací lázeň se k němu dostává nejobtížněji."
+      aria-label="Těžké znečištění, okolí závitových otvorů: olej stéká do závitů a odmašťovací lázeň se k němu dostává nejobtížněji."></button>
+    <button type="button" class="cc-uv__hs" data-x="61.7" data-y="33.6" data-value="Lehké znečištění"
+      data-short="Vrstva je pod limitem. Tenhle díl může do lakovny."
+      data-text="Můstek mezi písty. Vrstva je pod limitem, takže s tímto by díl mohl bez obav do lakovny."
+      aria-label="Lehké znečištění, můstek mezi písty: vrstva je pod limitem, s tímto by díl mohl bez obav do lakovny."></button>
+    <div class="cc-uv__tip" aria-hidden="true">
+      <span class="cc-uv__tipval"></span>
+      <span class="cc-uv__tiptext"></span>
+    </div>
+  </div>
+  <div class="cc-row cc-uv__bar">
+    <div class="cc-uv__scale" role="img" aria-label="Škála: zelená čistý povrch, červená silná vrstva oleje.">
+      <span class="cc-uv__grad"></span>
+      <span class="cc-uv__slabels"><span class="cc-label">čistý povrch</span><span class="cc-label">silná vrstva</span></span>
+    </div>
+    <button type="button" class="cc-btn cc-uv__all" aria-pressed="false">Zobrazit celý sken</button>
+  </div>
+  <p class="cc-note">Demonstrace měření Recognoil. Uvedené hodnoty jsou orientační.</p>
+  <p class="cc-sr">Interaktivní prvek: fotografie odmaštěného brzdového třmenu, po které se pohybuje kruhová UV lampa a odhaluje mapu zbytků oleje. Tři body na fotce popisují nalezená místa.</p>
+</div>
+<style>
+.cc-uv{--uv-ratio:2/1;}
+.cc-uv__stage{position:relative;width:100%;aspect-ratio:var(--uv-ratio);
+  border-radius:var(--cc-radius-sm);overflow:hidden;background:#e9edf1;cursor:crosshair;
+  touch-action:pan-y;--uvx:50%;--uvy:50%;--uvr:110px;}
+.cc-uv__base,.cc-uv__reveal{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;display:block;user-select:none;-webkit-user-drag:none;}
+.cc-uv__reveal{-webkit-mask-image:radial-gradient(circle var(--uvr) at var(--uvx) var(--uvy),#000 58%,rgba(0,0,0,.55) 80%,transparent 100%);
+  mask-image:radial-gradient(circle var(--uvr) at var(--uvx) var(--uvy),#000 58%,rgba(0,0,0,.55) 80%,transparent 100%);
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;}
+@supports not ((-webkit-mask-image:radial-gradient(#000,#000)) or (mask-image:radial-gradient(#000,#000))){
+  .cc-uv__reveal{clip-path:circle(var(--uvr) at var(--uvx) var(--uvy));}}
+.cc-uv__stage.is-all .cc-uv__reveal{-webkit-mask-image:none;mask-image:none;clip-path:none;}
+.cc-uv__ring{position:absolute;top:0;left:0;width:calc(var(--uvr)*2);height:calc(var(--uvr)*2);
+  margin:calc(var(--uvr)*-1) 0 0 calc(var(--uvr)*-1);transform:translate(var(--uvx),var(--uvy));
+  border-radius:50%;border:2px solid rgba(255,255,255,.85);
+  box-shadow:0 0 0 1px rgba(8,126,235,.6),0 0 20px rgba(8,126,235,.35),inset 0 0 20px 2px rgba(8,126,235,.14);
+  pointer-events:none;transition:opacity .25s;}
+.cc-uv__stage.is-all .cc-uv__ring{opacity:0;}
+/* --- hotspot: čistá bílá tečka, na hover/aktivní zmodrá --- */
+.cc-uv__hs{position:absolute;z-index:2;width:18px;height:18px;padding:0;margin:-9px 0 0 -9px;
+  border:0;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.4);
+  cursor:pointer;transition:background .18s;}
+.cc-uv__hs::before{content:"";position:absolute;inset:-9px;border-radius:50%;}
+.cc-uv__hs:hover,.cc-uv__hs.is-on{background:var(--cc-blue);}
+@media (min-width:620px){.cc-uv__hs{width:20px;height:20px;margin:-10px 0 0 -10px;}}
+/* --- popisek vedle tečky (uvnitř fotky, layout se nehýbe) --- */
+.cc-uv__tip{position:absolute;z-index:3;left:0;top:0;width:230px;
+  padding:11px 13px;background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);box-shadow:0 8px 24px rgba(0,0,0,.18);
+  font:400 13.5px/1.45 var(--cc-ui);color:var(--cc-ink-soft);
+  opacity:0;visibility:hidden;transition:opacity .16s;pointer-events:none;}
+.cc-uv__tip.is-on{opacity:1;visibility:visible;}
+.cc-uv__tipval{display:block;margin-bottom:3px;
+  font:700 11px/1.3 var(--cc-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--cc-blue);}
+@media (max-width:619px){
+  .cc-uv__tip{left:7px!important;right:7px;width:auto;
+    padding:8px 10px;font-size:12.5px;line-height:1.38;box-shadow:0 4px 14px rgba(0,0,0,.22);}
+  .cc-uv__tip.at-bottom{top:auto!important;bottom:7px;}
+  .cc-uv__tip.at-top{top:7px!important;bottom:auto;}
+  .cc-uv__tipval{margin-bottom:2px;font-size:10.5px;}}
+/* --- legenda --- */
+.cc-uv__bar{margin-top:14px;}
+.cc-uv__scale{flex:1 1 190px;min-width:170px;}
+.cc-uv__grad{display:block;height:9px;border-radius:999px;
+  background:linear-gradient(90deg,var(--cc-ok),#8fd62b,#f7dc24,var(--cc-warn),var(--cc-red));}
+.cc-uv__slabels{display:flex;justify-content:space-between;margin-top:5px;}
+</style>
+<script>
+(function(){
+  var root = document.currentScript.previousElementSibling;
+  while (root && !(root.classList && root.classList.contains('cc-uv'))) root = root.previousElementSibling;
+  if (!root || root.dataset.ccInit) return;
+  root.dataset.ccInit = '1';
+
+  var stage = root.querySelector('.cc-uv__stage'),
+      tip   = root.querySelector('.cc-uv__tip'),
+      tipV  = root.querySelector('.cc-uv__tipval'),
+      tipT  = root.querySelector('.cc-uv__tiptext'),
+      allBtn= root.querySelector('.cc-uv__all'),
+      spots = [].slice.call(root.querySelectorAll('.cc-uv__hs'));
+  var LBL_ON = 'Zpět na UV lampu', LBL_OFF = allBtn.textContent, active = null;
+
+  function narrow(){ return window.matchMedia('(max-width:619px)').matches; }
+  function radius(){ return Math.max(50, Math.min(168, stage.clientWidth*0.17, stage.clientHeight*0.4)); }
+
+  function place(x, y){
+    var r = radius();
+    stage.style.setProperty('--uvr', r+'px');
+    stage.style.setProperty('--uvx', x.toFixed(1)+'px');
+    stage.style.setProperty('--uvy', y.toFixed(1)+'px');
+    check(x, y, r);
+  }
+
+  function check(x, y, r){
+    var w = stage.clientWidth, h = stage.clientHeight, hit = null;
+    spots.forEach(function(s){
+      var sx = parseFloat(s.dataset.x)/100*w, sy = parseFloat(s.dataset.y)/100*h,
+          d = Math.sqrt((sx-x)*(sx-x) + (sy-y)*(sy-y));
+      if (d < r*0.72 && (!hit || d < hit.d)) hit = {el:s, d:d};
+    });
+    show(hit ? hit.el : null);
+  }
+
+  function position(el){
+    if (narrow()){                      /* mobil: pruh nad/pod tečkou, ať ji nepřekryje */
+      tip.style.left = ''; tip.style.top = '';
+      var lower = parseFloat(el.dataset.y) > 50;
+      tip.classList.toggle('at-top', lower);
+      tip.classList.toggle('at-bottom', !lower);
+      return;
+    }
+    tip.classList.remove('at-top', 'at-bottom');
+    var w = stage.clientWidth, h = stage.clientHeight,
+        x = parseFloat(el.dataset.x)/100*w, y = parseFloat(el.dataset.y)/100*h,
+        tw = tip.offsetWidth, th = tip.offsetHeight,
+        gap = radius()*0.92,                       /* odsadit za okraj lampy */
+        left = (x > w*0.5) ? x - gap - tw : x + gap;
+    tip.style.left = Math.max(8, Math.min(w - tw - 8, left)) + 'px';
+    tip.style.top  = Math.max(8, Math.min(h - th - 8, y - th/2)) + 'px';
+  }
+
+  function fill(el){
+    tipV.textContent = el.dataset.value;
+    tipT.textContent = (narrow() && el.dataset.short) ? el.dataset.short : el.dataset.text;
+  }
+
+  function show(el){
+    if (el === active) return;
+    active = el;
+    spots.forEach(function(s){ s.classList.toggle('is-on', s === el); });
+    if (!el){ tip.classList.remove('is-on'); return; }
+    fill(el);
+    tip.classList.add('is-on');
+    position(el);
+  }
+
+  stage.addEventListener('pointermove', function(e){
+    var b = stage.getBoundingClientRect();
+    place(e.clientX - b.left, e.clientY - b.top);
+  });
+  stage.addEventListener('pointerdown', function(e){
+    var b = stage.getBoundingClientRect();
+    place(e.clientX - b.left, e.clientY - b.top);
+  });
+
+  spots.forEach(function(s){
+    s.style.left = s.dataset.x + '%';
+    s.style.top  = s.dataset.y + '%';
+    function go(ev){
+      if (ev) ev.preventDefault();
+      place(parseFloat(s.dataset.x)/100*stage.clientWidth,
+            parseFloat(s.dataset.y)/100*stage.clientHeight);
+    }
+    s.addEventListener('click', go);
+    s.addEventListener('focus', function(){ go(); });
+  });
+
+  allBtn.addEventListener('click', function(){
+    var on = allBtn.getAttribute('aria-pressed') === 'true';
+    allBtn.setAttribute('aria-pressed', on ? 'false' : 'true');
+    allBtn.textContent = on ? LBL_OFF : LBL_ON;
+    stage.classList.toggle('is-all', !on);
+  });
+
+  window.addEventListener('resize', function(){
+    stage.style.setProperty('--uvr', radius()+'px');
+    if (active){ fill(active); position(active); }
+  });
+
+  place(stage.clientWidth*0.5, stage.clientHeight*0.5);
+})();
+</script>
+
+<script>
+/* hlásí rodičovské stránce svoji výšku, aby iframe nemusel mít pevnou výšku */
+(function(){
+  var last = 0;
+  function send(){
+    var h = Math.ceil(document.documentElement.getBoundingClientRect().height);
+    if (h && Math.abs(h - last) > 1){
+      last = h;
+      parent.postMessage({ ccEmbed: 'height', id: 'recognoil-uv', height: h }, '*');
+    }
+  }
+  window.addEventListener('load', send);
+  window.addEventListener('resize', send);
+  if (window.ResizeObserver) new ResizeObserver(send).observe(document.body);
+  document.fonts && document.fonts.ready.then(send);
+  setTimeout(send, 300); setTimeout(send, 1200);
+})();
+</script>
+</body>
+</html>
