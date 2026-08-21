@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Z drobných jsou statisíce — kalkulačka</title>
+<title>Latté za půl milionu — kalkulačka</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   html,body{margin:0;padding:0;background:transparent;}
   body{overflow-x:hidden;}
@@ -97,168 +97,236 @@
 </style>
 
 <div class="cc-embed cc-kafe" data-cc-kafe>
+ <div class="cc-kafe__inner">
 
   <!-- ===== OBRAZOVKA 1 ===== -->
-  <section class="cc-kafe__screen" data-screen="1">
-    <p class="cc-kicker">Kalkulačka</p>
-    <h3>Z drobných jsou statisíce</h3>
+  <section data-screen="1">
+    <h3>Latté za půl milionu</h3>
 
-    <div class="cc-kafe__ctrl">
-      <label class="cc-kafe__q" for="kafe-slider">Kolik káv si týdně koupíte?</label>
-
-      <div class="cc-kafe__cups" data-cups aria-hidden="true"></div>
-
-      <input id="kafe-slider" type="range" min="0" max="10" step="1" value="5"
-             data-slider aria-label="Počet káv koupených týdně">
-      <div class="cc-kafe__scale" aria-hidden="true"><span>0</span><span data-cupcount>5 káv týdně</span><span>10</span></div>
-
-      <p class="cc-note cc-kafe__assume">Počítáme <strong>85 Kč</strong> za kávu s sebou. Doma by vás stála 12 Kč.</p>
+    <div class="cc-kafe__ask">
+      <label for="kafe-slider">Kolikrát týdně si koupíte kávu v kavárně?</label>
+      <output for="kafe-slider" data-count>6</output>
     </div>
 
-    <div class="cc-kafe__total">
-      <span class="cc-label">Za rok utratíte</span>
-      <span class="cc-num cc-kafe__big" data-year>22 100 Kč</span>
+    <input id="kafe-slider" type="range" min="0" max="10" step="1" value="6"
+           data-slider aria-label="Kolikrát týdně si koupíte kávu v kavárně">
+    <div class="cc-kafe__scale" aria-hidden="true"><span>0</span><span>10</span></div>
+
+    <div class="cc-kafe__readout">
+      <span class="cc-kafe__lbl">Ročně je to</span>
+      <span class="cc-kafe__big" data-year>26 520 Kč</span>
     </div>
 
-    <p class="cc-lede cc-kafe__verdict" data-verdict></p>
+    <p class="cc-kafe__say" data-verdict></p>
 
-    <button type="button" class="cc-btn cc-kafe__cta" data-go>
-      Kolik by z toho bylo, kdybyste to investovali?
-    </button>
+    <button type="button" class="cc-kafe__pill" data-go>Kolik bych mohl/a mít?</button>
 
+    <p class="cc-kafe__foot"><svg class="cc-kafe__i" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 7.2v4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.7" r=".95" fill="currentColor"/></svg>Počítáme s cenou kávy v kavárně 85 Kč. Doma by vás stála jen 5–15 Kč.</p>
     <p class="cc-sr" data-sr aria-live="polite"></p>
   </section>
 
   <!-- ===== OBRAZOVKA 2 ===== -->
-  <section class="cc-kafe__screen" data-screen="2" hidden>
-    <p class="cc-kicker">Stejné peníze, jiný směr</p>
-    <h3 data-head2>Kdybyste ty peníze odkládali</h3>
-    <p class="cc-note cc-kafe__ctx" data-ctx></p>
+  <section data-screen="2" hidden>
+    <button type="button" class="cc-kafe__zpet" data-back><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.2 5.2 8l4.8 4.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Zpět na kalkulačku</button>
+
+    <h3 data-head2>Kdybyste ty peníze raději investoval/a</h3>
 
     <div class="cc-kafe__years" role="group" aria-label="Časový horizont">
-      <button type="button" class="cc-btn cc-btn--sm" data-years="5" aria-pressed="false">Posledních 5 let</button>
-      <button type="button" class="cc-btn cc-btn--sm" data-years="10" aria-pressed="true">Posledních 10 let</button>
+      <button type="button" data-years="5" aria-pressed="false">5 let</button>
+      <button type="button" data-years="10" aria-pressed="true">10 let</button>
     </div>
 
+    <figure class="cc-kafe__chart">
+      <svg data-svg role="img" tabindex="0" aria-describedby="kafe-graf-popis"></svg>
+      <p id="kafe-graf-popis" class="cc-sr" data-chart-desc></p>
+      <div class="cc-kafe__tip" data-tip hidden aria-hidden="true"></div>
+    </figure>
+
+    <!-- trojice hodnot slouží zároveň jako legenda grafu (barevný klíč u názvu) -->
     <div class="cc-kafe__res">
-      <div class="cc-card cc-kafe__res-item">
-        <span class="cc-label">Utratili jste za kávu</span>
-        <span class="cc-num" data-r-spent>—</span>
-        <span class="cc-kafe__bar"><i data-b-spent></i></span>
+      <div class="cc-kafe__item" data-series="v">
+        <span class="cc-kafe__lbl"><i class="cc-kafe__key"></i>Káva stála</span>
+        <span class="cc-kafe__val" data-r-spent>—</span>
+        <span class="cc-kafe__plus">&nbsp;</span>
       </div>
-      <div class="cc-card cc-kafe__res-item">
-        <span class="cc-label">Na spořicím účtu Air Bank</span>
-        <span class="cc-num" data-r-save>—</span>
-        <span class="cc-kafe__bar"><i data-b-save></i></span>
+      <div class="cc-kafe__item" data-series="s">
+        <span class="cc-kafe__lbl"><i class="cc-kafe__key"></i>Spořicí účet</span>
+        <span class="cc-kafe__val" data-r-save>—</span>
+        <span class="cc-kafe__plus" data-p-save></span>
       </div>
-      <div class="cc-card cc-kafe__res-item cc-kafe__res-item--win">
-        <span class="cc-label">V akciích (index S&amp;P 500)</span>
-        <span class="cc-num" data-r-sp>—</span>
-        <span class="cc-kafe__bar"><i data-b-sp></i></span>
+      <div class="cc-kafe__item cc-kafe__item--win" data-series="p">
+        <span class="cc-kafe__lbl"><i class="cc-kafe__key"></i>Index S&amp;P 500</span>
+        <span class="cc-kafe__val" data-r-sp>—</span>
+        <span class="cc-kafe__plus" data-p-sp></span>
       </div>
     </div>
 
-    <p class="cc-lede cc-kafe__verdict2" data-verdict2></p>
+    <p class="cc-kafe__say" data-verdict2></p>
 
     <details class="cc-kafe__meth">
-      <summary>Jak to počítáme</summary>
-      <div class="cc-kafe__meth-body">
-        <p>Počítáme 85 Kč za kávu, 52 týdnů v roce, částku odkládanou každý měsíc po dobu <span data-m-years>deseti</span> let (<span data-m-range>2016–2025</span>).</p>
-        <p><strong>Spořicí účet:</strong> skutečné bonusové sazby Air Bank podle data účinnosti — od 0,60 % v roce 2020 přes 5 % v letech 2022 a 2023 až po 2,6 % dnes. Úrok se počítá denně, připisuje měsíčně a odečítá se z něj 15% srážková daň. Respektujeme i limity úročených pásem: od září 2025 se zůstatek nad 300 000 Kč neúročí. Sazby za roky 2016 až 2019 jsou odhadnuté podle vývoje repo sazby ČNB — na výsledku se to projeví v řádu promile.</p>
-        <p><strong>Akcie:</strong> index S&amp;P 500 včetně reinvestovaných dividend. Koruny se každý rok mění na dolary průměrným ročním kurzem, výsledek se přepočítává zpět kurzem 20,50 Kč za dolar. Proto je výnos nižší, než jaký by vyšel v dolarech — koruna za tu dobu posílila. Nepočítáme poplatky ani daň z prodeje akcií (po třech letech držení je výnos od daně osvobozený).</p>
-        <p class="cc-kafe__disclaimer"><strong>Minulé výnosy nezaručují ty budoucí.</strong> Roky 2016 až 2025 byly pro akcie mimořádně silné a stejně dobře dopadnout nemusí. Nejde o investiční doporučení, jen o počty.</p>
+      <summary><svg class="cc-kafe__i" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 7.2v4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.7" r=".95" fill="currentColor"/></svg>Výpočet</summary>
+      <div>
+        <p>Počítáme s částkou, kterou byste za 52 týdnů dali za kávu při průměrné ceně 85 Kč. K tomu přidáváme scénář, kdy byste stejnou částku odkládali každý měsíc po dobu 5–10 let (2016–2025).</p>
+        <p><strong>Spořicí účet:</strong> Vycházíme ze skutečné bonusové sazby Air Bank – od 0,60 % v roce 2020 přes 5 % v letech 2022 a 2023 až po 2,6 % dnes. Úrok se počítá denně, připisuje měsíčně a odečítá se z něj 15% srážková daň. Respektujeme i limity úročení, kdy se od září 2025 zůstatek nad 300 000 Kč neúročí. Sazby za roky 2016 až 2019 jsou odhadnuté podle vývoje repo sazby ČNB, což se na výsledku projeví v řádu promile.</p>
+        <p><strong>Akcie:</strong> V úvahu bereme index S&amp;P 500 včetně reinvestovaných dividend. Koruny se každý rok mění na dolary průměrným ročním kurzem, výsledek se přepočítává zpět kurzem 20,50 Kč za dolar (červenec 2026). Proto je výnos o něco nižší, než jaký by vyšel v dolarech – koruna za tu dobu posílila. Nepočítáme poplatky ani daň z prodeje akcií. V grafu je roční výnos rozložený rovnoměrně do dvanácti měsíců, během roku by kolísal výrazněji.</p>
+        <p><strong>Minulé výnosy nezaručují ty budoucí.</strong> Roky 2016 až 2025 byly pro akcie mimořádně silné a stejně dobře dopadnout nemusí. Nejde o investiční doporučení.</p>
       </div>
     </details>
 
-    <button type="button" class="cc-btn cc-btn--ghost cc-btn--sm cc-kafe__back" data-back>← Zpět na kalkulačku</button>
   </section>
 
+ </div>
 </div>
 
 <style>
-/* ---- Kávová kalkulačka: tmavá varianta CC embedu s limetkou Air Bank ----
-   Všechny barvy jdou přes proměnné, takže se dají přebarvit na jednom místě. */
+/* ---- Kávová kalkulačka ----------------------------------------------------
+   Vychází z bloků na cc.cz: plocha #e9e9e9, radius 15px, velký vnitřní
+   padding, žádné rámečky ani stíny, obsah v úzkém sloupci.
+   Limetka Air Bank funguje jako plocha (slider, pruh), ne jako barva textu —
+   na světlém podkladu by nebyla čitelná. Pro text slouží tmavší odstín. */
 .cc-kafe{
   --ab-green:#b4d335;          /* SWAP-POINT: limetka Air Bank — ověřit v brand manuálu */
-  --ab-green-dark:#9dbb28;
-  --cc-blue:var(--ab-green);   /* akcent embedu = limetka */
-  --cc-blue-dark:var(--ab-green-dark);
-  --cc-surface:#14181d;        /* ztmavené pozadí karty */
-  --cc-white:#1c222a;          /* vnitřní karty */
-  --cc-line:#2b333c;
-  --cc-ink:#f2f4f5;
-  --cc-ink-soft:#c9cfd4;
-  --cc-muted:#8b959d;
-  border-color:#2b333c;
+  --ab-green-ink:#5f7d0a;      /* tmavší varianta pro text a čísla */
+  --k-plocha:#e9e9e9;
+  --k-line:#d4d4d4;
+  --k-muted:#6b7076;
+  background:var(--k-plocha);
+  border:0;
+  border-radius:15px;
+  padding:clamp(26px,5vw,60px) clamp(20px,4vw,60px);
 }
-.cc-kafe h3,.cc-kafe h4{color:#fff;}
-.cc-kafe .cc-kicker{color:var(--ab-green);}      /* červený kicker by na tmavém nešel */
-.cc-kafe .cc-btn{color:#14181d;}                 /* tmavý text na světlé limetce */
-.cc-kafe .cc-btn--ghost{background:transparent;color:var(--ab-green);}
-.cc-kafe .cc-btn--ghost:hover{background:var(--ab-green);color:#14181d;}
-.cc-kafe .cc-btn[aria-pressed="true"]{background:var(--ab-green);color:#14181d;}
-.cc-kafe .cc-btn[aria-pressed="false"]{background:transparent;color:var(--cc-ink-soft);border-color:var(--cc-line);}
-.cc-kafe .cc-btn[aria-pressed="false"]:hover{border-color:var(--ab-green);color:var(--ab-green);}
+.cc-kafe__inner{max-width:620px;margin:0 auto;}
 
-/* ovládání */
-.cc-kafe__ctrl{margin:18px 0 0;padding:18px;background:var(--cc-white);
-  border:1px solid var(--cc-line);border-radius:var(--cc-radius-sm);}
-.cc-kafe__q{display:block;margin:0 0 14px;font:700 clamp(17px,2.6vw,20px)/1.35 var(--cc-display);color:#fff;}
-/* grid místo flexu: šálky se vejdou na jeden řádek i na 320px */
-.cc-kafe__cups{display:grid;gap:5px;margin:0 0 14px;justify-items:start;}
-.cc-kafe__cups svg{width:100%;max-width:26px;height:auto;
-  color:#39424c;transition:color .15s;}
-.cc-kafe__cups svg.is-on{color:var(--ab-green);}
-.cc-kafe input[type=range]{accent-color:var(--ab-green);height:28px;cursor:pointer;touch-action:pan-y;}
-.cc-kafe__scale{display:flex;justify-content:space-between;align-items:baseline;
-  margin-top:2px;font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);}
-.cc-kafe__scale [data-cupcount]{color:var(--ab-green);font-weight:700;}
-.cc-kafe__assume{margin-top:14px;}
-.cc-kafe__assume strong{color:var(--cc-ink-soft);}
+/* pruh s návratem nad druhou obrazovkou */
+.cc-kafe__zpet{
+  display:inline-flex;align-items:center;gap:7px;
+  margin:0 0 clamp(16px,2.6vw,22px);padding:0;
+  border:0;background:none;cursor:pointer;
+  font:500 13px/1.4 var(--cc-ui);color:var(--k-muted);transition:color .16s;}
+.cc-kafe__zpet:hover{color:var(--cc-ink);}
+.cc-kafe__zpet svg{width:13px;height:13px;flex:0 0 auto;}
+/* ikonka „i" u poznámek */
+.cc-kafe__i{width:14px;height:14px;flex:0 0 auto;margin-top:1px;}
+.cc-kafe h3{font-size:clamp(23px,4.2vw,32px);line-height:1.19;margin:0 0 clamp(22px,4vw,34px);
+  letter-spacing:-.01em;}
 
-/* velké číslo */
-.cc-kafe__total{margin:20px 0 0;text-align:center;}
-.cc-kafe__total .cc-label{display:block;margin-bottom:2px;}
-.cc-kafe__big{display:block;font-size:clamp(38px,9vw,64px);line-height:1.05;
+/* --- otázka a slider --- */
+.cc-kafe__ask{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  margin:0 0 14px;}
+.cc-kafe__ask label{font:400 clamp(17px,2.4vw,19px)/1.4 var(--cc-serif);color:var(--cc-ink);}
+.cc-kafe__ask output{font:700 clamp(26px,5vw,34px)/1 var(--cc-display);color:var(--cc-ink);
   font-variant-numeric:tabular-nums;}
-/* pevná rezerva, ať se článek nehýbe při posunu slideru */
-.cc-kafe__verdict{margin:10px 0 20px;text-align:center;min-height:5.2em;}
-.cc-kafe__ctx{margin:0 0 4px;}
 
-.cc-kafe__cta{width:100%;text-align:center;font-size:clamp(15px,2.4vw,18px);
-  padding:14px 18px;line-height:1.3;}
+.cc-kafe input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:26px;
+  background:none;cursor:pointer;touch-action:pan-y;display:block;}
+.cc-kafe input[type=range]::-webkit-slider-runnable-track{
+  height:4px;border-radius:2px;
+  background:linear-gradient(to right,var(--ab-green) 0 var(--p,50%),#c6c6c6 var(--p,50%) 100%);}
+.cc-kafe input[type=range]::-moz-range-track{height:4px;border-radius:2px;background:#c6c6c6;}
+.cc-kafe input[type=range]::-moz-range-progress{height:4px;border-radius:2px;background:var(--ab-green);}
+.cc-kafe input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:24px;height:24px;margin-top:-10px;
+  border-radius:50%;background:var(--ab-green);border:3px solid var(--k-plocha);
+  box-shadow:0 0 0 1px rgba(0,0,0,.13);transition:transform .12s;}
+.cc-kafe input[type=range]::-moz-range-thumb{
+  width:18px;height:18px;border-radius:50%;background:var(--ab-green);
+  border:3px solid var(--k-plocha);box-shadow:0 0 0 1px rgba(0,0,0,.13);}
+.cc-kafe input[type=range]:active::-webkit-slider-thumb{transform:scale(1.1);}
+.cc-kafe__scale{display:flex;justify-content:space-between;
+  font:500 12px/1 var(--cc-ui);color:var(--k-muted);margin-top:2px;}
 
-/* obrazovka 2 */
-.cc-kafe__years{display:flex;gap:8px;margin:16px 0 18px;}
-.cc-kafe__years .cc-btn{flex:1 1 auto;text-align:center;}
-.cc-kafe__res{display:grid;gap:10px;}
-.cc-kafe__res-item{display:flex;flex-direction:column;gap:4px;}
-.cc-kafe__res-item .cc-num{font-size:clamp(24px,5.4vw,34px);color:var(--cc-ink);}
-.cc-kafe__res-item--win{border-color:var(--ab-green);}
-.cc-kafe__res-item--win .cc-num{color:var(--ab-green);}
-.cc-kafe__bar{display:block;height:6px;margin-top:6px;border-radius:999px;background:#2b333c;overflow:hidden;}
-.cc-kafe__bar i{display:block;height:100%;width:0;border-radius:999px;
-  background:#5a6672;transition:width .35s ease;}
-.cc-kafe__res-item--win .cc-kafe__bar i{background:var(--ab-green);}
-.cc-kafe__verdict2{margin:18px 0 0;}
-.cc-kafe__verdict2 strong{color:var(--ab-green);}
+/* --- hlavní číslo --- */
+.cc-kafe__readout{margin:clamp(30px,5vw,44px) 0 0;padding-top:clamp(24px,4vw,32px);
+  border-top:1px solid var(--k-line);}
+.cc-kafe__lbl{display:block;font:500 12px/1.3 var(--cc-ui);color:var(--k-muted);
+  letter-spacing:.06em;text-transform:uppercase;}
+.cc-kafe__big{display:block;margin-top:6px;font:700 clamp(38px,8.6vw,60px)/1.05 var(--cc-display);
+  color:var(--cc-ink);letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
 
-/* metodika */
-.cc-kafe__meth{margin:18px 0 0;border-top:1px solid var(--cc-line);padding-top:12px;}
-.cc-kafe__meth summary{cursor:pointer;font:700 14px/1.4 var(--cc-ui);color:var(--cc-ink-soft);
-  list-style:none;display:flex;align-items:center;gap:7px;}
+.cc-kafe .cc-kafe__say{margin:clamp(16px,2.6vw,20px) 0 0;font:400 clamp(16px,2.2vw,18px)/1.65 var(--cc-serif);
+  color:var(--cc-ink);min-height:4.95em;}
+.cc-kafe__say strong{font-weight:700;}
+
+/* --- tlačítka ve stylu CC: černý pill, Inter 12px --- */
+.cc-kafe__pill{
+  display:inline-block;margin:clamp(20px,3.4vw,26px) 0 0;padding:12px 26px;
+  border:0;border-radius:32px;background:#000;color:#fff;cursor:pointer;
+  font:500 13px/1.4 var(--cc-ui);letter-spacing:.01em;text-align:left;
+  transition:opacity .18s;}
+.cc-kafe__pill:hover{opacity:.82;}
+
+.cc-kafe .cc-kafe__foot{display:flex;gap:8px;align-items:flex-start;
+  margin:clamp(32px,5vw,42px) 0 0;font:400 13px/1.55 var(--cc-ui);color:var(--k-muted);}
+
+/* --- obrazovka 2 --- */
+.cc-kafe .cc-kafe__ctx{margin:-18px 0 clamp(20px,3.4vw,28px);font:400 15px/1.5 var(--cc-ui);color:var(--k-muted);}
+.cc-kafe__years{display:flex;gap:8px;justify-content:center;margin:0 0 clamp(26px,4vw,34px);}
+.cc-kafe__years button{
+  padding:9px 20px;border:0;border-radius:32px;cursor:pointer;
+  font:500 13px/1.4 var(--cc-ui);background:transparent;color:var(--k-muted);
+  box-shadow:inset 0 0 0 1px var(--k-line);transition:background .16s,color .16s,box-shadow .16s;}
+.cc-kafe__years button:hover{color:var(--cc-ink);box-shadow:inset 0 0 0 1px #b5b5b5;}
+.cc-kafe__years button[aria-pressed="true"]{background:#000;color:#fff;box-shadow:none;}
+
+/* --- graf ---------------------------------------------------------------
+   Emphasis paleta: akcie nesou barvu, zbytek je kontext v šedé. Rozlišení
+   nestojí jen na barvě — „utratili" má navíc čárkovanou linku. Kontrast
+   všech tří vůči ploše je nad 3:1. */
+.cc-kafe__chart{position:relative;margin:0 0 clamp(18px,3vw,24px);}
+.cc-kafe__chart svg{display:block;width:100%;height:auto;overflow:visible;}
+.cc-kafe__chart svg:focus-visible{outline:2px solid #000;outline-offset:4px;}
+.cc-kafe__gridline{stroke:#d4d4d4;stroke-width:1;}
+.cc-kafe__axtext{fill:var(--k-muted);font:500 11px/1 var(--cc-ui);}
+.cc-kafe__line{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;}
+.cc-kafe__line--v{stroke:#7c838a;stroke-dasharray:5 4;}
+.cc-kafe__line--s{stroke:#4a5058;}
+.cc-kafe__line--p{stroke:var(--ab-green-ink);stroke-width:2.5;}
+.cc-kafe__dot{stroke:var(--k-plocha);stroke-width:2;}
+.cc-kafe__cross{stroke:#9aa0a6;stroke-width:1;}
+
+.cc-kafe__tip{position:absolute;top:0;left:0;z-index:2;pointer-events:none;
+  background:#fff;border-radius:8px;padding:9px 12px;min-width:150px;
+  box-shadow:0 2px 10px rgba(0,0,0,.14);
+  font:400 12px/1.5 var(--cc-ui);color:var(--cc-ink);}
+.cc-kafe__tip b{display:block;margin-bottom:5px;font:500 11px/1.2 var(--cc-ui);
+  color:var(--k-muted);letter-spacing:.04em;text-transform:uppercase;}
+.cc-kafe__tip div{display:flex;align-items:center;gap:7px;white-space:nowrap;}
+.cc-kafe__tip span{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums;}
+.cc-kafe__tip i{display:block;width:12px;height:2px;flex:0 0 auto;}
+
+.cc-kafe__res{display:grid;gap:clamp(14px,2.4vw,20px);}
+.cc-kafe__item{display:block;}
+.cc-kafe__key{display:inline-block;width:14px;height:2px;margin-right:7px;
+  vertical-align:middle;background:#7c838a;}
+[data-series="s"] .cc-kafe__key{background:#4a5058;}
+[data-series="p"] .cc-kafe__key{background:var(--ab-green-ink);height:3px;}
+.cc-kafe__val{display:block;margin-top:4px;
+  font:700 clamp(22px,4.6vw,29px)/1.1 var(--cc-display);color:var(--cc-ink);
+  letter-spacing:-.015em;font-variant-numeric:tabular-nums;}
+.cc-kafe__item--win .cc-kafe__val{color:var(--ab-green-ink);}
+.cc-kafe__plus{display:block;margin-top:3px;
+  font:500 13px/1.3 var(--cc-ui);color:var(--k-muted);font-variant-numeric:tabular-nums;}
+.cc-kafe__item--win .cc-kafe__plus{color:var(--ab-green-ink);}
+
+/* --- metodika --- */
+.cc-kafe__meth{margin:clamp(20px,3vw,26px) 0 0;border-top:1px solid var(--k-line);padding-top:16px;}
+.cc-kafe__meth summary{cursor:pointer;list-style:none;
+  font:500 13px/1.4 var(--cc-ui);color:var(--k-muted);
+  display:inline-flex;align-items:center;gap:8px;}
 .cc-kafe__meth summary::-webkit-details-marker{display:none;}
-.cc-kafe__meth summary::before{content:"+";font-size:17px;line-height:1;color:var(--ab-green);}
-.cc-kafe__meth[open] summary::before{content:"–";}
-.cc-kafe__meth-body{margin-top:10px;}
-.cc-kafe__meth-body p{font:400 13px/1.6 var(--cc-ui);color:var(--cc-muted);margin:0 0 9px;}
-.cc-kafe__meth-body strong{color:var(--cc-ink-soft);}
-.cc-kafe__disclaimer{border-left:2px solid var(--ab-green);padding-left:10px;}
-.cc-kafe__back{margin:16px 0 0;}
+.cc-kafe__meth summary:hover{color:var(--cc-ink);}
+.cc-kafe__meth>div{margin-top:14px;}
+.cc-kafe__meth p{font:400 13px/1.7 var(--cc-ui);color:var(--k-muted);margin:0 0 11px;}
+.cc-kafe__meth strong{color:#4a5057;font-weight:700;}
 
-@media (min-width:560px){
-  .cc-kafe__res{grid-template-columns:repeat(3,1fr);}
-  .cc-kafe__verdict{min-height:3.4em;}
+.cc-kafe :focus-visible{outline:2px solid #000;outline-offset:3px;}
+
+[data-screen="2"] .cc-kafe__say{margin-top:clamp(22px,3.4vw,28px);min-height:0;}
+
+@media (min-width:620px){
+  .cc-kafe__res{grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.6vw,24px);}
+  .cc-kafe__say{min-height:3.3em;}
 }
 </style>
 
@@ -267,10 +335,9 @@
   /* ================= KONFIGURACE — vše, co se dá měnit, je tady ================= */
   var CFG = {
     cenaKavy:      85,      // Kč za kávu s sebou
-    cenaDoma:      12,      // jen do textu, do výpočtu nevstupuje
     tydnuVRoce:    52,
     maxKav:        10,
-    startKav:      5,
+    startKav:      6,
     kurzDnes:      20.50,   // Kč za dolar při přepočtu výsledku zpět
     danZUroku:     0.15,    // srážková daň ze spořicího účtu
 
@@ -315,19 +382,14 @@
     ],
 
     txt: {
-      verdict: function(c){
-        return 'Za rok takhle mimochodem utratíte <strong>' + c +
-               '</strong>. A ani u jedné z těch plateb jste neměli pocit, že utrácíte.';
-      },
-      verdictNula: 'Nula. Pak je tenhle výpočet pro někoho jiného — zkuste posunout slider.',
+      verdict: 'A ani u jedné z těch plateb jste neměli pocit, že utrácíte. Co kdybyste stejné peníze ale investovali?',
+      verdictNula: 'Nula. Pak je tahle kalkulačka pro někoho jiného — zkuste posunout slider.',
       verdict2: function(sp, roky){
-        return 'Kávu jste vypili. Kdyby stejné peníze posledních ' + roky +
-               ' let ležely v akciích, měli byste dnes <strong>' + sp + '</strong>.';
+        return 'Snad jste si tu kávu užili. Za posledních ' + roky +
+               ' let byste jinak mohli být o <strong>' + sp + '</strong> bohatší.';
       },
-      head2: function(roky){ return 'Kdybyste ty peníze odkládali posledních ' + roky + ' let'; },
-      ctx: function(n, kavy, rocne){
-        return 'Při ' + n + ' ' + kavy + ' týdně, tedy ' + rocne + ' ročně.';
-      }
+      head2: function(rocne){ return 'Kdybyste ' + rocne + ' za kávu raději investoval/a'; },
+      head2Nula: 'Kdybyste ty peníze raději investoval/a'
     }
   };
   /* ============================ konec konfigurace ============================ */
@@ -341,14 +403,13 @@
 
   /* ---------- pomocné ---------- */
   function kc(n){
-    return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' Kč';
+    return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' Kč';
   }
   function plural(n, one, few, many){
     if (n === 1) return one;
     if (n >= 2 && n <= 4) return few;
     return many;
   }
-  function dnu(a, b){ return Math.round((b - a) / 86400000); }
 
   /* ---------- model: spořicí účet ---------- */
   var sazbyParsed = CFG.sazby.map(function(s){
@@ -377,33 +438,36 @@
     return urok;
   }
 
-  function sporak(rocne, odRoku, doRoku){
+  /* ---------- model ----------
+     Jeden průchod dnem po dni. Na 1. každého měsíce přibude příspěvek,
+     na konci měsíce se připíše úrok (po dani) a zhodnotí se akciová část.
+     Roční výnos indexu je rozložený rovnoměrně do dvanácti měsíců — uvnitř
+     roku byl skutečný průběh divočejší, měsíční data ale k dispozici nejsou.
+     Vrací měsíční řady, aby graf i koncová čísla vycházely ze stejného výpočtu. */
+  function rada(rocne, odRoku, doRoku){
     var mesicne = rocne / 12,
-        zustatek = 0, urokMesice = 0,
+        zustatek = 0, urokMesice = 0, usd = 0, vlozeno = 0,
+        v = [], s = [], p = [], osaRoky = [],
         d = new Date(odRoku, 0, 1),
         konec = new Date(doRoku, 11, 31);
     while (d <= konec){
-      if (d.getDate() === 1) zustatek += mesicne;
+      if (d.getDate() === 1){
+        zustatek += mesicne;
+        vlozeno  += mesicne;
+        usd      += mesicne / CFG.kurzy[d.getFullYear()];   // nákup v dolarech kurzem roku
+      }
       urokMesice += dennitUrok(zustatek, pasmaKDatu(d));
+      var rok = d.getFullYear(), mesic = d.getMonth();
       d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
-      if (d.getDate() === 1){                       // konec měsíce → připsat po dani
+      if (d.getDate() === 1){                                // konec měsíce
         zustatek += urokMesice * (1 - CFG.danZUroku);
         urokMesice = 0;
+        usd *= Math.pow(1 + CFG.sp500[rok] / 100, 1 / 12);
+        v.push(vlozeno); s.push(zustatek); p.push(usd * CFG.kurzDnes);
+        osaRoky.push(rok + (mesic + 1) / 12);
       }
     }
-    return zustatek;
-  }
-
-  /* ---------- model: S&P 500 ----------
-     Příspěvky během roku jsou rozložené rovnoměrně, proto (1+r)^0,5.
-     Nákup probíhá v dolarech kurzem daného roku, výsledek se převádí zpět. */
-  function sp500(rocne, odRoku, doRoku){
-    var usd = 0;
-    for (var y = odRoku; y <= doRoku; y++){
-      var r = CFG.sp500[y] / 100;
-      usd = usd * (1 + r) + (rocne / CFG.kurzy[y]) * Math.pow(1 + r, 0.5);
-    }
-    return usd * CFG.kurzDnes;
+    return { v:v, s:s, p:p, roky:osaRoky, od:odRoku, do:doRoku };
   }
 
   /* ---------- předpočet (model není lineární kvůli pásmům) ---------- */
@@ -411,26 +475,178 @@
   Object.keys(CFG.okna).forEach(function(k){
     var o = CFG.okna[k]; TAB[k] = [];
     for (var n = 0; n <= CFG.maxKav; n++){
-      var rocne = n * CFG.cenaKavy * CFG.tydnuVRoce;
-      TAB[k].push({
-        rocne:  rocne,
-        vlozeno: rocne * (o[1] - o[0] + 1),
-        sporak: sporak(rocne, o[0], o[1]),
-        sp:     sp500(rocne, o[0], o[1])
-      });
+      var rocne = n * CFG.cenaKavy * CFG.tydnuVRoce,
+          r = rada(rocne, o[0], o[1]);
+      r.rocne   = rocne;
+      r.vlozeno = r.v[r.v.length - 1];
+      r.sporak  = r.s[r.s.length - 1];
+      r.sp      = r.p[r.p.length - 1];
+      TAB[k].push(r);
     }
   });
 
-  /* ---------- šálky ---------- */
-  var CUP = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
-    '<path d="M3 6h14v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V6Z" fill="currentColor"/>' +
-    '<path d="M17 8.5h1.4a2.6 2.6 0 0 1 0 5.2H17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" fill="none"/>' +
-    '<rect x="1.5" y="20.5" width="17" height="1.9" rx=".95" fill="currentColor" opacity=".45"/>' +
-    '</svg>';
-  var cupsBox = $('[data-cups]');
-  cupsBox.style.gridTemplateColumns = 'repeat(' + CFG.maxKav + ',1fr)';
-  cupsBox.innerHTML = new Array(CFG.maxKav + 1).join(CUP);
-  var cups = cupsBox.querySelectorAll('svg');
+  /* ---------- graf ----------
+     Vykresluje se v reálných pixelech (viewBox podle změřené šířky), aby texty
+     na mobilu nezdrobněly. Překresluje se při změně dat i při resize. */
+  var NS = 'http://www.w3.org/2000/svg',
+      svg = $('[data-svg]'),
+      tip = $('[data-tip]'),
+      box = root.querySelector('.cc-kafe__chart'),
+      SER = [
+        { k:'v', barva:'#7c838a', trida:'cc-kafe__line--v', nazev:'Utraceno za kávu' },
+        { k:'s', barva:'#4a5058', trida:'cc-kafe__line--s', nazev:'Spořicí účet' },
+        { k:'p', barva:'#5f7d0a', trida:'cc-kafe__line--p', nazev:'Akcie' }
+      ],
+      geo = null;
+
+  function el(jmeno, atr){
+    var e = document.createElementNS(NS, jmeno);
+    for (var a in atr) e.setAttribute(a, atr[a]);
+    return e;
+  }
+  function hezkyStrop(x){
+    if (x <= 0) return 1;
+    var e = Math.pow(10, Math.floor(Math.log(x) / Math.LN10)), f = x / e,
+        zebrik = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10];
+    for (var i = 0; i < zebrik.length; i++) if (f <= zebrik[i]) return zebrik[i] * e;
+    return 10 * e;
+  }
+  function osaPopis(v){
+    if (v === 0) return '0';
+    if (v >= 1000000){
+      var m = v / 1000000;
+      return (m % 1 ? m.toFixed(1).replace('.', ',') : m) + ' mil. Kč';
+    }
+    return v >= 1000 ? Math.round(v / 1000) + ' tis. Kč' : Math.round(v) + ' Kč';
+  }
+
+  function kresli(d){
+    var W = Math.max(240, Math.round(box.getBoundingClientRect().width || 600)),
+        uzky = W < 430,
+        H = uzky ? 170 : 210,
+        padT = 12, padB = 22, padR = 6,
+        plotH = H - padT - padB,
+        body = d.v.length,
+        strop = hezkyStrop(Math.max(d.vlozeno, d.sporak, d.sp)) || 1;
+
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    svg.setAttribute('height', H);
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    var x = function(i){ return body < 2 ? 0 : (i / (body - 1)) * (W - padR); },
+        y = function(v){ return padT + plotH - (v / strop) * plotH; };
+
+    // vodorovné linky a jejich popisky (popisek leží nad linkou, ne v okraji)
+    [0, 0.5, 1].forEach(function(f){
+      var v = strop * f, yy = y(v);
+      svg.appendChild(el('line', {x1:0, y1:yy, x2:W - padR, y2:yy, 'class':'cc-kafe__gridline'}));
+      if (f > 0){
+        var t = el('text', {x:0, y:yy - 5, 'class':'cc-kafe__axtext'});
+        t.textContent = osaPopis(v);
+        svg.appendChild(t);
+      }
+    });
+
+    // popisky let pod osou
+    var rozestup = uzky ? Math.max(1, Math.floor((d.do - d.od) / 2)) : (d.do - d.od > 5 ? 2 : 1);
+    for (var r = d.od; r <= d.do; r += rozestup){
+      var idx = Math.min(body - 1, (r - d.od) * 12);
+      var tx = el('text', {x:x(idx), y:H - 6, 'class':'cc-kafe__axtext'});
+      tx.textContent = r;
+      if (x(idx) > W - padR - 26) tx.setAttribute('text-anchor', 'end'), tx.setAttribute('x', W - padR);
+      svg.appendChild(tx);
+    }
+
+    // křivky
+    SER.forEach(function(s){
+      var pts = d[s.k].map(function(v, i){ return x(i) + ',' + y(v); }).join(' ');
+      svg.appendChild(el('polyline', {points:pts, 'class':'cc-kafe__line ' + s.trida}));
+    });
+    // koncové body — prstenec v barvě plochy je drží čitelné i tam, kde se kříží
+    SER.forEach(function(s){
+      svg.appendChild(el('circle', {cx:x(body - 1), cy:y(d[s.k][body - 1]), r:4,
+        fill:s.barva, 'class':'cc-kafe__dot'}));
+    });
+
+    // vrstva pro hover
+    var cross = el('line', {x1:0, y1:padT, x2:0, y2:padT + plotH, 'class':'cc-kafe__cross'});
+    cross.style.display = 'none';
+    svg.appendChild(cross);
+    var tecky = SER.map(function(s){
+      var c = el('circle', {r:4, fill:s.barva, 'class':'cc-kafe__dot'});
+      c.style.display = 'none';
+      svg.appendChild(c);
+      return c;
+    });
+    svg.appendChild(el('rect', {x:0, y:0, width:W, height:H, fill:'transparent', 'data-hit':''}));
+
+    geo = { d:d, W:W, H:H, body:body, x:x, y:y, cross:cross, tecky:tecky, idx:-1 };
+  }
+
+  function ukazBod(i){
+    if (!geo) return;
+    var d = geo.d;
+    i = Math.max(0, Math.min(geo.body - 1, i));
+    geo.idx = i;
+    var px = geo.x(i);
+    geo.cross.setAttribute('x1', px); geo.cross.setAttribute('x2', px);
+    geo.cross.style.display = '';
+    SER.forEach(function(s, j){
+      geo.tecky[j].setAttribute('cx', px);
+      geo.tecky[j].setAttribute('cy', geo.y(d[s.k][i]));
+      geo.tecky[j].style.display = '';
+    });
+
+    while (tip.firstChild) tip.removeChild(tip.firstChild);
+    var hl = document.createElement('b');
+    hl.textContent = ((i % 12) + 1) + '/' + (d.od + Math.floor(i / 12));
+    tip.appendChild(hl);
+    SER.forEach(function(s){
+      var radek = document.createElement('div'),
+          klic = document.createElement('i'),
+          jm = document.createElement('span');
+      klic.style.background = s.barva;
+      radek.appendChild(klic);
+      radek.appendChild(document.createTextNode(s.nazev));
+      jm.textContent = kc(d[s.k][i]);
+      radek.appendChild(jm);
+      tip.appendChild(radek);
+    });
+    // dvě pevné polohy místo poskakování za kurzorem: uhne tam, kde je volno
+    tip.hidden = false;
+    var vpravo = px < geo.W * 0.45;
+    tip.style.left = vpravo ? (geo.W - tip.offsetWidth) + 'px' : '0px';
+    tip.style.top = '0px';
+  }
+  function skryjBod(){
+    if (!geo) return;
+    geo.cross.style.display = 'none';
+    geo.tecky.forEach(function(c){ c.style.display = 'none'; });
+    tip.hidden = true;
+    geo.idx = -1;
+  }
+
+  svg.addEventListener('pointermove', function(e){
+    if (!geo) return;
+    var r = svg.getBoundingClientRect();
+    ukazBod(Math.round((e.clientX - r.left) / r.width * (geo.body - 1)));
+  });
+  svg.addEventListener('pointerleave', skryjBod);
+  svg.addEventListener('blur', skryjBod);
+  svg.addEventListener('focus', function(){ if (geo) ukazBod(geo.body - 1); });
+  svg.addEventListener('keydown', function(e){
+    if (!geo) return;
+    var k = e.key, krok = e.shiftKey ? 12 : 1;
+    if (k === 'ArrowRight'){ ukazBod(geo.idx + krok); e.preventDefault(); }
+    else if (k === 'ArrowLeft'){ ukazBod((geo.idx < 0 ? geo.body : geo.idx) - krok); e.preventDefault(); }
+    else if (k === 'Escape'){ skryjBod(); }
+  });
+  if (window.ResizeObserver){
+    var ro = new ResizeObserver(function(){
+      if (!root.querySelector('[data-screen="2"]').hidden) kresli(TAB[roky][+slider.value]);
+    });
+    ro.observe(box);
+  }
 
   /* ---------- stav ---------- */
   var slider = $('[data-slider]'),
@@ -438,37 +654,36 @@
 
   slider.max = CFG.maxKav;
   slider.value = CFG.startKav;
+  root.querySelector('.cc-kafe__scale').lastElementChild.textContent = CFG.maxKav;
 
   function vykresli(){
     var n = +slider.value,
         d = TAB[roky][n];
 
-    for (var i = 0; i < cups.length; i++) cups[i].classList.toggle('is-on', i < n);
-
-    $('[data-cupcount]').textContent = n + ' ' + plural(n, 'káva', 'kávy', 'káv') + ' týdně';
+    $('[data-count]').textContent = n;
+    slider.style.setProperty('--p', (n / CFG.maxKav * 100) + '%');
     $('[data-year]').textContent = kc(d.rocne);
-    $('[data-verdict]').innerHTML = n === 0 ? CFG.txt.verdictNula : CFG.txt.verdict(kc(d.rocne));
+    $('[data-verdict]').textContent = n === 0 ? CFG.txt.verdictNula : CFG.txt.verdict;
 
     // obrazovka 2
-    var max = Math.max(d.vlozeno, d.sporak, d.sp) || 1;
     $('[data-r-spent]').textContent = kc(d.vlozeno);
     $('[data-r-save]').textContent  = kc(d.sporak);
     $('[data-r-sp]').textContent    = kc(d.sp);
-    $('[data-b-spent]').style.width = (d.vlozeno / max * 100) + '%';
-    $('[data-b-save]').style.width  = (d.sporak / max * 100) + '%';
-    $('[data-b-sp]').style.width    = (d.sp / max * 100) + '%';
+    // přírůstek = kolik peněz přibylo nad vloženou částku
+    $('[data-p-save]').textContent = n === 0 ? '' : '+' + kc(d.sporak - d.vlozeno);
+    $('[data-p-sp]').textContent   = n === 0 ? '' : '+' + kc(d.sp - d.vlozeno);
+    skryjBod();
+    kresli(d);
+    svg.setAttribute('aria-label', 'Graf vývoje tří částek po měsících za období ' +
+      d.od + ' až ' + d.do + '.');
+    $('[data-chart-desc]').textContent = 'Na konci období: utraceno ' + kc(d.vlozeno) +
+      ', na spořicím účtu ' + kc(d.sporak) + ', v akciovém indexu ' + kc(d.sp) +
+      '. Šipkami vlevo a vpravo projdete jednotlivé měsíce.';
 
-    // "posledních pět let" je akuzativ, "po dobu pěti let" genitiv — proto dvě formy
-    var akuz = roky === 5 ? 'pět' : 'deset',
-        gen  = roky === 5 ? 'pěti' : 'deseti',
-        o = CFG.okna[roky];
-    $('[data-head2]').textContent  = CFG.txt.head2(akuz);
-    $('[data-ctx]').textContent    = CFG.txt.ctx(n, plural(n, 'kávě', 'kávách', 'kávách'), kc(d.rocne));
+    $('[data-head2]').textContent  = n === 0 ? CFG.txt.head2Nula : CFG.txt.head2(kc(d.rocne));
     $('[data-verdict2]').innerHTML = n === 0
       ? 'Při nule není co odkládat. Vraťte se a posuňte slider.'
-      : CFG.txt.verdict2(kc(d.sp), akuz);
-    $('[data-m-years]').textContent = gen;
-    $('[data-m-range]').textContent = o[0] + '–' + o[1];
+      : CFG.txt.verdict2(kc(d.sp), roky);
 
     $('[data-sr]').textContent = 'Při ' + n + ' ' + plural(n, 'kávě', 'kávách', 'kávách') +
       ' týdně utratíte za rok ' + kc(d.rocne) + '. Za ' + roky + ' let by z toho na spořicím účtu bylo ' +
@@ -478,6 +693,8 @@
   function prepni(cislo){
     root.querySelector('[data-screen="1"]').hidden = (cislo !== 1);
     root.querySelector('[data-screen="2"]').hidden = (cislo !== 2);
+    // graf se kreslí do změřené šířky, a tu má smysl měřit až když je vidět
+    if (cislo === 2) kresli(TAB[roky][+slider.value]);
   }
 
   slider.addEventListener('input', vykresli);
