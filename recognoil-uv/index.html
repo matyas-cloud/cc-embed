@@ -187,7 +187,6 @@
   while (root && !(root.classList && root.classList.contains('cc-uv'))) root = root.previousElementSibling;
   if (!root || root.dataset.ccInit) return;
   root.dataset.ccInit = '1';
-
   var stage = root.querySelector('.cc-uv__stage'),
       tip   = root.querySelector('.cc-uv__tip'),
       tipV  = root.querySelector('.cc-uv__tipval'),
@@ -195,10 +194,8 @@
       allBtn= root.querySelector('.cc-uv__all'),
       spots = [].slice.call(root.querySelectorAll('.cc-uv__hs'));
   var LBL_ON = 'Zpět na UV lampu', LBL_OFF = allBtn.textContent, active = null;
-
   function narrow(){ return window.matchMedia('(max-width:619px)').matches; }
   function radius(){ return Math.max(50, Math.min(168, stage.clientWidth*0.17, stage.clientHeight*0.4)); }
-
   function place(x, y){
     var r = radius();
     stage.style.setProperty('--uvr', r+'px');
@@ -206,7 +203,6 @@
     stage.style.setProperty('--uvy', y.toFixed(1)+'px');
     check(x, y, r);
   }
-
   function check(x, y, r){
     var w = stage.clientWidth, h = stage.clientHeight, hit = null;
     spots.forEach(function(s){
@@ -216,7 +212,6 @@
     });
     show(hit ? hit.el : null);
   }
-
   function position(el){
     if (narrow()){                      /* mobil: pruh nad/pod tečkou, ať ji nepřekryje */
       tip.style.left = ''; tip.style.top = '';
@@ -234,12 +229,10 @@
     tip.style.left = Math.max(8, Math.min(w - tw - 8, left)) + 'px';
     tip.style.top  = Math.max(8, Math.min(h - th - 8, y - th/2)) + 'px';
   }
-
   function fill(el){
     tipV.textContent = el.dataset.value;
     tipT.textContent = (narrow() && el.dataset.short) ? el.dataset.short : el.dataset.text;
   }
-
   function show(el){
     if (el === active) return;
     active = el;
@@ -249,7 +242,6 @@
     tip.classList.add('is-on');
     position(el);
   }
-
   stage.addEventListener('pointermove', function(e){
     var b = stage.getBoundingClientRect();
     place(e.clientX - b.left, e.clientY - b.top);
@@ -258,7 +250,6 @@
     var b = stage.getBoundingClientRect();
     place(e.clientX - b.left, e.clientY - b.top);
   });
-
   spots.forEach(function(s){
     s.style.left = s.dataset.x + '%';
     s.style.top  = s.dataset.y + '%';
@@ -270,23 +261,19 @@
     s.addEventListener('click', go);
     s.addEventListener('focus', function(){ go(); });
   });
-
   allBtn.addEventListener('click', function(){
     var on = allBtn.getAttribute('aria-pressed') === 'true';
     allBtn.setAttribute('aria-pressed', on ? 'false' : 'true');
     allBtn.textContent = on ? LBL_OFF : LBL_ON;
     stage.classList.toggle('is-all', !on);
   });
-
   window.addEventListener('resize', function(){
     stage.style.setProperty('--uvr', radius()+'px');
     if (active){ fill(active); position(active); }
   });
-
   place(stage.clientWidth*0.5, stage.clientHeight*0.5);
 })();
 </script>
-
 <script>
 /* hlásí rodičovské stránce svoji výšku, aby iframe nemusel mít pevnou výšku */
 (function(){
