@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kolik káv týdně si Češi dovolí</title>
+<meta name="robots" content="noindex">
+<!-- Iframe je samostatný dokument a fonty z cc.cz nedědí. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;background:transparent;height:100%;}
+  body{overflow-x:hidden;}
+  /* Šablona CC dává iframu pevnou výšku. Prvek ji vyplní, takže pod ním
+     nezůstane prázdné místo ani na širokých telefonech. */
+  .cc-embed{margin:0!important;}
+</style>
+</head>
+<body>
+
+<style>
+.cc-embed{
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed :focus-visible{outline:3px solid #000;outline-offset:3px;}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+
+<style>
+/* --- Kávový index -----------------------------------------------------------
+   SWAP-POINTS:
+     --ab-lime      limetka Air Bank (ověřit v brand manuálu partnera)
+     --ab-lime-ink  tmavší odstín pro obrysy a linky (kontrast vůči ploše)
+   Plocha, radius a typografie kopírují bloky na cc.cz: #e9e9e9, radius 15px,
+   velký vnitřní padding, žádný rámeček ani stín.
+   Výška je vázaná na rám, který kolem iframu staví šablona CC — proto jsou
+   odsazení a velikosti laděné na tři konkrétní poměry, viz hosting-iframe.md.
+--------------------------------------------------------------------------- */
+.cc-ki{
+  box-sizing:border-box;
+  display:flex;flex-direction:column;min-height:100vh;
+  --ab-lime:#b4d335;
+  --ab-lime-ink:#6f8c10;
+  --k-plocha:#e9e9e9;
+  --k-line:#d4d4d4;
+  --k-muted:#6b7076;
+  --k-ghost:#bcbcbc;
+  --k-ink:#222;
+  background:var(--k-plocha);
+  border:0;border-radius:15px;
+  padding:clamp(20px,3.4vw,44px) clamp(18px,3.2vw,48px);
+  margin:0;
+  font:18px/1.667 var(--cc-serif);
+}
+.cc-ki h3{font-size:clamp(19px,2.7vw,30px);line-height:1.17;letter-spacing:-.012em;
+  margin:0 0 clamp(6px,1vw,10px);max-width:28ch;}
+.cc-ki .cc-ki__lede{margin:0 0 clamp(16px,2.4vw,24px);max-width:62ch;
+  font:400 clamp(13.5px,1.3vw,16px)/1.55 var(--cc-serif);color:#3c3c3c;}
+.cc-ki .cc-ki__foot{display:flex;gap:7px;align-items:flex-start;
+  margin:clamp(16px,2.4vw,26px) 0 0;font:400 12px/1.5 var(--cc-ui);color:var(--k-muted);}
+.cc-ki__i{width:13px;height:13px;flex:0 0 auto;margin-top:2px;}
+
+/* přepínač kategorií — černý pill jako tlačítka na cc.cz */
+.cc-ki__tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 clamp(14px,2.2vw,24px);}
+.cc-ki__tabs button{
+  padding:7px 15px;border:0;border-radius:32px;cursor:pointer;
+  font:500 12px/1.35 var(--cc-ui);background:transparent;color:var(--k-muted);
+  box-shadow:inset 0 0 0 1px var(--k-line);
+  transition:background .16s,color .16s,box-shadow .16s;}
+.cc-ki__tabs button:hover{color:var(--k-ink);box-shadow:inset 0 0 0 1px #adadad;}
+.cc-ki__tabs button[aria-pressed="true"]{background:#000;color:#fff;box-shadow:none;}
+@media (max-width:619px){
+  /* v úzkém rámu není místo na dva řádky pilulek — jeden posuvný */
+  .cc-ki__tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+  .cc-ki__tabs::-webkit-scrollbar{display:none;}
+  .cc-ki__tabs button{flex:0 0 auto;}
+  .cc-ki h3{font-size:19px;}
+  .cc-ki .cc-ki__lede{margin-bottom:13px;}
+  .cc-ki__long{display:none;}
+}
+@media (max-width:379px){
+  .cc-ki{padding:15px 14px;}
+  .cc-ki h3{font-size:17.5px;}
+  .cc-ki .cc-ki__lede{font-size:12.5px;line-height:1.45;margin-bottom:10px;}
+  .cc-ki__tabs{margin-bottom:10px;gap:5px;}
+  .cc-ki__tabs button{padding:6px 12px;font-size:11.5px;}
+  .cc-ki .cc-ki__foot{font-size:10.5px;margin-top:10px;gap:5px;}
+  .cc-ki__i{width:11px;height:11px;}
+}
+
+@keyframes ki-pop{from{opacity:0;transform:translateY(4px) scale(.86);}to{opacity:1;transform:none;}}
+@keyframes ki-fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+@keyframes ki-take{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
+@keyframes ki-dot{from{opacity:0;transform:scale(.2);}to{opacity:1;transform:none;}}
+
+/* Pointa kategorie — věta, která se mění s přepnutím. Pevná minimální výška,
+   aby se článek nehýbal, když je text jednou o řádek delší. */
+.cc-ki .cc-ki__take{display:flex;gap:10px;align-items:stretch;
+  margin:clamp(10px,1.5vw,16px) 0 0;min-height:2.7em;
+  font:400 clamp(12.5px,1.3vw,15.5px)/1.45 var(--cc-ui);color:var(--k-ink);}
+.cc-ki__take::before{content:"";flex:0 0 auto;width:3px;border-radius:2px;
+  background:var(--ab-lime);}
+.cc-ki__take b{font-weight:600;}
+.cc-ki__take span{display:block;align-self:center;animation:ki-take .34s ease backwards;}
+@media (max-width:619px){ .cc-ki .cc-ki__take{min-height:3.2em;gap:8px;} }
+</style>
+
+<style>
+.cc-ki--a .cc-ki__rows{display:flex;flex-direction:column;flex:1 1 auto;}
+.cc-ki--a .cc-ki__row{flex:1 1 auto;}
+.cc-ki__row{display:grid;grid-template-columns:minmax(104px,.72fr) minmax(0,2.6fr) 74px;
+  align-items:center;gap:clamp(8px,1.6vw,20px);
+  padding:clamp(5px,0.75vw,11px) 0;border-top:1px solid var(--k-line);
+  transition:opacity .18s ease;}
+@media (min-width:620px) and (max-width:1023px){ .cc-ki__row{padding:4px 0;} }
+.cc-ki__row:first-child{border-top:0;}
+.cc-ki__row--avg{border-top:1px solid #b3b3b3;border-bottom:1px solid #b3b3b3;}
+/* ztlumení ostatních řádků při najetí — oko jde po jednom, ne po všech */
+.cc-ki--a .cc-ki__rows:hover .cc-ki__row{opacity:.42;}
+.cc-ki--a .cc-ki__rows:hover .cc-ki__row--avg{opacity:.7;}
+.cc-ki--a .cc-ki__rows .cc-ki__row:hover,
+.cc-ki--a .cc-ki__rows .cc-ki__row:focus-within{opacity:1;}
+.cc-ki__name{font:400 clamp(12.5px,1.4vw,16px)/1.25 var(--cc-serif);color:var(--k-ink);}
+.cc-ki__row--avg .cc-ki__name{font-family:var(--cc-ui);font-weight:600;
+  font-size:clamp(11px,1.15vw,13px);text-transform:uppercase;letter-spacing:.05em;
+  color:var(--k-muted);}
+.cc-ki__cups{display:flex;flex-wrap:wrap;gap:clamp(1.5px,.5vw,5px);align-items:center;}
+.cc-ki__cups svg{width:clamp(9px,1.85vw,25px);height:auto;display:block;flex:0 1 auto;}
+/* svislá ryska průměru — každý řádek se sám změří proti čtyřem šálkům */
+.cc-ki__mark{flex:0 0 auto;width:1px;align-self:stretch;background:#a2a2a2;
+  margin:0 clamp(3px,.6vw,7px);}
+.cc-ki__row--avg .cc-ki__mark{background:#7d7d7d;}
+.cup .g{fill:none;stroke:var(--k-ghost);stroke-width:1.3;}
+.cup .gh{fill:none;stroke:var(--k-ghost);stroke-width:1.6;}
+.cup .b{fill:var(--ab-lime);stroke:var(--ab-lime-ink);stroke-width:1.3;}
+.cup .h{fill:none;stroke:var(--ab-lime-ink);stroke-width:1.9;}
+/* nalévání: ořezový obdélník sjede zdola nahoru na cílovou hladinu */
+.cup .lq{transform:translateY(15.4px);
+  transition:transform .55s cubic-bezier(.22,.75,.3,1);
+  transition-delay:calc(var(--i,0) * 45ms);}
+.is-poured .cup .lq{transform:translateY(var(--dy,0px));}
+.cc-ki__n{justify-self:end;text-align:right;font:700 clamp(15px,2.1vw,24px)/1
+  var(--cc-display);font-variant-numeric:tabular-nums;color:var(--k-ink);}
+.cc-ki__n small{display:block;margin-top:2px;font:500 10px/1.2 var(--cc-ui);
+  letter-spacing:.05em;text-transform:uppercase;color:var(--k-muted);}
+.cc-ki__row--avg .cc-ki__n{font-size:clamp(15px,1.9vw,20px);color:var(--k-muted);}
+@media (max-width:619px){
+  /* jednořádkové řádky — v rámu na mobilu není na dvouřádkové místo */
+  .cc-ki__row{grid-template-columns:84px minmax(0,1fr) 42px;gap:6px;padding:4px 0;}
+  .cc-ki__n small{display:none;}
+  .cc-ki__n{font-size:16px;}
+  .cc-ki__cups{flex-wrap:nowrap;}
+}
+@media (max-width:379px){
+  .cc-ki__row{grid-template-columns:74px minmax(0,1fr) 38px;gap:5px;padding:2.5px 0;}
+  .cc-ki__name{font-size:11.5px;}
+  .cc-ki__row--avg .cc-ki__name{font-size:9.5px;letter-spacing:0;}
+  .cc-ki__n{font-size:14px;}
+  .cc-ki__row--avg .cc-ki__n{font-size:12.5px;}
+}
+@media (max-width:339px){
+  .cc-ki__row{grid-template-columns:68px minmax(0,1fr) 34px;padding:1px 0;}
+  .cc-ki__name{font-size:11px;}
+  .cc-ki__n{font-size:13px;}
+}
+</style>
+
+<div class="cc-embed cc-ki cc-ki--a" data-ki-a>
+  <h3>Čtyři kávy týdně. Průměr, pod kterým se schová propast</h3>
+  <p class="cc-ki__lede">Tolik si Čech dopřeje, aniž by ho kvůli rozpočtu hryzalo svědomí.</p>
+  <div class="cc-ki__tabs" role="group" aria-label="Kategorie" data-tabs></div>
+  <div class="cc-ki__rows" data-rows></div>
+  <p class="cc-ki__take" data-take></p>
+  <p class="cc-sr" aria-live="polite" data-sr></p>
+  <p class="cc-ki__foot"><svg class="cc-ki__i" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 7.2v4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.7" r=".95" fill="currentColor"/></svg>Barometr finanční pohody Air Bank, 2026.<span class="cc-ki__long"> Poslední šálek v řadě ukazuje desetiny.</span></p>
+</div>
+
+<script>
+(function(){
+
+  "use strict";
+
+  /* ---- DATA ---------------------------------------------------------------
+     [název, šálky týdně (sloupec F), Barometr finanční pohody (sloupec C)]
+     SWAP-POINT: při aktualizaci průzkumu se přepisuje jen tenhle blok.
+     Zdroj: Barometr finanční pohody Air Bank, 2026.
+  ------------------------------------------------------------------------- */
+  var CELKEM = ["Češi celkem", 4.003, 46.65];
+  /* Pointa ke každé kategorii — text, který se mění s přepnutím.
+     A = řádky se šálky, C = bodový graf. SWAP-POINT pro editora. */
+  var TAKE_A = {
+    pohlavi:"Muž si za týden dopřeje skoro <b>o dvě kávy víc</b> než žena.",
+    vek:"Věk s kávou skoro nehýbe. Všechny generace se drží kolem čtyř šálků.",
+    vzdelani:"Vysokoškolák si dá <b>dvakrát tolik</b> co člověk se základním vzděláním.",
+    prijem:"Pod 15 tisíci 2,4 kávy, nad 40 tisíci 6,5. Kávový index je jen jiné jméno pro výplatu.",
+    prace:"Manažer 11,4 kávy týdně, nezaměstnaný 2,9. Nikde jinde není propast takhle hluboká.",
+    region:"Praha si dá skoro o celou kávu víc než Morava."
+  };
+  var TAKE_C = {
+    pohlavi:"Muži sedí výš i víc vpravo — víc klidu v rozpočtu, víc káv.",
+    vek:"Věkové skupiny se mačkají na jednom místě. Tudy cesta k rozdílům nevede.",
+    vzdelani:"Se vzděláním stoupá obojí naráz: finanční pohoda i počet šálků.",
+    prijem:"Nejostřejší schod v celém grafu. Ze 2,4 kávy na 6,5.",
+    prace:"Manažeři jsou úplně mimo mračno — jedenáct šálků týdně.",
+    region:"Praha se od zbytku republiky odlepuje i u kávy."
+  };
+
+  var GROUPS = [
+    {k:"pohlavi", n:"Pohlaví", rows:[
+      ["Muži",4.888,50.74],["Ženy",3.048,42.24]]},
+    {k:"vek", n:"Věk", rows:[
+      ["do 25 let",3.437,47.94],["26–45 let",4.191,46.92],
+      ["46–60 let",3.929,45.86],["nad 60 let",3.919,46.89]]},
+    {k:"vzdelani", n:"Vzdělání", rows:[
+      ["Základní",2.127,34.96],["Vyučen/a",3.306,39.62],
+      ["Středoškolské",4.113,47.45],["Vysokoškolské",4.962,54.89]]},
+    {k:"prijem", n:"Příjem", rows:[
+      ["do 15 000 Kč",2.388,36.62],["15–25 000 Kč",2.618,37.46],
+      ["25–40 000 Kč",3.895,47.25],["nad 40 000 Kč",6.501,60.75]]},
+    {k:"prace", n:"Povolání", rows:[
+      ["Manažeři",11.444,73.94],["Podnikatelé",4.863,48.75],
+      ["Zaměstnanci",4.158,47.97],["Studenti",3.336,49.08],
+      ["Nezaměstnaní",2.902,33.14],["Důchodci",2.812,35.25],
+      ["V domácnosti",2.731,38.44]]},
+    {k:"region", n:"Region", rows:[
+      ["Praha",4.927,53.11],["Čechy",4.007,46.15],["Morava",3.642,45.00]]}
+  ];
+
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function el(t,c){var e=document.createElement(t); if(c)e.className=c; return e;}
+  function sv(t,a){var e=document.createElementNS(SVGNS,t);
+    for(var k in a) e.setAttribute(k,a[k]); return e;}
+  function cz(v,d){ return v.toFixed(d===undefined?1:d).replace(".",","); }
+  function salku(n){ return n===1?"šálek":(n>=2&&n<=4?"šálky":"šálků"); }
+  /* Celé číslo, když je k celému blízko, jinak jedno desetinné místo.
+     Jednotka se skloňuje — čeština chce u desetinného čísla genitiv „2,7 šálku". */
+  function num(v){ return Math.abs(v-Math.round(v))<0.05 ? String(Math.round(v)) : cz(v,1); }
+  function unit(v){ return Math.abs(v-Math.round(v))<0.05 ? salku(Math.round(v)) : "šálku"; }
+
+  /* Kořen se hledá bez id — fragment může na stránce být i dvakrát. */
+  function findRoot(cls){
+    var n = document.currentScript && document.currentScript.previousElementSibling;
+    while(n && !(n.classList && n.classList.contains(cls))) n = n.previousElementSibling;
+    return n;
+  }
+
+  function tabs(host, onPick){
+    var box = host.querySelector("[data-tabs]"), cur = GROUPS[0].k;
+    GROUPS.forEach(function(g){
+      var b = el("button"); b.type="button"; b.textContent=g.n;
+      b.setAttribute("aria-pressed", g.k===cur?"true":"false");
+      b.addEventListener("click", function(){
+        cur = g.k;
+        Array.prototype.forEach.call(box.children,function(x){
+          x.setAttribute("aria-pressed", x===b?"true":"false"); });
+        onPick(g);
+      });
+      box.appendChild(b);
+    });
+    onPick(GROUPS[0]);
+  }
+
+  var root = findRoot("cc-ki--a"); if(!root || root.dataset.ccInit) return;
+  root.dataset.ccInit = "1";
+  var rows = root.querySelector("[data-rows]"), sr = root.querySelector("[data-sr]");
+  var take = root.querySelector("[data-take]");
+  var UID = 0;   /* prefixované id pro clipPath — fragment padá na cizí stránku */
+  var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Šálek: pod ním obrys, nad ním limetková náplň oříznutá obdélníkem.
+     Obdélník se v CSS posune zdola na hladinu odpovídající fill (0..1),
+     takže se káva „nalije". */
+  function cup(fill, i){
+    var s = sv("svg",{viewBox:"0 0 27 25","aria-hidden":"true","class":"cup"});
+    s.style.setProperty("--i", i);
+    s.style.setProperty("--dy", (15.4*(1-Math.max(0,Math.min(1,fill)))).toFixed(2)+"px");
+    function body(cb,ch){
+      var g = sv("g",{});
+      g.appendChild(sv("path",{"class":cb,
+        d:"M2.6 4.6h15.1v8.7a6.2 6.2 0 0 1-6.2 6.2H8.8a6.2 6.2 0 0 1-6.2-6.2V4.6Z"}));
+      g.appendChild(sv("path",{"class":ch, d:"M18.1 7.7h2.5a3.4 3.4 0 0 1 0 6.8h-2.5"}));
+      return g;
+    }
+    s.appendChild(body("g","gh"));
+    if(fill > 0.02){
+      var id = "ki-cup-"+(++UID);
+      var cp = sv("clipPath",{id:id});
+      cp.appendChild(sv("rect",{"class":"lq",x:"-1",y:"4.1",width:"29",height:"21.4"}));
+      s.appendChild(cp);
+      var g = body("b","h");
+      g.setAttribute("clip-path","url(#"+id+")");
+      s.appendChild(g);
+    }
+    return s;
+  }
+
+  /* Číslo se dopočítá z nuly ve stejném rytmu, v jakém se nalévají šálky. */
+  function countUp(node, target, unitTxt, delay){
+    if(still){ node.innerHTML = num(target)+"<small>"+unitTxt+"</small>"; return; }
+    var dur = 480 + Math.min(target,12)*22, t0 = null;
+    node.innerHTML = "0<small>"+unitTxt+"</small>";
+    function step(ts){
+      if(t0===null) t0 = ts;
+      var p = (ts - t0 - delay) / dur;
+      if(p < 0){ requestAnimationFrame(step); return; }
+      if(p > 1) p = 1;
+      var e = 1 - Math.pow(1-p, 3);
+      node.innerHTML = num(target*e)+"<small>"+unitTxt+"</small>";
+      if(p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function row(name, cups, slots, isAvg){
+    var r = el("div","cc-ki__row"+(isAvg?" cc-ki__row--avg":""));
+    var n = el("div","cc-ki__name"); n.textContent = name; r.appendChild(n);
+    var c = el("div","cc-ki__cups");
+    for(var i=0;i<slots;i++){
+      c.appendChild(cup(cups-i, i));
+      /* ryska za čtvrtým šálkem = průměr populace */
+      if(i===3 && slots>4) c.appendChild(el("i","cc-ki__mark"));
+    }
+    r.appendChild(c);
+    var v = el("div","cc-ki__n"); r.appendChild(v);
+    countUp(v, cups, unit(cups), isAvg ? 0 : 90 + Math.min(cups,12)*20);
+    return r;
+  }
+
+  tabs(root, function(g){
+    var slots = Math.max(Math.ceil(CELKEM[1]), Math.ceil(Math.max.apply(null,
+      g.rows.map(function(r){ return r[1]; }))));
+    rows.classList.remove("is-poured");
+    rows.innerHTML = "";
+    rows.appendChild(row("Průměr Čechů", CELKEM[1], slots, true));
+    g.rows.forEach(function(r){ rows.appendChild(row(r[0], r[1], slots, false)); });
+    /* dva rámce, ať prohlížeč stihne vzít výchozí stav a teprve pak animovat */
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ rows.classList.add("is-poured"); }); });
+
+    take.innerHTML = ""; var sp = el("span");
+    sp.innerHTML = TAKE_A[g.k] || ""; take.appendChild(sp);
+
+    sr.textContent = g.n + ": " + g.rows.map(function(r){
+      return r[0]+" "+num(r[1])+" "+unit(r[1]); }).join(", ") +
+      ". Průměr populace 4 šálky týdně.";
+  });
+})();
+</script>
+
+</body>
+</html>
