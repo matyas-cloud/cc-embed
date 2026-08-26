@@ -202,20 +202,17 @@
 svg.is-focus .cc-ki__dot{opacity:.25;}
 svg.is-focus .cc-ki__link{opacity:.3;}
 svg.is-focus .cc-ki__dot.is-hot{opacity:1;transform:scale(1.55);}
-.cc-ki__pinlab{fill:var(--k-ink);font:600 12px/1 var(--cc-ui);transition:opacity .18s;
-  animation:ki-take .34s ease backwards;}
 /* popisky bodů vybrané kategorie — vysázené vedle bodu, při shluku odsunuté
    a dotažené vlasovou čárou, ať je jasné, který popisek patří kterému bodu */
 /* světlá obruba v barvě plochy — popisek zůstane čitelný i přes šedý bod */
-.cc-ki__catlab,.cc-ki__pinlab,.cc-ki__hotlab{paint-order:stroke fill;
+.cc-ki__catlab,.cc-ki__hotlab{paint-order:stroke fill;
   stroke:var(--k-plocha);stroke-width:3.4px;stroke-linejoin:round;}
 .cc-ki__catlab{fill:var(--k-ink);font:600 11.5px/1 var(--cc-ui);
   animation:ki-take .34s ease backwards;transition:opacity .18s;}
 .cc-ki__lead{stroke:#a8adb2;stroke-width:1;animation:ki-take .34s ease backwards;
   transition:opacity .18s;}
-svg.is-focus .cc-ki__catlab,svg.is-focus .cc-ki__pinlab,
-svg.is-focus .cc-ki__lead{opacity:.18;}
-svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;}
+svg.is-focus .cc-ki__catlab,svg.is-focus .cc-ki__lead{opacity:.18;}
+svg.is-focus .cc-ki__catlab.is-hot{opacity:1;}
 .cc-ki__hotlab{fill:var(--k-ink);font:700 12.5px/1 var(--cc-ui);opacity:0;
   transition:opacity .16s;pointer-events:none;}
 .cc-ki__hotlab.is-on{opacity:1;}
@@ -477,18 +474,15 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
     if(!S || S.narrow) return;
     var GAP = 17, PAD = 7;
 
-    var act = [], pins = [];
+    /* Popisky nese jen aktivní kategorie; průměr ČR má vlastní kotvu u rysky. */
+    var act = [];
     dots.forEach(function(x){
-      var on = x.d.g === active;
-      var isPin = !on && x.d.n === "Manažeři";
-      if(!on && !isPin) return;
       x.lab = null;
-      var it = {n:x.d.n, px:S.X(x.d.bar), py:S.Y(x.d.cups), pin:isPin, ref:x};
-      it.ly = it.py + 4;
-      (isPin ? pins : act).push(it);
+      if(x.d.g !== active) return;
+      act.push({n:x.d.n, px:S.X(x.d.bar), py:S.Y(x.d.cups),
+                ly:S.Y(x.d.cups) + 4, ref:x});
     });
-    dots.forEach(function(x){ x.lab = null; });
-    if(!act.length && !pins.length) return;
+    if(!act.length) return;
 
     /* Když se body kategorie mačkají na jednom místě, popisky se srovnají do
        sloupce vedle shluku a k bodům se dotáhnou vlasovou čárou. Rozptýlené
@@ -499,7 +493,6 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
     var side = (column ? maxX : (minX+maxX)/2) < S.W*0.62;
 
     act.forEach(function(i){ i.right = column ? side : (i.px < S.W*0.62); });
-    pins.forEach(function(i){ i.right = i.px < S.W*0.62; });
 
     if(column){
       /* skutečné šířky textů, ne odhad podle počtu znaků */
@@ -511,15 +504,8 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
     } else {
       act.forEach(function(i){ i.lx = i.right ? i.px + 14 : i.px - 14; });
     }
-    pins.forEach(function(i){
-      /* stálý popisek uvnitř shluku patří do stejného sloupce, jinak by
-         visel mezi body */
-      if(column && i.px > minX - 30 && i.px < maxX + 30){ i.lx = act[0].lx; i.right = side; }
-      else i.lx = i.right ? i.px + 12 : i.px - 12;
-    });
-
     /* svislé rozestupy zvlášť pro levou a pravou stranu */
-    var all = act.concat(pins);
+    var all = act;
     [true,false].forEach(function(sd){
       var list = all.filter(function(i){ return i.right === sd; })
                     .sort(function(a,b){ return a.ly - b.ly; });
@@ -573,7 +559,7 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
           x1:i.px + (i.right?7:-7), y1:i.py,
           x2:i.lx - (i.right?3:-3), y2:i.ly-4}));
       }
-      var t = sv("text",{"class":i.pin ? "cc-ki__pinlab" : "cc-ki__catlab",
+      var t = sv("text",{"class":"cc-ki__catlab",
         x:i.lx, y:i.ly, "text-anchor": i.right ? "start" : "end"});
       t.textContent = i.n; labg.appendChild(t);
       if(i.ref) i.ref.lab = t;
