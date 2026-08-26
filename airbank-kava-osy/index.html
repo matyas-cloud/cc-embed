@@ -143,36 +143,35 @@
   text-transform:uppercase;paint-order:stroke fill;stroke:var(--k-plocha);
   stroke-width:3.4px;stroke-linejoin:round;}
 
-/* --- 31: na mobilu žebříček místo bodového grafu ------------------------- */
-.cc-ki__list,.cc-ki__lishead{display:none;}
+/* --- mobil: místo bodového grafu žebříček finanční pohody -----------------
+   Prvek stojí v článku hned pod grafikou se šálky. Na úzkém rámu proto
+   spotřebu káv vynecháváme úplně a ukazujeme jen to, co ta grafika nemá. */
+.cc-ki__mob,.cc-ki__lede--m{display:none;}
 @media (max-width:619px){
-  .cc-ki--c .cc-ki__plotwrap,.cc-ki--c .cc-ki__axcap{display:none;}
-  .cc-ki__list{display:flex;flex-direction:column;flex:1 1 0;min-height:0;
-    margin-top:4px;justify-content:center;}
-  /* málo řádků se nemá roztahovat přes celý rám, hodně se musí vejít */
-  .cc-ki__li{flex:0 1 auto;min-height:0;max-height:52px;display:grid;
-    grid-template-columns:minmax(0,1fr) auto auto;align-items:center;
-    gap:10px;padding:7px 0;border-top:1px solid var(--k-line);}
-  .cc-ki__li:first-child{border-top:0;}
-  .cc-ki__li--norm{border-top:1px solid #b3b3b3;border-bottom:1px solid #b3b3b3;}
-  .cc-ki__li b{font:400 13px/1.2 var(--cc-serif);font-weight:400;color:var(--k-ink);
+  .cc-ki--c .cc-ki__plotwrap,.cc-ki--c .cc-ki__axcap,
+  .cc-ki .cc-ki__lede--d{display:none;}
+  .cc-ki .cc-ki__lede--m{display:block;}
+  .cc-ki__mob{display:flex;flex-direction:column;justify-content:space-evenly;
+    flex:1 1 0;min-height:0;gap:2px;}
+  .cc-ki__mrow{flex:0 1 auto;min-height:0;display:grid;
+    grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;
+    padding:5px 0;animation:ki-fade .34s ease backwards;}
+  .cc-ki__mname{min-width:0;font:400 13px/1.25 var(--cc-serif);color:var(--k-ink);
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .cc-ki__li--norm b{font:600 10px/1.2 var(--cc-ui);text-transform:uppercase;
-    letter-spacing:.05em;color:var(--k-muted);}
-  .cc-ki__li i{font-style:normal;font:700 15px/1 var(--cc-ui);
-    font-variant-numeric:tabular-nums;color:var(--ab-lime-ink);min-width:34px;
-    text-align:right;}
-  .cc-ki__li--norm i{color:var(--k-muted);}
-  .cc-ki__li s{text-decoration:none;font:600 12px/1 var(--cc-ui);
-    font-variant-numeric:tabular-nums;color:var(--k-muted);min-width:26px;
-    text-align:right;}
-  .cc-ki__lishead{display:grid;grid-template-columns:minmax(0,1fr) auto auto;
-    gap:10px;font:600 8.5px/1.2 var(--cc-ui);letter-spacing:.06em;
-    text-transform:uppercase;color:var(--k-muted);padding-bottom:3px;}
-  .cc-ki__lishead i,.cc-ki__lishead s{font-style:normal;text-decoration:none;
-    text-align:right;}
-  .cc-ki__lishead i{min-width:34px;} .cc-ki__lishead s{min-width:26px;}
+  .cc-ki__mval{font:700 14px/1 var(--cc-ui);font-variant-numeric:tabular-nums;
+    color:var(--ab-lime-ink);min-width:26px;text-align:right;}
+  .cc-ki__mbar{grid-column:1 / -1;height:5px;border-radius:3px;
+    background:#dcdcdc;overflow:hidden;}
+  .cc-ki__mbar i{display:block;height:100%;border-radius:3px;
+    background:var(--ab-lime);transform-origin:left center;
+    animation:ki-grow .5s cubic-bezier(.2,.7,.3,1) backwards;}
+  /* průměr ČR je orientační bod, ne soutěžící — proto šedý a bez tučného čísla */
+  .cc-ki__mrow--norm .cc-ki__mname{font:600 10px/1.2 var(--cc-ui);
+    text-transform:uppercase;letter-spacing:.05em;color:var(--k-muted);}
+  .cc-ki__mrow--norm .cc-ki__mval{color:var(--k-muted);font-weight:600;font-size:12px;}
+  .cc-ki__mrow--norm .cc-ki__mbar i{background:#b3b3b3;}
 }
+@keyframes ki-grow{from{transform:scaleX(0);}to{transform:none;}}
 .cc-ki--c .cc-ki__plotwrap{position:relative;flex:1 1 auto;min-height:170px;}
 .cc-ki--c .cc-ki__plotwrap svg{position:absolute;inset:0;display:block;
   width:100%;height:100%;overflow:hidden;}
@@ -240,14 +239,14 @@ svg.is-focus .cc-ki__catlab.is-hot{opacity:1;}
 
 <div class="cc-embed cc-ki cc-ki--c" data-ki-c>
   <h3>Co prozrazuje káva o finanční pohodě?</h3>
-  <p class="cc-ki__lede">Každý bod reprezentuje průměr jedné skupiny. Doprava roste finanční pohoda, nahoru spotřeba kávy.</p>
+  <p class="cc-ki__lede cc-ki__lede--d">Každý bod reprezentuje průměr jedné skupiny. Doprava roste finanční pohoda, nahoru spotřeba kávy.</p>
   <div class="cc-ki__tabs" role="group" aria-label="Kategorie" data-tabs></div>
   <div class="cc-ki__axcap"><span>&#8593; Kávy týdně</span></div>
+  <p class="cc-ki__lede cc-ki__lede--m">Index finanční pohody podle Barometru Air Bank. Čím delší proužek, tím lépe skupina vychází se svými penězi.</p>
   <div class="cc-ki__plotwrap">
     <svg data-svg role="img" aria-label="Bodový graf: vodorovně Index finanční pohody, svisle počet káv týdně"></svg>
   </div>
-  <div class="cc-ki__lishead" aria-hidden="true"><span>Skupina</span><i>Kávy</i><s>Index</s></div>
-  <div class="cc-ki__list" data-list></div>
+  <div class="cc-ki__mob" data-mob></div>
   <div class="cc-ki__read" data-read></div>
   <p class="cc-ki__foot"><svg class="cc-ki__i" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 7.2v4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.7" r=".95" fill="currentColor"/></svg>Barometr finanční pohody Air Bank, 2026.</p>
 </div>
@@ -273,13 +272,23 @@ svg.is-focus .cc-ki__catlab.is-hot{opacity:1;}
     prace:"Manažer vypije 11,4 kávy týdně, nezaměstnaný 2,9. Nikde jinde není propast takhle hluboká.",
     region:"Praha si dá skoro <b>o celou kávu</b> víc než Morava."
   };
+  /* Pointy pro úzký rám — mluví o finanční pohodě, ne o kávě.
+     Kávy má čtenář v grafice nad tímto prvkem, opakovat je nemá smysl. */
+  var TAKE_M = {
+    pohlavi:"Muži hlásí vyšší finanční pohodu než ženy – rozdíl <b>osmi bodů</b>.",
+    vek:"Věk s finanční pohodou skoro nesouvisí. Všechny generace se drží kolem 47.",
+    vzdelani:"Od základního vzdělání k vysokoškolskému stoupá pohoda <b>o dvacet bodů</b>.",
+    prijem:"Nejvyšší příjmové pásmo hlásí o 24 bodů vyšší pohodu než nejnižší.",
+    prace:"Manažeři 74, nezaměstnaní 33. <b>Nejhlubší propast</b> v celém průzkumu.",
+    region:"Praha 53, Morava 45. Rozdíl osmi bodů ve finanční pohodě."
+  };
   var TAKE_C = {
-    pohlavi:"Muži jsou finančně v pohodě a také víc pijí kávu. Najdeme je vpravo nahoře.",
+    pohlavi:"Muži jsou finančně v pohodě a také víc pijí kávu. To je posouvá doprava a nahoru.",
     vek:"Průměry věkových skupin se mačkají u sebe.",
     vzdelani:"Vzdělání zvyšuje spotřebu kávy i finanční pohodu.",
     prijem:"Nejostřejší schod v celém grafu. Ze 2,4 kávy na 6,5.",
-    prace:"Manažeři se utrhli do vedení — jedenáct šálků týdně.",
-    region:"Praha zbytku republiky utíká i ve spotřebě kávy."
+    prace:"Manažeři se utrhli do vedení – pijí 11 šálků týdně.",
+    region:"Praha zbytku republiky ve spotřebě kávy utíká."
   };
 
   var GROUPS = [
@@ -340,6 +349,7 @@ svg.is-focus .cc-ki__catlab.is-hot{opacity:1;}
   var root = findRoot("cc-ki--c"); if(!root || root.dataset.ccInit) return;
   root.dataset.ccInit = "1";
   var svg = root.querySelector("[data-svg]"), read = root.querySelector("[data-read]");
+  var mobEl = root.querySelector("[data-mob]");
   var wrap = root.querySelector(".cc-ki__plotwrap");
   /* Obě osy lineárně a sražené na skutečný rozsah dat. Zlom svislé osy tu
      byl a Matt ho zrušil — spojité měřítko se čte snáz, cenou je, že mračno
@@ -387,11 +397,41 @@ svg.is-focus .cc-ki__catlab.is-hot{opacity:1;}
   var dots = [], link = null, crossX = null, crossY = null, hotlab = null;
   var labg = null, S = null;
 
+  var MOB = window.matchMedia("(max-width:619px)");
+  var mobBox = mobEl;
+  /* Žebříček podle indexu. Sloupec s kávami tu schválně není. */
+  function mobil(){
+    if(!mobBox || !MOB.matches) return;
+    var g = null;
+    GROUPS.forEach(function(x){ if(x.k === active) g = x; });
+    if(!g) return;
+    var MIN = 30, MAX = 78;   // pevná škála, aby proužky šly srovnávat i mezi záložkami
+    mobBox.innerHTML = "";
+    var radky = g.rows.map(function(r){ return {n:r[0], bar:r[2]}; })
+                      .concat([{n:"Průměr ČR", bar:CELKEM[2], norm:true}])
+                      .sort(function(a,b){ return b.bar - a.bar; });
+    radky.forEach(function(d,i){
+      var row = el("div","cc-ki__mrow" + (d.norm ? " cc-ki__mrow--norm" : ""));
+      row.style.animationDelay = (i*0.05).toFixed(2)+"s";
+      var nm = el("div","cc-ki__mname"); nm.textContent = d.n; row.appendChild(nm);
+      var v = el("div","cc-ki__mval"); v.textContent = cz(d.bar,0); row.appendChild(v);
+      var bar = el("div","cc-ki__mbar");
+      var fill = document.createElement("i");
+      var pct = Math.max(4, Math.min(100, (d.bar-MIN)/(MAX-MIN)*100));
+      fill.style.width = pct.toFixed(1)+"%";
+      fill.style.animationDelay = (i*0.05).toFixed(2)+"s";
+      bar.appendChild(fill); row.appendChild(bar);
+      row.setAttribute("aria-label", d.n + ": index finanční pohody " + cz(d.bar,0));
+      mobBox.appendChild(row);
+    });
+  }
+
   function setRead(d){
     read.innerHTML = "";
     if(!d){
       var t = el("div","cc-ki__takeline");
-      var sp = el("span"); sp.innerHTML = TAKE_C[active] || "";
+      var sp = el("span");
+      sp.innerHTML = (MOB.matches ? TAKE_M[active] : TAKE_C[active]) || "";
       t.appendChild(sp); read.appendChild(t); return;
     }
     var b = el("b"); b.textContent = d.n; read.appendChild(b);
@@ -575,12 +615,14 @@ svg.is-focus .cc-ki__catlab.is-hot{opacity:1;}
     drawLink(rychle);
     if(!rychle) drawLabels();
     setRead(null);
-    seznam();
+    mobil();
   }
 
   /* viewBox se přepočítává na skutečné rozměry, aby 1 jednotka = 1 px
      a popisky os zůstaly čitelné i v úzkém rámu na mobilu. */
   function build(rychle){
+    /* v úzkém rámu se graf nekreslí vůbec — je schovaný a místo něj jede žebříček */
+    if(MOB.matches){ setRead(null); mobil(); return; }
     var W = Math.max(240, Math.round(wrap.clientWidth));
     var H = Math.max(150, Math.round(wrap.clientHeight));
     var narrow = W < 560;
@@ -660,38 +702,6 @@ svg.is-focus .cc-ki__catlab.is-hot{opacity:1;}
     update(rychle);
   }
 
-  /* --- 31: žebříček pro mobil ------------------------------------------
-     Bodový graf je na telefonu nečitelný (body 4,4 px, popisky se nevejdou).
-     Stejná data, formát, který na úzkém rámu funguje. */
-  var list = root.querySelector("[data-list]");
-  function seznam(){
-    if(!list) return;
-    var g = null;
-    GROUPS.forEach(function(x){ if(x.k === active) g = x; });
-    if(!g) return;
-    list.innerHTML = "";
-    var radky = g.rows.map(function(r){ return {n:r[0], cups:r[1], bar:r[2]}; })
-                      .sort(function(a,b){ return b.cups - a.cups; });
-    var vlozen = false;
-    function radek(d, norm){
-      var li = el("div","cc-ki__li" + (norm ? " cc-ki__li--norm" : ""));
-      var b = document.createElement("b"); b.textContent = d.n; li.appendChild(b);
-      var i = document.createElement("i"); i.textContent = num(d.cups); li.appendChild(i);
-      var sm = document.createElement("s"); sm.textContent = cz(d.bar,0); li.appendChild(sm);
-      li.setAttribute("aria-label", d.n + ": " + num(d.cups) + " " + unit(d.cups) +
-        " týdně, index finanční pohody " + cz(d.bar,0));
-      list.appendChild(li);
-    }
-    radky.forEach(function(d){
-      /* průměr ČR se zařadí tam, kam podle spotřeby patří */
-      if(!vlozen && d.cups < CELKEM[1]){
-        radek({n:"Průměr ČR", cups:CELKEM[1], bar:CELKEM[2]}, true); vlozen = true;
-      }
-      radek(d, false);
-    });
-    if(!vlozen) radek({n:"Průměr ČR", cups:CELKEM[1], bar:CELKEM[2]}, true);
-  }
-
   svg.addEventListener("mouseleave", function(){ hover(null); });
   tabs(root, function(g){
     active = g.k;
@@ -702,6 +712,8 @@ svg.is-focus .cc-ki__catlab.is-hot{opacity:1;}
     var to, ro = new ResizeObserver(function(){ clearTimeout(to); to=setTimeout(build,80); });
     ro.observe(wrap);
   } else { window.addEventListener("resize", build); }
+  /* při překlopení přes hranici se překreslí ta správná podoba */
+  if(MOB.addEventListener) MOB.addEventListener("change", function(){ S = null; build(); });
 })();
 </script>
 
