@@ -6,9 +6,11 @@
 <title>Co říká pití kávy o finanční pohodě?</title>
 <meta name="robots" content="noindex">
 <!-- Iframe je samostatný dokument a fonty z cc.cz nedědí. -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" media="print" onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;700&display=swap">
+<noscript><link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;700&display=swap"></noscript>
 <style>
   html,body{margin:0;padding:0;background:transparent;height:100%;}
   body{overflow-x:hidden;}
@@ -135,6 +137,42 @@
 </style>
 
 <style>
+/* ryska průměru ČR na vodorovné ose — pevný orientační bod pro čtenáře */
+.cc-ki__norm{stroke:#b6bbc0;stroke-width:1;stroke-dasharray:2 3;}
+.cc-ki__normlab{fill:var(--k-muted);font:600 9.5px/1 var(--cc-ui);letter-spacing:.06em;
+  text-transform:uppercase;paint-order:stroke fill;stroke:var(--k-plocha);
+  stroke-width:3.4px;stroke-linejoin:round;}
+
+/* --- 31: na mobilu žebříček místo bodového grafu ------------------------- */
+.cc-ki__list,.cc-ki__lishead{display:none;}
+@media (max-width:619px){
+  .cc-ki--c .cc-ki__plotwrap,.cc-ki--c .cc-ki__axcap{display:none;}
+  .cc-ki__list{display:flex;flex-direction:column;flex:1 1 0;min-height:0;
+    margin-top:4px;justify-content:center;}
+  /* málo řádků se nemá roztahovat přes celý rám, hodně se musí vejít */
+  .cc-ki__li{flex:0 1 auto;min-height:0;max-height:52px;display:grid;
+    grid-template-columns:minmax(0,1fr) auto auto;align-items:center;
+    gap:10px;padding:7px 0;border-top:1px solid var(--k-line);}
+  .cc-ki__li:first-child{border-top:0;}
+  .cc-ki__li--norm{border-top:1px solid #b3b3b3;border-bottom:1px solid #b3b3b3;}
+  .cc-ki__li b{font:400 13px/1.2 var(--cc-serif);font-weight:400;color:var(--k-ink);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .cc-ki__li--norm b{font:600 10px/1.2 var(--cc-ui);text-transform:uppercase;
+    letter-spacing:.05em;color:var(--k-muted);}
+  .cc-ki__li i{font-style:normal;font:700 15px/1 var(--cc-ui);
+    font-variant-numeric:tabular-nums;color:var(--ab-lime-ink);min-width:34px;
+    text-align:right;}
+  .cc-ki__li--norm i{color:var(--k-muted);}
+  .cc-ki__li s{text-decoration:none;font:600 12px/1 var(--cc-ui);
+    font-variant-numeric:tabular-nums;color:var(--k-muted);min-width:26px;
+    text-align:right;}
+  .cc-ki__lishead{display:grid;grid-template-columns:minmax(0,1fr) auto auto;
+    gap:10px;font:600 8.5px/1.2 var(--cc-ui);letter-spacing:.06em;
+    text-transform:uppercase;color:var(--k-muted);padding-bottom:3px;}
+  .cc-ki__lishead i,.cc-ki__lishead s{font-style:normal;text-decoration:none;
+    text-align:right;}
+  .cc-ki__lishead i{min-width:34px;} .cc-ki__lishead s{min-width:26px;}
+}
 .cc-ki--c .cc-ki__plotwrap{position:relative;flex:1 1 auto;min-height:170px;}
 .cc-ki--c .cc-ki__plotwrap svg{position:absolute;inset:0;display:block;
   width:100%;height:100%;overflow:hidden;}
@@ -211,6 +249,8 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
   <div class="cc-ki__plotwrap">
     <svg data-svg role="img" aria-label="Bodový graf: vodorovně Index finanční pohody, svisle počet káv týdně"></svg>
   </div>
+  <div class="cc-ki__lishead" aria-hidden="true"><span>Skupina</span><i>Kávy</i><s>Index</s></div>
+  <div class="cc-ki__list" data-list></div>
   <div class="cc-ki__read" data-read></div>
   <p class="cc-ki__foot"><svg class="cc-ki__i" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 7.2v4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.7" r=".95" fill="currentColor"/></svg>Barometr finanční pohody Air Bank, 2026.</p>
 </div>
@@ -307,7 +347,39 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
   /* Obě osy lineárně a sražené na skutečný rozsah dat. Zlom svislé osy tu
      byl a Matt ho zrušil — spojité měřítko se čte snáz, cenou je, že mračno
      sedí v dolní polovině, protože ho manažeři (11,4) roztahují nahoru. */
+  /* Osy se sráží na rozsah AKTIVNÍ kategorie (+ průměr ČR jako kotva) a při
+     přepnutí tam plynule přejedou. Pevný rozsah přes všechna data znamenal,
+     že Manažeři (73,9 / 11,4) sami roztahovali obě osy a zbytek se mačkal. */
   var XM=32, XX=76, YM=1.8, YX=11.8, active=GROUPS[0].k;
+  var cilXM=XM, cilXX=XX, cilYM=YM, cilYX=YX, tween=null;
+
+  function meritko(k){
+    var body = ALL.filter(function(d){ return d.g === k; }).concat([ALL[ALL.length-1]]);
+    var xs = body.map(function(d){ return d.bar; }),
+        ys = body.map(function(d){ return d.cups; });
+    var x0 = Math.min.apply(null,xs), x1 = Math.max.apply(null,xs),
+        y0 = Math.min.apply(null,ys), y1 = Math.max.apply(null,ys);
+    var rx = Math.max(x1-x0, 8), ry = Math.max(y1-y0, 1.2);
+    return { xm: x0 - rx*0.22, xx: x1 + rx*0.22,
+             ym: Math.max(0, y0 - ry*0.28), yx: y1 + ry*0.28 };
+  }
+
+  function prejed(k){
+    var c = meritko(k);
+    var zXM=XM, zXX=XX, zYM=YM, zYX=YX, t0=null, DUR=520;
+    cilXM=c.xm; cilXX=c.xx; cilYM=c.ym; cilYX=c.yx;
+    if(still || !S){ XM=cilXM; XX=cilXX; YM=cilYM; YX=cilYX; return false; }
+    if(tween) cancelAnimationFrame(tween);
+    (function krok(ts){
+      if(t0===null) t0=ts;
+      var pr = Math.min(1, (ts-t0)/DUR), e = 1 - Math.pow(1-pr, 3);
+      XM = zXM+(cilXM-zXM)*e; XX = zXX+(cilXX-zXX)*e;
+      YM = zYM+(cilYM-zYM)*e; YX = zYX+(cilYX-zYX)*e;
+      build(pr < 1);
+      if(pr < 1) tween = requestAnimationFrame(krok); else tween = null;
+    })(performance.now());
+    return true;
+  }
   var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var ALL = [];
@@ -367,7 +439,7 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
 
   /* Spojnice bodů kategorie seřazených podle osy x — ukáže, jak skupina
      stoupá spolu s finanční pohodou. Kreslí se zleva doprava. */
-  function drawLink(){
+  function drawLink(rychle){
     var pts = dots.filter(function(x){ return x.d.g === active; })
                   .map(function(x){ return x.d; })
                   .sort(function(a,b){ return a.bar - b.bar; });
@@ -378,8 +450,8 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
     var len = link.getTotalLength ? link.getTotalLength() : 0;
     link.style.transition = "none";
     link.style.strokeDasharray = len + " " + len;
-    link.style.strokeDashoffset = still ? 0 : len;
-    if(still) return;
+    link.style.strokeDashoffset = (still || rychle) ? 0 : len;
+    if(still || rychle) return;
     requestAnimationFrame(function(){
       link.style.transition = "";
       link.style.strokeDashoffset = 0;
@@ -388,10 +460,22 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
 
   /* Popisky zvýrazněných bodů. Na úzkém rámu se vynechají — plocha grafu
      je tam tak malá, že by se text překrýval; tam slouží ťuknutí na bod. */
+  /* Změří skutečnou šířku popisku ve stejném stylu, v jakém se vysází. */
+  var mericka = null;
+  function sirka(txt){
+    if(!mericka){
+      mericka = sv("text",{"class":"cc-ki__catlab",x:-9999,y:-9999});
+      svg.appendChild(mericka);
+    }
+    if(mericka.parentNode !== svg) svg.appendChild(mericka);
+    mericka.textContent = txt;
+    try { return mericka.getBBox().width; } catch(e){ return txt.length*6.35; }
+  }
+
   function drawLabels(){
     while(labg.firstChild) labg.removeChild(labg.firstChild);
     if(!S || S.narrow) return;
-    var GAP = 15, PAD = 7, CH = 6.35;   /* CH = odhad šířky znaku v Inter 600 11,5px */
+    var GAP = 17, PAD = 7;
 
     var act = [], pins = [];
     dots.forEach(function(x){
@@ -418,13 +502,14 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
     pins.forEach(function(i){ i.right = i.px < S.W*0.62; });
 
     if(column){
-      var wid = Math.max.apply(null, act.map(function(i){ return i.n.length*CH; }));
+      /* skutečné šířky textů, ne odhad podle počtu znaků */
+      var wid = Math.max.apply(null, act.map(function(i){ return sirka(i.n); }));
       var col = side ? maxX + 30 : minX - 30;
       if(side && col + wid > S.W - 8) col = S.W - 8 - wid;
       if(!side && col - wid < S.ML + 4) col = S.ML + 4 + wid;
       act.forEach(function(i){ i.lx = col; });
     } else {
-      act.forEach(function(i){ i.lx = i.right ? i.px + 12 : i.px - 12; });
+      act.forEach(function(i){ i.lx = i.right ? i.px + 14 : i.px - 14; });
     }
     pins.forEach(function(i){
       /* stálý popisek uvnitř shluku patří do stejného sloupce, jinak by
@@ -452,6 +537,35 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
       if(under > 0) list.forEach(function(i){ i.ly += under; });
     });
 
+    /* Když by popisek ležel přes jiný bod, překlopí se na druhou stranu.
+       Kolize se hlídá proti skutečné šířce textu, ne proti odhadu. */
+    var vsechnyBody = dots.map(function(x){
+      return {x:S.X(x.d.bar), y:S.Y(x.d.cups)}; });
+    all.forEach(function(i){
+      var w = sirka(i.n);
+      function koliduje(right){
+        var x0 = right ? i.lx : i.lx - w, x1 = right ? i.lx + w : i.lx;
+        return vsechnyBody.some(function(b){
+          return Math.abs(b.x - i.px) > 1 &&
+                 b.x > x0 - 5 && b.x < x1 + 5 &&
+                 b.y > i.ly - 12 && b.y < i.ly + 5;
+        });
+      }
+      if(koliduje(i.right)){
+        var puvodni = i.lx, puvR = i.right;
+        /* 1) zkus druhou stranu */
+        i.lx = i.right ? i.px - 14 : i.px + 14; i.right = !i.right;
+        if(koliduje(i.right)){
+          /* 2) zůstaň na původní straně, ale odsuň se za sousední bod */
+          i.lx = puvodni; i.right = puvR;
+          for(var k = 0; k < 5 && koliduje(i.right); k++)
+            i.lx += i.right ? 16 : -16;
+          /* 3) když ani to nepomůže, vrať výchozí polohu (halo text udrží čitelný) */
+          if(koliduje(i.right)){ i.lx = puvodni; i.right = puvR; }
+        }
+      }
+    });
+
     all.forEach(function(i){
       var far = Math.abs(i.ly - (i.py+4)) > 3 || Math.abs(i.lx - i.px) > 20;
       if(far){
@@ -466,20 +580,21 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
     });
   }
 
-  function update(){
+  function update(rychle){
     dots.forEach(function(x){
       var on = x.d.g === active;
       x.el.classList.toggle("cc-ki__dot--on", on);
-      x.el.classList.toggle("cc-ki__dot--pin", !on && (x.d.g==="celkem" || x.d.n==="Manažeři"));
+      x.el.classList.toggle("cc-ki__dot--pin", !on && x.d.g === "celkem");
     });
-    drawLink();
-    drawLabels();
+    drawLink(rychle);
+    if(!rychle) drawLabels();
     setRead(null);
+    seznam();
   }
 
   /* viewBox se přepočítává na skutečné rozměry, aby 1 jednotka = 1 px
      a popisky os zůstaly čitelné i v úzkém rámu na mobilu. */
-  function build(){
+  function build(rychle){
     var W = Math.max(240, Math.round(wrap.clientWidth));
     var H = Math.max(150, Math.round(wrap.clientHeight));
     var narrow = W < 560;
@@ -495,15 +610,33 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
     while(svg.firstChild) svg.removeChild(svg.firstChild);
     dots = [];
 
-    (narrow?[2,6,10]:[2,4,6,8,10]).forEach(function(t){
+    /* Popisky os se dopočítají k aktuálnímu rozsahu — po přejezdu měřítka
+       by pevný seznam hodnot často padl mimo plochu. */
+    function kroky(a, b, kolik){
+      var hrube = (b-a)/kolik, e = Math.pow(10, Math.floor(Math.log(hrube)/Math.LN10)),
+          f = hrube/e, krok = (f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*e, out = [];
+      for(var v = Math.ceil(a/krok)*krok; v <= b + 1e-9; v += krok) out.push(+v.toFixed(6));
+      return out;
+    }
+    kroky(YM, YX, narrow?2:3).forEach(function(t){
       svg.appendChild(sv("line",{"class":"cc-ki__grid",x1:ML,x2:W-MR,y1:Y(t),y2:Y(t)}));
       var tx = sv("text",{"class":"cc-ki__ax",x:ML-8,y:Y(t)+4,"text-anchor":"end"});
-      tx.textContent = t; svg.appendChild(tx);
+      tx.textContent = num(t); svg.appendChild(tx);
     });
-    (narrow?[40,60]:[35,45,55,65,75]).forEach(function(t){
+    kroky(XM, XX, narrow?2:4).forEach(function(t){
       var tx = sv("text",{"class":"cc-ki__ax",x:X(t),y:H-MB+17,"text-anchor":"middle"});
-      tx.textContent = t; svg.appendChild(tx);
+      tx.textContent = Math.round(t); svg.appendChild(tx);
     });
+    /* 30: pevná kotva — průměr ČR na ose finanční pohody */
+    if(CELKEM[2] > XM && CELKEM[2] < XX){
+      var nx = X(CELKEM[2]);
+      svg.appendChild(sv("line",{"class":"cc-ki__norm",x1:nx,x2:nx,y1:MT,y2:H-MB}));
+      var vpravo = nx < W*0.6;
+      var nl = sv("text",{"class":"cc-ki__normlab", x: nx + (vpravo?6:-6), y: MT+9,
+        "text-anchor": vpravo?"start":"end"});
+      nl.textContent = "průměr ČR " + Math.round(CELKEM[2]);
+      svg.appendChild(nl);
+    }
     var axn = sv("text",{"class":"cc-ki__axname",x:W-MR,y:H-MB+35,"text-anchor":"end"});
     if(narrow) axn.setAttribute("font-size","9");
     axn.textContent = "INDEX FINANČNÍ POHODY →"; svg.appendChild(axn);
@@ -519,7 +652,10 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
     crossX = sv("line",{"class":"cc-ki__cross"}); svg.appendChild(crossX);
     crossY = sv("line",{"class":"cc-ki__cross"}); svg.appendChild(crossY);
 
-    ALL.forEach(function(d,i){
+    var kresleny = ALL.filter(function(d){
+      return d.g === active || d.g === "celkem";
+    });
+    kresleny.forEach(function(d,i){
       var r = narrow ? 4.4 : 6;
       var c = sv("circle",{cx:X(d.bar), cy:Y(d.cups), r:r, "class":"cc-ki__dot",
         tabindex:"0", role:"img",
@@ -535,11 +671,47 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
 
     labg = sv("g",{}); svg.appendChild(labg);
     hotlab = sv("text",{"class":"cc-ki__hotlab"}); svg.appendChild(hotlab);
-    update();
+    update(rychle);
+  }
+
+  /* --- 31: žebříček pro mobil ------------------------------------------
+     Bodový graf je na telefonu nečitelný (body 4,4 px, popisky se nevejdou).
+     Stejná data, formát, který na úzkém rámu funguje. */
+  var list = root.querySelector("[data-list]");
+  function seznam(){
+    if(!list) return;
+    var g = null;
+    GROUPS.forEach(function(x){ if(x.k === active) g = x; });
+    if(!g) return;
+    list.innerHTML = "";
+    var radky = g.rows.map(function(r){ return {n:r[0], cups:r[1], bar:r[2]}; })
+                      .sort(function(a,b){ return b.cups - a.cups; });
+    var vlozen = false;
+    function radek(d, norm){
+      var li = el("div","cc-ki__li" + (norm ? " cc-ki__li--norm" : ""));
+      var b = document.createElement("b"); b.textContent = d.n; li.appendChild(b);
+      var i = document.createElement("i"); i.textContent = num(d.cups); li.appendChild(i);
+      var sm = document.createElement("s"); sm.textContent = cz(d.bar,0); li.appendChild(sm);
+      li.setAttribute("aria-label", d.n + ": " + num(d.cups) + " " + unit(d.cups) +
+        " týdně, index finanční pohody " + cz(d.bar,0));
+      list.appendChild(li);
+    }
+    radky.forEach(function(d){
+      /* průměr ČR se zařadí tam, kam podle spotřeby patří */
+      if(!vlozen && d.cups < CELKEM[1]){
+        radek({n:"Průměr ČR", cups:CELKEM[1], bar:CELKEM[2]}, true); vlozen = true;
+      }
+      radek(d, false);
+    });
+    if(!vlozen) radek({n:"Průměr ČR", cups:CELKEM[1], bar:CELKEM[2]}, true);
   }
 
   svg.addEventListener("mouseleave", function(){ hover(null); });
-  tabs(root, function(g){ active = g.k; if(S) update(); else build(); });
+  tabs(root, function(g){
+    active = g.k;
+    if(!S){ var c0 = meritko(active); XM=c0.xm; XX=c0.xx; YM=c0.ym; YX=c0.yx; build(); }
+    else if(!prejed(active)) build();
+  });
   if(window.ResizeObserver){
     var to, ro = new ResizeObserver(function(){ clearTimeout(to); to=setTimeout(build,80); });
     ro.observe(wrap);
