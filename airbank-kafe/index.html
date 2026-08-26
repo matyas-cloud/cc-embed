@@ -5,12 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Latté za půl milionu — kalkulačka</title>
 <meta name="robots" content="noindex">
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" media="print" onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@400;500;700&display=swap">
+<noscript><link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@400;500;700&display=swap"></noscript>
 <style>
-  html,body{margin:0;padding:0;background:transparent;}
-  body{overflow-x:hidden;}
+  /* Rám iframu na cc.cz má pevný poměr stran a výšku nelze měnit zevnitř.
+     Prvek se proto do rámu vejde sám a nikdy si neřekne o víc místa. */
+  html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;}
   .cc-embed{margin:0!important;}
 </style>
 </head>
@@ -163,18 +166,24 @@
 
     <p class="cc-kafe__say" data-verdict2></p>
 
-    <details class="cc-kafe__meth">
-      <summary><svg class="cc-kafe__i" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 7.2v4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.7" r=".95" fill="currentColor"/></svg>Výpočet</summary>
-      <div>
+    <p class="cc-kafe__meth">
+      <button type="button" class="cc-kafe__methbtn" data-meth-open aria-expanded="false"><svg class="cc-kafe__i" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 7.2v4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.7" r=".95" fill="currentColor"/></svg>Výpočet</button>
+    </p>
+
+  </section>
+
+ </div>
+
+ <!-- metodika: překryv přes celý rám, vlastní scroll -->
+ <div class="cc-kafe__panel" data-meth-panel hidden role="dialog" aria-modal="true" aria-label="Výpočet">
+   <h4>Výpočet</h4>
+   <div class="cc-kafe__panelbody">
         <p>Počítáme s částkou, kterou byste za 52 týdnů dali za kávu při průměrné ceně 85 Kč. K tomu přidáváme scénář, kdy byste stejnou částku odkládali každý měsíc po dobu 5–10 let (2016–2025).</p>
         <p><strong>Spořicí účet:</strong> Vycházíme ze skutečné bonusové sazby Air Bank – od 0,60 % v roce 2020 přes 5 % v letech 2022 a 2023 až po 2,6 % dnes. Úrok se počítá denně, připisuje měsíčně a odečítá se z něj 15% srážková daň. Respektujeme i limity úročení, kdy se od září 2025 zůstatek nad 300 000 Kč neúročí. Sazby za roky 2016 až 2019 jsou odhadnuté podle vývoje repo sazby ČNB, což se na výsledku projeví v řádu promile.</p>
         <p><strong>Akcie:</strong> V úvahu bereme index S&amp;P 500 včetně reinvestovaných dividend. Koruny se každý rok mění na dolary průměrným ročním kurzem, výsledek se přepočítává zpět kurzem 20,50 Kč za dolar (červenec 2026). Proto je výnos o něco nižší, než jaký by vyšel v dolarech – koruna za tu dobu posílila. Nepočítáme poplatky ani daň z prodeje akcií. V grafu je roční výnos rozložený rovnoměrně do dvanácti měsíců, během roku by kolísal výrazněji.</p>
         <p><strong>Minulé výnosy nezaručují ty budoucí.</strong> Roky 2016 až 2025 byly pro akcie mimořádně silné a stejně dobře dopadnout nemusí. Nejde o investiční doporučení.</p>
       </div>
-    </details>
-
-  </section>
-
+   <button type="button" class="cc-kafe__zavri" data-meth-close>Zavřít</button>
  </div>
 </div>
 
@@ -185,17 +194,24 @@
    Limetka Air Bank funguje jako plocha (slider, pruh), ne jako barva textu —
    na světlém podkladu by nebyla čitelná. Pro text slouží tmavší odstín. */
 .cc-kafe{
+  box-sizing:border-box;   /* min-height:100vh musí počítat i s paddingem */
   --ab-green:#b4d335;          /* SWAP-POINT: limetka Air Bank — ověřit v brand manuálu */
   --ab-green-ink:#5f7d0a;      /* tmavší varianta pro text a čísla */
   --k-plocha:#e9e9e9;
   --k-line:#d4d4d4;
   --k-muted:#6b7076;
+  position:relative;
+  display:flex;flex-direction:column;min-height:100vh;
   background:var(--k-plocha);
   border:0;
   border-radius:15px;
-  padding:clamp(26px,5vw,60px) clamp(20px,4vw,60px);
+  padding:clamp(18px,3.6vw,44px) clamp(16px,3.4vw,52px);
+  overflow:hidden;
 }
-.cc-kafe__inner{max-width:620px;margin:0 auto;}
+.cc-kafe__inner{max-width:620px;width:100%;margin:0 auto;
+  flex:1 1 0;min-height:0;display:flex;flex-direction:column;}
+.cc-kafe section[data-screen]{flex:1 1 0;min-height:0;display:flex;flex-direction:column;}
+.cc-kafe section[hidden]{display:none;}
 
 /* pruh s návratem nad druhou obrazovkou */
 .cc-kafe__zpet{
@@ -207,14 +223,15 @@
 .cc-kafe__zpet svg{width:13px;height:13px;flex:0 0 auto;}
 /* ikonka „i" u poznámek */
 .cc-kafe__i{width:14px;height:14px;flex:0 0 auto;margin-top:1px;}
-.cc-kafe h3{font-size:clamp(23px,4.2vw,32px);line-height:1.19;margin:0 0 clamp(22px,4vw,34px);
+.cc-kafe h3{font-size:calc(clamp(23px,4.2vw,32px) * var(--sc,1));line-height:1.19;
+  margin:0 0 calc(clamp(12px,2.4vw,26px) * var(--sc,1));
   letter-spacing:-.01em;}
 
 /* --- otázka a slider --- */
 .cc-kafe__ask{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
   margin:0 0 14px;}
 .cc-kafe__ask label{font:400 clamp(17px,2.4vw,19px)/1.4 var(--cc-serif);color:var(--cc-ink);}
-.cc-kafe__ask output{font:700 clamp(26px,5vw,34px)/1 var(--cc-display);color:var(--cc-ink);
+.cc-kafe__ask output{font:700 calc(clamp(26px,5vw,34px) * var(--sc,1))/1 var(--cc-display);color:var(--cc-ink);
   font-variant-numeric:tabular-nums;}
 
 .cc-kafe input[type=range]{
@@ -237,31 +254,35 @@
   font:500 12px/1 var(--cc-ui);color:var(--k-muted);margin-top:2px;}
 
 /* --- hlavní číslo --- */
-.cc-kafe__readout{margin:clamp(30px,5vw,44px) 0 0;padding-top:clamp(24px,4vw,32px);
+.cc-kafe__readout{margin:calc(clamp(14px,3vw,34px) * var(--sc,1)) 0 0;
+  padding-top:calc(clamp(12px,2.6vw,26px) * var(--sc,1));
   border-top:1px solid var(--k-line);}
 .cc-kafe__lbl{display:block;font:500 12px/1.3 var(--cc-ui);color:var(--k-muted);
   letter-spacing:.06em;text-transform:uppercase;}
-.cc-kafe__big{display:block;margin-top:6px;font:700 clamp(38px,8.6vw,60px)/1.05 var(--cc-display);
+.cc-kafe__big{display:block;margin-top:6px;
+  font:700 calc(clamp(38px,8.6vw,60px) * var(--sc,1))/1.05 var(--cc-display);
   color:var(--cc-ink);letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
 
-.cc-kafe .cc-kafe__say{margin:clamp(16px,2.6vw,20px) 0 0;font:400 clamp(16px,2.2vw,18px)/1.65 var(--cc-serif);
-  color:var(--cc-ink);min-height:4.95em;}
+.cc-kafe .cc-kafe__say{margin:calc(clamp(16px,2.6vw,20px) * var(--sc,1)) 0 0;
+  font:400 calc(clamp(16px,2.2vw,18px) * var(--sc,1))/1.6 var(--cc-serif);
+  color:var(--cc-ink);min-height:3.3em;}
 .cc-kafe__say strong{font-weight:700;}
 
 /* --- tlačítka ve stylu CC: černý pill, Inter 12px --- */
 .cc-kafe__pill{
-  display:inline-block;margin:clamp(20px,3.4vw,26px) 0 0;padding:12px 26px;
+  display:inline-block;margin:calc(clamp(12px,2.4vw,24px) * var(--sc,1)) 0 0;
+  padding:calc(12px * var(--sc,1)) 26px;
   border:0;border-radius:32px;background:#000;color:#fff;cursor:pointer;
   font:500 13px/1.4 var(--cc-ui);letter-spacing:.01em;text-align:left;
   transition:opacity .18s;}
 .cc-kafe__pill:hover{opacity:.82;}
 
 .cc-kafe .cc-kafe__foot{display:flex;gap:8px;align-items:flex-start;
-  margin:clamp(32px,5vw,42px) 0 0;font:400 13px/1.55 var(--cc-ui);color:var(--k-muted);}
+  margin:auto 0 0;padding-top:clamp(12px,2.4vw,22px);font:400 13px/1.55 var(--cc-ui);color:var(--k-muted);}
 
 /* --- obrazovka 2 --- */
 .cc-kafe .cc-kafe__ctx{margin:-18px 0 clamp(20px,3.4vw,28px);font:400 15px/1.5 var(--cc-ui);color:var(--k-muted);}
-.cc-kafe__years{display:flex;gap:8px;justify-content:center;margin:0 0 clamp(26px,4vw,34px);}
+.cc-kafe__years{display:flex;gap:8px;justify-content:center;margin:0 0 clamp(10px,2vw,20px);}
 .cc-kafe__years button{
   padding:9px 20px;border:0;border-radius:32px;cursor:pointer;
   font:500 13px/1.4 var(--cc-ui);background:transparent;color:var(--k-muted);
@@ -273,8 +294,9 @@
    Emphasis paleta: akcie nesou barvu, zbytek je kontext v šedé. Rozlišení
    nestojí jen na barvě — „utratili" má navíc čárkovanou linku. Kontrast
    všech tří vůči ploše je nad 3:1. */
-.cc-kafe__chart{position:relative;margin:0 0 clamp(18px,3vw,24px);}
-.cc-kafe__chart svg{display:block;width:100%;height:auto;overflow:visible;}
+.cc-kafe__chart{position:relative;margin:0 0 clamp(10px,2vw,20px);
+  flex:1 1 0;min-height:80px;}
+.cc-kafe__chart svg{display:block;width:100%;height:100%;overflow:visible;}
 .cc-kafe__chart svg:focus-visible{outline:2px solid #000;outline-offset:4px;}
 .cc-kafe__gridline{stroke:#d4d4d4;stroke-width:1;}
 .cc-kafe__axtext{fill:var(--k-muted);font:500 11px/1 var(--cc-ui);}
@@ -302,7 +324,7 @@
 [data-series="s"] .cc-kafe__key{background:#4a5058;}
 [data-series="p"] .cc-kafe__key{background:var(--ab-green-ink);height:3px;}
 .cc-kafe__val{display:block;margin-top:4px;
-  font:700 clamp(22px,4.6vw,29px)/1.1 var(--cc-display);color:var(--cc-ink);
+  font:700 calc(clamp(22px,4.6vw,29px) * var(--sc,1))/1.1 var(--cc-display);color:var(--cc-ink);
   letter-spacing:-.015em;font-variant-numeric:tabular-nums;}
 .cc-kafe__item--win .cc-kafe__val{color:var(--ab-green-ink);}
 .cc-kafe__plus{display:block;margin-top:3px;
@@ -310,15 +332,28 @@
 .cc-kafe__item--win .cc-kafe__plus{color:var(--ab-green-ink);}
 
 /* --- metodika --- */
-.cc-kafe__meth{margin:clamp(20px,3vw,26px) 0 0;border-top:1px solid var(--k-line);padding-top:16px;}
-.cc-kafe__meth summary{cursor:pointer;list-style:none;
-  font:500 13px/1.4 var(--cc-ui);color:var(--k-muted);
-  display:inline-flex;align-items:center;gap:8px;}
-.cc-kafe__meth summary::-webkit-details-marker{display:none;}
-.cc-kafe__meth summary:hover{color:var(--cc-ink);}
-.cc-kafe__meth>div{margin-top:14px;}
-.cc-kafe__meth p{font:400 13px/1.7 var(--cc-ui);color:var(--k-muted);margin:0 0 11px;}
-.cc-kafe__meth strong{color:#4a5057;font-weight:700;}
+/* Metodika je překryv přes celý rám s vlastním scrollem. Jako <details> to
+   rozráželo layout o 600-700 px, což se do pevné výšky nikdy nevešlo. */
+.cc-kafe__meth{margin:auto 0 0;padding-top:clamp(10px,2vw,18px);}
+.cc-kafe__methbtn{display:inline-flex;align-items:center;gap:8px;
+  padding:0;border:0;background:none;cursor:pointer;
+  font:500 13px/1.4 var(--cc-ui);color:var(--k-muted);transition:color .16s;}
+.cc-kafe__methbtn:hover{color:var(--cc-ink);}
+.cc-kafe__panel{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;
+  background:var(--k-plocha);border-radius:15px;
+  padding:clamp(18px,3.6vw,44px) clamp(16px,3.4vw,52px);}
+.cc-kafe__panel[hidden]{display:none;}
+.cc-kafe__panel h4{margin:0 0 12px;font:700 clamp(17px,2.6vw,22px)/1.2 var(--cc-display);}
+.cc-kafe__panelbody{flex:1 1 auto;min-height:0;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  /* jemný náznak, že text pokračuje */
+  -webkit-mask-image:linear-gradient(to bottom,#000 92%,rgba(0,0,0,.25));
+  mask-image:linear-gradient(to bottom,#000 92%,rgba(0,0,0,.25));}
+.cc-kafe__zavri{align-self:flex-start;margin-top:12px;padding:9px 20px;
+  border:0;border-radius:32px;background:#000;color:#fff;cursor:pointer;
+  font:500 13px/1.4 var(--cc-ui);}
+.cc-kafe__panel p{font:400 13px/1.7 var(--cc-ui);color:var(--k-muted);margin:0 0 11px;}
+.cc-kafe__panel strong{color:#4a5057;font-weight:700;}
 
 .cc-kafe :focus-visible{outline:2px solid #000;outline-offset:3px;}
 
@@ -326,7 +361,18 @@
 
 @media (min-width:620px){
   .cc-kafe__res{grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.6vw,24px);}
-  .cc-kafe__say{min-height:3.3em;}
+  .cc-kafe__say{min-height:2.6em;}
+}
+/* Na mobilu drží trojice výsledků jeden řádek — pod sebou zabrala celý rám. */
+@media (max-width:619px){
+  [data-screen="2"] .cc-kafe__res{grid-template-columns:repeat(3,1fr);gap:8px;}
+  [data-screen="2"] .cc-kafe__lbl{font-size:9.5px;letter-spacing:.03em;}
+  [data-screen="2"] .cc-kafe__key{width:9px;margin-right:4px;}
+  [data-screen="2"] .cc-kafe__val{font-size:calc(clamp(15px,3.9vw,20px) * var(--sc,1));
+    letter-spacing:-.02em;}
+  [data-screen="2"] .cc-kafe__plus{font-size:11px;}
+  [data-screen="2"] .cc-kafe__say{font-size:calc(14px * var(--sc,1));line-height:1.5;min-height:0;}
+  [data-screen="2"] h3{font-size:calc(clamp(18px,4.4vw,23px) * var(--sc,1));}
 }
 </style>
 
@@ -394,8 +440,9 @@
   };
   /* ============================ konec konfigurace ============================ */
 
-  var root = document.currentScript ? document.currentScript.previousElementSibling : null;
-  while (root && !(root.classList && root.classList.contains('cc-kafe'))) root = root.previousElementSibling;
+  /* Kořen přes vlastní data-atribut. Hledání přes previousElementSibling
+     padalo, jakmile WP mezi bloky vložil prázdný odstavec. */
+  var root = document.querySelector('[data-cc-kafe]');
   if (!root || root.dataset.ccInit) return;
   root.dataset.ccInit = '1';
 
@@ -521,16 +568,19 @@
   }
 
   function kresli(d){
-    var W = Math.max(240, Math.round(box.getBoundingClientRect().width || 600)),
+    var r0 = box.getBoundingClientRect(),
+        W = Math.max(240, Math.round(r0.width || 600)),
         uzky = W < 430,
-        H = uzky ? 170 : 210,
-        padT = 12, padB = 22, padR = 6,
+        /* výška se bere z místa, které v rámu zbylo — rám má pevný poměr */
+        H = Math.max(90, Math.round(r0.height || (uzky ? 170 : 210))),
+        padT = 10, padB = H < 150 ? 18 : 22, padR = 6,
         plotH = H - padT - padB,
         body = d.v.length,
         strop = hezkyStrop(Math.max(d.vlozeno, d.sporak, d.sp)) || 1;
 
     svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-    svg.setAttribute('height', H);
+    svg.setAttribute('preserveAspectRatio', 'none');
+    svg.removeAttribute('height');
     while (svg.firstChild) svg.removeChild(svg.firstChild);
 
     var x = function(i){ return body < 2 ? 0 : (i / (body - 1)) * (W - padR); },
@@ -613,7 +663,7 @@
       tip.appendChild(radek);
     });
     // dvě pevné polohy místo poskakování za kurzorem: uhne tam, kde je volno
-    tip.hidden = false;
+    tip.hidden = false; tip.setAttribute('aria-hidden','false');
     var vpravo = px < geo.W * 0.45;
     tip.style.left = vpravo ? (geo.W - tip.offsetWidth) + 'px' : '0px';
     tip.style.top = '0px';
@@ -622,12 +672,15 @@
     if (!geo) return;
     geo.cross.style.display = 'none';
     geo.tecky.forEach(function(c){ c.style.display = 'none'; });
-    tip.hidden = true;
+    tip.hidden = true; tip.setAttribute('aria-hidden','true');
     geo.idx = -1;
   }
 
+  /* Na dotykovém displeji tooltip nezapínáme — prst při scrollování jen
+     rozsvěcel bublinu. Koncová čísla jsou pod grafem. */
+  var jemnyKurzor = !window.matchMedia || window.matchMedia('(pointer: fine)').matches;
   svg.addEventListener('pointermove', function(e){
-    if (!geo) return;
+    if (!geo || !jemnyKurzor || e.pointerType === 'touch') return;
     var r = svg.getBoundingClientRect();
     ukazBod(Math.round((e.clientX - r.left) / r.width * (geo.body - 1)));
   });
@@ -690,12 +743,42 @@
       kc(d.sporak) + ', v akciovém indexu ' + kc(d.sp) + '.';
   }
 
+  /* Rám má pevnou výšku. Když se obsah nevejde (nízký rám, delší text,
+     jiné fonty), typografie a rezervy se úměrně zmenší. */
+  function fit(){
+    var sek = root.querySelector('section[data-screen]:not([hidden])');
+    if (!sek) return;
+    root.style.setProperty('--sc', '1');
+    for (var i = 0; i < 12; i++){
+      /* root má overflow:hidden, takže o přetečení musí říct sekce */
+      if (sek.scrollHeight <= sek.clientHeight + 1) break;
+      root.style.setProperty('--sc', (1 - (i + 1) * 0.05).toFixed(2));
+    }
+  }
+
   function prepni(cislo){
     root.querySelector('[data-screen="1"]').hidden = (cislo !== 1);
     root.querySelector('[data-screen="2"]').hidden = (cislo !== 2);
     // graf se kreslí do změřené šířky, a tu má smysl měřit až když je vidět
+    fit();
     if (cislo === 2) kresli(TAB[roky][+slider.value]);
   }
+
+  /* --- metodika (překryv) --- */
+  var panel = root.querySelector('[data-meth-panel]'),
+      methBtn = root.querySelector('[data-meth-open]'),
+      methClose = root.querySelector('[data-meth-close]');
+  function meth(otevrit){
+    panel.hidden = !otevrit;
+    methBtn.setAttribute('aria-expanded', String(!!otevrit));
+    if (otevrit) { panel.querySelector('.cc-kafe__panelbody').scrollTop = 0; methClose.focus(); }
+    else methBtn.focus();
+  }
+  methBtn.addEventListener('click', function(){ meth(true); });
+  methClose.addEventListener('click', function(){ meth(false); });
+  root.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !panel.hidden) { meth(false); e.preventDefault(); }
+  });
 
   slider.addEventListener('input', vykresli);
   $('[data-go]').addEventListener('click', function(){ prepni(2); });
@@ -712,27 +795,14 @@
   }
 
   vykresli();
+  fit();
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
 })();
 </script>
 
-<script>
-/* Hlásí rodičovské stránce svoji výšku, aby iframe nemusel mít pevnou výšku. */
-(function(){
-  var ID = 'airbank-kafe';
-  var last = 0;
-  function send(){
-    var h = Math.ceil(document.documentElement.getBoundingClientRect().height);
-    if (h && Math.abs(h - last) > 1){
-      last = h;
-      parent.postMessage({ ccEmbed: 'height', id: ID, height: h }, '*');
-    }
-  }
-  window.addEventListener('load', send);
-  window.addEventListener('resize', send);
-  if (window.ResizeObserver) new ResizeObserver(send).observe(document.body);
-  document.fonts && document.fonts.ready.then(send);
-  setTimeout(send, 300); setTimeout(send, 1200);
-})();
-</script>
+<!-- Skript, který hlásil výšku rodičovské stránce, je pryč: rám iframu na
+     cc.cz má pevný poměr stran a postMessage s výškou téma ignoruje. -->
 </body>
 </html>
