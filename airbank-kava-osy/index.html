@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Káva jako teploměr rozpočtu</title>
+<meta name="robots" content="noindex">
+<!-- Iframe je samostatný dokument a fonty z cc.cz nedědí. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;background:transparent;height:100%;}
+  body{overflow-x:hidden;}
+  /* Šablona CC dává iframu pevnou výšku. Prvek ji vyplní, takže pod ním
+     nezůstane prázdné místo ani na širokých telefonech. */
+  .cc-embed{margin:0!important;}
+</style>
+</head>
+<body>
+
+<style>
+.cc-embed{
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed :focus-visible{outline:3px solid #000;outline-offset:3px;}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+
+<style>
+/* --- Kávový index -----------------------------------------------------------
+   SWAP-POINTS:
+     --ab-lime      limetka Air Bank (ověřit v brand manuálu partnera)
+     --ab-lime-ink  tmavší odstín pro obrysy a linky (kontrast vůči ploše)
+   Plocha, radius a typografie kopírují bloky na cc.cz: #e9e9e9, radius 15px,
+   velký vnitřní padding, žádný rámeček ani stín.
+   Výška je vázaná na rám, který kolem iframu staví šablona CC — proto jsou
+   odsazení a velikosti laděné na tři konkrétní poměry, viz hosting-iframe.md.
+--------------------------------------------------------------------------- */
+.cc-ki{
+  box-sizing:border-box;
+  display:flex;flex-direction:column;min-height:100vh;
+  --ab-lime:#b4d335;
+  --ab-lime-ink:#6f8c10;
+  --k-plocha:#e9e9e9;
+  --k-line:#d4d4d4;
+  --k-muted:#6b7076;
+  --k-ghost:#bcbcbc;
+  --k-ink:#222;
+  background:var(--k-plocha);
+  border:0;border-radius:15px;
+  padding:clamp(20px,3.4vw,44px) clamp(18px,3.2vw,48px);
+  margin:0;
+  font:18px/1.667 var(--cc-serif);
+}
+.cc-ki h3{font-size:clamp(19px,2.7vw,30px);line-height:1.17;letter-spacing:-.012em;
+  margin:0 0 clamp(6px,1vw,10px);max-width:28ch;}
+.cc-ki .cc-ki__lede{margin:0 0 clamp(16px,2.4vw,24px);max-width:62ch;
+  font:400 clamp(13.5px,1.3vw,16px)/1.55 var(--cc-serif);color:#3c3c3c;}
+.cc-ki .cc-ki__foot{display:flex;gap:7px;align-items:flex-start;
+  margin:clamp(16px,2.4vw,26px) 0 0;font:400 12px/1.5 var(--cc-ui);color:var(--k-muted);}
+.cc-ki__i{width:13px;height:13px;flex:0 0 auto;margin-top:2px;}
+
+/* přepínač kategorií — černý pill jako tlačítka na cc.cz */
+.cc-ki__tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 clamp(14px,2.2vw,24px);}
+.cc-ki__tabs button{
+  padding:7px 15px;border:0;border-radius:32px;cursor:pointer;
+  font:500 12px/1.35 var(--cc-ui);background:transparent;color:var(--k-muted);
+  box-shadow:inset 0 0 0 1px var(--k-line);
+  transition:background .16s,color .16s,box-shadow .16s;}
+.cc-ki__tabs button:hover{color:var(--k-ink);box-shadow:inset 0 0 0 1px #adadad;}
+.cc-ki__tabs button[aria-pressed="true"]{background:#000;color:#fff;box-shadow:none;}
+@media (max-width:619px){
+  /* v úzkém rámu není místo na dva řádky pilulek — jeden posuvný */
+  .cc-ki__tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+  .cc-ki__tabs::-webkit-scrollbar{display:none;}
+  .cc-ki__tabs button{flex:0 0 auto;}
+  .cc-ki h3{font-size:19px;}
+  .cc-ki .cc-ki__lede{margin-bottom:13px;}
+  .cc-ki__long{display:none;}
+}
+@media (max-width:379px){
+  .cc-ki{padding:15px 14px;}
+  .cc-ki h3{font-size:17.5px;}
+  .cc-ki .cc-ki__lede{font-size:12.5px;line-height:1.45;margin-bottom:10px;}
+  .cc-ki__tabs{margin-bottom:10px;gap:5px;}
+  .cc-ki__tabs button{padding:6px 12px;font-size:11.5px;}
+  .cc-ki .cc-ki__foot{font-size:10.5px;margin-top:10px;gap:5px;}
+  .cc-ki__i{width:11px;height:11px;}
+}
+
+@keyframes ki-pop{from{opacity:0;transform:translateY(4px) scale(.86);}to{opacity:1;transform:none;}}
+@keyframes ki-fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+@keyframes ki-take{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
+@keyframes ki-dot{from{opacity:0;transform:scale(.2);}to{opacity:1;transform:none;}}
+
+/* Pointa kategorie — věta, která se mění s přepnutím. Pevná minimální výška,
+   aby se článek nehýbal, když je text jednou o řádek delší. */
+.cc-ki .cc-ki__take{display:flex;gap:10px;align-items:stretch;
+  margin:clamp(10px,1.5vw,16px) 0 0;min-height:2.7em;
+  font:400 clamp(12.5px,1.3vw,15.5px)/1.45 var(--cc-ui);color:var(--k-ink);}
+.cc-ki__take::before{content:"";flex:0 0 auto;width:3px;border-radius:2px;
+  background:var(--ab-lime);}
+.cc-ki__take b{font-weight:600;}
+.cc-ki__take span{display:block;align-self:center;animation:ki-take .34s ease backwards;}
+@media (max-width:619px){ .cc-ki .cc-ki__take{min-height:3.2em;gap:8px;} }
+</style>
+
+<style>
+.cc-ki--c .cc-ki__plotwrap{position:relative;flex:1 1 auto;min-height:170px;}
+.cc-ki--c .cc-ki__plotwrap svg{position:absolute;inset:0;display:block;
+  width:100%;height:100%;overflow:hidden;}
+.cc-ki__axcap{display:flex;justify-content:flex-start;gap:12px;margin:0 0 4px;
+  font:600 clamp(9px,.95vw,10.5px)/1.3 var(--cc-ui);letter-spacing:.07em;
+  text-transform:uppercase;color:var(--k-muted);}
+.cc-ki__grid{stroke:#dcdcdc;stroke-width:1;}
+.cc-ki__ax{fill:var(--k-muted);font:500 11px/1 var(--cc-ui);}
+/* popis vodorovné osy sedí pod čísly, u pravého konce osy */
+.cc-ki__axname{fill:var(--k-muted);font:600 10.5px/1 var(--cc-ui);letter-spacing:.07em;}
+.cc-ki__trend{stroke:#c9c9c9;stroke-width:1.3;stroke-dasharray:5 4;fill:none;}
+/* zlom svislé osy — nad ním je měřítko stlačené, aby manažeři nerozmáčkli mračno */
+.cc-ki__brk{stroke:#8d9298;stroke-width:1.4;stroke-linecap:round;}
+.cc-ki__brkline{stroke:#cfcfcf;stroke-width:1;stroke-dasharray:2 5;}
+/* spojnice bodů vybrané kategorie — vykreslí se zleva doprava */
+.cc-ki__link{fill:none;stroke:var(--ab-lime-ink);stroke-width:2.2;
+  stroke-linecap:round;stroke-linejoin:round;opacity:.9;
+  transition:stroke-dashoffset .75s cubic-bezier(.3,.7,.3,1);}
+.cc-ki__cross{stroke:#8d9298;stroke-width:1;stroke-dasharray:3 3;opacity:0;
+  transition:opacity .16s;}
+.cc-ki__cross.is-on{opacity:1;}
+.cc-ki__dot{fill:#aeb3b8;stroke:var(--k-plocha);stroke-width:1.5;cursor:pointer;
+  transform-box:fill-box;transform-origin:center;
+  animation:ki-dot .42s cubic-bezier(.2,.8,.3,1.3) backwards;
+  animation-delay:calc(var(--i,0) * 16ms);
+  transition:fill .2s,opacity .2s,transform .3s cubic-bezier(.2,.8,.3,1.5);}
+.cc-ki__dot--on{fill:var(--ab-lime);stroke:var(--ab-lime-ink);stroke-width:1.6;
+  transform:scale(1.28);}
+.cc-ki__dot--pin{fill:#1d2023;stroke:var(--k-plocha);}
+svg.is-focus .cc-ki__dot{opacity:.25;}
+svg.is-focus .cc-ki__link{opacity:.3;}
+svg.is-focus .cc-ki__dot.is-hot{opacity:1;transform:scale(1.55);}
+.cc-ki__pinlab{fill:var(--k-ink);font:600 12px/1 var(--cc-ui);transition:opacity .18s;
+  animation:ki-take .34s ease backwards;}
+/* popisky bodů vybrané kategorie — vysázené vedle bodu, při shluku odsunuté
+   a dotažené vlasovou čárou, ať je jasné, který popisek patří kterému bodu */
+/* světlá obruba v barvě plochy — popisek zůstane čitelný i přes šedý bod */
+.cc-ki__catlab,.cc-ki__pinlab,.cc-ki__hotlab{paint-order:stroke fill;
+  stroke:var(--k-plocha);stroke-width:3.4px;stroke-linejoin:round;}
+.cc-ki__catlab{fill:var(--k-ink);font:600 11.5px/1 var(--cc-ui);
+  animation:ki-take .34s ease backwards;transition:opacity .18s;}
+.cc-ki__lead{stroke:#a8adb2;stroke-width:1;animation:ki-take .34s ease backwards;
+  transition:opacity .18s;}
+svg.is-focus .cc-ki__catlab,svg.is-focus .cc-ki__pinlab,
+svg.is-focus .cc-ki__lead{opacity:.18;}
+svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;}
+.cc-ki__hotlab{fill:var(--k-ink);font:700 12.5px/1 var(--cc-ui);opacity:0;
+  transition:opacity .16s;pointer-events:none;}
+.cc-ki__hotlab.is-on{opacity:1;}
+.cc-ki__read{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 16px;
+  min-height:52px;margin-top:clamp(10px,1.6vw,16px);padding-top:clamp(9px,1.4vw,14px);
+  border-top:1px solid var(--k-line);}
+.cc-ki__read b{font:700 clamp(16px,2vw,21px)/1.2 var(--cc-display);color:var(--k-ink);}
+.cc-ki__read span{font:400 clamp(12.5px,1.35vw,14px)/1.4 var(--cc-ui);color:var(--k-muted);}
+.cc-ki__read em{font-style:normal;color:var(--k-ink);font-weight:600;}
+.cc-ki__read>*{animation:ki-take .3s ease backwards;}
+.cc-ki__read .cc-ki__takeline{display:flex;gap:10px;align-items:stretch;width:100%;
+  font:400 clamp(12.5px,1.3vw,15px)/1.45 var(--cc-ui);color:var(--k-ink);}
+.cc-ki__read .cc-ki__takeline::before{content:"";flex:0 0 auto;width:3px;
+  border-radius:2px;background:var(--ab-lime);}
+@media (max-width:619px){ .cc-ki__read{min-height:56px;} }
+@media (max-width:379px){
+  .cc-ki--c .cc-ki__plotwrap{min-height:120px;}
+  .cc-ki__axcap{font-size:8.5px;}
+  .cc-ki__read{min-height:52px;}
+  .cc-ki__read b{font-size:15px;}
+  .cc-ki__read span{font-size:11.5px;}
+  .cc-ki__read .cc-ki__takeline{font-size:11.5px;}
+}
+</style>
+
+<div class="cc-embed cc-ki cc-ki--c" data-ki-c>
+  <h3>Kávový šálek je teploměr rozpočtu</h3>
+  <p class="cc-ki__lede">Každý bod je jedna skupina. Čím výš stojí na Indexu finanční pohody, tím víc káv si týdně dovolí.</p>
+  <div class="cc-ki__tabs" role="group" aria-label="Kategorie" data-tabs></div>
+  <div class="cc-ki__axcap"><span>&#8593; Kávy týdně</span></div>
+  <div class="cc-ki__plotwrap">
+    <svg data-svg role="img" aria-label="Bodový graf: vodorovně Index finanční pohody, svisle počet káv týdně"></svg>
+  </div>
+  <div class="cc-ki__read" data-read></div>
+  <p class="cc-ki__foot"><svg class="cc-ki__i" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 7.2v4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.7" r=".95" fill="currentColor"/></svg>Barometr finanční pohody Air Bank, 2026.<span class="cc-ki__long"> Body jsou průměry skupin, ne jednotlivci.</span></p>
+</div>
+
+<script>
+(function(){
+
+  "use strict";
+
+  /* ---- DATA ---------------------------------------------------------------
+     [název, šálky týdně (sloupec F), Barometr finanční pohody (sloupec C)]
+     SWAP-POINT: při aktualizaci průzkumu se přepisuje jen tenhle blok.
+     Zdroj: Barometr finanční pohody Air Bank, 2026.
+  ------------------------------------------------------------------------- */
+  var CELKEM = ["Češi celkem", 4.003, 46.65];
+  /* Pointa ke každé kategorii — text, který se mění s přepnutím.
+     A = řádky se šálky, C = bodový graf. SWAP-POINT pro editora. */
+  var TAKE_A = {
+    pohlavi:"Muž si za týden dopřeje skoro <b>o dvě kávy víc</b> než žena.",
+    vek:"Věk s kávou skoro nehýbe. Všechny generace se drží kolem čtyř šálků.",
+    vzdelani:"Vysokoškolák si dá <b>dvakrát tolik</b> co člověk se základním vzděláním.",
+    prijem:"Pod 15 tisíci 2,4 kávy, nad 40 tisíci 6,5. Kávový index je jen jiné jméno pro výplatu.",
+    prace:"Manažer 11,4 kávy týdně, nezaměstnaný 2,9. Nikde jinde není propast takhle hluboká.",
+    region:"Praha si dá skoro o celou kávu víc než Morava."
+  };
+  var TAKE_C = {
+    pohlavi:"Muži sedí výš i víc vpravo — víc klidu v rozpočtu, víc káv.",
+    vek:"Věkové skupiny se mačkají na jednom místě. Tudy cesta k rozdílům nevede.",
+    vzdelani:"Se vzděláním stoupá obojí naráz: finanční pohoda i počet šálků.",
+    prijem:"Nejostřejší schod v celém grafu. Ze 2,4 kávy na 6,5.",
+    prace:"Manažeři jsou úplně mimo mračno — jedenáct šálků týdně.",
+    region:"Praha se od zbytku republiky odlepuje i u kávy."
+  };
+
+  var GROUPS = [
+    {k:"pohlavi", n:"Pohlaví", rows:[
+      ["Muži",4.888,50.74],["Ženy",3.048,42.24]]},
+    {k:"vek", n:"Věk", rows:[
+      ["do 25 let",3.437,47.94],["26–45 let",4.191,46.92],
+      ["46–60 let",3.929,45.86],["nad 60 let",3.919,46.89]]},
+    {k:"vzdelani", n:"Vzdělání", rows:[
+      ["Základní",2.127,34.96],["Vyučen/a",3.306,39.62],
+      ["Středoškolské",4.113,47.45],["Vysokoškolské",4.962,54.89]]},
+    {k:"prijem", n:"Příjem", rows:[
+      ["do 15 000 Kč",2.388,36.62],["15–25 000 Kč",2.618,37.46],
+      ["25–40 000 Kč",3.895,47.25],["nad 40 000 Kč",6.501,60.75]]},
+    {k:"prace", n:"Povolání", rows:[
+      ["Manažeři",11.444,73.94],["Podnikatelé",4.863,48.75],
+      ["Zaměstnanci",4.158,47.97],["Studenti",3.336,49.08],
+      ["Nezaměstnaní",2.902,33.14],["Důchodci",2.812,35.25],
+      ["V domácnosti",2.731,38.44]]},
+    {k:"region", n:"Region", rows:[
+      ["Praha",4.927,53.11],["Čechy",4.007,46.15],["Morava",3.642,45.00]]}
+  ];
+
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function el(t,c){var e=document.createElement(t); if(c)e.className=c; return e;}
+  function sv(t,a){var e=document.createElementNS(SVGNS,t);
+    for(var k in a) e.setAttribute(k,a[k]); return e;}
+  function cz(v,d){ return v.toFixed(d===undefined?1:d).replace(".",","); }
+  function salku(n){ return n===1?"šálek":(n>=2&&n<=4?"šálky":"šálků"); }
+  /* Celé číslo, když je k celému blízko, jinak jedno desetinné místo.
+     Jednotka se skloňuje — čeština chce u desetinného čísla genitiv „2,7 šálku". */
+  function num(v){ return Math.abs(v-Math.round(v))<0.05 ? String(Math.round(v)) : cz(v,1); }
+  function unit(v){ return Math.abs(v-Math.round(v))<0.05 ? salku(Math.round(v)) : "šálku"; }
+
+  /* Kořen se hledá bez id — fragment může na stránce být i dvakrát. */
+  function findRoot(cls){
+    var n = document.currentScript && document.currentScript.previousElementSibling;
+    while(n && !(n.classList && n.classList.contains(cls))) n = n.previousElementSibling;
+    return n;
+  }
+
+  function tabs(host, onPick){
+    var box = host.querySelector("[data-tabs]"), cur = GROUPS[0].k;
+    GROUPS.forEach(function(g){
+      var b = el("button"); b.type="button"; b.textContent=g.n;
+      b.setAttribute("aria-pressed", g.k===cur?"true":"false");
+      b.addEventListener("click", function(){
+        cur = g.k;
+        Array.prototype.forEach.call(box.children,function(x){
+          x.setAttribute("aria-pressed", x===b?"true":"false"); });
+        onPick(g);
+      });
+      box.appendChild(b);
+    });
+    onPick(GROUPS[0]);
+  }
+
+  var root = findRoot("cc-ki--c"); if(!root || root.dataset.ccInit) return;
+  root.dataset.ccInit = "1";
+  var svg = root.querySelector("[data-svg]"), read = root.querySelector("[data-read]");
+  var wrap = root.querySelector(".cc-ki__plotwrap");
+  /* Osa X lineárně. Osa Y má zlom: hlavní pásmo drží mračno (1,8–7 šálku),
+     nad zlomem je stlačené pásmo jen pro manažery. Bez toho by mračno sedělo
+     ve spodní třetině a popisky by se lepily na sebe. */
+  var XM=32, XX=76, YM=1.8, YB=7, YX=11.6, active=GROUPS[0].k;
+  var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var ALL = [];
+  GROUPS.forEach(function(g){ g.rows.forEach(function(r){
+    ALL.push({n:r[0], cups:r[1], bar:r[2], g:g.k}); }); });
+  ALL.push({n:CELKEM[0], cups:CELKEM[1], bar:CELKEM[2], g:"celkem"});
+
+  var dots = [], link = null, crossX = null, crossY = null, hotlab = null;
+  var labg = null, S = null;
+
+  function setRead(d){
+    read.innerHTML = "";
+    if(!d){
+      var t = el("div","cc-ki__takeline");
+      var sp = el("span"); sp.innerHTML = TAKE_C[active] || "";
+      t.appendChild(sp); read.appendChild(t); return;
+    }
+    var b = el("b"); b.textContent = d.n; read.appendChild(b);
+    var s1 = el("span");
+    s1.innerHTML = "<em>"+num(d.cups)+"</em> "+unit(d.cups)+" týdně";
+    read.appendChild(s1);
+    var s2 = el("span");
+    s2.innerHTML = "Index finanční pohody <em>"+cz(d.bar,0)+"</em>";
+    read.appendChild(s2);
+  }
+
+  function hover(d, node){
+    if(!S) return;
+    dots.forEach(function(x){
+      x.el.classList.remove("is-hot");
+      if(x.lab) x.lab.classList.remove("is-hot");
+    });
+    if(!d){ svg.classList.remove("is-focus");
+      crossX.classList.remove("is-on"); crossY.classList.remove("is-on");
+      hotlab.classList.remove("is-on"); setRead(null); return; }
+    svg.classList.add("is-focus");
+    node.classList.add("is-hot");
+    var ent = dots.filter(function(x){ return x.el === node; })[0];
+    if(ent && ent.lab) ent.lab.classList.add("is-hot");
+    var x = S.X(d.bar), y = S.Y(d.cups);
+    crossX.setAttribute("x1", S.ML); crossX.setAttribute("x2", x);
+    crossX.setAttribute("y1", y);    crossX.setAttribute("y2", y);
+    crossY.setAttribute("x1", x);    crossY.setAttribute("x2", x);
+    crossY.setAttribute("y1", y);    crossY.setAttribute("y2", S.H - S.MB);
+    crossX.classList.add("is-on"); crossY.classList.add("is-on");
+    /* bod, který už popisek má, ho nedostane podruhé */
+    if(!S.narrow && !(ent && ent.lab)){
+      var right = x < S.W*0.62;
+      hotlab.setAttribute("x", right ? x+13 : x-13);
+      hotlab.setAttribute("y", y+4);
+      hotlab.setAttribute("text-anchor", right ? "start" : "end");
+      hotlab.textContent = d.n;
+      hotlab.classList.add("is-on");
+    }
+    setRead(d);
+  }
+
+  /* Spojnice bodů kategorie seřazených podle osy x — ukáže, jak skupina
+     stoupá spolu s finanční pohodou. Kreslí se zleva doprava. */
+  function drawLink(){
+    var pts = dots.filter(function(x){ return x.d.g === active; })
+                  .map(function(x){ return x.d; })
+                  .sort(function(a,b){ return a.bar - b.bar; });
+    if(pts.length < 2){ link.setAttribute("d",""); return; }
+    var d = pts.map(function(p,i){
+      return (i?"L":"M") + S.X(p.bar).toFixed(1) + " " + S.Y(p.cups).toFixed(1); }).join(" ");
+    link.setAttribute("d", d);
+    var len = link.getTotalLength ? link.getTotalLength() : 0;
+    link.style.transition = "none";
+    link.style.strokeDasharray = len + " " + len;
+    link.style.strokeDashoffset = still ? 0 : len;
+    if(still) return;
+    requestAnimationFrame(function(){
+      link.style.transition = "";
+      link.style.strokeDashoffset = 0;
+    });
+  }
+
+  /* Popisky zvýrazněných bodů. Na úzkém rámu se vynechají — plocha grafu
+     je tam tak malá, že by se text překrýval; tam slouží ťuknutí na bod. */
+  function drawLabels(){
+    while(labg.firstChild) labg.removeChild(labg.firstChild);
+    if(!S || S.narrow) return;
+    var GAP = 15, PAD = 7, CH = 6.35;   /* CH = odhad šířky znaku v Inter 600 11,5px */
+
+    var act = [], pins = [];
+    dots.forEach(function(x){
+      var on = x.d.g === active;
+      var isPin = !on && x.d.n === "Manažeři";
+      if(!on && !isPin) return;
+      x.lab = null;
+      var it = {n:x.d.n, px:S.X(x.d.bar), py:S.Y(x.d.cups), pin:isPin, ref:x};
+      it.ly = it.py + 4;
+      (isPin ? pins : act).push(it);
+    });
+    dots.forEach(function(x){ x.lab = null; });
+    if(!act.length && !pins.length) return;
+
+    /* Když se body kategorie mačkají na jednom místě, popisky se srovnají do
+       sloupce vedle shluku a k bodům se dotáhnou vlasovou čárou. Rozptýlené
+       kategorie si nechají popisek u svého bodu. */
+    var xs = act.map(function(i){ return i.px; });
+    var minX = Math.min.apply(null,xs), maxX = Math.max.apply(null,xs);
+    var column = act.length > 1 && (maxX - minX) < S.W*0.12;
+    var side = (column ? maxX : (minX+maxX)/2) < S.W*0.62;
+
+    act.forEach(function(i){ i.right = column ? side : (i.px < S.W*0.62); });
+    pins.forEach(function(i){ i.right = i.px < S.W*0.62; });
+
+    if(column){
+      var wid = Math.max.apply(null, act.map(function(i){ return i.n.length*CH; }));
+      var col = side ? maxX + 30 : minX - 30;
+      if(side && col + wid > S.W - 8) col = S.W - 8 - wid;
+      if(!side && col - wid < S.ML + 4) col = S.ML + 4 + wid;
+      act.forEach(function(i){ i.lx = col; });
+    } else {
+      act.forEach(function(i){ i.lx = i.right ? i.px + 12 : i.px - 12; });
+    }
+    pins.forEach(function(i){
+      /* stálý popisek uvnitř shluku patří do stejného sloupce, jinak by
+         visel mezi body */
+      if(column && i.px > minX - 30 && i.px < maxX + 30){ i.lx = act[0].lx; i.right = side; }
+      else i.lx = i.right ? i.px + 12 : i.px - 12;
+    });
+
+    /* svislé rozestupy zvlášť pro levou a pravou stranu */
+    var all = act.concat(pins);
+    [true,false].forEach(function(sd){
+      var list = all.filter(function(i){ return i.right === sd; })
+                    .sort(function(a,b){ return a.ly - b.ly; });
+      if(!list.length) return;
+      var want = 0; list.forEach(function(i){ want += i.ly; }); want /= list.length;
+      for(var i=1;i<list.length;i++)
+        if(list[i].ly - list[i-1].ly < GAP) list[i].ly = list[i-1].ly + GAP;
+      /* stoh popisků se vycentruje na těžiště bodů, ať nevisí jen dolů */
+      var got = 0; list.forEach(function(i){ got += i.ly; }); got /= list.length;
+      var shift = want - got;
+      list.forEach(function(i){ i.ly += shift; });
+      var over = list[list.length-1].ly - (S.H - S.MB - PAD);
+      if(over > 0) list.forEach(function(i){ i.ly -= over; });
+      var under = (PAD + 9) - list[0].ly;
+      if(under > 0) list.forEach(function(i){ i.ly += under; });
+    });
+
+    all.forEach(function(i){
+      var far = Math.abs(i.ly - (i.py+4)) > 3 || Math.abs(i.lx - i.px) > 20;
+      if(far){
+        labg.appendChild(sv("line",{"class":"cc-ki__lead",
+          x1:i.px + (i.right?7:-7), y1:i.py,
+          x2:i.lx - (i.right?3:-3), y2:i.ly-4}));
+      }
+      var t = sv("text",{"class":i.pin ? "cc-ki__pinlab" : "cc-ki__catlab",
+        x:i.lx, y:i.ly, "text-anchor": i.right ? "start" : "end"});
+      t.textContent = i.n; labg.appendChild(t);
+      if(i.ref) i.ref.lab = t;
+    });
+  }
+
+  function update(){
+    dots.forEach(function(x){
+      var on = x.d.g === active;
+      x.el.classList.toggle("cc-ki__dot--on", on);
+      x.el.classList.toggle("cc-ki__dot--pin", !on && (x.d.g==="celkem" || x.d.n==="Manažeři"));
+    });
+    drawLink();
+    drawLabels();
+    setRead(null);
+  }
+
+  /* viewBox se přepočítává na skutečné rozměry, aby 1 jednotka = 1 px
+     a popisky os zůstaly čitelné i v úzkém rámu na mobilu. */
+  function build(){
+    var W = Math.max(240, Math.round(wrap.clientWidth));
+    var H = Math.max(150, Math.round(wrap.clientHeight));
+    var narrow = W < 560;
+    var ML = narrow?30:46, MR = narrow?14:26, MT=16, MB = narrow?42:50;
+    var top = MT, bot = H - MB, PH = bot - top;
+    var GAPY = narrow ? 15 : 24;
+    var tailH = PH * 0.19, mainH = PH - tailH - GAPY;
+    var mainTop = bot - mainH, tailBot = mainTop - GAPY;
+    S = {W:W,H:H,ML:ML,MB:MB,narrow:narrow,brk:(mainTop+tailBot)/2,
+      X:function(v){ return ML + (v-XM)/(XX-XM)*(W-ML-MR); },
+      Y:function(v){
+        if(v <= YB) return bot - (v-YM)/(YB-YM)*mainH;
+        return tailBot - (v-YB)/(YX-YB)*(tailBot-top);
+      }};
+    var X = S.X, Y = S.Y;
+
+    svg.setAttribute("viewBox","0 0 "+W+" "+H);
+    svg.setAttribute("preserveAspectRatio","xMidYMid meet");
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    dots = [];
+
+    (narrow?[2,4,6,11]:[2,3,4,5,6,7,11]).forEach(function(t){
+      svg.appendChild(sv("line",{"class":"cc-ki__grid",x1:ML,x2:W-MR,y1:Y(t),y2:Y(t)}));
+      var tx = sv("text",{"class":"cc-ki__ax",x:ML-8,y:Y(t)+4,"text-anchor":"end"});
+      tx.textContent = t; svg.appendChild(tx);
+    });
+    (narrow?[40,60]:[35,45,55,65,75]).forEach(function(t){
+      var tx = sv("text",{"class":"cc-ki__ax",x:X(t),y:H-MB+17,"text-anchor":"middle"});
+      tx.textContent = t; svg.appendChild(tx);
+    });
+    var axn = sv("text",{"class":"cc-ki__axname",x:W-MR,y:H-MB+35,"text-anchor":"end"});
+    if(narrow) axn.setAttribute("font-size","9");
+    axn.textContent = "INDEX FINANČNÍ POHODY →"; svg.appendChild(axn);
+    /* značka zlomu: dvě šikmé čárky na ose a slabá tečkovaná linka napříč */
+    svg.appendChild(sv("line",{"class":"cc-ki__brkline",
+      x1:ML,x2:W-MR,y1:S.brk,y2:S.brk}));
+    [-3,2].forEach(function(o){
+      svg.appendChild(sv("line",{"class":"cc-ki__brk",
+        x1:ML-9,y1:S.brk+4+o, x2:ML+1,y2:S.brk-4+o}));
+    });
+
+    var n=ALL.length, sx=0, sy=0, sxy=0, sxx=0;
+    ALL.forEach(function(d){ sx+=d.bar; sy+=d.cups; sxy+=d.bar*d.cups; sxx+=d.bar*d.bar; });
+    var bb = (n*sxy - sx*sy)/(n*sxx - sx*sx), aa = (sy - bb*sx)/n;
+    var xEnd = Math.min(XX, (YB - aa)/bb);
+    svg.appendChild(sv("line",{"class":"cc-ki__trend",
+      x1:X(XM), y1:Y(aa+bb*XM), x2:X(xEnd), y2:Y(aa+bb*xEnd)}));
+
+    link = sv("path",{"class":"cc-ki__link",d:""}); svg.appendChild(link);
+    crossX = sv("line",{"class":"cc-ki__cross"}); svg.appendChild(crossX);
+    crossY = sv("line",{"class":"cc-ki__cross"}); svg.appendChild(crossY);
+
+    ALL.forEach(function(d,i){
+      var r = narrow ? 4.4 : 6;
+      var c = sv("circle",{cx:X(d.bar), cy:Y(d.cups), r:r, "class":"cc-ki__dot",
+        tabindex:"0", role:"img",
+        "aria-label":d.n+", "+num(d.cups)+" "+unit(d.cups)+" týdně, index finanční pohody "+cz(d.bar,0)});
+      c.style.setProperty("--i", i);
+      c.addEventListener("mouseenter",function(){ hover(d,c); });
+      c.addEventListener("focus",function(){ hover(d,c); });
+      c.addEventListener("click",function(){ hover(d,c); });
+      c.addEventListener("blur",function(){ hover(null); });
+      svg.appendChild(c);
+      dots.push({d:d, el:c});
+    });
+
+    labg = sv("g",{}); svg.appendChild(labg);
+    hotlab = sv("text",{"class":"cc-ki__hotlab"}); svg.appendChild(hotlab);
+    update();
+  }
+
+  svg.addEventListener("mouseleave", function(){ hover(null); });
+  tabs(root, function(g){ active = g.k; if(S) update(); else build(); });
+  if(window.ResizeObserver){
+    var to, ro = new ResizeObserver(function(){ clearTimeout(to); to=setTimeout(build,80); });
+    ro.observe(wrap);
+  } else { window.addEventListener("resize", build); }
+})();
+</script>
+
+</body>
+</html>
