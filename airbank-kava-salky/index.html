@@ -149,7 +149,7 @@
   align-items:center;gap:clamp(8px,1.6vw,20px);
   padding:var(--rowpad,clamp(5px,0.75vw,11px)) 0;border-top:1px solid var(--k-line);
   transition:opacity .18s ease;}
-@media (min-width:620px) and (max-width:1023px){ .cc-ki__row{padding:4px 0;} }
+@media (min-width:620px) and (max-width:1023px){ .cc-ki__row{--rowpad:4px;} }
 .cc-ki__row:first-child{border-top:0;}
 .cc-ki__row--avg{border-top:1px solid #b3b3b3;border-bottom:1px solid #b3b3b3;}
 /* ztlumení ostatních řádků při najetí — oko jde po jednom, ne po všech */
@@ -383,7 +383,7 @@
       if(i===3 && slots>4) c.appendChild(el("i","cc-ki__mark"));
     }
     if(slots > MAXSLOT){
-      var extra = Math.max(0, Math.ceil(cups) - MAXSLOT);
+      var extra = Math.max(0, Math.round(cups) - MAXSLOT);
       var p = el("i","cc-ki__more");
       p.textContent = extra > 0 ? "+"+extra : "";
       c.appendChild(p);
