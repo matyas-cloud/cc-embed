@@ -363,8 +363,12 @@
   .cc-kafe__res{grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.6vw,24px);}
   .cc-kafe__say{min-height:2.6em;}
 }
-/* Na mobilu drží trojice výsledků jeden řádek — pod sebou zabrala celý rám. */
+/* Rám má na mobilu pevný poměr 150 %, takže první obrazovka je nižší než místo,
+   které dostane. Volné místo se rozdělí na dvě části — nad hlavní číslo a nad
+   patičku — místo jedné díry pod tlačítkem. */
 @media (max-width:619px){
+  [data-screen="1"] .cc-kafe__readout{margin-top:auto;}
+  [data-screen="1"] .cc-kafe__scale{margin-bottom:0;}
   [data-screen="2"] .cc-kafe__res{grid-template-columns:repeat(3,1fr);gap:8px;}
   [data-screen="2"] .cc-kafe__lbl{font-size:9.5px;letter-spacing:.03em;}
   [data-screen="2"] .cc-kafe__key{width:9px;margin-right:4px;}
