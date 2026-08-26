@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Recognoil — UV lampa</title>
+<title>Tech Test: Recognoil 3W</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -131,7 +131,7 @@
     <button type="button" class="cc-btn cc-uv__all" aria-pressed="false">Zobrazit celý sken</button>
   </div>
   <p class="cc-note">Zjednodušená demonstrace technologie Recognoil.</p>
-  <p class="cc-sr">Interaktivní prvek: fotografie odmaštěného brzdového třmenu, po které se pohybuje kruhová UV lampa a odhaluje mapu zbytků oleje. Tři body na fotce popisují nalezená místa.</p>
+  <p class="cc-sr">Interaktivní prvek: fotografie odmaštěného brzdového třmenu, po které se pohybuje zařízení Recognoil a odhaluje mapu zbytků oleje. Tři body na fotce popisují nalezená místa.</p>
 </div>
 <style>
 .cc-uv{--uv-ratio:2/1;}
@@ -193,7 +193,7 @@
       tipT  = root.querySelector('.cc-uv__tiptext'),
       allBtn= root.querySelector('.cc-uv__all'),
       spots = [].slice.call(root.querySelectorAll('.cc-uv__hs'));
-  var LBL_ON = 'Zpět na UV lampu', LBL_OFF = allBtn.textContent, active = null;
+  var LBL_ON = 'Zpět', LBL_OFF = allBtn.textContent, active = null;
   function narrow(){ return window.matchMedia('(max-width:619px)').matches; }
   function radius(){ return Math.max(50, Math.min(168, stage.clientWidth*0.17, stage.clientHeight*0.4)); }
   function place(x, y){
