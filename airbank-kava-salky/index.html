@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kolik káv týdně si Češi dovolí</title>
+<title>Kolik káv týdně si Češi dopřejí?</title>
 <meta name="robots" content="noindex">
 <!-- Iframe je samostatný dokument a fonty z cc.cz nedědí. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,15 +56,6 @@
 </style>
 
 <style>
-/* --- Kávový index -----------------------------------------------------------
-   SWAP-POINTS:
-     --ab-lime      limetka Air Bank (ověřit v brand manuálu partnera)
-     --ab-lime-ink  tmavší odstín pro obrysy a linky (kontrast vůči ploše)
-   Plocha, radius a typografie kopírují bloky na cc.cz: #e9e9e9, radius 15px,
-   velký vnitřní padding, žádný rámeček ani stín.
-   Výška je vázaná na rám, který kolem iframu staví šablona CC — proto jsou
-   odsazení a velikosti laděné na tři konkrétní poměry, viz hosting-iframe.md.
---------------------------------------------------------------------------- */
 .cc-ki{
   box-sizing:border-box;
   display:flex;flex-direction:column;min-height:100vh;
@@ -144,7 +135,7 @@
 @media (min-width:620px) and (max-width:1023px){ .cc-ki__row{padding:4px 0;} }
 .cc-ki__row:first-child{border-top:0;}
 .cc-ki__row--avg{border-top:1px solid #b3b3b3;border-bottom:1px solid #b3b3b3;}
-/* ztlumení ostatních řádků při najetí — oko jde po jednom, ne po všech */
+/* ztlumení ostatních řádků při najetí */
 .cc-ki--a .cc-ki__rows:hover .cc-ki__row{opacity:.42;}
 .cc-ki--a .cc-ki__rows:hover .cc-ki__row--avg{opacity:.7;}
 .cc-ki--a .cc-ki__rows .cc-ki__row:hover,
@@ -155,7 +146,7 @@
   color:var(--k-muted);}
 .cc-ki__cups{display:flex;flex-wrap:wrap;gap:clamp(1.5px,.5vw,5px);align-items:center;}
 .cc-ki__cups svg{width:clamp(9px,1.85vw,25px);height:auto;display:block;flex:0 1 auto;}
-/* svislá ryska průměru — každý řádek se sám změří proti čtyřem šálkům */
+/* svislá ryska průměru */
 .cc-ki__mark{flex:0 0 auto;width:1px;align-self:stretch;background:#a2a2a2;
   margin:0 clamp(3px,.6vw,7px);}
 .cc-ki__row--avg .cc-ki__mark{background:#7d7d7d;}
@@ -195,8 +186,8 @@
 </style>
 
 <div class="cc-embed cc-ki cc-ki--a" data-ki-a>
-  <h3>Čtyři kávy týdně. Průměr, pod kterým se schová propast</h3>
-  <p class="cc-ki__lede">Tolik si Čech dopřeje, aniž by ho kvůli rozpočtu hryzalo svědomí.</p>
+  <h3>Čtyři kávy týdně. Manažeři jedenáct</h3>
+  <p class="cc-ki__lede">Tolik si dopřejeme, aniž by nás hryzalo svědomí kvůli rozpočtu.</p>
   <div class="cc-ki__tabs" role="group" aria-label="Kategorie" data-tabs></div>
   <div class="cc-ki__rows" data-rows></div>
   <p class="cc-ki__take" data-take></p>
@@ -209,29 +200,24 @@
 
   "use strict";
 
-  /* ---- DATA ---------------------------------------------------------------
-     [název, šálky týdně (sloupec F), Barometr finanční pohody (sloupec C)]
-     SWAP-POINT: při aktualizaci průzkumu se přepisuje jen tenhle blok.
-     Zdroj: Barometr finanční pohody Air Bank, 2026.
-  ------------------------------------------------------------------------- */
   var CELKEM = ["Češi celkem", 4.003, 46.65];
   /* Pointa ke každé kategorii — text, který se mění s přepnutím.
      A = řádky se šálky, C = bodový graf. SWAP-POINT pro editora. */
   var TAKE_A = {
-    pohlavi:"Muž si za týden dopřeje skoro <b>o dvě kávy víc</b> než žena.",
-    vek:"Věk s kávou skoro nehýbe. Všechny generace se drží kolem čtyř šálků.",
-    vzdelani:"Vysokoškolák si dá <b>dvakrát tolik</b> co člověk se základním vzděláním.",
-    prijem:"Pod 15 tisíci 2,4 kávy, nad 40 tisíci 6,5. Kávový index je jen jiné jméno pro výplatu.",
-    prace:"Manažer 11,4 kávy týdně, nezaměstnaný 2,9. Nikde jinde není propast takhle hluboká.",
-    region:"Praha si dá skoro o celou kávu víc než Morava."
+    pohlavi:"Muž si týdně dopřeje skoro <b>o dvě kávy víc</b> než žena.",
+    vek:"Věk na spotřeby kávy nemá výrazný vliv. Všechny generace se drží kolem čtyř šálků.",
+    vzdelani:"Vysokoškolák vypije <b>dvakrát tolik káv</b> co člověk se základním vzděláním.",
+    prijem:"Pod 15 tisíci 2,4 kávy, nad 40 tisíci 6,5. Spotřeba kávy roste s výplatou.",
+    prace:"Manažer vypije 11,4 kávy týdně, nezaměstnaný 2,9. Nikde jinde není propast takhle hluboká.",
+    region:"Praha si dá skoro <b>o celou kávu</b> víc než Morava."
   };
   var TAKE_C = {
-    pohlavi:"Muži sedí výš i víc vpravo — víc klidu v rozpočtu, víc káv.",
-    vek:"Věkové skupiny se mačkají na jednom místě. Tudy cesta k rozdílům nevede.",
-    vzdelani:"Se vzděláním stoupá obojí naráz: finanční pohoda i počet šálků.",
+    pohlavi:"Muži jsou finančně v pohodě a také víc pijí kávu. Najdeme je vpravo nahoře.",
+    vek:"Průměry věkových skupin se mačkají kolem průměru.",
+    vzdelani:"Vzdělání zvyšuje spotřebu kávy i finanční pohodu.",
     prijem:"Nejostřejší schod v celém grafu. Ze 2,4 kávy na 6,5.",
-    prace:"Manažeři jsou úplně mimo mračno — jedenáct šálků týdně.",
-    region:"Praha se od zbytku republiky odlepuje i u kávy."
+    prace:"Manažeři se utrhli do vedení — jedenáct šálků týdně.",
+    region:"Praha zbytku republiky utíká i ve spotřebě kávy."
   };
 
   var GROUPS = [
@@ -371,7 +357,7 @@
 
     sr.textContent = g.n + ": " + g.rows.map(function(r){
       return r[0]+" "+num(r[1])+" "+unit(r[1]); }).join(", ") +
-      ". Průměr populace 4 šálky týdně.";
+      ". Průměr Čechů jsou 4 šálky týdně.";
   });
 })();
 </script>
