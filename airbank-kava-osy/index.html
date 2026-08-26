@@ -56,7 +56,15 @@
 </style>
 
 <style>
-
+/* --- Kávový index -----------------------------------------------------------
+   SWAP-POINTS:
+     --ab-lime      limetka Air Bank (ověřit v brand manuálu partnera)
+     --ab-lime-ink  tmavší odstín pro obrysy a linky (kontrast vůči ploše)
+   Plocha, radius a typografie kopírují bloky na cc.cz: #e9e9e9, radius 15px,
+   velký vnitřní padding, žádný rámeček ani stín.
+   Výška je vázaná na rám, který kolem iframu staví šablona CC — proto jsou
+   odsazení a velikosti laděné na tři konkrétní poměry, viz hosting-iframe.md.
+--------------------------------------------------------------------------- */
 .cc-ki{
   box-sizing:border-box;
   display:flex;flex-direction:column;min-height:100vh;
@@ -138,9 +146,6 @@
 /* popis vodorovné osy sedí pod čísly, u pravého konce osy */
 .cc-ki__axname{fill:var(--k-muted);font:600 10.5px/1 var(--cc-ui);letter-spacing:.07em;}
 .cc-ki__trend{stroke:#c9c9c9;stroke-width:1.3;stroke-dasharray:5 4;fill:none;}
-/* zlom svislé osy — nad ním je měřítko stlačené, aby manažeři nerozmáčkli mračno */
-.cc-ki__brk{stroke:#8d9298;stroke-width:1.4;stroke-linecap:round;}
-.cc-ki__brkline{stroke:#cfcfcf;stroke-width:1;stroke-dasharray:2 5;}
 /* spojnice bodů vybrané kategorie — vykreslí se zleva doprava */
 .cc-ki__link{fill:none;stroke:var(--ab-lime-ink);stroke-width:2.2;
   stroke-linecap:round;stroke-linejoin:round;opacity:.9;
@@ -200,7 +205,7 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
 
 <div class="cc-embed cc-ki cc-ki--c" data-ki-c>
   <h3>Co prozrazuje káva o finanční pohodě?</h3>
-  <p class="cc-ki__lede">Každý bod reprezentuje průměr jedné skupiny. Doprava rostě finanční pohoda, nahoru spotřeba kávy.</p>
+  <p class="cc-ki__lede">Každý bod reprezentuje průměr jedné skupiny. Doprava roste finanční pohoda, nahoru spotřeba kávy.</p>
   <div class="cc-ki__tabs" role="group" aria-label="Kategorie" data-tabs></div>
   <div class="cc-ki__axcap"><span>&#8593; Kávy týdně</span></div>
   <div class="cc-ki__plotwrap">
@@ -215,7 +220,11 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
 
   "use strict";
 
-
+  /* ---- DATA ---------------------------------------------------------------
+     [název, šálky týdně (sloupec F), Barometr finanční pohody (sloupec C)]
+     SWAP-POINT: při aktualizaci průzkumu se přepisuje jen tenhle blok.
+     Zdroj: Barometr finanční pohody Air Bank, 2026.
+  ------------------------------------------------------------------------- */
   var CELKEM = ["Češi celkem", 4.003, 46.65];
   /* Pointa ke každé kategorii — text, který se mění s přepnutím.
      A = řádky se šálky, C = bodový graf. SWAP-POINT pro editora. */
@@ -229,7 +238,7 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
   };
   var TAKE_C = {
     pohlavi:"Muži jsou finančně v pohodě a také víc pijí kávu. Najdeme je vpravo nahoře.",
-    vek:"Průměry věkových skupin se mačkají kolem průměru.",
+    vek:"Průměry věkových skupin se mačkají u sebe.",
     vzdelani:"Vzdělání zvyšuje spotřebu kávy i finanční pohodu.",
     prijem:"Nejostřejší schod v celém grafu. Ze 2,4 kávy na 6,5.",
     prace:"Manažeři se utrhli do vedení — jedenáct šálků týdně.",
@@ -295,10 +304,10 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
   root.dataset.ccInit = "1";
   var svg = root.querySelector("[data-svg]"), read = root.querySelector("[data-read]");
   var wrap = root.querySelector(".cc-ki__plotwrap");
-  /* Osa X lineárně. Osa Y má zlom: hlavní pásmo drží mračno (1,8–7 šálku),
-     nad zlomem je stlačené pásmo jen pro manažery. Bez toho by mračno sedělo
-     ve spodní třetině a popisky by se lepily na sebe. */
-  var XM=32, XX=76, YM=1.8, YB=7, YX=11.6, active=GROUPS[0].k;
+  /* Obě osy lineárně a sražené na skutečný rozsah dat. Zlom svislé osy tu
+     byl a Matt ho zrušil — spojité měřítko se čte snáz, cenou je, že mračno
+     sedí v dolní polovině, protože ho manažeři (11,4) roztahují nahoru. */
+  var XM=32, XX=76, YM=1.8, YX=11.8, active=GROUPS[0].k;
   var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var ALL = [];
@@ -476,15 +485,9 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
     var narrow = W < 560;
     var ML = narrow?30:46, MR = narrow?14:26, MT=16, MB = narrow?42:50;
     var top = MT, bot = H - MB, PH = bot - top;
-    var GAPY = narrow ? 15 : 24;
-    var tailH = PH * 0.19, mainH = PH - tailH - GAPY;
-    var mainTop = bot - mainH, tailBot = mainTop - GAPY;
-    S = {W:W,H:H,ML:ML,MB:MB,narrow:narrow,brk:(mainTop+tailBot)/2,
+    S = {W:W,H:H,ML:ML,MB:MB,narrow:narrow,
       X:function(v){ return ML + (v-XM)/(XX-XM)*(W-ML-MR); },
-      Y:function(v){
-        if(v <= YB) return bot - (v-YM)/(YB-YM)*mainH;
-        return tailBot - (v-YB)/(YX-YB)*(tailBot-top);
-      }};
+      Y:function(v){ return bot - (v-YM)/(YX-YM)*PH; }};
     var X = S.X, Y = S.Y;
 
     svg.setAttribute("viewBox","0 0 "+W+" "+H);
@@ -492,7 +495,7 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
     while(svg.firstChild) svg.removeChild(svg.firstChild);
     dots = [];
 
-    (narrow?[2,4,6,11]:[2,3,4,5,6,7,11]).forEach(function(t){
+    (narrow?[2,6,10]:[2,4,6,8,10]).forEach(function(t){
       svg.appendChild(sv("line",{"class":"cc-ki__grid",x1:ML,x2:W-MR,y1:Y(t),y2:Y(t)}));
       var tx = sv("text",{"class":"cc-ki__ax",x:ML-8,y:Y(t)+4,"text-anchor":"end"});
       tx.textContent = t; svg.appendChild(tx);
@@ -504,20 +507,13 @@ svg.is-focus .cc-ki__catlab.is-hot,svg.is-focus .cc-ki__pinlab.is-hot{opacity:1;
     var axn = sv("text",{"class":"cc-ki__axname",x:W-MR,y:H-MB+35,"text-anchor":"end"});
     if(narrow) axn.setAttribute("font-size","9");
     axn.textContent = "INDEX FINANČNÍ POHODY →"; svg.appendChild(axn);
-    /* značka zlomu: dvě šikmé čárky na ose a slabá tečkovaná linka napříč */
-    svg.appendChild(sv("line",{"class":"cc-ki__brkline",
-      x1:ML,x2:W-MR,y1:S.brk,y2:S.brk}));
-    [-3,2].forEach(function(o){
-      svg.appendChild(sv("line",{"class":"cc-ki__brk",
-        x1:ML-9,y1:S.brk+4+o, x2:ML+1,y2:S.brk-4+o}));
-    });
 
     var n=ALL.length, sx=0, sy=0, sxy=0, sxx=0;
     ALL.forEach(function(d){ sx+=d.bar; sy+=d.cups; sxy+=d.bar*d.cups; sxx+=d.bar*d.bar; });
     var bb = (n*sxy - sx*sy)/(n*sxx - sx*sx), aa = (sy - bb*sx)/n;
-    var xEnd = Math.min(XX, (YB - aa)/bb);
+    var xA = Math.max(XM, (YM - aa)/bb), xB = Math.min(XX, (YX - aa)/bb);
     svg.appendChild(sv("line",{"class":"cc-ki__trend",
-      x1:X(XM), y1:Y(aa+bb*XM), x2:X(xEnd), y2:Y(aa+bb*xEnd)}));
+      x1:X(xA), y1:Y(aa+bb*xA), x2:X(xB), y2:Y(aa+bb*xB)}));
 
     link = sv("path",{"class":"cc-ki__link",d:""}); svg.appendChild(link);
     crossX = sv("line",{"class":"cc-ki__cross"}); svg.appendChild(crossX);
