@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jaký jste zachránce — CzechCrunch × Kaufland</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" media="print" onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;700&display=swap">
+<noscript><link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;700&display=swap"></noscript>
+<style>
+  html,body{margin:0;padding:0;background:transparent;height:100%;}
+  body{overflow-x:hidden;}
+  .cc-embed{margin:0!important;}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     CC sdílený designový základ .cc-embed — nesahat, vlastní styly
+     jsou ve druhém <style> bloku pod třídou .cc-aed.
+     ============================================================ -->
+<style>
+.cc-embed{
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}
+.cc-embed--bare{background:none;border:0;padding:0;}
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{margin:12px 0 0;font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);
+  letter-spacing:.02em;text-transform:uppercase;}
+.cc-embed .cc-num{font-family:var(--cc-display);font-weight:700;
+  font-size:clamp(22px,4vw,32px);color:var(--cc-blue);font-variant-numeric:tabular-nums;}
+.cc-embed a{color:var(--cc-blue);}
+.cc-embed .cc-btn{
+  display:inline-block;padding:10px 20px;
+  border:1px solid var(--cc-blue);border-radius:var(--cc-radius);
+  background:var(--cc-blue);color:#fff;text-decoration:none;
+  font:700 18px/26px var(--cc-display);cursor:pointer;
+  transition:background .18s,color .18s;}
+.cc-embed .cc-btn:hover{background:var(--cc-blue-dark);border-color:var(--cc-blue-dark);}
+.cc-embed .cc-btn--ghost{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-btn--ghost:hover{background:var(--cc-blue);color:#fff;}
+.cc-embed .cc-btn--sm{padding:7px 14px;font-size:15px;line-height:22px;}
+.cc-embed .cc-btn[aria-pressed="true"]{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-card{background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);padding:14px 16px;}
+.cc-embed .cc-badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  background:var(--cc-blue);color:#fff;font:700 12px/18px var(--cc-ui);}
+.cc-embed .cc-badge--red{background:var(--cc-red);}
+.cc-embed .cc-badge--soft{background:#eaf3fd;color:var(--cc-blue-dark);}
+.cc-embed input,.cc-embed select,.cc-embed textarea{
+  font:400 16px/24px var(--cc-ui);color:var(--cc-ink);
+  padding:9px 12px;background:#fff;border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);}
+.cc-embed input[type=range]{padding:0;border:0;background:none;accent-color:var(--cc-blue);width:100%;}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed table{width:100%;border-collapse:collapse;font:400 15px/1.4 var(--cc-ui);}
+.cc-embed th{text-align:left;font-weight:700;color:var(--cc-muted);
+  text-transform:uppercase;font-size:12px;letter-spacing:.05em;padding:8px 10px;}
+.cc-embed td{padding:10px;border-top:1px solid var(--cc-line);}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-grid{display:grid;gap:var(--cc-gap);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.cc-embed .cc-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--cc-gap);}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+
+<!-- ============================================================
+     PRVEK — Jaký jste zachránce (Kaufland: Z lásky k srdci)
+     Swap-pointy pro redakci jsou nahoře ve <script> v objektu CFG.
+     ============================================================ -->
+<div class="cc-embed cc-embed--bare cc-aed" data-cc-aed>
+  <p class="cc-sr" id="ccaed-sum">Interaktivní test o první pomoci při zástavě srdce. Sedm úkolů: dva odhady křivky přežití, trenažér tempa masáže a čtyři otázky.</p>
+
+  <div class="cc-aed__head">
+    <div class="cc-aed__headtext">
+      <p class="cc-aed__kicker" data-el="kicker">Jaký jste zachránce</p>
+      <h3 class="cc-aed__title" data-el="title">Jak rychle klesá šance na přežití, když nikdo nezasáhne?</h3>
+      <p class="cc-aed__instr" data-el="instr">Táhněte prstem nebo myší zleva doprava a nakreslete svůj odhad.</p>
+    </div>
+    <div class="cc-aed__dots" data-el="dots" role="group" aria-label="Postup testem"></div>
+  </div>
+
+  <div class="cc-aed__stage" data-el="stage">
+
+    <!-- scéna: graf -->
+    <div class="cc-aed__scene cc-aed__scene--chart" data-scene="chart">
+      <div class="cc-aed__legend" data-el="legend" aria-hidden="true"></div>
+      <div class="cc-aed__canvaswrap" data-el="canvaswrap">
+        <canvas data-el="canvas" tabindex="0" role="img"
+                aria-label="Graf: vodorovně minuty od zástavy srdce, svisle šance na přežití. Nakreslete čáru tažením."></canvas>
+      </div>
+    </div>
+
+    <!-- scéna: trenažér -->
+    <div class="cc-aed__scene cc-aed__scene--tempo" data-scene="tempo" hidden>
+      <div class="cc-aed__tapwrap">
+        <button type="button" class="cc-aed__tap" data-el="tap" aria-describedby="ccaed-tapstate">
+          <span class="cc-aed__taplabel" data-el="taplabel">Start</span>
+        </button>
+      </div>
+      <div class="cc-aed__gauge" data-el="gauge">
+        <div class="cc-aed__gaugebar">
+          <div class="cc-aed__gaugezone"></div>
+          <div class="cc-aed__gaugemark" data-el="gaugemark"></div>
+        </div>
+        <div class="cc-aed__gaugescale"><span>40</span><span>100</span><span>120</span><span>180</span></div>
+      </div>
+      <p class="cc-aed__tapstate" id="ccaed-tapstate" data-el="tapstate">Tempo se ukáže po prvních klepnutích.</p>
+    </div>
+
+    <!-- scéna: otázka -->
+    <div class="cc-aed__scene cc-aed__scene--quiz" data-scene="quiz" hidden>
+      <div class="cc-aed__opts" data-el="opts"></div>
+    </div>
+
+    <!-- scéna: výsledek -->
+    <div class="cc-aed__scene cc-aed__scene--result" data-scene="result" hidden>
+      <p class="cc-aed__score" data-el="score"></p>
+      <p class="cc-aed__verdict" data-el="verdict"></p>
+      <ul class="cc-aed__list" data-el="list"></ul>
+    </div>
+
+  </div>
+
+  <div class="cc-aed__say" data-el="say" role="status" aria-live="polite"></div>
+
+  <div class="cc-aed__foot">
+    <div class="cc-aed__footleft" data-el="footleft"></div>
+    <button type="button" class="cc-aed__next" data-el="next" disabled>Nakreslete čáru</button>
+  </div>
+
+  <p class="cc-aed__disc" data-el="disc">Ilustrativní test, nenahrazuje kurz první pomoci. Průběh křivek vychází z publikovaných modelů přežití, ne z konkrétního pacienta.</p>
+</div>
+
+<style>
+.cc-aed{
+  /* Paleta speciálu „Z lásky k srdci": černá plocha, bílý text, jedna červená. */
+  --cc-blue:#ff4343; --cc-blue-dark:#e33b3b;
+  --ac:#ff4343;
+  --ok:#ffffff;
+  --bad:#ff4343;
+  --plocha:#050101;
+  --ink:#ffffff;
+  --ink2:#a7adb2;
+  --line:#241f1f;
+  --sc:1;
+  box-sizing:border-box;
+  position:relative;
+  display:flex;flex-direction:column;
+  min-height:100vh;
+  padding:clamp(14px,2.6vw,28px);
+  background:var(--plocha);
+  color:var(--ink);
+  border-radius:15px;
+  overflow:hidden;
+}
+/* paprsky z hlavičky speciálu — velmi jemné, nikdy nepřebijí obsah */
+.cc-aed::before{
+  content:"";position:absolute;inset:-20% -10% auto -10%;height:150%;pointer-events:none;
+  background:repeating-conic-gradient(from 182deg at 50% 0%,
+    #0f0a0a 0deg 4.2deg, #050101 4.2deg 11deg);
+  -webkit-mask-image:radial-gradient(120% 90% at 50% 0%,#000 0%,rgba(0,0,0,.35) 55%,transparent 85%);
+          mask-image:radial-gradient(120% 90% at 50% 0%,#000 0%,rgba(0,0,0,.35) 55%,transparent 85%);
+}
+.cc-aed > *{position:relative;z-index:1;}
+
+/* ---------- hlavička ---------- */
+.cc-aed__head{display:flex;align-items:flex-start;gap:14px;flex:0 0 auto;}
+.cc-aed__headtext{flex:1 1 auto;min-width:0;}
+.cc-aed .cc-aed__kicker{margin:0 0 4px;font:700 calc(11px*var(--sc))/1.2 var(--cc-ui);
+  letter-spacing:.09em;text-transform:uppercase;color:var(--ac);}
+.cc-aed .cc-aed__title{margin:0;font-family:var(--cc-display);font-weight:700;color:var(--ink);
+  font-size:calc(clamp(17px,2.7vw,25px)*var(--sc));line-height:1.22;}
+.cc-aed .cc-aed__instr{margin:calc(5px*var(--sc)) 0 0;font:400 calc(clamp(13px,1.6vw,15px)*var(--sc))/1.4 var(--cc-ui);
+  color:var(--ink2);}
+
+/* tečky postupu */
+.cc-aed__dots{display:flex;gap:6px;flex:0 0 auto;padding-top:5px;}
+.cc-aed__dot{width:8px;height:8px;border-radius:50%;box-sizing:border-box;
+  border:1.5px solid #4a4242;background:transparent;transition:background .2s,border-color .2s;}
+.cc-aed__dot--done{background:#7d7373;border-color:#7d7373;}
+.cc-aed__dot--now{background:var(--ac);border-color:var(--ac);}
+
+/* ---------- scéna ---------- */
+.cc-aed__stage{position:relative;flex:1 1 auto;min-height:0;margin-top:calc(10px*var(--sc));}
+.cc-aed__scene{position:absolute;inset:0;display:flex;flex-direction:column;min-height:0;}
+.cc-aed__scene[hidden]{display:none;}
+
+/* graf */
+.cc-aed__legend{flex:0 0 auto;height:calc(18px*var(--sc));display:flex;gap:16px;justify-content:flex-end;
+  font:500 calc(11.5px*var(--sc))/calc(18px*var(--sc)) var(--cc-ui);color:var(--ink2);opacity:0;transition:opacity .3s;}
+.cc-aed__legend--on{opacity:1;}
+.cc-aed__legend i{display:inline-block;width:14px;height:0;border-top-width:3px;border-top-style:solid;
+  vertical-align:middle;margin-right:6px;}
+.cc-aed__canvaswrap{position:relative;flex:1 1 auto;min-height:0;}
+.cc-aed__canvaswrap canvas{position:absolute;inset:0;width:100%;height:100%;
+  touch-action:pan-y;cursor:crosshair;border-radius:8px;}
+.cc-aed__canvaswrap canvas:focus-visible{outline:3px solid var(--ac);outline-offset:2px;}
+
+/* trenažér */
+.cc-aed__scene--tempo{align-items:center;justify-content:center;gap:calc(12px*var(--sc));}
+.cc-aed__tapwrap{flex:0 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;}
+.cc-aed__tap{
+  width:var(--tapd,150px);height:var(--tapd,150px);border-radius:50%;
+  border:2px solid var(--ac);background:rgba(255,67,67,.08);color:var(--ink);cursor:pointer;
+  font:700 calc(clamp(15px,2vw,19px)*var(--sc))/1.2 var(--cc-display);
+  display:flex;align-items:center;justify-content:center;padding:0;
+  font-variant-numeric:tabular-nums;
+  transition:transform .06s ease-out,background .12s;}
+.cc-aed__tap--live{background:var(--ac);color:#fff;}
+.cc-aed__tap--hit{transform:scale(.955);}
+.cc-aed__tap:disabled{opacity:.5;cursor:default;}
+.cc-aed__gauge{flex:0 0 auto;width:min(420px,100%);}
+.cc-aed__gaugebar{position:relative;height:calc(10px*var(--sc));border-radius:999px;background:#241f1f;overflow:hidden;}
+.cc-aed__gaugezone{position:absolute;top:0;bottom:0;left:42.86%;width:14.28%;background:rgba(255,67,67,.42);}
+.cc-aed__gaugemark{position:absolute;top:-3px;bottom:-3px;width:3px;border-radius:2px;background:#fff;
+  left:0;opacity:0;transition:left .12s linear,opacity .2s;}
+.cc-aed__gaugemark--on{opacity:1;}
+.cc-aed__gaugescale{display:flex;justify-content:space-between;margin-top:4px;
+  font:500 calc(10.5px*var(--sc))/1.2 var(--cc-ui);color:#7d8388;font-variant-numeric:tabular-nums;}
+.cc-aed__gaugescale span:nth-child(2){margin-left:24%;}
+.cc-aed__gaugescale span:nth-child(3){margin-right:24%;}
+.cc-aed .cc-aed__tapstate{flex:0 0 auto;margin:0;text-align:center;
+  font:500 calc(clamp(12.5px,1.6vw,14.5px)*var(--sc))/1.4 var(--cc-ui);color:var(--ink2);
+  font-variant-numeric:tabular-nums;}
+
+/* otázka */
+.cc-aed__opts{display:flex;flex-direction:column;justify-content:center;gap:calc(8px*var(--sc));
+  flex:1 1 auto;min-height:0;}
+.cc-aed__opt{display:flex;align-items:center;gap:10px;width:100%;text-align:left;cursor:pointer;
+  background:#0e0909;border:1px solid #2b2424;border-radius:10px;color:var(--ink);
+  padding:calc(11px*var(--sc)) calc(14px*var(--sc));
+  font:400 calc(clamp(14px,1.85vw,17px)*var(--sc))/1.35 var(--cc-ui);
+  transition:border-color .15s,background .15s;}
+.cc-aed__opt:hover:not(:disabled){border-color:#645858;background:#151010;}
+.cc-aed__opt:disabled{cursor:default;}
+.cc-aed__opt--ok{border-color:#fff;background:#181313;}
+.cc-aed__opt--bad{border-color:var(--bad);background:#1c0d0f;}
+.cc-aed__opt--dim{opacity:.42;}
+.cc-aed__opt span{flex:1 1 auto;}
+.cc-aed__mark{flex:0 0 auto;width:calc(19px*var(--sc));height:calc(19px*var(--sc));display:none;}
+.cc-aed__mark svg{display:block;width:100%;height:100%;}
+.cc-aed__opt--ok .cc-aed__mark,.cc-aed__opt--bad .cc-aed__mark{display:block;}
+
+/* výsledek */
+.cc-aed__scene--result{justify-content:center;}
+.cc-aed .cc-aed__score{margin:0;font:700 calc(11px*var(--sc))/1.2 var(--cc-ui);
+  letter-spacing:.09em;text-transform:uppercase;color:var(--ac);}
+.cc-aed .cc-aed__verdict{margin:calc(4px*var(--sc)) 0 calc(10px*var(--sc));
+  font-family:var(--cc-display);font-weight:700;color:var(--ink);
+  font-size:calc(clamp(18px,3vw,27px)*var(--sc));line-height:1.2;}
+.cc-aed .cc-aed__score:empty,.cc-aed .cc-aed__verdict:empty,
+.cc-aed .cc-aed__title:empty,.cc-aed .cc-aed__instr:empty{display:none;}
+.cc-aed__list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line);}
+.cc-aed__list li{display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--line);
+  padding:calc(6px*var(--sc)) 0;
+  font:400 calc(clamp(12.5px,1.6vw,15px)*var(--sc))/1.3 var(--cc-ui);color:#d5d9dc;}
+.cc-aed__list svg{flex:0 0 auto;width:calc(15px*var(--sc));height:calc(15px*var(--sc));}
+
+/* ---------- slot vysvětlení (nikdy neroste) ---------- */
+.cc-aed__say{flex:0 0 auto;position:relative;
+  min-height:calc(var(--sayh,54px)*var(--sc));margin-top:calc(8px*var(--sc));
+  font:400 calc(clamp(13px,1.7vw,15.5px)*var(--sc))/1.42 var(--cc-ui);color:#c8ced2;}
+.cc-aed__say b{font-weight:600;color:#fff;}
+.cc-aed__say .cc-aed__stat{display:block;margin-top:3px;color:#8d9499;}
+.cc-aed__shapes{display:none;gap:8px;flex-wrap:wrap;align-items:center;}
+.cc-aed__shapes--on{display:flex;}
+.cc-aed__shapes b{font:600 calc(12.5px*var(--sc))/1.3 var(--cc-ui);color:var(--ink2);}
+.cc-aed__shape{cursor:pointer;background:transparent;border:1px solid #3c3434;border-radius:999px;color:#fff;
+  padding:calc(5px*var(--sc)) calc(12px*var(--sc));font:500 calc(12.5px*var(--sc))/1.3 var(--cc-ui);}
+.cc-aed__shape:hover{border-color:#fff;}
+
+/* ---------- patička ---------- */
+.cc-aed__foot{flex:0 0 auto;display:flex;align-items:center;gap:10px;
+  margin-top:calc(8px*var(--sc));}
+.cc-aed__footleft{flex:1 1 auto;min-width:0;display:flex;gap:8px;flex-wrap:wrap;}
+.cc-aed__next{flex:0 0 auto;cursor:pointer;border:0;border-radius:999px;background:var(--ac);color:#fff;
+  padding:calc(9px*var(--sc)) calc(22px*var(--sc));
+  font:600 calc(clamp(12px,1.4vw,13px)*var(--sc))/1.5 var(--cc-ui);letter-spacing:.02em;
+  transition:background .15s,color .15s;}
+.cc-aed__next:hover:not(:disabled){background:#fff;color:#0a0505;}
+.cc-aed__next:disabled{background:#241f1f;color:#6f6767;cursor:default;}
+.cc-aed__ghost{cursor:pointer;border:1px solid #3c3434;border-radius:999px;background:transparent;color:#fff;
+  padding:calc(8px*var(--sc)) calc(18px*var(--sc));
+  font:500 calc(clamp(12px,1.4vw,13px)*var(--sc))/1.5 var(--cc-ui);}
+.cc-aed__ghost:hover{border-color:#fff;}
+.cc-aed__ghost[aria-pressed="true"]{background:#fff;color:#0a0505;border-color:#fff;}
+
+.cc-aed .cc-aed__disc{flex:0 0 auto;margin:calc(8px*var(--sc)) 0 0;
+  font:400 calc(clamp(10.5px,1.2vw,12px)*var(--sc))/1.35 var(--cc-ui);color:#6f767b;}
+.cc-aed :focus-visible{outline:3px solid var(--ac);outline-offset:2px;}
+
+@media (max-width:619px){
+  .cc-aed__head{gap:10px;}
+  .cc-aed__gaugescale span:nth-child(2){margin-left:18%;}
+  .cc-aed__gaugescale span:nth-child(3){margin-right:18%;}
+}
+</style>
+
+<script>
+(function(){
+  var root = document.querySelector('[data-cc-aed]');
+  if(!root || root.dataset.ccInit) return;
+  root.dataset.ccInit = '1';
+
+  /* ============================================================
+     CFG — všechno, co může chtít redakce přepsat, je tady.
+     ============================================================ */
+  var CFG = {
+    // modelový pokles v procentních bodech za minutu
+    dropNone: 10,   // bez jakékoli pomoci  (text speciálu: ~10 % za minutu)
+    dropCpr:  4,    // s okamžitou masáží srdce
+    tolerance: 15,  // průměrná odchylka v p. b., do které je odhad "trefa"
+    tapSeconds: 10,
+    tempoMin: 100, tempoMax: 120,
+    tempoNeed: 0.6,   // podíl intervalů v pásmu potřebný ke splnění
+    tempoMinTaps: 8,  // pod tímhle počtem klepnutí úkol neplatí
+    metronomeBpm: 110
+  };
+
+  var QUIZ = [
+    { id:'q1', key:'Čtyři minuty',
+      title:'Jak dlouho vydrží mozek bez kyslíku, než se začne nevratně poškozovat?',
+      opts:['Zhruba minutu','Zhruba čtyři minuty','Zhruba čtvrt hodiny'],
+      right:1,
+      ok:'Přesně tak. Čtyři minuty jsou hranice, po které začínají odumírat buňky mozkové kůry — a proto nestačí jen čekat na sanitku.',
+      no:'Jsou to zhruba čtyři minuty. Po nich začínají nevratně odumírat buňky mozkové kůry, i když se srdce později podaří rozběhnout.' },
+
+    { id:'q2', key:'Kdo smí použít AED',
+      title:'Kdo smí použít automatizovaný externí defibrilátor?',
+      opts:['Jen zdravotník nebo vyškolený člověk','Kdokoliv, kdo je na místě'],
+      right:1,
+      ok:'Správně. Přístroj je konstruovaný tak, aby ho bez tréninku zvládl kdokoliv.',
+      no:'Kdokoliv. Veřejně dostupná AED jsou dělaná tak, aby je ovládl i člověk bez jakéhokoli výcviku.',
+      stat:'Skoro polovina Čechů si přitom myslí totéž co vy — že přístroj patří jen do rukou odborníka.' },
+
+    { id:'q3', key:'Bezpečnost výboje',
+      title:'Co se stane, když elektrody nalepíte člověku, který výboj nepotřebuje?',
+      opts:['Přístroj výboj nepovolí','Dostane výboj a může mu to ublížit','Musíte se rozhodnout sami'],
+      right:0,
+      ok:'Ano. AED si samo načte srdeční rytmus a výboj umožní jen tehdy, když ho stav opravdu vyžaduje.',
+      no:'Nic. Přístroj po nalepení elektrod provede analýzu a výboj povolí jen u rytmu, který ho vyžaduje. Ublížit takhle nejde.',
+      stat:'Právě tahle obava brzdí polovinu populace.' },
+
+    { id:'q4', key:'Kde hledat AED',
+      title:'Kde v supermarketu nejspíš najdete defibrilátor?',
+      opts:['U pokladen','Na Informacích','V kanceláři vedoucího'],
+      right:1,
+      ok:'Ano. Na Informacích u vchodu — tam ho má například celá síť prodejen Kauflandu.',
+      no:'Na Informacích u vchodu. Tam je přístroj v každé prodejně Kauflandu, aby se k němu dalo doběhnout během pár desítek vteřin.' }
+  ];
+
+  var VERDICTS = [
+    { min:6, kicker:'Výsledek', head:'Zvládli byste zasáhnout',
+      say:'Víte, co se děje i jak rychle je potřeba jednat. Řekněte to někomu dalšímu — u zástavy srdce rozhoduje ten, kdo zrovna stojí nejblíž.' },
+    { min:4, kicker:'Výsledek', head:'Základ máte, mezery si doplňte',
+      say:'To podstatné víte. Projděte si znovu kroky, které vám utekly, a zapamatujte si tempo 100 až 120 stlačení za minutu.' },
+    { min:0, kicker:'Výsledek', head:'Projděte si to ještě jednou',
+      say:'Nevadí, tohle se nikdo nenaučí sám od sebe. Stačí si odnést jediné: volat 155 a začít stlačovat hrudník. I nedokonalá masáž je řádově cennější než čekání.' }
+  ];
+
+  /* ============================================================ */
+  var el = {};
+  root.querySelectorAll('[data-el]').forEach(function(n){ el[n.dataset.el] = n; });
+  var scenes = {};
+  root.querySelectorAll('[data-scene]').forEach(function(n){ scenes[n.dataset.scene] = n; });
+
+  var TASKS = [
+    {id:'k1', key:'Odhad křivky bez pomoci'},
+    {id:'k2', key:'Odhad křivky s masáží'},
+    {id:'tempo', key:'Tempo masáže'},
+    {id:'q1', key:QUIZ[0].key},
+    {id:'q2', key:QUIZ[1].key},
+    {id:'q3', key:QUIZ[2].key},
+    {id:'q4', key:QUIZ[3].key}
+  ];
+  var pass = {};   // id -> true/false
+
+  var STEPS = ['k1','k2','tempo','q1','q2','q3','q4','result'];
+  var stepIx = 0;
+
+  /* ---------- ikonky ---------- */
+  function icon(good){
+    var c = good ? 'var(--ok)' : 'var(--bad)';
+    var d = good ? 'M3 8.5l3.6 3.6L13.2 4.4' : 'M4 4l8 8M12 4l-8 8';
+    return '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="'+d+'" fill="none" stroke="'+c+
+           '" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+
+  /* ---------- tečky postupu ---------- */
+  (function(){
+    var h = '';
+    for(var i=0;i<7;i++) h += '<span class="cc-aed__dot"></span>';
+    el.dots.innerHTML = h;
+  })();
+  function paintDots(){
+    var d = el.dots.children;
+    for(var i=0;i<d.length;i++){
+      d[i].className = 'cc-aed__dot' + (i < stepIx ? ' cc-aed__dot--done' : (i === stepIx ? ' cc-aed__dot--now' : ''));
+    }
+    el.dots.style.visibility = (STEPS[stepIx] === 'result') ? 'hidden' : 'visible';
+  }
+
+  /* ============================================================
+     GRAF
+     ============================================================ */
+  var cv = el.canvas, ctx = cv.getContext('2d');
+  var N = 101;                       // 0 … 10 min po 0,1
+  var user = null, lastIx = 0, revealT = 0, revealing = false, chartStep = 1;
+  var plot = {x:0,y:0,w:10,h:10};
+
+  function refCurve(drop){
+    var a = new Float32Array(N);
+    for(var i=0;i<N;i++) a[i] = Math.max(0, 100 - drop * (i/10));
+    return a;
+  }
+  var REF1 = refCurve(CFG.dropNone), REF2 = refCurve(CFG.dropCpr);
+
+  function newUser(){
+    var a = new Float32Array(N);
+    for(var i=0;i<N;i++) a[i] = NaN;
+    a[0] = 100;
+    return a;
+  }
+
+  function sizeCanvas(){
+    var w = el.canvaswrap.clientWidth, h = el.canvaswrap.clientHeight;
+    if(w < 2 || h < 2) return false;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    var padL = w < 380 ? 30 : 38, padB = 22, padT = 10, padR = w < 380 ? 8 : 14;
+    plot = {x:padL, y:padT, w:Math.max(10, w-padL-padR), h:Math.max(10, h-padT-padB)};
+    return true;
+  }
+  function px(t){ return plot.x + (t/10) * plot.w; }              // t v minutách
+  function py(v){ return plot.y + (1 - v/100) * plot.h; }
+
+  function drawSeries(arr, upto, color, width, dash){
+    ctx.save();
+    ctx.strokeStyle = color; ctx.lineWidth = width;
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    if(dash) ctx.setLineDash(dash);
+    ctx.beginPath();
+    var started = false;
+    for(var i=0;i<=upto && i<N;i++){
+      var v = arr[i];
+      if(isNaN(v)){ started = false; continue; }
+      var X = px(i/10), Y = py(v);
+      if(!started){ ctx.moveTo(X,Y); started = true; } else ctx.lineTo(X,Y);
+    }
+    ctx.stroke(); ctx.restore();
+  }
+
+  function draw(){
+    if(!sizeCanvas()) return;
+    var w = cv.width, h = cv.height;
+    ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,w,h); ctx.restore();
+
+    var small = plot.w < 300;
+    ctx.fillStyle = '#0c0808';
+    ctx.fillRect(plot.x, plot.y, plot.w, plot.h);
+
+    // mřížka + osa Y
+    ctx.font = '500 ' + (small?9.5:11) + 'px Inter,-apple-system,"Segoe UI",sans-serif';
+    ctx.fillStyle = '#7d8388'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    [0,25,50,75,100].forEach(function(v){
+      var Y = py(v);
+      ctx.strokeStyle = v===0 ? '#463c3c' : '#241e1e'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(plot.x, Y+.5); ctx.lineTo(plot.x+plot.w, Y+.5); ctx.stroke();
+      if(v%50===0) ctx.fillText(v + ' %', plot.x-7, Y);
+    });
+    // osa X
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    for(var t=0;t<=10;t+=2){
+      var X = px(t);
+      if(t>0){ ctx.strokeStyle='#241e1e'; ctx.beginPath(); ctx.moveTo(X+.5,plot.y); ctx.lineTo(X+.5,plot.y+plot.h); ctx.stroke(); }
+      ctx.fillStyle = '#7d8388';
+      ctx.textAlign = t===10 ? 'right' : 'center';
+      ctx.fillText(t===10 ? '10 min' : String(t), t===10 ? X+2 : X, plot.y+plot.h+6);
+      ctx.textAlign = 'center';
+    }
+    ctx.strokeStyle = '#3a3232'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(plot.x+.5, plot.y); ctx.lineTo(plot.x+.5, plot.y+plot.h); ctx.stroke();
+
+    // kotva ve druhém kroku: reálná křivka bez pomoci
+    if(chartStep === 2) drawSeries(REF1, N-1, '#5a5050', 2, [5,4]);
+
+    // odhalená reference
+    if(revealing || revealT > 0){
+      var upto = Math.round((N-1) * Math.min(1, revealT));
+      var refA = chartStep === 1 ? REF1 : REF2;
+      drawSeries(refA, upto, 'var-ac', 3);
+    }
+
+    // uživatelova čára
+    var done = revealT > 0;
+    drawSeries(user, N-1, done ? '#8b9196' : '#ffffff', done ? 2 : 2.8);
+
+    // startovní bod
+    if(!done && lastIx === 0){
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.arc(px(0), py(100), 4.5, 0, Math.PI*2); ctx.fill();
+    }
+
+    // svislá linka na 4 minutách — až v odhalení a vždy s popiskem
+    if(revealT >= .999){
+      var X4 = px(4);
+      ctx.save();
+      ctx.strokeStyle = '#6b6262'; ctx.lineWidth = 1; ctx.setLineDash([4,4]);
+      ctx.beginPath(); ctx.moveTo(X4+.5, plot.y); ctx.lineTo(X4+.5, plot.y+plot.h); ctx.stroke();
+      ctx.restore();
+      ctx.font = '600 ' + (small?9.5:11) + 'px Inter,-apple-system,"Segoe UI",sans-serif';
+      ctx.fillStyle = '#9aa0a5'; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillText('4 min', X4+5, plot.y+3);
+    }
+  }
+
+  // drawSeries dostává 'var-ac' jako značku pro akcent (canvas neumí CSS proměnné)
+  var AC = '#ff4343';
+  (function(){
+    var v = getComputedStyle(root).getPropertyValue('--ac').trim();
+    if(v) AC = v;
+  })();
+  var _ds = drawSeries;
+  drawSeries = function(arr, upto, color, width, dash){
+    _ds(arr, upto, color === 'var-ac' ? AC : color, width, dash);
+  };
+
+  /* ---------- kreslení ---------- */
+  function tFromEvent(e){
+    var r = cv.getBoundingClientRect();
+    return { t: ((e.clientX - r.left) - plot.x) / plot.w * 10,
+             v: (1 - ((e.clientY - r.top) - plot.y) / plot.h) * 100 };
+  }
+  function putTo(t, v){
+    var ix = Math.round(Math.max(0, Math.min(10, t)) * 10);
+    v = Math.max(0, Math.min(100, v));
+    if(ix <= lastIx) return;
+    var from = lastIx, fv = user[from];
+    if(isNaN(fv)) fv = 100;
+    for(var i=from+1;i<=ix;i++){
+      user[i] = fv + (v - fv) * (i - from) / (ix - from);
+    }
+    lastIx = ix;
+    if(lastIx >= 95){
+      for(var j=lastIx+1;j<N;j++) user[j] = user[lastIx];
+      lastIx = N-1;
+    }
+    draw(); syncNext();
+  }
+  var drawingPtr = null;
+  cv.addEventListener('pointerdown', function(e){
+    if(revealT > 0) return;
+    drawingPtr = e.pointerId;
+    try{ cv.setPointerCapture(e.pointerId); }catch(err){}
+    var p = tFromEvent(e); putTo(p.t, p.v);
+  });
+  cv.addEventListener('pointermove', function(e){
+    if(drawingPtr !== e.pointerId || revealT > 0) return;
+    var p = tFromEvent(e); putTo(p.t, p.v);
+  });
+  ['pointerup','pointercancel','pointerleave'].forEach(function(t){
+    cv.addEventListener(t, function(e){ if(drawingPtr === e.pointerId) drawingPtr = null; });
+  });
+
+  // klávesová cesta: po zaostření canvasu se ve slotu nabídnou hotové tvary
+  cv.addEventListener('focus', function(){
+    if(revealT > 0 || lastIx >= N-1) return;
+    var isKb = true;
+    try{ isKb = cv.matches(':focus-visible'); }catch(e){}
+    if(isKb) showShapes();
+  });
+  function showShapes(){
+    if(el.say.dataset.mode === 'shapes') return;
+    el.say.dataset.mode = 'shapes';
+    el.say.innerHTML = '<div class="cc-aed__shapes cc-aed__shapes--on"><b>Nebo vyberte tvar:</b>'+
+      '<button type="button" class="cc-aed__shape" data-shape="steep">Prudký pokles</button>'+
+      '<button type="button" class="cc-aed__shape" data-shape="lin">Rovnoměrný</button>'+
+      '<button type="button" class="cc-aed__shape" data-shape="soft">Mírný pokles</button></div>';
+    el.say.querySelectorAll('[data-shape]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var s = b.dataset.shape;
+        for(var i=0;i<N;i++){
+          var t = i/10;
+          user[i] = s==='steep' ? Math.max(0,100 - 16*t)
+                  : s==='soft'  ? Math.max(0,100 - 5*t)
+                                : Math.max(0,100 - 10*t);
+        }
+        lastIx = N-1; el.say.dataset.mode = ''; el.say.innerHTML = '';
+        draw(); syncNext(); el.next.focus();
+      });
+    });
+  }
+
+  /* ---------- odhalení ---------- */
+  function reveal(){
+    revealing = true; revealT = 0;
+    var t0 = performance.now(), dur = 700;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if(reduce){ revealT = 1; revealing = false; draw(); afterReveal(); return; }
+    (function tick(now){
+      revealT = Math.min(1, (now - t0)/dur);
+      draw();
+      if(revealT < 1) requestAnimationFrame(tick);
+      else { revealing = false; afterReveal(); }
+    })(performance.now());
+  }
+
+  function avgDiff(a, b){
+    var s = 0, n = 0;
+    for(var i=10;i<N;i+=10){ if(!isNaN(a[i])){ s += Math.abs(a[i]-b[i]); n++; } }
+    return n ? s/n : 99;
+  }
+  function bias(a, b){
+    var s = 0, n = 0;
+    for(var i=10;i<N;i+=10){ if(!isNaN(a[i])){ s += (a[i]-b[i]); n++; } }
+    return n ? s/n : 0;
+  }
+
+  function afterReveal(){
+    var refA = chartStep === 1 ? REF1 : REF2;
+    var d = avgDiff(user, refA), bi = bias(user, refA);
+    var okay = d <= CFG.tolerance;
+    pass[chartStep === 1 ? 'k1' : 'k2'] = okay;
+
+    el.legend.innerHTML = chartStep === 1
+      ? '<span><i style="border-color:#8b9196"></i>Váš odhad</span><span><i style="border-color:'+AC+'"></i>Realita</span>'
+      : '<span><i style="border-color:#5a5050"></i>Bez pomoci</span><span><i style="border-color:#8b9196"></i>Váš odhad</span><span><i style="border-color:'+AC+'"></i>S masáží</span>';
+    el.legend.classList.add('cc-aed__legend--on');
+
+    var lead = okay ? 'Trefa. ' : (bi > 0 ? 'Tipovali jste mírnější pokles, než jaký realita má. ' : 'Tipovali jste strmější pokles, než jaký realita má. ');
+    var body = chartStep === 1
+      ? 'Bez zásahu mizí každou minutu zhruba deset procent naděje. Po čtyřech minutách začíná mozek nevratně odumírat, po deseti se šance blíží nule.'
+      : 'S okamžitou masáží klesá naděje zhruba dvaapůlkrát pomaleji. Rozdíl mezi čarami je přesně to, co dokáže náhodný svědek — ještě než dorazí sanitka.';
+    say('<b>' + lead + '</b>' + body);
+    syncNext();
+  }
+
+  /* ============================================================
+     TRENAŽÉR
+     ============================================================ */
+  var taps = [], tapRunning = false, tapEnd = 0, tapTimer = null, metro = false, metroTimer = null, actx = null;
+
+  function bpmToPct(b){ return Math.max(0, Math.min(1, (b-40)/140)); }
+
+  function tapReset(){
+    taps = []; tapRunning = false;
+    clearInterval(tapTimer); stopMetro();
+    el.taplabel.textContent = 'Start';
+    el.tap.classList.remove('cc-aed__tap--live');
+    el.tap.disabled = false;
+    el.gaugemark.classList.remove('cc-aed__gaugemark--on');
+    el.tapstate.textContent = 'Tempo se ukáže po prvních klepnutích.';
+  }
+
+  function tapHit(){
+    var now = performance.now();
+    if(!tapRunning){
+      tapRunning = true; taps = [now]; tapEnd = now + CFG.tapSeconds*1000;
+      el.tap.classList.add('cc-aed__tap--live');
+      if(metro) startMetro();
+      tapTimer = setInterval(function(){
+        var left = Math.max(0, tapEnd - performance.now());
+        el.taplabel.textContent = (left/1000).toFixed(1).replace('.', ',');
+        if(left <= 0) tapFinish();
+      }, 60);
+      el.taplabel.textContent = CFG.tapSeconds.toFixed(1).replace('.', ',');
+      return;
+    }
+    if(now > tapEnd) return;
+    taps.push(now);
+    el.tap.classList.add('cc-aed__tap--hit');
+    setTimeout(function(){ el.tap.classList.remove('cc-aed__tap--hit'); }, 70);
+
+    var n = taps.length;
+    if(n >= 3){
+      var win = Math.min(3, n-1), sum = 0;
+      for(var i=n-win;i<n;i++) sum += taps[i] - taps[i-1];
+      var bpm = 60000 / (sum/win);
+      el.gaugemark.style.left = (bpmToPct(bpm)*100).toFixed(1) + '%';
+      el.gaugemark.classList.add('cc-aed__gaugemark--on');
+      var streak = 0;
+      for(var j=n-1;j>=1;j--){
+        var b = 60000/(taps[j]-taps[j-1]);
+        if(b >= CFG.tempoMin && b <= CFG.tempoMax) streak++; else break;
+      }
+      el.tapstate.textContent = Math.round(bpm) + ' za minutu' + (streak >= 3 ? '  ·  série ' + streak : '');
+    }
+  }
+
+  function tapFinish(){
+    clearInterval(tapTimer); stopMetro();
+    tapRunning = false; el.tap.disabled = true;
+    el.tap.classList.remove('cc-aed__tap--live');
+    el.taplabel.textContent = 'Hotovo';
+
+    var iv = [];
+    for(var i=1;i<taps.length;i++) iv.push(60000/(taps[i]-taps[i-1]));
+    iv = iv.slice(2);                                 // první dvě klepnutí = rozjezd
+    var inZone = iv.filter(function(b){ return b >= CFG.tempoMin && b <= CFG.tempoMax; }).length;
+    var share = iv.length ? inZone/iv.length : 0;
+    var med = iv.length ? iv.slice().sort(function(a,b){return a-b;})[Math.floor(iv.length/2)] : 0;
+    var enough = iv.length >= CFG.tempoMinTaps - 1;
+    var okay = enough && share >= CFG.tempoNeed;
+    pass.tempo = okay;
+
+    if(!enough){
+      say('<b>Klepnutí bylo málo na to, aby se tempo dalo změřit.</b> Zkuste to ještě jednou — potřebujete zhruba dvě klepnutí za vteřinu.');
+    } else {
+      var lead = okay ? 'Sedí. ' : (med < CFG.tempoMin ? 'Bylo to pomalejší, než je potřeba. ' : 'Bylo to rychlejší, než je potřeba. ');
+      say('<b>' + lead + '</b>Vaše tempo bylo ' + Math.round(med) + ' za minutu, v pásmu 100 až 120 jste strávili ' +
+          Math.round(share*100) + ' % času. Na skutečném člověku k tomu patří hloubka 5 až 6 centimetrů a propnuté lokty.' +
+          '<span class="cc-aed__stat">Tempo si drží i ten, kdo si v duchu přehrává Stayin’ Alive od Bee Gees.</span>');
+    }
+    el.tapstate.textContent = enough ? (Math.round(med) + ' za minutu  ·  ' + Math.round(share*100) + ' % v pásmu') : 'Málo klepnutí na změření.';
+    footTempoButtons(true);
+    syncNext();
+  }
+
+  function ensureCtx(){
+    if(actx) return actx;
+    try{ actx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ actx = null; }
+    return actx;
+  }
+  function click(){
+    var c = ensureCtx(); if(!c) return;
+    var o = c.createOscillator(), g = c.createGain();
+    o.frequency.value = 1050; o.type = 'square';
+    g.gain.setValueAtTime(.0001, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(.16, c.currentTime + .004);
+    g.gain.exponentialRampToValueAtTime(.0001, c.currentTime + .05);
+    o.connect(g); g.connect(c.destination); o.start(); o.stop(c.currentTime + .06);
+  }
+  function startMetro(){
+    stopMetro(); var c = ensureCtx(); if(c && c.state === 'suspended') c.resume();
+    metroTimer = setInterval(click, 60000/CFG.metronomeBpm); click();
+  }
+  function stopMetro(){ if(metroTimer){ clearInterval(metroTimer); metroTimer = null; } }
+
+  el.tap.addEventListener('click', tapHit);
+  el.tap.addEventListener('keydown', function(e){ if(e.key === ' ' || e.key === 'Enter') e.preventDefault(); });
+
+  function footTempoButtons(withAgain){
+    el.footleft.innerHTML = '';
+    var again = document.createElement('button');
+    again.type = 'button'; again.className = 'cc-aed__ghost'; again.textContent = 'Zkusit znovu';
+    again.addEventListener('click', function(){ tapReset(); say(''); footTempoButtons(false); syncNext(); });
+    var m = document.createElement('button');
+    m.type = 'button'; m.className = 'cc-aed__ghost'; m.textContent = 'Tikání 110/min';
+    m.setAttribute('aria-pressed', metro ? 'true' : 'false');
+    m.addEventListener('click', function(){
+      metro = !metro; m.setAttribute('aria-pressed', metro ? 'true' : 'false');
+      if(metro && tapRunning) startMetro(); else if(!metro) stopMetro();
+      if(metro && !tapRunning){ ensureCtx(); click(); }
+    });
+    if(withAgain) el.footleft.appendChild(again);
+    el.footleft.appendChild(m);
+  }
+
+  /* ============================================================
+     OTÁZKY
+     ============================================================ */
+  function renderQuiz(q){
+    el.opts.innerHTML = '';
+    q.opts.forEach(function(txt, i){
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'cc-aed__opt';
+      b.innerHTML = '<span>' + txt + '</span><span class="cc-aed__mark"></span>';
+      b.addEventListener('click', function(){ answer(q, i); });
+      el.opts.appendChild(b);
+    });
+  }
+  function answer(q, i){
+    var right = (i === q.right), btns = el.opts.children;
+    pass[q.id] = right;
+    for(var k=0;k<btns.length;k++){
+      btns[k].disabled = true;
+      var mark = btns[k].querySelector('.cc-aed__mark');
+      if(k === q.right){ btns[k].classList.add('cc-aed__opt--ok'); mark.innerHTML = icon(true); }
+      else if(k === i){ btns[k].classList.add('cc-aed__opt--bad'); mark.innerHTML = icon(false); }
+      else btns[k].classList.add('cc-aed__opt--dim');
+    }
+    var txt = '<b>' + (right ? 'Správně. ' : 'Není to tak. ') + '</b>' + (right ? q.ok : q.no);
+    if(q.stat && !right) txt += '<span class="cc-aed__stat">' + q.stat + '</span>';
+    say(txt);
+    syncNext();
+  }
+
+  /* ============================================================
+     VÝSLEDEK
+     ============================================================ */
+  function renderResult(){
+    var score = 0;
+    TASKS.forEach(function(t){ if(pass[t.id]) score++; });
+    var v = VERDICTS.find(function(x){ return score >= x.min; });
+    el.title.textContent = v.head;
+    el.instr.textContent = 'Splnili jste ' + score + ' ze sedmi úkolů.';
+    el.score.textContent = '';
+    el.verdict.textContent = '';
+    el.list.innerHTML = TASKS.map(function(t){
+      return '<li>' + icon(!!pass[t.id]) + '<span>' + t.key + '</span></li>';
+    }).join('');
+    say(v.say);
+    el.footleft.innerHTML = '';
+    var again = document.createElement('button');
+    again.type = 'button'; again.className = 'cc-aed__ghost'; again.textContent = 'Zkusit znovu';
+    again.addEventListener('click', restart);
+    el.footleft.appendChild(again);
+  }
+
+  function restart(){
+    pass = {}; stepIx = 0; chartStep = 1;
+    user = newUser(); lastIx = 0; revealT = 0;
+    tapReset(); enter();
+  }
+
+  /* ============================================================
+     ŘÍZENÍ OBRAZOVEK
+     ============================================================ */
+  function say(html){
+    el.say.dataset.mode = '';
+    el.say.innerHTML = html || '';
+  }
+  function showScene(name){
+    Object.keys(scenes).forEach(function(k){ scenes[k].hidden = (k !== name); });
+  }
+  function syncNext(){
+    var s = STEPS[stepIx], b = el.next;
+    if(s === 'k1' || s === 'k2'){
+      if(revealT > 0){ b.disabled = false; b.textContent = 'Pokračovat'; }
+      else if(lastIx >= N-1){ b.disabled = false; b.textContent = 'Ukázat realitu'; }
+      else { b.disabled = true; b.textContent = 'Nakreslete čáru'; }
+    } else if(s === 'tempo'){
+      b.disabled = (pass.tempo === undefined);
+      b.textContent = 'Pokračovat';
+    } else if(s === 'result'){
+      b.disabled = true; b.textContent = 'Hotovo'; b.style.display = 'none';
+    } else {
+      b.style.display = '';
+      b.disabled = (pass[s] === undefined);
+      b.textContent = stepIx === STEPS.length - 2 ? 'Zobrazit výsledek' : 'Pokračovat';
+    }
+  }
+
+  function enter(){
+    var s = STEPS[stepIx];
+    paintDots();
+    say(''); el.footleft.innerHTML = ''; el.next.style.display = '';
+    el.legend.classList.remove('cc-aed__legend--on'); el.legend.innerHTML = '';
+
+    if(s === 'k1' || s === 'k2'){
+      chartStep = (s === 'k1') ? 1 : 2;
+      user = newUser(); lastIx = 0; revealT = 0;
+      el.kicker.textContent = 'Jaký jste zachránce';
+      el.title.textContent = chartStep === 1
+        ? 'Jak rychle klesá šance na přežití, když nikdo nezasáhne?'
+        : 'A jak klesá, když jí někdo hned začne stlačovat hrudník?';
+      el.instr.textContent = chartStep === 1
+        ? 'Táhněte prstem nebo myší zleva doprava a nakreslete svůj odhad.'
+        : 'Šedá čára je skutečnost bez pomoci. Nakreslete, jak to podle vás vypadá s masáží.';
+      el.disc.textContent = 'Svislá osa je šance na přežití vztažená k okamžiku zástavy. Modelový průběh podle publikovaných dat, ne konkrétní pacient.';
+      showScene('chart');
+      requestAnimationFrame(function(){ draw(); fit(); });
+    }
+    else if(s === 'tempo'){
+      el.kicker.textContent = 'Trenažér';
+      el.title.textContent = 'Udržíte deset vteřin tempo masáže srdce?';
+      el.instr.textContent = 'Klepejte na kolečko v tempu 100 až 120 stlačení za minutu. Odpočet spustí první klepnutí.';
+      el.disc.textContent = 'Ilustrativní test, nenahrazuje kurz první pomoci.';
+      showScene('tempo'); tapReset(); delete pass.tempo; footTempoButtons(false);
+    }
+    else if(s === 'result'){
+      el.kicker.textContent = 'Jaký jste zachránce';
+      el.title.textContent = '';
+      el.instr.textContent = '';
+      el.disc.textContent = 'Ilustrativní test, nenahrazuje kurz první pomoci. Nejbližší defibrilátor bývá na Informacích v obchodech, na úřadech i na nádražích.';
+      showScene('result'); renderResult();
+    }
+    else {
+      var q = QUIZ.filter(function(x){ return x.id === s; })[0];
+      el.kicker.textContent = 'Otázka ' + (QUIZ.indexOf(q)+1) + ' ze 4';
+      el.title.textContent = q.title;
+      el.instr.textContent = 'Vyberte jednu odpověď.';
+      el.disc.textContent = 'Ilustrativní test, nenahrazuje kurz první pomoci. Data o obavách: průzkum YouGov pro Kaufland, březen 2026.';
+      showScene('quiz'); renderQuiz(q); delete pass[s];
+    }
+    syncNext(); fit();
+  }
+
+  el.next.addEventListener('click', function(){
+    var s = STEPS[stepIx];
+    if((s === 'k1' || s === 'k2') && revealT === 0 && lastIx >= N-1){ reveal(); return; }
+    if(stepIx < STEPS.length - 1){ stepIx++; enter(); }
+  });
+
+  /* ============================================================
+     FIT DO RÁMU
+     ============================================================ */
+  var fitT = null;
+  function fit(){
+    root.style.setProperty('--sc', 1);
+    root.style.setProperty('--tapd', '150px');
+    root.style.setProperty('--sayh', '54px');
+
+    // kolečko trenažéru se odvozuje od volné výšky scény, ne od šířky
+    var st = el.stage.clientHeight, sw = el.stage.clientWidth;
+    if(st > 0){
+      var d = Math.max(84, Math.min(285, Math.min(st * 0.6, sw * 0.66)));
+      root.style.setProperty('--tapd', d.toFixed(0) + 'px');
+    }
+    var sc = 1;
+    for(var k=0;k<14;k++){
+      var over = document.documentElement.scrollHeight - window.innerHeight;
+      if(over <= 1) break;
+      sc *= 0.93;
+      root.style.setProperty('--sc', sc.toFixed(3));
+      root.style.setProperty('--sayh', (54*sc).toFixed(1) + 'px');
+      if(st > 0){
+        var d2 = Math.max(70, Math.min(285, Math.min(el.stage.clientHeight * 0.6, sw * 0.66)));
+        root.style.setProperty('--tapd', d2.toFixed(0) + 'px');
+      }
+    }
+    if(!scenes.chart.hidden) draw();
+  }
+  function fitSoon(){ clearTimeout(fitT); fitT = setTimeout(fit, 60); }
+
+  window.addEventListener('resize', fitSoon);
+  window.addEventListener('load', fit);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  if(window.ResizeObserver) new ResizeObserver(fitSoon).observe(root);
+
+  user = newUser();
+  enter();
+})();
+</script>
+
+</body>
+</html>
