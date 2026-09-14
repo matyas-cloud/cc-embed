@@ -45,13 +45,14 @@ body{background:var(--cc-surface,#f8f9fa);}
   box-sizing:border-box;
   display:flex;flex-direction:column;
   height:100vh;min-height:100vh;
-  margin:0!important;padding:var(--pad);
+  margin:0!important;padding:var(--pad);position:relative;
   background:var(--cc-surface);border:0;border-radius:0;
   overflow:hidden;
 }
 
 /* ---------- hlavička ---------- */
-.cc-sig__head{flex:0 0 auto;margin:0 0 clamp(8px,1.4vh,16px);max-width:54em;}
+.cc-sig__head{flex:0 0 auto;margin:0 0 var(--headGap,12px);max-width:54em;}
+.cc-sig{--headGap:clamp(8px,1.4vh,16px);}
 .cc-sig__title{margin:0 0 4px;font-family:var(--cc-display);font-weight:700;
   font-size:clamp(18px,2.6vw,28px);line-height:1.16;color:#000;}
 .cc-sig__lede{margin:0;font-family:var(--cc-serif);
@@ -59,11 +60,17 @@ body{background:var(--cc-surface,#f8f9fa);}
 
 /* ---------- pole karet ---------- */
 .cc-sig__deck{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;
-  justify-content:center;}
+  justify-content:center;position:relative;}
+/* nápověda, že se ruka karet posouvá do strany */
+.cc-sig--rail .cc-sig__deck::after{
+  content:"";position:absolute;top:0;bottom:0;right:calc(var(--pad) * -1);width:34px;
+  pointer-events:none;z-index:5;
+  background:linear-gradient(to right, rgba(248,249,250,0), var(--cc-surface,#f8f9fa) 78%);
+  opacity:var(--railHint,0);transition:opacity .2s;}
 
 .cc-sig__grid{
   display:grid;gap:var(--rowgap,16px) var(--colgap,16px);
-  grid-template-columns:repeat(3, var(--colW, 260px));
+  grid-template-columns:repeat(3, minmax(0, 1fr));
   justify-content:center;align-content:center;
   perspective:1200px;
 }
@@ -78,7 +85,7 @@ body{background:var(--cc-surface,#f8f9fa);}
 .cc-sig--rail .cc-sig__grid::-webkit-scrollbar{height:5px;}
 .cc-sig--rail .cc-sig__grid::-webkit-scrollbar-thumb{background:#d6dade;border-radius:3px;}
 
-.cc-sig__cell{display:flex;flex-direction:column;align-items:center;min-width:0;}
+.cc-sig__cell{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;}
 .cc-sig--rail .cc-sig__cell{flex:0 0 auto;width:var(--cw,150px);scroll-snap-align:center;}
 
 /* ---------- karta ---------- */
@@ -111,7 +118,7 @@ body{background:var(--cc-surface,#f8f9fa);}
 @media (hover:hover){
   .cc-sig__card:hover .cc-sig__face{box-shadow:0 16px 30px rgba(12,20,26,.26);}
 }
-.cc-sig__face img{display:block;width:100%;height:100%;object-fit:fill;}
+.cc-sig__face img{display:block;width:100%;height:100%;object-fit:cover;}
 .cc-sig__face--lic{transform:rotateY(180deg);}
 
 .cc-sig__slot{position:absolute;display:flex;align-items:center;justify-content:center;
@@ -127,20 +134,29 @@ body{background:var(--cc-surface,#f8f9fa);}
 
 /* ---------- popisek pod kartou ---------- */
 .cc-sig__cap{
-  margin:var(--capgap,10px) auto 0;width:100%;max-width:var(--capW,280px);
-  height:var(--capH,54px);
-  overflow:hidden;text-align:center;
-  font-family:var(--cc-serif);font-size:var(--fs-cap,13px);line-height:1.38;
-  color:#2a3033;
-  opacity:0;transform:translateY(-4px);
-  transition:opacity .28s ease .22s, transform .28s ease .22s;
+  position:absolute;left:0;right:0;bottom:0;z-index:3;
+  margin:0;padding:7px 8px 8px;
+  max-height:64%;overflow:hidden;text-align:center;
+  display:flex;flex-direction:column;justify-content:center;
+  background:rgba(248,249,250,.955);
+  border-top:1px solid rgba(20,24,26,.10);
+  font-family:var(--cc-serif);font-size:var(--fs-cap,13px);line-height:1.34;
+  color:#1d2225;
+  opacity:0;transform:translateY(6px);pointer-events:none;
+  transition:opacity .26s ease .26s, transform .26s ease .26s;
 }
+.cc-sig__capname{display:block;margin:0 0 3px;font-family:var(--cc-display);font-weight:700;
+  font-size:var(--fs-capname,10px);line-height:1.1;letter-spacing:.05em;
+  text-transform:uppercase;color:#0a4b45;}
 .cc-sig__cell.is-on .cc-sig__cap{opacity:1;transform:none;}
+/* jméno je po otočení v popisku, na líci by se pod ním schovalo */
+.cc-sig__cell.is-on .cc-sig__face--lic .cc-sig__slot{opacity:0;transition:opacity .2s ease .26s;}
+.cc-sig__capwrap{position:relative;width:var(--cw,170px);height:var(--ch,255px);}
 
 /* ---------- tmavý box POZOR ---------- */
 .cc-sig__box{
-  flex:0 0 auto;margin-top:clamp(10px,1.8vh,22px);
-  height:var(--boxH,120px);overflow:hidden;
+  flex:0 0 auto;margin-top:0;
+  height:0;overflow:hidden;
   background:var(--ink);border-radius:var(--cc-radius);
   padding:clamp(10px,1.4vw,20px) clamp(14px,2vw,28px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -148,7 +164,11 @@ body{background:var(--cc-surface,#f8f9fa);}
   visibility:hidden;opacity:0;
   transition:opacity .34s ease;
 }
-.cc-sig--warn .cc-sig__box{visibility:visible;opacity:1;}
+.cc-sig--warn .cc-sig__box{visibility:visible;opacity:1;height:var(--boxH,120px);margin-top:var(--boxGap,16px);}
+/* skryté měření skutečné výšky textu v boxu (nezasahuje do layoutu) */
+.cc-sig--measure .cc-sig__box{position:absolute!important;left:var(--pad);right:var(--pad);top:0;
+  height:auto!important;margin-top:0!important;visibility:hidden!important;opacity:0!important;
+  transition:none!important;}
 .cc-sig__boxtag{
   display:inline-block;margin:0 0 var(--tag-gap,9px);
   padding:4px 12px;border-radius:999px;background:var(--acc);
@@ -253,8 +273,10 @@ body{background:var(--cc-surface,#f8f9fa);}
          +          '<span class="cc-sig__name">' + esc(c.name) + '</span></span>'
          +      '</span>'
          +    '</span>'
+         +    '<span class="cc-sig__cap" style="min-height:' + pct(1 - p.t + 0.015) + '">'
+         +      '<b class="cc-sig__capname">' + esc(c.name)
+         +      '</b>' + esc(c.why) + '</span>'
          +  '</button>'
-         +  '<p class="cc-sig__cap">' + esc(c.why) + '</p>'
          + '</div>';
   });
   grid.innerHTML = html;
@@ -284,72 +306,96 @@ body{background:var(--cc-surface,#f8f9fa);}
       root.classList.add('cc-sig--static');
       update();
       fit();
+      railHint();
     });
   });
 
   /* ---- rozměry ---- */
+  var MIN_GRID_CW = 96;    /* pod tímhle je text na líci nečitelný -> radši vodorovný rail */
+
+  function boxMetrics(rootH){
+    var boxH = Math.round(clamp(84, rootH * 0.132, 150));
+    var gap  = Math.round(clamp(10, rootH * 0.026, 20));
+    return {h:boxH, gap:gap};
+  }
+
   function fit(){
     var rootH = root.clientHeight;
-    var wide  = root.clientWidth >= 1100;
-    root.classList.toggle('cc-sig--rail', !wide);
+    var bm = boxMetrics(rootH);
+    root.style.setProperty('--boxH', bm.h + 'px');
+    root.style.setProperty('--boxGap', bm.gap + 'px');
+    root.style.setProperty('--fs-boxh', clamp(16, bm.h * 0.235, 30).toFixed(1) + 'px');
+    root.style.setProperty('--fs-rest', clamp(11, bm.h * 0.118, 15).toFixed(1) + 'px');
+    root.style.setProperty('--fs-tag',  clamp(9, bm.h * 0.082, 11.5).toFixed(1) + 'px');
+    root.style.setProperty('--tag-gap', Math.round(clamp(4, bm.h * 0.055, 10)) + 'px');
+    root.style.setProperty('--h-gap',   Math.round(clamp(3, bm.h * 0.045, 8)) + 'px');
+    root.style.setProperty('--lead-gap',Math.round(clamp(2, bm.h * 0.035, 6)) + 'px');
 
-    var boxH = Math.round(clamp(118, rootH * 0.155, 172));
-    root.style.setProperty('--boxH', boxH + 'px');
-    root.style.setProperty('--fs-boxh', clamp(17, boxH * 0.215, 30).toFixed(1) + 'px');
-    root.style.setProperty('--fs-rest', clamp(11.5, boxH * 0.107, 15).toFixed(1) + 'px');
-    root.style.setProperty('--fs-tag',  clamp(9, boxH * 0.082, 11.5).toFixed(1) + 'px');
-    root.style.setProperty('--tag-gap', Math.round(clamp(4, boxH * 0.055, 10)) + 'px');
-    root.style.setProperty('--h-gap',   Math.round(clamp(3, boxH * 0.045, 8)) + 'px');
-    root.style.setProperty('--lead-gap',Math.round(clamp(2, boxH * 0.035, 6)) + 'px');
+    /* box musí být tak vysoký, aby se do něj text vešel celý (jinak se
+       ořízne štítek POZOR); měříme naslepo mimo layout */
+    root.classList.add('cc-sig--measure');
+    var need = box.scrollHeight;
+    root.classList.remove('cc-sig--measure');
+    bm.h = Math.round(clamp(bm.h, need, Math.max(bm.h, rootH * 0.34)));
+    root.style.setProperty('--boxH', bm.h + 'px');
 
+    /* výška pro karty: box je vždy odpočítaný, i když ještě není vidět
+       -> karty nikdy nemění velikost v průběhu klikání */
+    var warn = root.classList.contains('cc-sig--warn');
+    var cs   = getComputedStyle(root);
+    var head = root.querySelector('.cc-sig__head');
+    var availH = rootH - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom)
+               - head.offsetHeight - (parseFloat(getComputedStyle(head).marginBottom) || 0)
+               - bm.h - bm.gap;
     var availW = grid.clientWidth;
-    var availH = deck.clientHeight;
     if(availW <= 0 || availH <= 0) return;
 
-    var colgap = wide ? Math.round(clamp(12, availW * 0.016, 22)) : 10;
-    var rowgap = wide ? Math.round(clamp(10, availH * 0.030, 22)) : 0;
-    root.style.setProperty('--colgap', colgap + 'px');
-    root.style.setProperty('--rowgap', rowgap + 'px');
+    /* --- pokus o mřížku 3 x 2 --- */
+    var colgap = Math.round(clamp(10, availW * 0.016, 22));
+    var rowgap = Math.round(clamp(8, availH * 0.026, 20));
+    var cellW  = (availW - 2 * colgap) / 3;
+    var rowH   = (availH - rowgap) / 2;
+    var gridCw = Math.floor(Math.min(cellW, (rowH - 10) / RATIO));
+    var grid3  = gridCw >= MIN_GRID_CW && root.clientWidth >= 560;
 
-    var cellW, rows;
-    if(wide){ cellW = (availW - 2 * colgap) / 3; rows = 2; }
-    else    { cellW = clamp(112, availH * 0.46, 210); rows = 1; }
+    root.classList.toggle('cc-sig--rail', !grid3);
 
-    var capW = Math.floor(Math.min(cellW, wide ? 258 : 230));
-    root.style.setProperty('--capW', capW + 'px');
-    var capGap = Math.round(clamp(5, availH * 0.016, 12));
-    root.style.setProperty('--capgap', capGap + 'px');
-    root.style.setProperty('--fs-cap', clamp(10.5, capW * 0.049, 14.5).toFixed(1) + 'px');
-    root.style.setProperty('--capH', 'auto');
-    var capH = 0;
-    caps.forEach(function(p){
-      p.style.width = capW + 'px';
-      if(p.scrollHeight > capH) capH = p.scrollHeight;
-    });
-    caps.forEach(function(p){ p.style.width = ''; });
-    capH = Math.ceil(capH) + 2;
-    root.style.setProperty('--capH', capH + 'px');
-
-    var rowH = (availH - (rows - 1) * rowgap) / rows;
-    var byH  = (rowH - capH - capGap - 10) / RATIO;   /* 10 = prostor na stín a nadzvednutí */
-    var cw   = Math.floor(Math.max(96, Math.min(cellW, byH)));
-    var ch   = Math.round(cw * RATIO);
+    var cw;
+    if(grid3){
+      root.style.setProperty('--colgap', colgap + 'px');
+      root.style.setProperty('--rowgap', rowgap + 'px');
+      cw = gridCw;
+    } else {
+      root.style.setProperty('--colgap', '10px');
+      root.style.setProperty('--rowgap', '0px');
+      cw = Math.floor(clamp(112, Math.min(availH - 10, availW * 0.42) / RATIO, 210));
+    }
+    var ch = Math.round(cw * RATIO);
     root.style.setProperty('--cw', cw + 'px');
     root.style.setProperty('--ch', ch + 'px');
-    if(wide) root.style.setProperty('--colW', Math.max(cw + 24, capW) + 'px');
     root.style.setProperty('--fs-say',  Math.max(9, cw * 0.072).toFixed(1) + 'px');
     root.style.setProperty('--fs-name', Math.max(7, cw * 0.058).toFixed(1) + 'px');
     root.style.setProperty('--fs-num',  Math.max(7.5, cw * 0.062).toFixed(1) + 'px');
+    root.style.setProperty('--fs-cap',  clamp(10.5, cw * 0.082, 14.5).toFixed(1) + 'px');
+    root.style.setProperty('--fs-capname', clamp(8.5, cw * 0.062, 11.5).toFixed(1) + 'px');
 
+    /* box: dorovnat text, jen když je opravdu vidět */
+    if(!warn) return;
     var fr = parseFloat(getComputedStyle(root).getPropertyValue('--fs-rest')) || 14;
     var fh = parseFloat(getComputedStyle(root).getPropertyValue('--fs-boxh')) || 26;
-    var frMin = wide ? 10.5 : 9.2, fhMin = wide ? 16 : 13.5;
+    var frMin = grid3 ? 10.5 : 9.2, fhMin = grid3 ? 16 : 13.5;
     for(var g = 0; g < 22 && box.scrollHeight > box.clientHeight + 1; g++){
       if(fr > frMin){ fr -= 0.5; root.style.setProperty('--fs-rest', fr.toFixed(1) + 'px'); }
       else if(fh > fhMin){ fh -= 1; root.style.setProperty('--fs-boxh', fh.toFixed(1) + 'px'); }
       else { root.style.setProperty('--tag-gap','3px'); root.style.setProperty('--h-gap','2px'); break; }
     }
   }
+
+  function railHint(){
+    var more = grid.scrollWidth - grid.clientWidth - grid.scrollLeft;
+    root.style.setProperty('--railHint', more > 8 ? '1' : '0');
+  }
+  grid.addEventListener('scroll', railHint, {passive:true});
 
   /* ---- úvodní animace ---- */
   var armed = false;
@@ -372,8 +418,9 @@ body{background:var(--cc-surface,#f8f9fa);}
 
   update();
   fit();
+  railHint();
   var t;
-  window.addEventListener('resize', function(){ clearTimeout(t); t = setTimeout(fit, 120); });
+  window.addEventListener('resize', function(){ clearTimeout(t); t = setTimeout(function(){ fit(); railHint(); }, 120); });
   window.addEventListener('load', fit);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
 
