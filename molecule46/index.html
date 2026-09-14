@@ -42,11 +42,12 @@ html,body{margin:0;padding:0;background:#05090F}
 .m46__nav button{width:36px;height:36px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.04);
   color:var(--tx);border-radius:50%;cursor:pointer;font-size:15px;line-height:1}
 @media (max-width:619px){.m46__caps{width:86%}}
+@media (prefers-reduced-motion: reduce){.m46__cap{transition:none}}
 </style>
 </head>
 <body>
 
-<div class="m46" data-cc-scrolly>
+<div class="m46" data-cc-scrolly data-cc-snap="1">
   <div class="m46__track"><div class="m46__pin"><div class="m46__stage">
     <canvas class="m46__cv"></canvas>
 
@@ -416,48 +417,103 @@ html,body{margin:0;padding:0;background:#05090F}
   }
 
   /* ---------------- progress ---------------- */
+  /* raw  = where the reader's scroll says we are (0-1)
+     cur  = what we actually draw; in snap mode it travels to scene anchors
+     idx  = the scene we are resting on / travelling to                        */
+  var raw=0, cur=0, idx=0, tPrev=performance.now();
+
+  /* snap: a flick of the wheel plays the next scene out on its own and stops.
+     Off with data-cc-snap="0" on the root, or ?snap=0 in the URL (quick A/B). */
+  var SNAP=(function(){
+    var q=(location.search.match(/[?&]snap=([^&]+)/)||[])[1];
+    if(q) return q!=='0'&&q!=='off';
+    return root.getAttribute('data-cc-snap')!=='0';
+  })();
+  var ANCH=SC.map(function(sc,i){
+    if(i===0) return .050;
+    if(i===SC.length-1) return .975;
+    return (sc[0]+sc[1])/2;
+  });
+  function sceneOf(p){
+    for(var i=0;i<SC.length;i++) if(p>=SC[i][0]&&p<SC[i][1]) return i;
+    return p<SC[0][0]?0:SC.length-1;
+  }
+
   function ownScroll(){
     if(!demo) return;
     var r=track.getBoundingClientRect(), span=r.height-pin.offsetHeight;
-    progress=span>0?cl(-r.top/span,0,1):0;
+    raw=span>0?cl(-r.top/span,0,1):0;
+  }
+
+  /* only our own pages may drive the element */
+  function okOrigin(o){
+    return /^https:\/\/(www\.)?cc\.cz$/.test(o)
+        || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o);
   }
 
   window.addEventListener('message',function(e){
     if(e.source!==window.parent) return;
+    if(!okOrigin(e.origin)) return;
     var d=e.data;
     if(!d||d.source!=='cc-scrolly'||d.type!=='progress') return;
     if(!driven){driven=true; root.classList.remove('has-nav'); manual=-1;}
-    progress=cl(+d.value||0,0,1);
+    raw=cl(+d.value||0,0,1);
   },false);
+
+  /* ready is announced repeatedly until the parent answers — one shot gets lost
+     when the parent script is deferred or the phone is slow */
+  var hellos=0;
+  function hello(){
+    if(driven||demo) return;
+    try{ window.parent.postMessage({source:'cc-scrolly',type:'ready'},'*'); }catch(err){}
+    if(++hellos<6) setTimeout(hello,300);
+  }
 
   /* embedded and nobody is driving us: offer buttons. Never a tall scrolling
      document inside a fixed frame — that traps the reader's finger on mobile. */
   setTimeout(function(){
     if(driven||demo) return;
-    root.classList.add('has-nav'); manual=0; progress=(SC[0][0]+SC[0][1])/2;
-  },1200);
+    root.classList.add('has-nav'); manual=0; raw=ANCH[0]; idx=0; cur=ANCH[0];
+  },2500);
 
   root.querySelector('.m46__nav').addEventListener('click',function(e){
     var b=e.target.closest('button'); if(!b) return;
     manual=cl(manual+(+b.dataset.d),0,SC.length-1);
-    progress=(SC[manual][0]+SC[manual][1])/2;
+    raw=ANCH[manual];
   });
 
   window.addEventListener('scroll',ownScroll,{passive:true});
-  new ResizeObserver(resize).observe(stage);
+  try{ new ResizeObserver(resize).observe(stage); }
+  catch(err){ window.addEventListener('resize',resize); }
   try{ new IntersectionObserver(function(es){ visible=es[0].isIntersecting; },{threshold:0}).observe(stage); }
   catch(err){ visible=true; }
 
+  function advance(dt){
+    if(!SNAP){                                  /* plain, but smoothed */
+      cur+=(raw-cur)*Math.min(1,dt*9);
+      return;
+    }
+    var want=sceneOf(raw), at=Math.abs(cur-ANCH[idx])<.012;
+    if(at&&want>idx) idx++;
+    else if(at&&want<idx) idx--;
+    var t=ANCH[idx], k=Math.min(1,dt*(reduce?24:3.6));
+    cur+=(t-cur)*k;
+    if(Math.abs(t-cur)<.0006) cur=t;
+  }
+
   function loop(now){
     requestAnimationFrame(loop);
+    var dt=Math.min(.05,(now-tPrev)/1000); tPrev=now;
     if(document.hidden||!visible) return;
     if(demo&&manual<0) ownScroll();
-    draw(progress,now); frames++;
+    advance(dt);
+    draw(cur,now); frames++;
   }
-  window.__m46=function(){return{frames:frames,visible:visible,demo:demo,driven:driven};};
+  window.__m46=function(){return{frames:frames,visible:visible,demo:demo,
+    driven:driven,snap:SNAP,raw:+raw.toFixed(3),cur:+cur.toFixed(3),idx:idx};};
 
-  resize(); ownScroll();
-  if(window.parent!==window) try{window.parent.postMessage({source:'cc-scrolly',type:'ready'},'*');}catch(err){}
+  resize(); ownScroll(); cur=SNAP?ANCH[sceneOf(raw)]:raw; idx=sceneOf(raw);
+  hello();
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(resize);
   requestAnimationFrame(loop);
 })();
