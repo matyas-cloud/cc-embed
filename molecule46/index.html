@@ -494,9 +494,13 @@ html,body{margin:0;padding:0;background:#05090F}
       return;
     }
     var want=sceneOf(raw), at=Math.abs(cur-ANCH[idx])<.012;
-    if(at&&want>idx) idx++;
-    else if(at&&want<idx) idx--;
-    var t=ANCH[idx], k=Math.min(1,dt*(reduce?24:3.6));
+    /* forward: one scene at a time, the story plays out.
+       backward: jump straight to where the reader is and rewind fast — nobody
+       wants to watch eight scenes play in reverse. */
+    if(want>idx){ if(at) idx++; }
+    else if(want<idx){ idx=want; }
+    var t=ANCH[idx], back=t<cur;
+    var k=Math.min(1,dt*(reduce?24:(back?9:3.6)));
     cur+=(t-cur)*k;
     if(Math.abs(t-cur)<.0006) cur=t;
   }
