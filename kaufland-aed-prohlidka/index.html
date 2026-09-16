@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jak funguje defibrilátor?</title>
+<title>Jak vypadá defibrilátor?</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" media="print" onload="this.media='all'"
@@ -37,6 +37,8 @@ body{overflow:hidden}
 .aed__head{flex:none;padding-bottom:calc(.85rem*var(--sc))}
 .aed__title{margin:0;font-family:"Poppins",Georgia,serif;font-weight:700;
   font-size:calc(clamp(20px,2.9vw,31px)*var(--sc));line-height:1.12;letter-spacing:-.015em}
+.aed__lede{margin:calc(.3rem*var(--sc)) 0 0;color:var(--dim);
+  font-size:calc(.86rem*var(--sc));line-height:1.35}
 
 .aed__body{flex:1 1 auto;min-height:0;display:flex;gap:calc(1.15rem*var(--sc))}
 
@@ -51,16 +53,22 @@ body{overflow:hidden}
                      linear-gradient(to bottom,transparent 0,#000 5%,#000 95%,transparent 100%);
   -webkit-mask-composite:source-in; mask-composite:intersect}
 .aed__foto,.aed__lit{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.aed__zavoj{position:absolute;inset:0;background:#080203;opacity:0;
-  transition:opacity .3s ease;pointer-events:none}
+/* Utlumené okolí se nedělá černým závojem, ale ztmavením a odsycením samotné
+   fotky. Přístroj je pak pořád celý vidět, jen je ztišený. */
+.aed__foto{filter:brightness(var(--jb,1)) saturate(var(--js,1));transition:filter .3s ease}
 .aed__lit{opacity:0;transition:opacity .3s ease;pointer-events:none;
-  filter:brightness(1.07) saturate(1.05) drop-shadow(0 0 10px rgba(255,120,90,.5))}
+  filter:brightness(1.06) saturate(1.06) drop-shadow(0 0 13px rgba(255,150,120,.45))}
 .aed__lit.on{opacity:1}
-/* volitelná kontura; ve výchozím stavu vypnutá (--obrys:0) */
+/* Značky klikatelných částí. Rozmazání je to, co z obrysu udělá záři
+   místo čáry; bez něj je vidět ostrá linka. */
 .aed__ov{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
-.aed__obr{fill:none;stroke:var(--ac);stroke-width:.0026;opacity:0;transition:opacity .3s ease;
-  filter:drop-shadow(0 0 5px rgba(255,67,67,.9))}
-.aed__obr.on{opacity:var(--obrys,0)}
+.aed__znacky{opacity:1;transition:opacity .35s ease;
+  mix-blend-mode:screen;                       /* přisvětluje, nekreslí přes fotku */
+  filter:blur(3px) drop-shadow(0 0 7px rgba(255,176,148,.95));
+  animation:aedPuls 2.9s ease-in-out infinite}
+.aed__znacka{fill:none;stroke:rgba(255,236,226,1);stroke-width:.0052}
+.aed__znacky.off{opacity:0;animation:none}
+@keyframes aedPuls{0%,100%{opacity:.38}50%{opacity:1}}
 .aed__terce{position:absolute;inset:0;width:100%;height:100%}
 .aed__hit{fill:transparent;stroke:transparent;stroke-width:.016;pointer-events:all;cursor:pointer;outline:none}
 .aed__hit:focus-visible{stroke:var(--ac);stroke-width:.004}
@@ -86,9 +94,26 @@ body{overflow:hidden}
 .aed__row.on{background:rgba(255,67,67,.14)}
 .aed__bul{flex:none;width:5px;height:5px;border-radius:50%;background:var(--dim);transition:background .18s}
 .aed__row.on .aed__bul{background:var(--ac)}
-.aed__ico{flex:none;width:calc(15px*var(--sc));height:calc(15px*var(--sc));
-  fill:none;stroke:var(--dim);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:stroke .18s}
-.aed__row.on .aed__ico{stroke:var(--ac)}
+
+/* ---------- tři díly, které na fotce nejsou ---------- */
+.aed__mimo{flex:none;margin-top:calc(.75rem*var(--sc))}
+.aed__skup--mimo{color:var(--dim)}
+.aed__mimogrp{display:flex;gap:calc(.5rem*var(--sc))}
+.aed__dlazd{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:calc(.55rem*var(--sc));
+  background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:10px;
+  color:var(--txt);cursor:pointer;text-align:left;
+  padding:calc(.55rem*var(--sc)) calc(.65rem*var(--sc));
+  font-size:calc(.82rem*var(--sc));line-height:1.2;touch-action:manipulation;
+  transition:background .18s ease,border-color .18s ease}
+.aed__dlazd:hover{background:rgba(255,255,255,.075)}
+.aed__dlazd.on{background:rgba(255,67,67,.14);border-color:var(--ac)}
+.aed__ico2{flex:none;width:calc(24px*var(--sc));height:calc(24px*var(--sc));
+  fill:none;stroke:var(--dim);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .18s}
+.aed__dlazd.on .aed__ico2{stroke:var(--ac)}
+/* varianta B: dlaždice pod seznamem v pravém sloupci, tedy pod sebou */
+.aed__side .aed__mimogrp{flex-direction:column}
+.aed__side .aed__skup--mimo{margin-top:calc(.85rem*var(--sc));
+  border-top:1px solid var(--line);padding-top:calc(.7rem*var(--sc))}
 
 /* ---------- detail ---------- */
 .aed__detail{flex:none;border-top:1px solid var(--line);
@@ -99,19 +124,17 @@ body{overflow:hidden}
 .aed__popis{margin:0;color:var(--dim);font-size:calc(.86rem*var(--sc));line-height:1.45;max-width:64ch}
 
 /* ---------- patička ---------- */
-.aed__foot{flex:none;position:relative;display:flex;align-items:center;justify-content:space-between;
-  gap:.6rem;padding-top:calc(.6rem*var(--sc))}
-.aed__i{width:calc(23px*var(--sc));height:calc(23px*var(--sc));border-radius:50%;
+.aed__foot{flex:none;display:flex;align-items:flex-start;justify-content:flex-end;
+  gap:calc(.65rem*var(--sc));padding-top:calc(.55rem*var(--sc))}
+/* Poznámka drží místo, i když není vidět, jinak by rám při rozkliknutí poposkočil. */
+.aed__pozn{flex:1 1 auto;margin:0;text-align:right;color:var(--dim);
+  font-size:calc(.72rem*var(--sc));line-height:1.4;visibility:hidden}
+.aed__pozn.on{visibility:visible}
+.aed__i{flex:none;width:calc(22px*var(--sc));height:calc(22px*var(--sc));border-radius:50%;
   border:1px solid var(--line);background:none;color:var(--dim);cursor:pointer;
-  font-size:calc(.72rem*var(--sc));font-style:italic;font-weight:700;line-height:1;
+  font-size:calc(.7rem*var(--sc));font-style:italic;font-weight:700;line-height:1;
   display:flex;align-items:center;justify-content:center;touch-action:manipulation}
 .aed__i:hover,.aed__i[aria-expanded="true"]{color:var(--txt);border-color:var(--txt)}
-.aed__partner{font-size:calc(.62rem*var(--sc));letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
-.aed__pozn{position:absolute;bottom:100%;left:0;right:0;margin-bottom:.5rem;z-index:6;
-  background:#120708;border:1px solid var(--line);border-radius:11px;
-  padding:calc(.7rem*var(--sc)) calc(.85rem*var(--sc));
-  font-size:calc(.76rem*var(--sc));line-height:1.45;color:var(--dim);display:none}
-.aed__pozn.on{display:block}
 
 /* ---------- skládaný layout ----------
    Poměr rámu se láme na 620 px, ale hned nad hranicí je rám nízký a široký,
@@ -134,17 +157,39 @@ body{overflow:hidden}
   .aed__bul{display:none}
   .aed__skup{margin:calc(.3rem*var(--sc)) 0 calc(.18rem*var(--sc))}
   .aed__detail{min-height:calc(4.8rem*var(--sc));margin-top:calc(.5rem*var(--sc))}
+  /* dlaždice zůstávají vedle sebe v jednom řádku i ve variantě B */
+  .aed__side .aed__mimogrp{flex-direction:row}
+  .aed__side .aed__skup--mimo{margin-top:calc(.45rem*var(--sc));padding-top:calc(.4rem*var(--sc))}
+  /* Na úzkém displeji ukrajuje každý pixel chrome fotce, takže dlaždice
+     splasknou na štítky ve stejné výšce jako ostatní. */
+  .aed__mimo{margin-top:calc(.45rem*var(--sc))}
+  .aed__dlazd{flex:0 1 auto;justify-content:center;border-radius:999px;
+    padding:calc(.28rem*var(--sc)) calc(.6rem*var(--sc));font-size:calc(.74rem*var(--sc));
+    gap:calc(.35rem*var(--sc));white-space:nowrap}
+  .aed__ico2{width:calc(16px*var(--sc));height:calc(16px*var(--sc))}
+  .aed__lede{font-size:calc(.79rem*var(--sc));margin-top:calc(.2rem*var(--sc))}
 }
 @media (max-width:400px){
   .aed{padding:calc(.85rem*var(--sc)) calc(.9rem*var(--sc)) calc(.7rem*var(--sc))}
   .aed__head{padding-bottom:calc(.55rem*var(--sc))}
   .aed__row{font-size:calc(.73rem*var(--sc));padding:calc(.24rem*var(--sc)) calc(.55rem*var(--sc))}
-  .aed__ico{width:calc(13px*var(--sc));height:calc(13px*var(--sc))}
+  .aed__dlazd{font-size:calc(.69rem*var(--sc));padding:calc(.24rem*var(--sc)) calc(.5rem*var(--sc))}
+  .aed__ico2{width:calc(15px*var(--sc));height:calc(15px*var(--sc))}
+  .aed__mimogrp{gap:calc(.3rem*var(--sc))}
   .aed__detail{min-height:calc(4.4rem*var(--sc))}
   .aed__popis{font-size:calc(.8rem*var(--sc))}
+  .aed__lede{font-size:calc(.75rem*var(--sc))}
+  .aed__skup--mimo{margin-top:calc(.35rem*var(--sc))}
+}
+/* Na 320px je rám 480px vysoký a podtitulek se láme na dva řádky. Instrukce
+   je na dotyku nejmíň potřeba, tak ji tam raději obětujeme ve prospěch fotky. */
+@media (max-width:340px){
+  .aed__lede{display:none}
+  .aed__head{padding-bottom:calc(.4rem*var(--sc))}
 }
 @media (prefers-reduced-motion:reduce){
-  .aed__lit,.aed__zavoj,.aed__obr,.aed__cedule{transition:none}
+  .aed__lit,.aed__foto,.aed__cedule,.aed__znacky{transition:none}
+  .aed__znacky{animation:none;opacity:.6}
 }
 </style>
 </head>
@@ -154,7 +199,8 @@ body{overflow:hidden}
  <div class="aed">
 
   <div class="aed__head">
-   <h2 class="aed__title">Jak funguje defibrilátor?</h2>
+   <h2 class="aed__title">Jak vypadá defibrilátor?</h2>
+   <p class="aed__lede">Klikněte a objevte, co box obsahuje.</p>
   </div>
 
   <div class="aed__body">
@@ -163,62 +209,60 @@ body{overflow:hidden}
      <div class="aed__ram">
       <img class="aed__foto" src="aed-defibrilator.webp" width="1448" height="1086"
            alt="Otevřené červené pouzdro s defibrilátorem Philips HeartStart FRx.">
-      <div class="aed__zavoj" data-el="zavoj"></div>
       <img class="aed__lit" data-el="litA" src="aed-defibrilator.webp" alt="" aria-hidden="true">
       <img class="aed__lit" data-el="litB" src="aed-defibrilator.webp" alt="" aria-hidden="true">
      </div>
      <svg class="aed__ov" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true">
-      <path class="aed__obr" data-el="obrA" fill-rule="evenodd"/>
-      <path class="aed__obr" data-el="obrB" fill-rule="evenodd"/>
+      <g class="aed__znacky" data-el="znacky"><path class="aed__znacka" d="M0.8189,0.3959 A0.0152,0.0248 174.0 1 0 0.8493,0.3959 A0.0152,0.0248 174.0 1 0 0.8189,0.3959Z"/><path class="aed__znacka" d="M0.6338,0.3796 L0.6328,0.3810 L0.6318,0.3827 L0.6310,0.3848 L0.6302,0.3872 L0.6295,0.3900 L0.6288,0.4022 L0.6282,0.4238 L0.6277,0.4549 L0.6272,0.4954 L0.6271,0.5270 L0.6275,0.5497 L0.6285,0.5634 L0.6298,0.5683 L0.6318,0.5726 L0.6344,0.5765 L0.6376,0.5800 L0.6414,0.5830 L0.6514,0.5882 L0.6675,0.5955 L0.6898,0.6051 L0.7183,0.6168 L0.7403,0.6255 L0.7557,0.6310 L0.7647,0.6334 L0.7671,0.6327 L0.7693,0.6313 L0.7711,0.6293 L0.7728,0.6265 L0.7742,0.6230 L0.7753,0.6170 L0.7762,0.6084 L0.7768,0.5971 L0.7771,0.5833 L0.7775,0.5727 L0.7781,0.5652 L0.7787,0.5609 L0.7794,0.5597 L0.7797,0.5579 L0.7798,0.5554 L0.7796,0.5521 L0.7791,0.5482 L0.7789,0.5450 L0.7790,0.5425 L0.7794,0.5406 L0.7800,0.5395 L0.7804,0.5383 L0.7805,0.5372 L0.7803,0.5360 L0.7798,0.5349 L0.7795,0.5280 L0.7795,0.5153 L0.7798,0.4969 L0.7803,0.4727 L0.7804,0.4537 L0.7800,0.4399 L0.7793,0.4313 L0.7781,0.4278 L0.7764,0.4246 L0.7743,0.4216 L0.7718,0.4189 L0.7689,0.4163 L0.7592,0.4121 L0.7427,0.4061 L0.7194,0.3984 L0.6894,0.3889 L0.6663,0.3820 L0.6502,0.3776 L0.6410,0.3758 L0.6387,0.3765 L0.6368,0.3774 L0.6351,0.3784Z"/><path class="aed__znacka" d="M0.8075,0.6846 A0.0156,0.0273 164.8 1 0 0.8388,0.6846 A0.0156,0.0273 164.8 1 0 0.8075,0.6846Z"/><path class="aed__znacka" d="M0.7536,0.4714 A0.0108,0.0191 162.0 1 0 0.7751,0.4714 A0.0108,0.0191 162.0 1 0 0.7536,0.4714Z"/><path class="aed__znacka" d="M0.9488,0.6989 L0.9469,0.6989 L0.9431,0.7003 L0.9373,0.7030 L0.9296,0.7072 L0.9199,0.7127 L0.9122,0.7174 L0.9064,0.7212 L0.9025,0.7241 L0.9006,0.7262 L0.8988,0.7277 L0.8970,0.7288 L0.8952,0.7293 L0.8935,0.7293 L0.8913,0.7298 L0.8887,0.7308 L0.8857,0.7324 L0.8823,0.7345 L0.8802,0.7368 L0.8796,0.7393 L0.8804,0.7421 L0.8827,0.7451 L0.8843,0.7482 L0.8852,0.7516 L0.8855,0.7551 L0.8852,0.7587 L0.8845,0.7629 L0.8836,0.7675 L0.8823,0.7726 L0.8808,0.7781 L0.8797,0.7827 L0.8792,0.7864 L0.8792,0.7891 L0.8797,0.7910 L0.8804,0.7921 L0.8813,0.7924 L0.8823,0.7920 L0.8835,0.7909 L0.8851,0.7897 L0.8870,0.7886 L0.8892,0.7874 L0.8918,0.7863 L0.8943,0.7855 L0.8968,0.7852 L0.8991,0.7852 L0.9013,0.7857 L0.9035,0.7864 L0.9057,0.7873 L0.9078,0.7884 L0.9099,0.7898 L0.9125,0.7890 L0.9157,0.7860 L0.9195,0.7808 L0.9238,0.7735 L0.9267,0.7677 L0.9281,0.7634 L0.9282,0.7607 L0.9268,0.7596 L0.9257,0.7581 L0.9248,0.7562 L0.9242,0.7540 L0.9239,0.7515 L0.9242,0.7477 L0.9252,0.7426 L0.9270,0.7363 L0.9294,0.7287 L0.9315,0.7226 L0.9334,0.7180 L0.9351,0.7149 L0.9365,0.7133 L0.9382,0.7116 L0.9404,0.7097 L0.9429,0.7078 L0.9459,0.7057 L0.9482,0.7039 L0.9498,0.7024 L0.9508,0.7012 L0.9511,0.7003 L0.9509,0.6996 L0.9501,0.6991Z"/><path class="aed__znacka" d="M0.3399,0.2475 L0.3252,0.2479 L0.3128,0.2469 L0.3026,0.2445 L0.2946,0.2407 L0.2889,0.2354 L0.2834,0.2314 L0.2779,0.2288 L0.2726,0.2274 L0.2674,0.2274 L0.2625,0.2280 L0.2579,0.2292 L0.2535,0.2309 L0.2493,0.2332 L0.2449,0.2369 L0.2402,0.2421 L0.2353,0.2487 L0.2301,0.2568 L0.2234,0.2646 L0.2151,0.2722 L0.2053,0.2796 L0.1939,0.2867 L0.1844,0.2936 L0.1769,0.3003 L0.1714,0.3067 L0.1677,0.3130 L0.1655,0.3425 L0.1646,0.3953 L0.1651,0.4715 L0.1670,0.5709 L0.1690,0.6472 L0.1710,0.7004 L0.1730,0.7304 L0.1751,0.7373 L0.1776,0.7436 L0.1806,0.7493 L0.1841,0.7543 L0.1881,0.7586 L0.1929,0.7622 L0.1984,0.7650 L0.2047,0.7669 L0.2118,0.7681 L0.2267,0.7672 L0.2495,0.7642 L0.2801,0.7591 L0.3186,0.7520 L0.3486,0.7460 L0.3700,0.7411 L0.3829,0.7375 L0.3872,0.7349 L0.3913,0.7315 L0.3953,0.7271 L0.3991,0.7218 L0.4027,0.7156 L0.4041,0.6854 L0.4032,0.6312 L0.4001,0.5529 L0.3948,0.4507 L0.3904,0.3724 L0.3869,0.3178 L0.3844,0.2871 L0.3829,0.2802 L0.3805,0.2735 L0.3774,0.2672 L0.3735,0.2612 L0.3689,0.2554 L0.3617,0.2512 L0.3520,0.2486Z M0.3405,0.3020 L0.3453,0.3149 L0.3681,0.6786 L0.3550,0.6888 L0.2162,0.7109 L0.2113,0.7007 L0.2017,0.3490 L0.2099,0.3398Z"/><path class="aed__znacka" d="M0.5688,0.2600 L0.5603,0.2566 L0.5522,0.2543 L0.5443,0.2533 L0.5368,0.2535 L0.5295,0.2548 L0.5232,0.2581 L0.5179,0.2633 L0.5135,0.2704 L0.5100,0.2794 L0.5071,0.2903 L0.5047,0.3033 L0.5028,0.3184 L0.5014,0.3354 L0.4995,0.3498 L0.4971,0.3615 L0.4941,0.3706 L0.4907,0.3771 L0.4870,0.3825 L0.4830,0.3870 L0.4788,0.3905 L0.4743,0.3931 L0.4678,0.3938 L0.4593,0.3928 L0.4489,0.3900 L0.4365,0.3854 L0.4257,0.3803 L0.4167,0.3748 L0.4093,0.3688 L0.4036,0.3623 L0.3988,0.3557 L0.3949,0.3488 L0.3919,0.3416 L0.3898,0.3343 L0.3875,0.3277 L0.3849,0.3219 L0.3821,0.3170 L0.3790,0.3128 L0.3706,0.3065 L0.3570,0.2980 L0.3381,0.2873 L0.3139,0.2744 L0.2941,0.2647 L0.2786,0.2581 L0.2675,0.2547 L0.2608,0.2545 L0.2545,0.2558 L0.2487,0.2585 L0.2434,0.2628 L0.2386,0.2685 L0.2354,0.2734 L0.2337,0.2773 L0.2337,0.2803 L0.2352,0.2823 L0.2382,0.2828 L0.2426,0.2817 L0.2484,0.2789 L0.2557,0.2745 L0.2676,0.2742 L0.2842,0.2779 L0.3054,0.2856 L0.3313,0.2973 L0.3517,0.3084 L0.3665,0.3189 L0.3759,0.3287 L0.3797,0.3379 L0.3845,0.3471 L0.3904,0.3562 L0.3973,0.3652 L0.4052,0.3742 L0.4130,0.3821 L0.4207,0.3889 L0.4283,0.3946 L0.4357,0.3992 L0.4426,0.4027 L0.4490,0.4053 L0.4549,0.4068 L0.4602,0.4072 L0.4658,0.4066 L0.4717,0.4049 L0.4778,0.4020 L0.4842,0.3981 L0.4898,0.3935 L0.4946,0.3882 L0.4987,0.3823 L0.5020,0.3756 L0.5048,0.3650 L0.5071,0.3507 L0.5090,0.3324 L0.5104,0.3103 L0.5125,0.2944 L0.5155,0.2846 L0.5192,0.2810 L0.5237,0.2835 L0.5300,0.2848 L0.5381,0.2848 L0.5480,0.2835 L0.5597,0.2810 L0.5688,0.2783 L0.5752,0.2756 L0.5789,0.2727 L0.5799,0.2697 L0.5786,0.2666 L0.5749,0.2634Z"/><path class="aed__znacka" d="M0.3432,0.2983 L0.2023,0.3435 L0.2127,0.7136 L0.3681,0.6851Z"/><path class="aed__znacka" d="M0.9414,0.4890 L0.9405,0.4890 L0.9375,0.4902 L0.9322,0.4927 L0.9247,0.4965 L0.9151,0.5016 L0.9075,0.5058 L0.9021,0.5092 L0.8987,0.5116 L0.8975,0.5132 L0.8965,0.5149 L0.8956,0.5166 L0.8949,0.5184 L0.8944,0.5203 L0.8939,0.5346 L0.8934,0.5614 L0.8929,0.6007 L0.8924,0.6525 L0.8923,0.6918 L0.8927,0.7185 L0.8936,0.7326 L0.8950,0.7342 L0.8968,0.7352 L0.8990,0.7354 L0.9015,0.7349 L0.9044,0.7338 L0.9083,0.7318 L0.9132,0.7289 L0.9189,0.7251 L0.9257,0.7205 L0.9310,0.7166 L0.9350,0.7132 L0.9376,0.7105 L0.9388,0.7084 L0.9399,0.7062 L0.9408,0.7038 L0.9416,0.7012 L0.9423,0.6984 L0.9432,0.6844 L0.9442,0.6591 L0.9454,0.6225 L0.9468,0.5746 L0.9477,0.5381 L0.9482,0.5130 L0.9481,0.4993 L0.9476,0.4970 L0.9470,0.4950 L0.9462,0.4933 L0.9453,0.4918 L0.9442,0.4907 L0.9432,0.4898 L0.9423,0.4892Z"/></g>
      </svg>
-     <svg class="aed__terce" viewBox="0 0 1 1" preserveAspectRatio="none"><path class="aed__hit" data-k="elektrody" fill-rule="evenodd" tabindex="0" role="button" aria-label="Elektrody" d="M0.3299,0.2468 L0.3117,0.2505 L0.2977,0.2521 L0.2876,0.2516 L0.2817,0.2491 L0.2798,0.2445 L0.2765,0.2415 L0.2720,0.2403 L0.2661,0.2407 L0.2588,0.2427 L0.2525,0.2459 L0.2473,0.2502 L0.2430,0.2555 L0.2397,0.2620 L0.2337,0.2681 L0.2250,0.2740 L0.2136,0.2796 L0.1994,0.2849 L0.1877,0.2905 L0.1785,0.2965 L0.1717,0.3028 L0.1674,0.3095 L0.1646,0.3396 L0.1633,0.3931 L0.1635,0.4701 L0.1652,0.5704 L0.1672,0.6477 L0.1693,0.7018 L0.1717,0.7327 L0.1743,0.7406 L0.1773,0.7475 L0.1808,0.7535 L0.1847,0.7585 L0.1890,0.7627 L0.1939,0.7660 L0.1994,0.7685 L0.2055,0.7703 L0.2123,0.7712 L0.2270,0.7701 L0.2496,0.7670 L0.2801,0.7619 L0.3186,0.7547 L0.3488,0.7486 L0.3706,0.7434 L0.3842,0.7392 L0.3893,0.7360 L0.3940,0.7322 L0.3981,0.7278 L0.4018,0.7228 L0.4049,0.7173 L0.4074,0.7109 L0.4094,0.7037 L0.4108,0.6956 L0.4117,0.6866 L0.4108,0.6563 L0.4082,0.6047 L0.4039,0.5319 L0.3979,0.4377 L0.3927,0.3648 L0.3883,0.3131 L0.3847,0.2827 L0.3819,0.2735 L0.3785,0.2654 L0.3746,0.2585 L0.3700,0.2528 L0.3648,0.2482 L0.3564,0.2456 L0.3447,0.2452Z M0.3432,0.2974 L0.3688,0.6851 L0.2127,0.7145 L0.2017,0.3435Z"/><path class="aed__hit" data-k="prirucka" fill-rule="evenodd" tabindex="0" role="button" aria-label="Uživatelská příručka" d="M0.3432,0.2983 L0.2023,0.3435 L0.2127,0.7136 L0.3681,0.6851Z"/><path class="aed__hit" data-k="kabel" fill-rule="evenodd" tabindex="0" role="button" aria-label="Kabel" d="M0.5688,0.2600 L0.5603,0.2566 L0.5522,0.2543 L0.5443,0.2533 L0.5368,0.2535 L0.5295,0.2548 L0.5232,0.2581 L0.5179,0.2633 L0.5135,0.2704 L0.5100,0.2794 L0.5071,0.2903 L0.5047,0.3033 L0.5028,0.3184 L0.5014,0.3354 L0.4995,0.3498 L0.4971,0.3615 L0.4941,0.3706 L0.4907,0.3771 L0.4870,0.3825 L0.4830,0.3870 L0.4788,0.3905 L0.4743,0.3931 L0.4678,0.3938 L0.4593,0.3928 L0.4489,0.3900 L0.4365,0.3854 L0.4257,0.3803 L0.4167,0.3748 L0.4093,0.3688 L0.4036,0.3623 L0.3988,0.3557 L0.3949,0.3488 L0.3919,0.3416 L0.3898,0.3343 L0.3875,0.3277 L0.3849,0.3219 L0.3821,0.3170 L0.3790,0.3128 L0.3706,0.3065 L0.3570,0.2980 L0.3381,0.2873 L0.3139,0.2744 L0.2941,0.2647 L0.2786,0.2581 L0.2675,0.2547 L0.2608,0.2545 L0.2545,0.2558 L0.2487,0.2585 L0.2434,0.2628 L0.2386,0.2685 L0.2354,0.2734 L0.2337,0.2773 L0.2337,0.2803 L0.2352,0.2823 L0.2382,0.2828 L0.2426,0.2817 L0.2484,0.2789 L0.2557,0.2745 L0.2676,0.2742 L0.2842,0.2779 L0.3054,0.2856 L0.3313,0.2973 L0.3517,0.3084 L0.3665,0.3189 L0.3759,0.3287 L0.3797,0.3379 L0.3845,0.3471 L0.3904,0.3562 L0.3973,0.3652 L0.4052,0.3742 L0.4130,0.3821 L0.4207,0.3889 L0.4283,0.3946 L0.4357,0.3992 L0.4426,0.4027 L0.4490,0.4053 L0.4549,0.4068 L0.4602,0.4072 L0.4658,0.4066 L0.4717,0.4049 L0.4778,0.4020 L0.4842,0.3981 L0.4898,0.3935 L0.4946,0.3882 L0.4987,0.3823 L0.5020,0.3756 L0.5048,0.3650 L0.5071,0.3507 L0.5090,0.3324 L0.5104,0.3103 L0.5125,0.2944 L0.5155,0.2846 L0.5192,0.2810 L0.5237,0.2835 L0.5300,0.2848 L0.5381,0.2848 L0.5480,0.2835 L0.5597,0.2810 L0.5688,0.2783 L0.5752,0.2756 L0.5789,0.2727 L0.5799,0.2697 L0.5786,0.2666 L0.5749,0.2634Z"/><path class="aed__hit" data-k="navod" fill-rule="evenodd" tabindex="0" role="button" aria-label="Návod k použití" d="M0.6338,0.3796 L0.6328,0.3810 L0.6318,0.3827 L0.6310,0.3848 L0.6302,0.3872 L0.6295,0.3900 L0.6288,0.4022 L0.6282,0.4238 L0.6277,0.4549 L0.6272,0.4954 L0.6271,0.5270 L0.6275,0.5497 L0.6285,0.5634 L0.6298,0.5683 L0.6318,0.5726 L0.6344,0.5765 L0.6376,0.5800 L0.6414,0.5830 L0.6514,0.5882 L0.6675,0.5955 L0.6898,0.6051 L0.7183,0.6168 L0.7403,0.6255 L0.7557,0.6310 L0.7647,0.6334 L0.7671,0.6327 L0.7693,0.6313 L0.7711,0.6293 L0.7728,0.6265 L0.7742,0.6230 L0.7753,0.6170 L0.7762,0.6084 L0.7768,0.5971 L0.7771,0.5833 L0.7775,0.5727 L0.7781,0.5652 L0.7787,0.5609 L0.7794,0.5597 L0.7797,0.5579 L0.7798,0.5554 L0.7796,0.5521 L0.7791,0.5482 L0.7789,0.5450 L0.7790,0.5425 L0.7794,0.5406 L0.7800,0.5395 L0.7804,0.5383 L0.7805,0.5372 L0.7803,0.5360 L0.7798,0.5349 L0.7795,0.5280 L0.7795,0.5153 L0.7798,0.4969 L0.7803,0.4727 L0.7804,0.4537 L0.7800,0.4399 L0.7793,0.4313 L0.7781,0.4278 L0.7764,0.4246 L0.7743,0.4216 L0.7718,0.4189 L0.7689,0.4163 L0.7592,0.4121 L0.7427,0.4061 L0.7194,0.3984 L0.6894,0.3889 L0.6663,0.3820 L0.6502,0.3776 L0.6410,0.3758 L0.6387,0.3765 L0.6368,0.3774 L0.6351,0.3784Z"/><path class="aed__hit" data-k="karta155" fill-rule="evenodd" tabindex="0" role="button" aria-label="Volejte 155" d="M0.9414,0.4890 L0.9405,0.4890 L0.9375,0.4902 L0.9322,0.4927 L0.9247,0.4965 L0.9151,0.5016 L0.9075,0.5058 L0.9021,0.5092 L0.8987,0.5116 L0.8975,0.5132 L0.8965,0.5149 L0.8956,0.5166 L0.8949,0.5184 L0.8944,0.5203 L0.8939,0.5346 L0.8934,0.5614 L0.8929,0.6007 L0.8924,0.6525 L0.8923,0.6918 L0.8927,0.7185 L0.8936,0.7326 L0.8950,0.7342 L0.8968,0.7352 L0.8990,0.7354 L0.9015,0.7349 L0.9044,0.7338 L0.9083,0.7318 L0.9132,0.7289 L0.9189,0.7251 L0.9257,0.7205 L0.9310,0.7166 L0.9350,0.7132 L0.9376,0.7105 L0.9388,0.7084 L0.9399,0.7062 L0.9408,0.7038 L0.9416,0.7012 L0.9423,0.6984 L0.9432,0.6844 L0.9442,0.6591 L0.9454,0.6225 L0.9468,0.5746 L0.9477,0.5381 L0.9482,0.5130 L0.9481,0.4993 L0.9476,0.4970 L0.9470,0.4950 L0.9462,0.4933 L0.9453,0.4918 L0.9442,0.4907 L0.9432,0.4898 L0.9423,0.4892Z"/><path class="aed__hit" data-k="reproduktor" fill-rule="evenodd" tabindex="0" role="button" aria-label="Reproduktor" d="M0.9488,0.6989 L0.9469,0.6989 L0.9431,0.7003 L0.9373,0.7030 L0.9296,0.7072 L0.9199,0.7127 L0.9122,0.7174 L0.9064,0.7212 L0.9025,0.7241 L0.9006,0.7262 L0.8988,0.7277 L0.8970,0.7288 L0.8952,0.7293 L0.8935,0.7293 L0.8913,0.7298 L0.8887,0.7308 L0.8857,0.7324 L0.8823,0.7345 L0.8802,0.7368 L0.8796,0.7393 L0.8804,0.7421 L0.8827,0.7451 L0.8843,0.7482 L0.8852,0.7516 L0.8855,0.7551 L0.8852,0.7587 L0.8845,0.7629 L0.8836,0.7675 L0.8823,0.7726 L0.8808,0.7781 L0.8797,0.7827 L0.8792,0.7864 L0.8792,0.7891 L0.8797,0.7910 L0.8804,0.7921 L0.8813,0.7924 L0.8823,0.7920 L0.8835,0.7909 L0.8851,0.7897 L0.8870,0.7886 L0.8892,0.7874 L0.8918,0.7863 L0.8943,0.7855 L0.8968,0.7852 L0.8991,0.7852 L0.9013,0.7857 L0.9035,0.7864 L0.9057,0.7873 L0.9078,0.7884 L0.9099,0.7898 L0.9125,0.7890 L0.9157,0.7860 L0.9195,0.7808 L0.9238,0.7735 L0.9267,0.7677 L0.9281,0.7634 L0.9282,0.7607 L0.9268,0.7596 L0.9257,0.7581 L0.9248,0.7562 L0.9242,0.7540 L0.9239,0.7515 L0.9242,0.7477 L0.9252,0.7426 L0.9270,0.7363 L0.9294,0.7287 L0.9315,0.7226 L0.9334,0.7180 L0.9351,0.7149 L0.9365,0.7133 L0.9382,0.7116 L0.9404,0.7097 L0.9429,0.7078 L0.9459,0.7057 L0.9482,0.7039 L0.9498,0.7024 L0.9508,0.7012 L0.9511,0.7003 L0.9509,0.6996 L0.9501,0.6991Z"/><path class="aed__hit" data-k="oranzove" fill-rule="evenodd" tabindex="0" role="button" aria-label="Oranžové tlačítko" d="M0.8075,0.6846 A0.0156,0.0273 164.8 1 0 0.8388,0.6846 A0.0156,0.0273 164.8 1 0 0.8075,0.6846Z"/><path class="aed__hit" data-k="zelene" fill-rule="evenodd" tabindex="0" role="button" aria-label="Zelené tlačítko" d="M0.8189,0.3959 A0.0152,0.0248 174.0 1 0 0.8493,0.3959 A0.0152,0.0248 174.0 1 0 0.8189,0.3959Z"/><path class="aed__hit" data-k="ibtn" fill-rule="evenodd" tabindex="0" role="button" aria-label="Tlačítko i" d="M0.7536,0.4714 A0.0108,0.0191 162.0 1 0 0.7751,0.4714 A0.0108,0.0191 162.0 1 0 0.7536,0.4714Z"/></svg>
+     <svg class="aed__terce" viewBox="0 0 1 1" preserveAspectRatio="none"><path class="aed__hit" data-k="elektrody" fill-rule="evenodd" tabindex="0" role="button" aria-label="Elektrody" d="M0.3399,0.2475 L0.3252,0.2479 L0.3128,0.2469 L0.3026,0.2445 L0.2946,0.2407 L0.2889,0.2354 L0.2834,0.2314 L0.2779,0.2288 L0.2726,0.2274 L0.2674,0.2274 L0.2625,0.2280 L0.2579,0.2292 L0.2535,0.2309 L0.2493,0.2332 L0.2449,0.2369 L0.2402,0.2421 L0.2353,0.2487 L0.2301,0.2568 L0.2234,0.2646 L0.2151,0.2722 L0.2053,0.2796 L0.1939,0.2867 L0.1844,0.2936 L0.1769,0.3003 L0.1714,0.3067 L0.1677,0.3130 L0.1655,0.3425 L0.1646,0.3953 L0.1651,0.4715 L0.1670,0.5709 L0.1690,0.6472 L0.1710,0.7004 L0.1730,0.7304 L0.1751,0.7373 L0.1776,0.7436 L0.1806,0.7493 L0.1841,0.7543 L0.1881,0.7586 L0.1929,0.7622 L0.1984,0.7650 L0.2047,0.7669 L0.2118,0.7681 L0.2267,0.7672 L0.2495,0.7642 L0.2801,0.7591 L0.3186,0.7520 L0.3486,0.7460 L0.3700,0.7411 L0.3829,0.7375 L0.3872,0.7349 L0.3913,0.7315 L0.3953,0.7271 L0.3991,0.7218 L0.4027,0.7156 L0.4041,0.6854 L0.4032,0.6312 L0.4001,0.5529 L0.3948,0.4507 L0.3904,0.3724 L0.3869,0.3178 L0.3844,0.2871 L0.3829,0.2802 L0.3805,0.2735 L0.3774,0.2672 L0.3735,0.2612 L0.3689,0.2554 L0.3617,0.2512 L0.3520,0.2486Z M0.3405,0.3020 L0.3453,0.3149 L0.3681,0.6786 L0.3550,0.6888 L0.2162,0.7109 L0.2113,0.7007 L0.2017,0.3490 L0.2099,0.3398Z"/><path class="aed__hit" data-k="prirucka" fill-rule="evenodd" tabindex="0" role="button" aria-label="Uživatelská příručka" d="M0.3432,0.2983 L0.2023,0.3435 L0.2127,0.7136 L0.3681,0.6851Z"/><path class="aed__hit" data-k="kabel" fill-rule="evenodd" tabindex="0" role="button" aria-label="Kabel" d="M0.5688,0.2600 L0.5603,0.2566 L0.5522,0.2543 L0.5443,0.2533 L0.5368,0.2535 L0.5295,0.2548 L0.5232,0.2581 L0.5179,0.2633 L0.5135,0.2704 L0.5100,0.2794 L0.5071,0.2903 L0.5047,0.3033 L0.5028,0.3184 L0.5014,0.3354 L0.4995,0.3498 L0.4971,0.3615 L0.4941,0.3706 L0.4907,0.3771 L0.4870,0.3825 L0.4830,0.3870 L0.4788,0.3905 L0.4743,0.3931 L0.4678,0.3938 L0.4593,0.3928 L0.4489,0.3900 L0.4365,0.3854 L0.4257,0.3803 L0.4167,0.3748 L0.4093,0.3688 L0.4036,0.3623 L0.3988,0.3557 L0.3949,0.3488 L0.3919,0.3416 L0.3898,0.3343 L0.3875,0.3277 L0.3849,0.3219 L0.3821,0.3170 L0.3790,0.3128 L0.3706,0.3065 L0.3570,0.2980 L0.3381,0.2873 L0.3139,0.2744 L0.2941,0.2647 L0.2786,0.2581 L0.2675,0.2547 L0.2608,0.2545 L0.2545,0.2558 L0.2487,0.2585 L0.2434,0.2628 L0.2386,0.2685 L0.2354,0.2734 L0.2337,0.2773 L0.2337,0.2803 L0.2352,0.2823 L0.2382,0.2828 L0.2426,0.2817 L0.2484,0.2789 L0.2557,0.2745 L0.2676,0.2742 L0.2842,0.2779 L0.3054,0.2856 L0.3313,0.2973 L0.3517,0.3084 L0.3665,0.3189 L0.3759,0.3287 L0.3797,0.3379 L0.3845,0.3471 L0.3904,0.3562 L0.3973,0.3652 L0.4052,0.3742 L0.4130,0.3821 L0.4207,0.3889 L0.4283,0.3946 L0.4357,0.3992 L0.4426,0.4027 L0.4490,0.4053 L0.4549,0.4068 L0.4602,0.4072 L0.4658,0.4066 L0.4717,0.4049 L0.4778,0.4020 L0.4842,0.3981 L0.4898,0.3935 L0.4946,0.3882 L0.4987,0.3823 L0.5020,0.3756 L0.5048,0.3650 L0.5071,0.3507 L0.5090,0.3324 L0.5104,0.3103 L0.5125,0.2944 L0.5155,0.2846 L0.5192,0.2810 L0.5237,0.2835 L0.5300,0.2848 L0.5381,0.2848 L0.5480,0.2835 L0.5597,0.2810 L0.5688,0.2783 L0.5752,0.2756 L0.5789,0.2727 L0.5799,0.2697 L0.5786,0.2666 L0.5749,0.2634Z"/><path class="aed__hit" data-k="navod" fill-rule="evenodd" tabindex="0" role="button" aria-label="Návod k použití" d="M0.6338,0.3796 L0.6328,0.3810 L0.6318,0.3827 L0.6310,0.3848 L0.6302,0.3872 L0.6295,0.3900 L0.6288,0.4022 L0.6282,0.4238 L0.6277,0.4549 L0.6272,0.4954 L0.6271,0.5270 L0.6275,0.5497 L0.6285,0.5634 L0.6298,0.5683 L0.6318,0.5726 L0.6344,0.5765 L0.6376,0.5800 L0.6414,0.5830 L0.6514,0.5882 L0.6675,0.5955 L0.6898,0.6051 L0.7183,0.6168 L0.7403,0.6255 L0.7557,0.6310 L0.7647,0.6334 L0.7671,0.6327 L0.7693,0.6313 L0.7711,0.6293 L0.7728,0.6265 L0.7742,0.6230 L0.7753,0.6170 L0.7762,0.6084 L0.7768,0.5971 L0.7771,0.5833 L0.7775,0.5727 L0.7781,0.5652 L0.7787,0.5609 L0.7794,0.5597 L0.7797,0.5579 L0.7798,0.5554 L0.7796,0.5521 L0.7791,0.5482 L0.7789,0.5450 L0.7790,0.5425 L0.7794,0.5406 L0.7800,0.5395 L0.7804,0.5383 L0.7805,0.5372 L0.7803,0.5360 L0.7798,0.5349 L0.7795,0.5280 L0.7795,0.5153 L0.7798,0.4969 L0.7803,0.4727 L0.7804,0.4537 L0.7800,0.4399 L0.7793,0.4313 L0.7781,0.4278 L0.7764,0.4246 L0.7743,0.4216 L0.7718,0.4189 L0.7689,0.4163 L0.7592,0.4121 L0.7427,0.4061 L0.7194,0.3984 L0.6894,0.3889 L0.6663,0.3820 L0.6502,0.3776 L0.6410,0.3758 L0.6387,0.3765 L0.6368,0.3774 L0.6351,0.3784Z"/><path class="aed__hit" data-k="karta155" fill-rule="evenodd" tabindex="0" role="button" aria-label="Volejte 155" d="M0.9414,0.4890 L0.9405,0.4890 L0.9375,0.4902 L0.9322,0.4927 L0.9247,0.4965 L0.9151,0.5016 L0.9075,0.5058 L0.9021,0.5092 L0.8987,0.5116 L0.8975,0.5132 L0.8965,0.5149 L0.8956,0.5166 L0.8949,0.5184 L0.8944,0.5203 L0.8939,0.5346 L0.8934,0.5614 L0.8929,0.6007 L0.8924,0.6525 L0.8923,0.6918 L0.8927,0.7185 L0.8936,0.7326 L0.8950,0.7342 L0.8968,0.7352 L0.8990,0.7354 L0.9015,0.7349 L0.9044,0.7338 L0.9083,0.7318 L0.9132,0.7289 L0.9189,0.7251 L0.9257,0.7205 L0.9310,0.7166 L0.9350,0.7132 L0.9376,0.7105 L0.9388,0.7084 L0.9399,0.7062 L0.9408,0.7038 L0.9416,0.7012 L0.9423,0.6984 L0.9432,0.6844 L0.9442,0.6591 L0.9454,0.6225 L0.9468,0.5746 L0.9477,0.5381 L0.9482,0.5130 L0.9481,0.4993 L0.9476,0.4970 L0.9470,0.4950 L0.9462,0.4933 L0.9453,0.4918 L0.9442,0.4907 L0.9432,0.4898 L0.9423,0.4892Z"/><path class="aed__hit" data-k="reproduktor" fill-rule="evenodd" tabindex="0" role="button" aria-label="Reproduktor" d="M0.9488,0.6989 L0.9469,0.6989 L0.9431,0.7003 L0.9373,0.7030 L0.9296,0.7072 L0.9199,0.7127 L0.9122,0.7174 L0.9064,0.7212 L0.9025,0.7241 L0.9006,0.7262 L0.8988,0.7277 L0.8970,0.7288 L0.8952,0.7293 L0.8935,0.7293 L0.8913,0.7298 L0.8887,0.7308 L0.8857,0.7324 L0.8823,0.7345 L0.8802,0.7368 L0.8796,0.7393 L0.8804,0.7421 L0.8827,0.7451 L0.8843,0.7482 L0.8852,0.7516 L0.8855,0.7551 L0.8852,0.7587 L0.8845,0.7629 L0.8836,0.7675 L0.8823,0.7726 L0.8808,0.7781 L0.8797,0.7827 L0.8792,0.7864 L0.8792,0.7891 L0.8797,0.7910 L0.8804,0.7921 L0.8813,0.7924 L0.8823,0.7920 L0.8835,0.7909 L0.8851,0.7897 L0.8870,0.7886 L0.8892,0.7874 L0.8918,0.7863 L0.8943,0.7855 L0.8968,0.7852 L0.8991,0.7852 L0.9013,0.7857 L0.9035,0.7864 L0.9057,0.7873 L0.9078,0.7884 L0.9099,0.7898 L0.9125,0.7890 L0.9157,0.7860 L0.9195,0.7808 L0.9238,0.7735 L0.9267,0.7677 L0.9281,0.7634 L0.9282,0.7607 L0.9268,0.7596 L0.9257,0.7581 L0.9248,0.7562 L0.9242,0.7540 L0.9239,0.7515 L0.9242,0.7477 L0.9252,0.7426 L0.9270,0.7363 L0.9294,0.7287 L0.9315,0.7226 L0.9334,0.7180 L0.9351,0.7149 L0.9365,0.7133 L0.9382,0.7116 L0.9404,0.7097 L0.9429,0.7078 L0.9459,0.7057 L0.9482,0.7039 L0.9498,0.7024 L0.9508,0.7012 L0.9511,0.7003 L0.9509,0.6996 L0.9501,0.6991Z"/><path class="aed__hit" data-k="oranzove" fill-rule="evenodd" tabindex="0" role="button" aria-label="Oranžové tlačítko" d="M0.8075,0.6846 A0.0156,0.0273 164.8 1 0 0.8388,0.6846 A0.0156,0.0273 164.8 1 0 0.8075,0.6846Z"/><path class="aed__hit" data-k="zelene" fill-rule="evenodd" tabindex="0" role="button" aria-label="Zelené tlačítko" d="M0.8189,0.3959 A0.0152,0.0248 174.0 1 0 0.8493,0.3959 A0.0152,0.0248 174.0 1 0 0.8189,0.3959Z"/><path class="aed__hit" data-k="ibtn" fill-rule="evenodd" tabindex="0" role="button" aria-label="Tlačítko i" d="M0.7536,0.4714 A0.0108,0.0191 162.0 1 0 0.7751,0.4714 A0.0108,0.0191 162.0 1 0 0.7536,0.4714Z"/></svg>
      <div class="aed__cedule" data-el="cedule"></div>
     </div>
    </div>
 
-   <div class="aed__side" data-el="side"><p class="aed__skup">Ovládání</p><div class="aed__grp"><button type="button" class="aed__row" data-k="zelene"><span class="aed__bul"></span><span>Zelené tlačítko</span></button><button type="button" class="aed__row" data-k="navod"><span class="aed__bul"></span><span>Návod k použití</span></button><button type="button" class="aed__row" data-k="oranzove"><span class="aed__bul"></span><span>Oranžové tlačítko</span></button><button type="button" class="aed__row" data-k="ibtn"><span class="aed__bul"></span><span>Tlačítko i</span></button><button type="button" class="aed__row" data-k="reproduktor"><span class="aed__bul"></span><span>Reproduktor</span></button></div><p class="aed__skup">Příslušenství</p><div class="aed__grp"><button type="button" class="aed__row" data-k="elektrody"><span class="aed__bul"></span><span>Elektrody</span></button><button type="button" class="aed__row" data-k="kabel"><span class="aed__bul"></span><span>Kabel</span></button><button type="button" class="aed__row" data-k="prirucka"><span class="aed__bul"></span><span>Uživatelská příručka</span></button><button type="button" class="aed__row" data-k="karta155"><span class="aed__bul"></span><span>Volejte 155</span></button><button type="button" class="aed__row" data-k="nuzky"><svg class="aed__ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5.5l9.5 13M16.5 5.5L7 18.5"/><circle cx="5.6" cy="19.4" r="2.2"/><circle cx="17.9" cy="19.4" r="2.2"/></svg><span>Nůžky a holítko</span></button><button type="button" class="aed__row" data-k="klic"><svg class="aed__ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="12" r="3.5"/><path d="M10.5 12H20M16.8 12v3.2M19.4 12v2.3"/></svg><span>Dětský klíč</span></button><button type="button" class="aed__row" data-k="baterie"><svg class="aed__ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="7.5" width="14" height="9" rx="2"/><path d="M17.9 10.6h2.3v2.8h-2.3"/><path d="M7.5 12h6"/></svg><span>Baterie</span></button></div></div>
+   <div class="aed__side" data-el="side"><p class="aed__skup">Ovládání</p><div class="aed__grp"><button type="button" class="aed__row" data-k="zelene"><span class="aed__bul"></span><span>Zelené tlačítko</span></button><button type="button" class="aed__row" data-k="navod"><span class="aed__bul"></span><span>Návod k použití</span></button><button type="button" class="aed__row" data-k="oranzove"><span class="aed__bul"></span><span>Oranžové tlačítko</span></button><button type="button" class="aed__row" data-k="ibtn"><span class="aed__bul"></span><span>Tlačítko i</span></button><button type="button" class="aed__row" data-k="reproduktor"><span class="aed__bul"></span><span>Reproduktor</span></button></div><p class="aed__skup">Příslušenství</p><div class="aed__grp"><button type="button" class="aed__row" data-k="elektrody"><span class="aed__bul"></span><span>Elektrody</span></button><button type="button" class="aed__row" data-k="kabel"><span class="aed__bul"></span><span>Kabel</span></button><button type="button" class="aed__row" data-k="prirucka"><span class="aed__bul"></span><span>Uživatelská příručka</span></button><button type="button" class="aed__row" data-k="karta155"><span class="aed__bul"></span><span>Volejte 155</span></button></div></div>
   </div>
+  <div class="aed__mimo"><p class="aed__skup aed__skup--mimo">Na fotce je neuvidíte</p><div class="aed__mimogrp"><button type="button" class="aed__dlazd" data-k="nuzky"><svg class="aed__ico2" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5.5l9.5 13M16.5 5.5L7 18.5"/><circle cx="5.6" cy="19.4" r="2.2"/><circle cx="17.9" cy="19.4" r="2.2"/></svg><span>Nůžky a holítko</span></button><button type="button" class="aed__dlazd" data-k="klic"><svg class="aed__ico2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="12" r="3.5"/><path d="M10.5 12H20M16.8 12v3.2M19.4 12v2.3"/></svg><span>Dětský klíč</span></button><button type="button" class="aed__dlazd" data-k="baterie"><svg class="aed__ico2" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="7.5" width="14" height="9" rx="2"/><path d="M17.9 10.6h2.3v2.8h-2.3"/><path d="M7.5 12h6"/></svg><span>Baterie</span></button></div></div>
 
   <div class="aed__detail">
-   <p class="aed__jmeno" data-el="jmeno" aria-live="polite">Projděte si ovládání</p>
-   <p class="aed__popis" data-el="popis">Projděte si ovládání a jednotlivé části AED přístroje.</p>
+   <p class="aed__jmeno" data-el="jmeno" aria-live="polite"></p>
+   <p class="aed__popis" data-el="popis">Devět částí najdete na fotce, tři další jsou v balíčku.</p>
   </div>
 
   <div class="aed__foot">
+   <p class="aed__pozn" data-el="pozn" role="note">Na fotce je Philips HeartStart FRx, model, který má Kaufland na informacích ve svých prodejnách.</p>
    <button type="button" class="aed__i" data-el="ibtn" aria-expanded="false"
            aria-label="Poznámka ke zdroji">i</button>
-   <span class="aed__partner">Kaufland &times; CzechCrunch</span>
-   <div class="aed__pozn" data-el="pozn" role="note">Na fotce je Philips HeartStart FRx, model, který má Kaufland na informacích ve svých prodejnách.</div>
   </div>
 
  </div>
- <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><clipPath id="cp-zelene" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.8189,0.3959 A0.0152,0.0248 174.0 1 0 0.8493,0.3959 A0.0152,0.0248 174.0 1 0 0.8189,0.3959Z"/></clipPath><clipPath id="cp-navod" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.6338,0.3796 L0.6328,0.3810 L0.6318,0.3827 L0.6310,0.3848 L0.6302,0.3872 L0.6295,0.3900 L0.6288,0.4022 L0.6282,0.4238 L0.6277,0.4549 L0.6272,0.4954 L0.6271,0.5270 L0.6275,0.5497 L0.6285,0.5634 L0.6298,0.5683 L0.6318,0.5726 L0.6344,0.5765 L0.6376,0.5800 L0.6414,0.5830 L0.6514,0.5882 L0.6675,0.5955 L0.6898,0.6051 L0.7183,0.6168 L0.7403,0.6255 L0.7557,0.6310 L0.7647,0.6334 L0.7671,0.6327 L0.7693,0.6313 L0.7711,0.6293 L0.7728,0.6265 L0.7742,0.6230 L0.7753,0.6170 L0.7762,0.6084 L0.7768,0.5971 L0.7771,0.5833 L0.7775,0.5727 L0.7781,0.5652 L0.7787,0.5609 L0.7794,0.5597 L0.7797,0.5579 L0.7798,0.5554 L0.7796,0.5521 L0.7791,0.5482 L0.7789,0.5450 L0.7790,0.5425 L0.7794,0.5406 L0.7800,0.5395 L0.7804,0.5383 L0.7805,0.5372 L0.7803,0.5360 L0.7798,0.5349 L0.7795,0.5280 L0.7795,0.5153 L0.7798,0.4969 L0.7803,0.4727 L0.7804,0.4537 L0.7800,0.4399 L0.7793,0.4313 L0.7781,0.4278 L0.7764,0.4246 L0.7743,0.4216 L0.7718,0.4189 L0.7689,0.4163 L0.7592,0.4121 L0.7427,0.4061 L0.7194,0.3984 L0.6894,0.3889 L0.6663,0.3820 L0.6502,0.3776 L0.6410,0.3758 L0.6387,0.3765 L0.6368,0.3774 L0.6351,0.3784Z"/></clipPath><clipPath id="cp-oranzove" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.8075,0.6846 A0.0156,0.0273 164.8 1 0 0.8388,0.6846 A0.0156,0.0273 164.8 1 0 0.8075,0.6846Z"/></clipPath><clipPath id="cp-ibtn" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.7536,0.4714 A0.0108,0.0191 162.0 1 0 0.7751,0.4714 A0.0108,0.0191 162.0 1 0 0.7536,0.4714Z"/></clipPath><clipPath id="cp-reproduktor" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.9488,0.6989 L0.9469,0.6989 L0.9431,0.7003 L0.9373,0.7030 L0.9296,0.7072 L0.9199,0.7127 L0.9122,0.7174 L0.9064,0.7212 L0.9025,0.7241 L0.9006,0.7262 L0.8988,0.7277 L0.8970,0.7288 L0.8952,0.7293 L0.8935,0.7293 L0.8913,0.7298 L0.8887,0.7308 L0.8857,0.7324 L0.8823,0.7345 L0.8802,0.7368 L0.8796,0.7393 L0.8804,0.7421 L0.8827,0.7451 L0.8843,0.7482 L0.8852,0.7516 L0.8855,0.7551 L0.8852,0.7587 L0.8845,0.7629 L0.8836,0.7675 L0.8823,0.7726 L0.8808,0.7781 L0.8797,0.7827 L0.8792,0.7864 L0.8792,0.7891 L0.8797,0.7910 L0.8804,0.7921 L0.8813,0.7924 L0.8823,0.7920 L0.8835,0.7909 L0.8851,0.7897 L0.8870,0.7886 L0.8892,0.7874 L0.8918,0.7863 L0.8943,0.7855 L0.8968,0.7852 L0.8991,0.7852 L0.9013,0.7857 L0.9035,0.7864 L0.9057,0.7873 L0.9078,0.7884 L0.9099,0.7898 L0.9125,0.7890 L0.9157,0.7860 L0.9195,0.7808 L0.9238,0.7735 L0.9267,0.7677 L0.9281,0.7634 L0.9282,0.7607 L0.9268,0.7596 L0.9257,0.7581 L0.9248,0.7562 L0.9242,0.7540 L0.9239,0.7515 L0.9242,0.7477 L0.9252,0.7426 L0.9270,0.7363 L0.9294,0.7287 L0.9315,0.7226 L0.9334,0.7180 L0.9351,0.7149 L0.9365,0.7133 L0.9382,0.7116 L0.9404,0.7097 L0.9429,0.7078 L0.9459,0.7057 L0.9482,0.7039 L0.9498,0.7024 L0.9508,0.7012 L0.9511,0.7003 L0.9509,0.6996 L0.9501,0.6991Z"/></clipPath><clipPath id="cp-elektrody" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.3299,0.2468 L0.3117,0.2505 L0.2977,0.2521 L0.2876,0.2516 L0.2817,0.2491 L0.2798,0.2445 L0.2765,0.2415 L0.2720,0.2403 L0.2661,0.2407 L0.2588,0.2427 L0.2525,0.2459 L0.2473,0.2502 L0.2430,0.2555 L0.2397,0.2620 L0.2337,0.2681 L0.2250,0.2740 L0.2136,0.2796 L0.1994,0.2849 L0.1877,0.2905 L0.1785,0.2965 L0.1717,0.3028 L0.1674,0.3095 L0.1646,0.3396 L0.1633,0.3931 L0.1635,0.4701 L0.1652,0.5704 L0.1672,0.6477 L0.1693,0.7018 L0.1717,0.7327 L0.1743,0.7406 L0.1773,0.7475 L0.1808,0.7535 L0.1847,0.7585 L0.1890,0.7627 L0.1939,0.7660 L0.1994,0.7685 L0.2055,0.7703 L0.2123,0.7712 L0.2270,0.7701 L0.2496,0.7670 L0.2801,0.7619 L0.3186,0.7547 L0.3488,0.7486 L0.3706,0.7434 L0.3842,0.7392 L0.3893,0.7360 L0.3940,0.7322 L0.3981,0.7278 L0.4018,0.7228 L0.4049,0.7173 L0.4074,0.7109 L0.4094,0.7037 L0.4108,0.6956 L0.4117,0.6866 L0.4108,0.6563 L0.4082,0.6047 L0.4039,0.5319 L0.3979,0.4377 L0.3927,0.3648 L0.3883,0.3131 L0.3847,0.2827 L0.3819,0.2735 L0.3785,0.2654 L0.3746,0.2585 L0.3700,0.2528 L0.3648,0.2482 L0.3564,0.2456 L0.3447,0.2452Z M0.3432,0.2974 L0.3688,0.6851 L0.2127,0.7145 L0.2017,0.3435Z"/></clipPath><clipPath id="cp-kabel" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.5688,0.2600 L0.5603,0.2566 L0.5522,0.2543 L0.5443,0.2533 L0.5368,0.2535 L0.5295,0.2548 L0.5232,0.2581 L0.5179,0.2633 L0.5135,0.2704 L0.5100,0.2794 L0.5071,0.2903 L0.5047,0.3033 L0.5028,0.3184 L0.5014,0.3354 L0.4995,0.3498 L0.4971,0.3615 L0.4941,0.3706 L0.4907,0.3771 L0.4870,0.3825 L0.4830,0.3870 L0.4788,0.3905 L0.4743,0.3931 L0.4678,0.3938 L0.4593,0.3928 L0.4489,0.3900 L0.4365,0.3854 L0.4257,0.3803 L0.4167,0.3748 L0.4093,0.3688 L0.4036,0.3623 L0.3988,0.3557 L0.3949,0.3488 L0.3919,0.3416 L0.3898,0.3343 L0.3875,0.3277 L0.3849,0.3219 L0.3821,0.3170 L0.3790,0.3128 L0.3706,0.3065 L0.3570,0.2980 L0.3381,0.2873 L0.3139,0.2744 L0.2941,0.2647 L0.2786,0.2581 L0.2675,0.2547 L0.2608,0.2545 L0.2545,0.2558 L0.2487,0.2585 L0.2434,0.2628 L0.2386,0.2685 L0.2354,0.2734 L0.2337,0.2773 L0.2337,0.2803 L0.2352,0.2823 L0.2382,0.2828 L0.2426,0.2817 L0.2484,0.2789 L0.2557,0.2745 L0.2676,0.2742 L0.2842,0.2779 L0.3054,0.2856 L0.3313,0.2973 L0.3517,0.3084 L0.3665,0.3189 L0.3759,0.3287 L0.3797,0.3379 L0.3845,0.3471 L0.3904,0.3562 L0.3973,0.3652 L0.4052,0.3742 L0.4130,0.3821 L0.4207,0.3889 L0.4283,0.3946 L0.4357,0.3992 L0.4426,0.4027 L0.4490,0.4053 L0.4549,0.4068 L0.4602,0.4072 L0.4658,0.4066 L0.4717,0.4049 L0.4778,0.4020 L0.4842,0.3981 L0.4898,0.3935 L0.4946,0.3882 L0.4987,0.3823 L0.5020,0.3756 L0.5048,0.3650 L0.5071,0.3507 L0.5090,0.3324 L0.5104,0.3103 L0.5125,0.2944 L0.5155,0.2846 L0.5192,0.2810 L0.5237,0.2835 L0.5300,0.2848 L0.5381,0.2848 L0.5480,0.2835 L0.5597,0.2810 L0.5688,0.2783 L0.5752,0.2756 L0.5789,0.2727 L0.5799,0.2697 L0.5786,0.2666 L0.5749,0.2634Z"/></clipPath><clipPath id="cp-prirucka" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.3432,0.2983 L0.2023,0.3435 L0.2127,0.7136 L0.3681,0.6851Z"/></clipPath><clipPath id="cp-karta155" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.9414,0.4890 L0.9405,0.4890 L0.9375,0.4902 L0.9322,0.4927 L0.9247,0.4965 L0.9151,0.5016 L0.9075,0.5058 L0.9021,0.5092 L0.8987,0.5116 L0.8975,0.5132 L0.8965,0.5149 L0.8956,0.5166 L0.8949,0.5184 L0.8944,0.5203 L0.8939,0.5346 L0.8934,0.5614 L0.8929,0.6007 L0.8924,0.6525 L0.8923,0.6918 L0.8927,0.7185 L0.8936,0.7326 L0.8950,0.7342 L0.8968,0.7352 L0.8990,0.7354 L0.9015,0.7349 L0.9044,0.7338 L0.9083,0.7318 L0.9132,0.7289 L0.9189,0.7251 L0.9257,0.7205 L0.9310,0.7166 L0.9350,0.7132 L0.9376,0.7105 L0.9388,0.7084 L0.9399,0.7062 L0.9408,0.7038 L0.9416,0.7012 L0.9423,0.6984 L0.9432,0.6844 L0.9442,0.6591 L0.9454,0.6225 L0.9468,0.5746 L0.9477,0.5381 L0.9482,0.5130 L0.9481,0.4993 L0.9476,0.4970 L0.9470,0.4950 L0.9462,0.4933 L0.9453,0.4918 L0.9442,0.4907 L0.9432,0.4898 L0.9423,0.4892Z"/></clipPath></defs></svg>
+ <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><clipPath id="cp-zelene" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.8189,0.3959 A0.0152,0.0248 174.0 1 0 0.8493,0.3959 A0.0152,0.0248 174.0 1 0 0.8189,0.3959Z"/></clipPath><clipPath id="cp-navod" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.6338,0.3796 L0.6328,0.3810 L0.6318,0.3827 L0.6310,0.3848 L0.6302,0.3872 L0.6295,0.3900 L0.6288,0.4022 L0.6282,0.4238 L0.6277,0.4549 L0.6272,0.4954 L0.6271,0.5270 L0.6275,0.5497 L0.6285,0.5634 L0.6298,0.5683 L0.6318,0.5726 L0.6344,0.5765 L0.6376,0.5800 L0.6414,0.5830 L0.6514,0.5882 L0.6675,0.5955 L0.6898,0.6051 L0.7183,0.6168 L0.7403,0.6255 L0.7557,0.6310 L0.7647,0.6334 L0.7671,0.6327 L0.7693,0.6313 L0.7711,0.6293 L0.7728,0.6265 L0.7742,0.6230 L0.7753,0.6170 L0.7762,0.6084 L0.7768,0.5971 L0.7771,0.5833 L0.7775,0.5727 L0.7781,0.5652 L0.7787,0.5609 L0.7794,0.5597 L0.7797,0.5579 L0.7798,0.5554 L0.7796,0.5521 L0.7791,0.5482 L0.7789,0.5450 L0.7790,0.5425 L0.7794,0.5406 L0.7800,0.5395 L0.7804,0.5383 L0.7805,0.5372 L0.7803,0.5360 L0.7798,0.5349 L0.7795,0.5280 L0.7795,0.5153 L0.7798,0.4969 L0.7803,0.4727 L0.7804,0.4537 L0.7800,0.4399 L0.7793,0.4313 L0.7781,0.4278 L0.7764,0.4246 L0.7743,0.4216 L0.7718,0.4189 L0.7689,0.4163 L0.7592,0.4121 L0.7427,0.4061 L0.7194,0.3984 L0.6894,0.3889 L0.6663,0.3820 L0.6502,0.3776 L0.6410,0.3758 L0.6387,0.3765 L0.6368,0.3774 L0.6351,0.3784Z"/></clipPath><clipPath id="cp-oranzove" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.8075,0.6846 A0.0156,0.0273 164.8 1 0 0.8388,0.6846 A0.0156,0.0273 164.8 1 0 0.8075,0.6846Z"/></clipPath><clipPath id="cp-ibtn" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.7536,0.4714 A0.0108,0.0191 162.0 1 0 0.7751,0.4714 A0.0108,0.0191 162.0 1 0 0.7536,0.4714Z"/></clipPath><clipPath id="cp-reproduktor" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.9488,0.6989 L0.9469,0.6989 L0.9431,0.7003 L0.9373,0.7030 L0.9296,0.7072 L0.9199,0.7127 L0.9122,0.7174 L0.9064,0.7212 L0.9025,0.7241 L0.9006,0.7262 L0.8988,0.7277 L0.8970,0.7288 L0.8952,0.7293 L0.8935,0.7293 L0.8913,0.7298 L0.8887,0.7308 L0.8857,0.7324 L0.8823,0.7345 L0.8802,0.7368 L0.8796,0.7393 L0.8804,0.7421 L0.8827,0.7451 L0.8843,0.7482 L0.8852,0.7516 L0.8855,0.7551 L0.8852,0.7587 L0.8845,0.7629 L0.8836,0.7675 L0.8823,0.7726 L0.8808,0.7781 L0.8797,0.7827 L0.8792,0.7864 L0.8792,0.7891 L0.8797,0.7910 L0.8804,0.7921 L0.8813,0.7924 L0.8823,0.7920 L0.8835,0.7909 L0.8851,0.7897 L0.8870,0.7886 L0.8892,0.7874 L0.8918,0.7863 L0.8943,0.7855 L0.8968,0.7852 L0.8991,0.7852 L0.9013,0.7857 L0.9035,0.7864 L0.9057,0.7873 L0.9078,0.7884 L0.9099,0.7898 L0.9125,0.7890 L0.9157,0.7860 L0.9195,0.7808 L0.9238,0.7735 L0.9267,0.7677 L0.9281,0.7634 L0.9282,0.7607 L0.9268,0.7596 L0.9257,0.7581 L0.9248,0.7562 L0.9242,0.7540 L0.9239,0.7515 L0.9242,0.7477 L0.9252,0.7426 L0.9270,0.7363 L0.9294,0.7287 L0.9315,0.7226 L0.9334,0.7180 L0.9351,0.7149 L0.9365,0.7133 L0.9382,0.7116 L0.9404,0.7097 L0.9429,0.7078 L0.9459,0.7057 L0.9482,0.7039 L0.9498,0.7024 L0.9508,0.7012 L0.9511,0.7003 L0.9509,0.6996 L0.9501,0.6991Z"/></clipPath><clipPath id="cp-elektrody" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.3399,0.2475 L0.3252,0.2479 L0.3128,0.2469 L0.3026,0.2445 L0.2946,0.2407 L0.2889,0.2354 L0.2834,0.2314 L0.2779,0.2288 L0.2726,0.2274 L0.2674,0.2274 L0.2625,0.2280 L0.2579,0.2292 L0.2535,0.2309 L0.2493,0.2332 L0.2449,0.2369 L0.2402,0.2421 L0.2353,0.2487 L0.2301,0.2568 L0.2234,0.2646 L0.2151,0.2722 L0.2053,0.2796 L0.1939,0.2867 L0.1844,0.2936 L0.1769,0.3003 L0.1714,0.3067 L0.1677,0.3130 L0.1655,0.3425 L0.1646,0.3953 L0.1651,0.4715 L0.1670,0.5709 L0.1690,0.6472 L0.1710,0.7004 L0.1730,0.7304 L0.1751,0.7373 L0.1776,0.7436 L0.1806,0.7493 L0.1841,0.7543 L0.1881,0.7586 L0.1929,0.7622 L0.1984,0.7650 L0.2047,0.7669 L0.2118,0.7681 L0.2267,0.7672 L0.2495,0.7642 L0.2801,0.7591 L0.3186,0.7520 L0.3486,0.7460 L0.3700,0.7411 L0.3829,0.7375 L0.3872,0.7349 L0.3913,0.7315 L0.3953,0.7271 L0.3991,0.7218 L0.4027,0.7156 L0.4041,0.6854 L0.4032,0.6312 L0.4001,0.5529 L0.3948,0.4507 L0.3904,0.3724 L0.3869,0.3178 L0.3844,0.2871 L0.3829,0.2802 L0.3805,0.2735 L0.3774,0.2672 L0.3735,0.2612 L0.3689,0.2554 L0.3617,0.2512 L0.3520,0.2486Z M0.3405,0.3020 L0.3453,0.3149 L0.3681,0.6786 L0.3550,0.6888 L0.2162,0.7109 L0.2113,0.7007 L0.2017,0.3490 L0.2099,0.3398Z"/></clipPath><clipPath id="cp-kabel" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.5688,0.2600 L0.5603,0.2566 L0.5522,0.2543 L0.5443,0.2533 L0.5368,0.2535 L0.5295,0.2548 L0.5232,0.2581 L0.5179,0.2633 L0.5135,0.2704 L0.5100,0.2794 L0.5071,0.2903 L0.5047,0.3033 L0.5028,0.3184 L0.5014,0.3354 L0.4995,0.3498 L0.4971,0.3615 L0.4941,0.3706 L0.4907,0.3771 L0.4870,0.3825 L0.4830,0.3870 L0.4788,0.3905 L0.4743,0.3931 L0.4678,0.3938 L0.4593,0.3928 L0.4489,0.3900 L0.4365,0.3854 L0.4257,0.3803 L0.4167,0.3748 L0.4093,0.3688 L0.4036,0.3623 L0.3988,0.3557 L0.3949,0.3488 L0.3919,0.3416 L0.3898,0.3343 L0.3875,0.3277 L0.3849,0.3219 L0.3821,0.3170 L0.3790,0.3128 L0.3706,0.3065 L0.3570,0.2980 L0.3381,0.2873 L0.3139,0.2744 L0.2941,0.2647 L0.2786,0.2581 L0.2675,0.2547 L0.2608,0.2545 L0.2545,0.2558 L0.2487,0.2585 L0.2434,0.2628 L0.2386,0.2685 L0.2354,0.2734 L0.2337,0.2773 L0.2337,0.2803 L0.2352,0.2823 L0.2382,0.2828 L0.2426,0.2817 L0.2484,0.2789 L0.2557,0.2745 L0.2676,0.2742 L0.2842,0.2779 L0.3054,0.2856 L0.3313,0.2973 L0.3517,0.3084 L0.3665,0.3189 L0.3759,0.3287 L0.3797,0.3379 L0.3845,0.3471 L0.3904,0.3562 L0.3973,0.3652 L0.4052,0.3742 L0.4130,0.3821 L0.4207,0.3889 L0.4283,0.3946 L0.4357,0.3992 L0.4426,0.4027 L0.4490,0.4053 L0.4549,0.4068 L0.4602,0.4072 L0.4658,0.4066 L0.4717,0.4049 L0.4778,0.4020 L0.4842,0.3981 L0.4898,0.3935 L0.4946,0.3882 L0.4987,0.3823 L0.5020,0.3756 L0.5048,0.3650 L0.5071,0.3507 L0.5090,0.3324 L0.5104,0.3103 L0.5125,0.2944 L0.5155,0.2846 L0.5192,0.2810 L0.5237,0.2835 L0.5300,0.2848 L0.5381,0.2848 L0.5480,0.2835 L0.5597,0.2810 L0.5688,0.2783 L0.5752,0.2756 L0.5789,0.2727 L0.5799,0.2697 L0.5786,0.2666 L0.5749,0.2634Z"/></clipPath><clipPath id="cp-prirucka" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.3432,0.2983 L0.2023,0.3435 L0.2127,0.7136 L0.3681,0.6851Z"/></clipPath><clipPath id="cp-karta155" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d="M0.9414,0.4890 L0.9405,0.4890 L0.9375,0.4902 L0.9322,0.4927 L0.9247,0.4965 L0.9151,0.5016 L0.9075,0.5058 L0.9021,0.5092 L0.8987,0.5116 L0.8975,0.5132 L0.8965,0.5149 L0.8956,0.5166 L0.8949,0.5184 L0.8944,0.5203 L0.8939,0.5346 L0.8934,0.5614 L0.8929,0.6007 L0.8924,0.6525 L0.8923,0.6918 L0.8927,0.7185 L0.8936,0.7326 L0.8950,0.7342 L0.8968,0.7352 L0.8990,0.7354 L0.9015,0.7349 L0.9044,0.7338 L0.9083,0.7318 L0.9132,0.7289 L0.9189,0.7251 L0.9257,0.7205 L0.9310,0.7166 L0.9350,0.7132 L0.9376,0.7105 L0.9388,0.7084 L0.9399,0.7062 L0.9408,0.7038 L0.9416,0.7012 L0.9423,0.6984 L0.9432,0.6844 L0.9442,0.6591 L0.9454,0.6225 L0.9468,0.5746 L0.9477,0.5381 L0.9482,0.5130 L0.9481,0.4993 L0.9476,0.4970 L0.9470,0.4950 L0.9462,0.4933 L0.9453,0.4918 L0.9442,0.4907 L0.9432,0.4898 L0.9423,0.4892Z"/></clipPath></defs></svg>
 </div>
 
 <script>
 (function(){
-  var DATA = {"zelene": {"n": "Zelené tlačítko", "d": "Zapnete jím přístroj a ten vám obratem poví, jak správně postupovat dál.", "box": [0.8191, 0.3711, 0.8501, 0.4217]}, "navod": {"n": "Návod k použití", "d": "Nákres, který jasně ukazuje, kam na těle správně nalepit elektrody.", "box": [0.6264, 0.3748, 0.7818, 0.6354]}, "oranzove": {"n": "Oranžové tlačítko", "d": "Výboj lze aktivovat pouze potom, co přístroj registruje vhodný srdeční rytmus.", "box": [0.8073, 0.6575, 0.8398, 0.7127]}, "ibtn": {"n": "Tlačítko i", "d": "Zopakuje poslední pokyn a poradí i s masáží srdce.", "box": [0.7535, 0.453, 0.7762, 0.4908]}, "reproduktor": {"n": "Reproduktor", "d": "Instrukce dostáváte česky, nahlas a klidně, aby je bylo slyšet i v hlučné prodejně.", "box": [0.8771, 0.698, 0.9523, 0.7947]}, "elektrody": {"n": "Elektrody", "d": "Až vám přístroj řekne, stačí je rozbalit a nalepit podle obrázku na každé elektrodě.", "box": [0.1575, 0.2366, 0.4137, 0.7744]}, "kabel": {"n": "Kabel", "d": "Elektrody jsou k přístroji připojené napořád, nic sestavovat nemusíte.", "box": [0.2314, 0.2505, 0.5822, 0.4088]}, "prirucka": {"n": "Uživatelská příručka", "d": "Veškeré informace o přístroji na jedné kartě. Základ je zapnout, nalepit, zmáčknout.", "box": [0.2023, 0.2983, 0.3688, 0.7145]}, "karta155": {"n": "Volejte 155", "d": "Jedna věc, na kterou po zjištění vědomí a dýchání nesmíte zapomenout. Dispečer vám navíc se vším pomůže.", "box": [0.8916, 0.489, 0.9496, 0.7376]}, "nuzky": {"n": "Nůžky a holítko", "d": "Elektrody musí na holou kůži. Nůžkami rozstřihnete tričko, holítkem kůži připravíte."}, "klic": {"n": "Dětský klíč", "d": "Zasunete ho do přístroje, pokud zachraňujete dítě do 8 let / 25 kg."}, "baterie": {"n": "Baterie", "d": "Vydrží v pohotovosti celé roky. Přístroj každý den sám testuje její kapacitu."}}, PORADI = ["zelene", "navod", "oranzove", "ibtn", "reproduktor", "elektrody", "kabel", "prirucka", "karta155"];
+  var DATA = {"zelene": {"n": "Zelené tlačítko", "d": "Zapnete jím přístroj a ten vám obratem poví, jak správně postupovat dál.", "box": [0.8191, 0.3711, 0.8501, 0.4217]}, "navod": {"n": "Návod k použití", "d": "Nákres, který jasně ukazuje, kam na těle správně nalepit elektrody.", "box": [0.6264, 0.3748, 0.7818, 0.6354]}, "oranzove": {"n": "Oranžové tlačítko", "d": "Výboj lze aktivovat pouze potom, co přístroj registruje vhodný srdeční rytmus.", "box": [0.8073, 0.6575, 0.8398, 0.7127]}, "ibtn": {"n": "Tlačítko i", "d": "Zopakuje poslední pokyn a poradí i s masáží srdce.", "box": [0.7535, 0.453, 0.7762, 0.4908]}, "reproduktor": {"n": "Reproduktor", "d": "Instrukce dostáváte česky, nahlas a klidně, aby je bylo slyšet i v hlučné prodejně.", "box": [0.8771, 0.698, 0.9523, 0.7947]}, "elektrody": {"n": "Elektrody", "d": "Až vám přístroj řekne, stačí je rozbalit a nalepit podle obrázku na každé elektrodě.", "box": [0.1595, 0.2256, 0.4116, 0.7716]}, "kabel": {"n": "Kabel", "d": "Elektrody jsou k přístroji připojené napořád, nic sestavovat nemusíte.", "box": [0.2314, 0.2505, 0.5822, 0.4088]}, "prirucka": {"n": "Uživatelská příručka", "d": "Veškeré informace o přístroji na jedné kartě. Základ je zapnout, nalepit, zmáčknout.", "box": [0.2023, 0.2983, 0.3688, 0.7145]}, "karta155": {"n": "Volejte 155", "d": "Jedna věc, na kterou po zjištění vědomí a dýchání nesmíte zapomenout. Dispečer vám navíc se vším pomůže.", "box": [0.8916, 0.489, 0.9496, 0.7376]}, "nuzky": {"n": "Nůžky a holítko", "d": "Elektrody musí na holou kůži. Nůžkami rozstřihnete tričko, holítkem kůži připravíte."}, "klic": {"n": "Dětský klíč", "d": "Zasunete ho do přístroje, pokud zachraňujete dítě do 8 let / 25 kg."}, "baterie": {"n": "Baterie", "d": "Vydrží v pohotovosti celé roky. Přístroj každý den sám testuje její kapacitu."}};
   var CFG = {
-    KROK: 560,        // jak dlouho svítí jedna část v klidovém průchodu
-    PAUZA: 1500,      // pauza mezi průchody
-    PRUCHODY: 2,      // kolik průchodů se přehraje, než prvek ztichne
-    ZAVOJ_KLID: .42,  // ztmavení scény v klidovém náhledu
-    ZAVOJ_HOVER: .78, // ztmavení scény při skutečném výběru
-    OBRYS: 0          // 0 = jen prosvětlení, 1 = i tenká kontura po obrysu
+    JAS_UTLUM: .46,   // jak ztmavne zbytek přístroje, když je něco vybrané
+    SYTOST_UTLUM: .38,// a jak se odsytí; 1 = beze změny
+    ZPOZDENI: 260,    // pauza před návratem do základu, ať to při přejetí neblikalo
+    UVODNI_TEXT: 'Devět částí najdete na fotce, tři další jsou v balíčku.'
   };
 
   var root = document.querySelector('[data-cc-aed]');
   if(!root) return;
   var $ = function(n){ return root.querySelector('[data-el='+n+']'); };
-  var stage=$('stage'), zavoj=$('zavoj'), cedule=$('cedule'),
+  var stage=$('stage'), znacky=$('znacky'), cedule=$('cedule'),
       jmeno=$('jmeno'), popis=$('popis'), pozn=$('pozn'), ibtn=$('ibtn');
-  var lit=[$('litA'),$('litB')], obr=[$('obrA'),$('obrB')];
+  var lit=[$('litA'),$('litB')];
   var rows={}, hits={};
-  root.querySelectorAll('.aed__row').forEach(function(b){ rows[b.dataset.k]=b; });
+  root.querySelectorAll('.aed__row, .aed__dlazd').forEach(function(b){ rows[b.dataset.k]=b; });
   root.querySelectorAll('.aed__hit').forEach(function(p){ hits[p.dataset.k]=p; });
-  root.style.setProperty('--obrys', CFG.OBRYS);
 
-  var slot=0, vybrano=null, klidBezi=true, timer=null, zacatek=0, pruchod=0;
+  var slot=0,        // která ze dvou prosvětlených vrstev je navrchu
+      zamceno=null,  // část potvrzená kliknutím; přežije sjetí myší
+      ukazane=null,  // co je zrovna vidět (může to být jen náhled při hoveru)
+      cas=null;      // odklad návratu do základu
 
   /* Klepnutí na mobilu vypadává, když se prst při ťuknutí pohne. */
   function bindTap(node, fn){
@@ -233,87 +277,76 @@ body{overflow:hidden}
     node.addEventListener('click', function(e){ e.preventDefault(); });
   }
 
-  /* Vykreslení jednoho stavu. sila 0..1 pro klidový náhled, 1 pro výběr. */
-  function vykresli(k, sila, hover){
+  /* ---- tři stavy: základ, náhled (hover), zámek (klik) ---- */
+
+  /* Základ: přístroj v plné síle, na klikatelných částech pulzuje záře. */
+  function zaklad(){
+    ukazane = null;
+    stage.style.setProperty('--jb', 1);
+    stage.style.setProperty('--js', 1);
+    lit[0].style.opacity = 0; lit[1].style.opacity = 0;
+    cedule.classList.remove('on');
+    znacky.classList.remove('off');
+    for(var id in rows) rows[id].classList.remove('on');
+    jmeno.textContent = ''; popis.textContent = CFG.UVODNI_TEXT;
+  }
+
+  /* Ukázat jednu část. Zbytek přístroje se jen ztlumí, nezčerná. */
+  function ukaz(k){
+    if(ukazane === k) return;
+    ukazane = k;
     var it = DATA[k], naFotce = !!(it && it.box), n = slot^1;
+    stage.style.setProperty('--jb', CFG.JAS_UTLUM);
+    stage.style.setProperty('--js', CFG.SYTOST_UTLUM);
+    znacky.classList.add('off');
+    for(var id in rows) rows[id].classList.toggle('on', id===k);
+    jmeno.textContent = it.n; popis.textContent = it.d;
     if(naFotce){
       lit[n].style.clipPath = 'url(#cp-'+k+')';
-      obr[n].setAttribute('d', hits[k].getAttribute('d'));
-      lit[n].style.opacity = sila;
-      obr[n].classList.add('on'); obr[n].style.opacity = (CFG.OBRYS*sila).toFixed(3);
-      lit[slot].style.opacity = 0; obr[slot].classList.remove('on');
+      lit[n].style.opacity = 1;
+      lit[slot].style.opacity = 0;
       cedule.textContent = it.n;
       cedule.style.left = (100*(it.box[0]+it.box[2])/2)+'%';
       cedule.style.top  = Math.max(6, 100*it.box[1]-1.2)+'%';
-      cedule.classList.toggle('on', sila>.25);
+      cedule.classList.add('on');
       slot = n;
     } else {
-      lit[0].style.opacity=0; lit[1].style.opacity=0;
-      obr[0].classList.remove('on'); obr[1].classList.remove('on');
+      /* Nůžky, dětský klíč a baterie na fotce nejsou: svítit se nemá co. */
+      lit[0].style.opacity = 0; lit[1].style.opacity = 0;
       cedule.classList.remove('on');
     }
-    zavoj.style.opacity = (hover?CFG.ZAVOJ_HOVER:CFG.ZAVOJ_KLID)*sila;
   }
 
-  function vypni(){
-    lit[0].style.opacity=0; lit[1].style.opacity=0;
-    obr[0].classList.remove('on'); obr[1].classList.remove('on');
-    cedule.classList.remove('on'); zavoj.style.opacity=0;
+  function zrus(){ if(cas){ clearTimeout(cas); cas=null; } }
+  /* Po sjetí myší se vrátí zámek, a když žádný není, celý rozsvícený přístroj. */
+  function zpet(){
+    zrus();
+    cas = setTimeout(function(){ zamceno ? ukaz(zamceno) : zaklad(); }, CFG.ZPOZDENI);
   }
-
-  function vyber(k){
-    stopKlid();
-    vybrano = k;
-    for(var id in rows) rows[id].classList.toggle('on', id===k);
-    jmeno.textContent = DATA[k].n; popis.textContent = DATA[k].d;
-    vykresli(k, 1, true);
-  }
-
-  /* ---- klidový náhled: prvek si sám projde části, než do něj někdo sáhne ---- */
-  var CYKLUS = PORADI.length*CFG.KROK + CFG.PAUZA;
-  function klidTick(t){
-    if(!klidBezi) return;
-    var c = t - zacatek;
-    if(c >= CYKLUS){ zacatek = t; c = 0; pruchod++; if(pruchod >= CFG.PRUCHODY){ stopKlid(); return; } }
-    var i = Math.floor(c/CFG.KROK);
-    if(i < PORADI.length){
-      var f = (c - i*CFG.KROK)/CFG.KROK;
-      vykresli(PORADI[i], Math.sin(f*Math.PI), false);
-    } else vypni();
-    timer = requestAnimationFrame(klidTick);
-  }
-  function startKlid(){
-    if(vybrano || klidBezi) return;
-    klidBezi = true; pruchod = 0; zacatek = performance.now();
-    timer = requestAnimationFrame(klidTick);
-  }
-  function stopKlid(){
-    klidBezi = false;
-    if(timer){ cancelAnimationFrame(timer); timer=null; }
-    if(!vybrano) vypni();
-  }
-
-  /* Znovu se rozběhne, až se prvek vrátí do záběru. Uvnitř iframu to funguje,
-     implicitním kořenem je viewport nejvyššího dokumentu. */
-  if(window.IntersectionObserver){
-    var vidno = true;
-    new IntersectionObserver(function(e){
-      var v = e[0].isIntersecting;
-      if(v && !vidno && !vybrano) startKlid();
-      if(!v) stopKlid();
-      vidno = v;
-    }, {threshold:.35}).observe(root);
+  function najed(k){ zrus(); ukaz(k); }
+  function klepni(k){
+    zrus();
+    if(zamceno === k){ zamceno = null; zaklad(); }   // druhý klik na totéž odemkne
+    else { zamceno = k; ukaz(k); }
   }
 
   /* ---- vazby ---- */
-  Object.keys(rows).forEach(function(k){
-    bindTap(rows[k], function(){ vyber(k); });
-    rows[k].addEventListener('mouseenter', function(){ if(vybrano!==k) vyber(k); });
+  function navaz(node, k){
+    bindTap(node, function(){ klepni(k); });
+    node.addEventListener('mouseenter', function(){ najed(k); });
+    node.addEventListener('mouseleave', zpet);
+    node.addEventListener('focus', function(){ najed(k); });
+    node.addEventListener('blur', zpet);
+  }
+  Object.keys(rows).forEach(function(k){ navaz(rows[k], k); });
+  Object.keys(hits).forEach(function(k){ navaz(hits[k], k); });
+
+  /* Klik mimo části odemkne a vrátí základ. Patičky se to netýká. */
+  root.addEventListener('pointerdown', function(e){
+    if(e.target.closest('.aed__hit,.aed__row,.aed__dlazd,.aed__foot')) return;
+    zrus(); zamceno = null; zaklad();
   });
-  Object.keys(hits).forEach(function(k){
-    bindTap(hits[k], function(){ vyber(k); });
-    hits[k].addEventListener('mouseenter', function(){ if(vybrano!==k) vyber(k); });
-  });
+  root.addEventListener('mouseleave', zpet);
 
   bindTap(ibtn, function(){
     var open = pozn.classList.toggle('on');
@@ -351,8 +384,7 @@ body{overflow:hidden}
   if(window.ResizeObserver) new ResizeObserver(refit).observe(root);
   fit();
 
-  zacatek = performance.now();
-  timer = requestAnimationFrame(klidTick);
+  zaklad();
 })();
 </script>
 </body>
