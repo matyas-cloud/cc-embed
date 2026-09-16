@@ -44,8 +44,10 @@ body{overflow:hidden}
 
 /* ---------- fotka ---------- */
 .aed__wrap{flex:1 1 auto;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center}
-.aed__stage{position:relative;width:100%;max-width:100%;max-height:100%;aspect-ratio:1448/1086;
-  touch-action:manipulation}
+/* Rozměr scény počítá JS (viz fotkaFit). CSS aspect-ratio tu nestačí:
+   `width:100%` plus `max-height:100%` se navzájem přebijí a box vyjde širší
+   než fotka. Fotka se pak ořízne, ale masky a značky ne, takže utečou. */
+.aed__stage{position:relative;touch-action:manipulation}
 .aed__ram{position:absolute;inset:0;overflow:hidden;
   -webkit-mask-image:linear-gradient(to right,transparent 0,#000 5%,#000 95%,transparent 100%),
                      linear-gradient(to bottom,transparent 0,#000 5%,#000 95%,transparent 100%);
@@ -56,19 +58,23 @@ body{overflow:hidden}
 /* Utlumené okolí se nedělá černým závojem, ale ztmavením a odsycením samotné
    fotky. Přístroj je pak pořád celý vidět, jen je ztišený. */
 .aed__foto{filter:brightness(var(--jb,1)) saturate(var(--js,1));transition:filter .3s ease}
+/* Žádný drop-shadow. Na tenkém tvaru, jako je kabel, obklopí záře obrys
+   z obou stran a čte se jako červená linka. Zvýraznění dělá jen jas. */
 .aed__lit{opacity:0;transition:opacity .3s ease;pointer-events:none;
-  filter:brightness(1.06) saturate(1.06) drop-shadow(0 0 13px rgba(255,150,120,.45))}
+  filter:brightness(1.12) saturate(1.08)}
 .aed__lit.on{opacity:1}
 /* Značky klikatelných částí. Rozmazání je to, co z obrysu udělá záři
    místo čáry; bez něj je vidět ostrá linka. */
-.aed__ov{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+/* Míchání i rozostření musí být na <svg>, ne na skupině uvnitř. Uvnitř SVG
+   se `screen` míchá s prázdným plátnem, ne s fotkou, a není vidět nic. */
+.aed__ov{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;
+  mix-blend-mode:screen;
+  filter:blur(2px) drop-shadow(0 0 7px rgba(255,186,158,.9))}
 .aed__znacky{opacity:1;transition:opacity .35s ease;
-  mix-blend-mode:screen;                       /* přisvětluje, nekreslí přes fotku */
-  filter:blur(3px) drop-shadow(0 0 7px rgba(255,176,148,.95));
   animation:aedPuls 2.9s ease-in-out infinite}
-.aed__znacka{fill:none;stroke:rgba(255,236,226,1);stroke-width:.0052}
+.aed__znacka{fill:none;stroke:rgba(255,236,226,1);stroke-width:.0040}
 .aed__znacky.off{opacity:0;animation:none}
-@keyframes aedPuls{0%,100%{opacity:.38}50%{opacity:1}}
+@keyframes aedPuls{0%,100%{opacity:.26}50%{opacity:.78}}
 .aed__terce{position:absolute;inset:0;width:100%;height:100%}
 .aed__hit{fill:transparent;stroke:transparent;stroke-width:.016;pointer-events:all;cursor:pointer;outline:none}
 .aed__hit:focus-visible{stroke:var(--ac);stroke-width:.004}
@@ -189,7 +195,7 @@ body{overflow:hidden}
 }
 @media (prefers-reduced-motion:reduce){
   .aed__lit,.aed__foto,.aed__cedule,.aed__znacky{transition:none}
-  .aed__znacky{animation:none;opacity:.6}
+  .aed__znacky{animation:none;opacity:.5}
 }
 </style>
 </head>
@@ -362,7 +368,19 @@ body{overflow:hidden}
   }, true);
 
   /* ---- vejít se do pevného rámu ---- */
-  var sek = root.querySelector('.aed');
+  var sek = root.querySelector('.aed'), wrap = root.querySelector('.aed__wrap');
+  var POMER = 1448/1086;
+
+  /* Největší box v poměru fotky, který se vejde do volného místa.
+     Počítá se v pixelech, protože CSS aspect-ratio se tu pere s max-height. */
+  function fotkaFit(){
+    var w = wrap.clientWidth, h = wrap.clientHeight;
+    if(!w || !h) return;
+    var sw = Math.min(w, h*POMER);
+    stage.style.width  = sw.toFixed(1)+'px';
+    stage.style.height = (sw/POMER).toFixed(1)+'px';
+  }
+
   function fit(){
     root.style.setProperty('--sc', 1);
     var volno = root.querySelector('[data-el=side]').clientHeight || 0;
@@ -376,12 +394,13 @@ body{overflow:hidden}
          document.documentElement.scrollHeight <= window.innerHeight+1) break;
       sc *= 0.94; root.style.setProperty('--sc', sc.toFixed(3));
     }
+    fotkaFit();
   }
   var t; function refit(){ clearTimeout(t); t=setTimeout(fit,90); }
   window.addEventListener('resize', refit);
   window.addEventListener('load', fit);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
-  if(window.ResizeObserver) new ResizeObserver(refit).observe(root);
+  if(window.ResizeObserver){ var ro=new ResizeObserver(refit); ro.observe(root); ro.observe(wrap); }
   fit();
 
   zaklad();
