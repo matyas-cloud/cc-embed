@@ -324,21 +324,6 @@ html,body{margin:0;padding:0;background:#05090F}
     var tD=h0.tD, hit=h0.hit, aft=h0.aft;
     var hdX=h0.dx, hdY=h0.dy;
 
-    /* stopa: kudy buňka plavala — slábnoucí, tenčící se, z minulosti průběhu */
-    function trail(from,to,pick,col,alive,S){
-      if(p<=from||p>to+.03||alive<=.02) return;
-      var pts=[];
-      for(var i=0;i<=10;i++){ var q=p-i*.0052; if(q<from) break; var hq=heroAt(q); pts.push(pick(hq)); }
-      if(pts.length<2) return;
-      ctx.save(); ctx.lineCap='round'; ctx.strokeStyle=col;
-      for(var j=1;j<pts.length;j++){
-        var f=1-j/pts.length;
-        ctx.globalAlpha=f*f*.6*alive; ctx.lineWidth=Math.max(.8,f*S*1.5);
-        ctx.beginPath(); ctx.moveTo(sx(pts[j-1][0]),sy(pts[j-1][1])); ctx.lineTo(sx(pts[j][0]),sy(pts[j][1])); ctx.stroke();
-      }
-      ctx.restore();
-    }
-
     /* once the story is told they are gone — absorbed, or drifted off */
     var aliveH=1-ez(seg(p,.535,.585)), aliveD=1-ez(seg(p,.680,.725));
 
@@ -390,9 +375,6 @@ html,body{margin:0;padding:0;background:#05090F}
       ctx.save(); ctx.globalAlpha=E.a*imp*.75*aliveD; ctx.strokeStyle=rgba(C.flag,.9); ctx.lineWidth=1.6;
       ctx.beginPath(); ctx.arc(HDx,HDy,HD.s*Z*3+(1-imp)*HD.s*Z*12,0,TAU); ctx.stroke(); ctx.restore();
     }
-
-    trail(.392,.505,function(q){return [q.hx,q.hy];},C.ok,aliveH,HH.s*Z);
-    trail(.545,.645,function(q){return [q.dx,q.dy];},C.flag,aliveD,HD.s*Z);
 
     /* selection glow instead of a reticle */
     var idnG=ez(seg(p,.245,.306));
