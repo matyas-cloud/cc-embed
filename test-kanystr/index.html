@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kolik z litru spolkne stát – CzechCrunch</title>
+<meta name="robots" content="noindex">
+<!-- Iframe je samostatný dokument a fonty z cc.cz nedědí. Načítají se
+     neblokujícím způsobem: rám je už na obrazovce, nemá na co čekat.
+     Cenou je, že se prvek poprvé změří v systémovém fallbacku — proto se
+     přeměřuje na document.fonts.ready (viz fit() níž). -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" media="print" onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;700&display=swap">
+<noscript><link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;700&display=swap"></noscript>
+<style>
+  /* Rám iframu na cc.cz má pevný poměr stran a výšku nelze měnit zevnitř.
+     Prvek se do rámu vejde sám a nikdy si neřekne o víc místa. */
+  html,body{margin:0;padding:0;background:transparent;height:100%;}
+  body{overflow-x:hidden;font-size:0;line-height:0;} /* bez prázdného řádku pod prvkem */
+  /* uvnitř iframu nechceme vnější odsazení karty – mezery řeší článek */
+  .cc-embed{margin:0!important;}
+</style>
+</head>
+<body>
+
+
+<style>
+.cc-embed{
+  /* --- barvy --- */
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  /* --- shape --- */
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  /* --- font --- */
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}      /* prvek do krajů (fotka, mapa) */
+.cc-embed--bare{background:none;border:0;padding:0;} /* bez rámečku */
+/* --- typo --- */
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{margin:12px 0 0;font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);
+  letter-spacing:.02em;text-transform:uppercase;}
+.cc-embed .cc-num{font-family:var(--cc-display);font-weight:700;
+  font-size:clamp(22px,4vw,32px);color:var(--cc-blue);font-variant-numeric:tabular-nums;}
+.cc-embed a{color:var(--cc-blue);}
+/* --- UI --- */
+.cc-embed .cc-btn{
+  display:inline-block;padding:10px 20px;
+  border:1px solid var(--cc-blue);border-radius:var(--cc-radius);
+  background:var(--cc-blue);color:#fff;text-decoration:none;
+  font:700 18px/26px var(--cc-display);cursor:pointer;
+  transition:background .18s,color .18s;}
+.cc-embed .cc-btn:hover{background:var(--cc-blue-dark);border-color:var(--cc-blue-dark);}
+.cc-embed .cc-btn--ghost{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-btn--ghost:hover{background:var(--cc-blue);color:#fff;}
+.cc-embed .cc-btn--sm{padding:7px 14px;font-size:15px;line-height:22px;}
+.cc-embed .cc-btn[aria-pressed="true"]{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-card{background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);padding:14px 16px;}
+.cc-embed .cc-badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  background:var(--cc-blue);color:#fff;font:700 12px/18px var(--cc-ui);}
+.cc-embed .cc-badge--red{background:var(--cc-red);}
+.cc-embed .cc-badge--soft{background:#eaf3fd;color:var(--cc-blue-dark);}
+.cc-embed input,.cc-embed select,.cc-embed textarea{
+  font:400 16px/24px var(--cc-ui);color:var(--cc-ink);
+  padding:9px 12px;background:#fff;border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);}
+.cc-embed input[type=range]{padding:0;border:0;background:none;accent-color:var(--cc-blue);width:100%;}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed table{width:100%;border-collapse:collapse;font:400 15px/1.4 var(--cc-ui);}
+.cc-embed th{text-align:left;font-weight:700;color:var(--cc-muted);
+  text-transform:uppercase;font-size:12px;letter-spacing:.05em;padding:8px 10px;}
+.cc-embed td{padding:10px;border-top:1px solid var(--cc-line);}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-grid{display:grid;gap:var(--cc-gap);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.cc-embed .cc-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--cc-gap);}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+<div class="cc-embed cc-kan" data-cc-kan>
+  <p class="cc-sr">Tipovačka: natankujte do kanystru tolik, kolik si podle vás z ceny litru paliva bere stát na daních. Potom kanystr ukáže skutečný podíl spotřební daně a DPH.</p>
+  <div class="cc-kan__head">
+    <p class="cc-kicker">Data check</p>
+    <h3 class="cc-title cc-kan__title">Kolik z litru spolkne stát?</h3>
+    <p class="cc-kan__lede">Natankujte do kanystru tolik, kolik si podle vás z ceny berou daně.</p>
+  </div>
+
+  <div class="cc-kan__body">
+    <div class="cc-kan__stage">
+      <svg class="cc-kan__svg" viewBox="-34 -58 290 336" role="slider" tabindex="0"
+           aria-label="Váš odhad podílu daní v procentech" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="0 %">
+        <defs>
+          <clipPath id="ccKanClip"><rect x="34" y="62" width="152" height="206" rx="11"/></clipPath>
+        </defs>
+        <!-- pistole a proud: ukazují, že tlačítko „tankuje" -->
+        <g class="cc-kan__gun"><g transform="translate(114.5 26) scale(.72) translate(-114.5 -26)">
+          <path d="M150 -44 h52 a8 8 0 0 1 8 8 v12 h-20 v22 a6 6 0 0 1 -6 6 h-8 a6 6 0 0 1 -6 -6 v-22 h-20 z" fill="#1f2428"/>
+          <path d="M150 -34 L128 -34 L112 -20 L118 -14 L132 -26 L150 -26 Z" fill="#1f2428"/>
+          <rect x="208" y="-40" width="26" height="8" rx="4" fill="#1f2428"/>
+          <rect class="cc-kan__stream" x="112" y="-14" width="5" height="40" rx="2.5" fill="#f5a524"/>
+        </g></g>
+        <!-- víčko a výlevka -->
+        <rect x="50" y="22" width="44" height="36" rx="4" fill="#cfd5da"/>
+        <rect x="94" y="22" width="12" height="36" fill="#1f2428"/>
+        <path d="M106 50 L106 36 L116 26 L128 34 L118 50 Z" fill="#cfd5da"/>
+        <!-- tělo -->
+        <rect x="30" y="58" width="160" height="214" rx="14" fill="#353c42"/>
+        <g clip-path="url(#ccKanClip)">
+          <path class="cc-kan__l1" fill="#f5a524"/>
+          <path class="cc-kan__l2" fill="#0668c2"/>
+        </g>
+        <path d="M54 86 L166 244 M166 86 L54 244" stroke="#fff" stroke-opacity=".13" stroke-width="1.4" fill="none"/>
+        <!-- stupnice -->
+        <g class="cc-kan__scale" font-family="Inter,sans-serif" font-size="11" fill="#84929b" text-anchor="end">
+          <g transform="translate(0 216.5)"><line x1="20" x2="28" stroke="#c5cdd3"/><text x="16" dy="4">25</text></g>
+          <g transform="translate(0 165)"><line x1="20" x2="28" stroke="#c5cdd3"/><text x="16" dy="4">50</text></g>
+          <g transform="translate(0 113.5)"><line x1="20" x2="28" stroke="#c5cdd3"/><text x="16" dy="4">75</text></g>
+          <text x="16" y="66" >100 %</text>
+        </g>
+        <!-- čára tipu (výsledek) -->
+        <g class="cc-kan__tip" opacity="0">
+          <line x1="22" x2="200" stroke="#222" stroke-width="2" stroke-dasharray="5 4"/>
+          <text x="204" dy="4" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#222">váš tip</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="cc-kan__side">
+      <!-- ============ fáze 1: tip ============ -->
+      <div class="cc-kan__phase" data-phase="guess">
+        <div class="cc-kan__seg" role="radiogroup" aria-label="Palivo">
+          <button type="button" role="radio" data-fuel="benzin" aria-checked="true">Benzin</button>
+          <button type="button" role="radio" data-fuel="nafta" aria-checked="false">Nafta</button>
+        </div>
+
+        <div class="cc-kan__display">
+          <div class="cc-kan__row"><span>Cena za litr</span><b class="cc-kan__price">44,22 Kč</b></div>
+          <div class="cc-kan__row cc-kan__row--main">
+            <span>Daně podle vás</span>
+            <div class="cc-kan__stepper">
+              <button type="button" class="cc-kan__step" data-step="-1" aria-label="O procento méně">−</button>
+              <output class="cc-kan__pct" aria-live="off">0<small>%</small></output>
+              <button type="button" class="cc-kan__step" data-step="1" aria-label="O procento více">+</button>
+            </div>
+          </div>
+          <div class="cc-kan__row cc-kan__row--sub"><span></span><span class="cc-kan__kc">0,00 Kč z litru</span></div>
+        </div>
+
+        <button type="button" class="cc-kan__pump" aria-describedby="ccKanHint">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h7a2 2 0 0 1 2 2v3h2.5L21 12v6a2 2 0 0 1-4 0v-4h-2v6H4V5a2 2 0 0 1 2-2zm0 2v5h7V5H6z" fill="currentColor"/></svg>
+          <span class="cc-kan__pumpTxt">Držte a tankujte</span>
+        </button>
+        <p class="cc-kan__hint" id="ccKanHint">Čím déle držíte, tím víc teče. Doladit jde tlačítky − a +.</p>
+
+        <button type="button" class="cc-btn cc-kan__go" disabled>Ukázat, kolik to je</button>
+      </div>
+
+      <!-- ============ fáze 2: výsledek ============ -->
+      <div class="cc-kan__phase" data-phase="result" hidden>
+        <h4 class="cc-kan__verdict" aria-live="polite"></h4>
+        <div class="cc-kan__cmp">
+          <div><span>Váš tip</span><b class="cc-kan__cG">0 %</b></div>
+          <div class="cc-kan__cmpReal"><span>Skutečnost</span><b class="cc-kan__cR">0 %</b><em class="cc-kan__diff"></em></div>
+        </div>
+        <ul class="cc-kan__legend">
+          <li><i class="s1"></i><span>Spotřební daň</span><b class="cc-kan__v1"></b></li>
+          <li><i class="s2"></i><span>DPH 21 %, i ze spotřební daně</span><b class="cc-kan__v2"></b></li>
+          <li><i class="s3"></i><span>Ropa, výroba, doprava, marže</span><b class="cc-kan__v3"></b></li>
+        </ul>
+        <p class="cc-kan__tank"></p>
+        <div class="cc-kan__acts">
+          <button type="button" class="cc-btn cc-kan__other"></button>
+          <button type="button" class="cc-kan__again">Tipovat znovu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="cc-note cc-kan__foot">Průměrné ceny v ČR, začátek září 2026 (CCS). Sazby spotřební daně podle § 45 zák. č. 353/2003 Sb.</p>
+</div>
+
+<style>
+.cc-kan{--fuel:#f5a524;--tax1:#0668c2;--tax2:#6fb3f5;--can:#353c42;
+  box-sizing:border-box;display:flex;flex-direction:column;min-height:100vh;position:relative;overflow:hidden;
+  padding:calc(var(--cc-pad)*var(--sc,1));}
+.cc-kan .cc-kicker{font-size:calc(12px*var(--sc,1));margin-bottom:calc(4px*var(--sc,1));}
+.cc-kan__title{font-size:calc(clamp(21px,3.4vw,27px)*var(--sc,1))!important;margin:0!important;}
+.cc-kan__lede{margin:calc(4px*var(--sc,1)) 0 0!important;font:400 calc(16px*var(--sc,1))/1.45 var(--cc-serif);color:var(--cc-ink-soft);}
+.cc-kan__body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:calc(10px*var(--sc,1));margin-top:calc(8px*var(--sc,1));}
+.cc-kan__stage{flex:1 1 0;min-height:70px;position:relative;}
+.cc-kan__svg{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y;overflow:visible;}
+.cc-kan:not(.is-result) .cc-kan__svg{cursor:ns-resize;}
+.cc-kan__svg:focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;border-radius:8px;}
+.cc-kan__gun{transition:opacity .3s,transform .3s;transform-box:view-box;}
+.cc-kan.is-result .cc-kan__gun{opacity:0;transform:translateY(-12px);}
+.cc-kan__stream{transform-origin:50% 0;transform:scaleY(0);transition:transform .12s ease-in;}
+.cc-kan.is-pouring .cc-kan__stream{transform:scaleY(1);transition-duration:.18s;}
+.cc-kan.is-result .cc-kan__scale{opacity:.5;}
+.cc-kan.is-result:not(.is-wide) .cc-kan__scale{display:none;}
+.cc-kan__side{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;font-family:var(--cc-ui);}
+.cc-kan__phase{display:flex;flex-direction:column;align-items:stretch;gap:calc(10px*var(--sc,1));width:100%;max-width:360px;margin:0 auto;}
+.cc-kan__phase[hidden]{display:none;}
+
+/* přepínač paliva */
+.cc-kan__seg{display:flex;padding:3px;background:#eceff2;border-radius:999px;}
+.cc-kan__seg button{flex:1;border:0;background:none;border-radius:999px;cursor:pointer;
+  padding:calc(5px*var(--sc,1)) 0;font:600 calc(14px*var(--sc,1))/1.3 var(--cc-ui);color:var(--cc-muted);transition:background .2s,color .2s;}
+.cc-kan__seg button[aria-checked="true"]{background:#fff;color:var(--cc-ink);box-shadow:0 0 0 1px var(--cc-line);}
+
+/* displej jako na stojanu */
+.cc-kan__display{background:#fff;border:1px solid var(--cc-line);border-radius:var(--cc-radius-sm);padding:calc(4px*var(--sc,1)) calc(14px*var(--sc,1));}
+.cc-kan__row{display:flex;justify-content:space-between;align-items:center;gap:10px;
+  font-size:calc(14px*var(--sc,1));color:var(--cc-muted);padding:calc(6px*var(--sc,1)) 0;}
+.cc-kan__row b{color:var(--cc-ink);font-weight:600;font-variant-numeric:tabular-nums;}
+.cc-kan__row + .cc-kan__row--main{border-top:1px solid var(--cc-line);}
+.cc-kan__row--main{padding-bottom:0;}
+.cc-kan__row--main > span{color:var(--cc-ink);font-weight:600;}
+.cc-kan__row--sub{padding-top:0;font-size:calc(13px*var(--sc,1));}
+.cc-kan__stepper{display:flex;align-items:center;gap:calc(6px*var(--sc,1));}
+.cc-kan__step{width:calc(30px*var(--sc,1));height:calc(30px*var(--sc,1));border-radius:50%;border:1px solid var(--cc-line);
+  background:#fff;color:var(--cc-ink);font:500 calc(18px*var(--sc,1))/1 var(--cc-ui);cursor:pointer;padding:0;transition:border-color .15s,color .15s;}
+.cc-kan__step:hover{border-color:var(--cc-blue);color:var(--cc-blue);}
+.cc-kan__pct{min-width:2.3em;text-align:right;font:700 calc(clamp(34px,5.4vw,44px)*var(--sc,1))/1.05 var(--cc-ui);color:#000;
+  font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;letter-spacing:-.02em;}
+.cc-kan__pct small{font-size:.42em;font-weight:600;color:var(--cc-muted);margin-left:2px;letter-spacing:0;}
+.cc-kan__kc{font-variant-numeric:tabular-nums;}
+
+/* hlavní ovládání: pistole */
+.cc-kan__pump{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;cursor:pointer;
+  padding:calc(11px*var(--sc,1)) 16px;border:0;border-radius:999px;background:var(--can);color:#fff;
+  font:700 calc(16px*var(--sc,1))/1.2 var(--cc-display);position:relative;overflow:hidden;
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:none;transition:transform .1s;}
+.cc-kan__pump svg{width:calc(20px*var(--sc,1));height:calc(20px*var(--sc,1));color:var(--fuel);position:relative;}
+.cc-kan__pump span{position:relative;}
+.cc-kan__pump::before{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--fuel);transform:scaleX(var(--fill,0));transform-origin:left;transition:transform .1s;}
+.cc-kan.is-pouring .cc-kan__pump{transform:scale(.98);}
+.cc-kan__pump:disabled{opacity:.45;cursor:default;}
+.cc-kan__hint{margin:calc(-4px*var(--sc,1)) 0 0!important;text-align:center;font:400 calc(12.5px*var(--sc,1))/1.4 var(--cc-ui);color:var(--cc-muted);}
+.cc-kan__go{width:100%;font-size:calc(16px*var(--sc,1))!important;padding:calc(8px*var(--sc,1)) 16px!important;line-height:1.3!important;border-radius:999px!important;}
+.cc-kan__go[disabled]{background:#fff;color:var(--cc-muted);border-color:var(--cc-line);cursor:default;}
+
+/* výsledek */
+.cc-kan__verdict{margin:0!important;font-size:calc(21px*var(--sc,1))!important;line-height:1.2!important;}
+.cc-kan__cmp{display:flex;gap:calc(10px*var(--sc,1));}
+.cc-kan__cmp div{flex:1;border:1px solid var(--cc-line);border-radius:var(--cc-radius-sm);background:#fff;padding:calc(6px*var(--sc,1)) 12px;}
+.cc-kan__cmp span{display:block;font-size:calc(12.5px*var(--sc,1));color:var(--cc-muted);}
+.cc-kan__cmp b{display:block;font:700 calc(26px*var(--sc,1))/1.15 var(--cc-ui);font-variant-numeric:tabular-nums;color:var(--cc-ink);}
+.cc-kan__cmp .cc-kan__cmpReal{border-color:var(--tax1);}
+.cc-kan__cmp .cc-kan__cmpReal b{color:var(--tax1);}
+.cc-kan__diff{display:block;font:500 calc(12.5px*var(--sc,1))/1.3 var(--cc-ui);color:var(--cc-ink-soft);font-style:normal;min-height:1.3em;}
+.cc-kan__legend{list-style:none;margin:0;padding:0;font-size:calc(14px*var(--sc,1));}
+.cc-kan__legend li{display:flex;align-items:center;gap:9px;padding:calc(5px*var(--sc,1)) 0;border-bottom:1px solid var(--cc-line);}
+.cc-kan__legend i{flex:0 0 11px;height:11px;border-radius:3px;}
+.cc-kan__legend .s1{background:var(--tax1);} .cc-kan__legend .s2{background:var(--tax2);}
+.cc-kan__legend .s3{background:var(--can);}
+.cc-kan__legend span{flex:1 1 auto;color:var(--cc-ink-soft);}
+.cc-kan__legend b{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.cc-kan__tank{margin:0!important;font:400 calc(14px*var(--sc,1))/1.45 var(--cc-ui);color:var(--cc-ink-soft);}
+.cc-kan__tank b{color:var(--cc-ink);}
+.cc-kan__acts{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.cc-kan__other{font-size:calc(15px*var(--sc,1))!important;padding:calc(6px*var(--sc,1)) 18px!important;line-height:1.3!important;border-radius:999px!important;}
+.cc-kan__again{border:0;background:none;padding:4px 0;cursor:pointer;color:var(--cc-blue);
+  font:600 calc(14px*var(--sc,1))/1.3 var(--cc-ui);text-decoration:underline;text-underline-offset:3px;}
+.cc-kan__foot{margin:calc(8px*var(--sc,1)) 0 0!important;font-size:calc(12px*var(--sc,1))!important;}
+
+/* široký rám */
+.cc-kan.is-wide .cc-kan__body{flex-direction:row;align-items:stretch;gap:calc(20px*var(--sc,1));}
+.cc-kan.is-wide .cc-kan__stage{flex:1 1 44%;}
+.cc-kan.is-wide .cc-kan__side{flex:1 1 56%;}
+.cc-kan.is-wide .cc-kan__phase{margin:0;}
+/* úzký a nízký rám */
+.cc-kan.is-narrow .cc-kan__hint,.cc-kan.is-narrow .cc-kan__lede{display:none;}
+.cc-kan.is-short.is-result .cc-kan__tank{display:none;}
+/* výsledek v úzkém rámu: kanystr vedle verdiktu, ať není drobný */
+.cc-kan.is-result:not(.is-wide) .cc-kan__body{display:grid;grid-template-columns:46% 1fr;
+  grid-template-rows:auto auto 1fr auto auto auto;column-gap:14px;row-gap:calc(8px*var(--sc,1));}
+.cc-kan.is-result:not(.is-wide) .cc-kan__side,.cc-kan.is-result:not(.is-wide) [data-phase="result"]{display:contents;}
+.cc-kan.is-result:not(.is-wide) .cc-kan__stage{grid-column:1;grid-row:1/4;min-height:150px;}
+.cc-kan.is-result:not(.is-wide) .cc-kan__verdict{grid-column:2;grid-row:1;align-self:end;font-size:calc(18px*var(--sc,1))!important;}
+.cc-kan.is-result:not(.is-wide) .cc-kan__cmp{grid-column:2;grid-row:2;flex-direction:column;}
+.cc-kan.is-result:not(.is-wide) .cc-kan__legend{grid-column:1/-1;grid-row:4;}
+.cc-kan.is-result:not(.is-wide) .cc-kan__tank{grid-column:1/-1;grid-row:5;}
+.cc-kan.is-result:not(.is-wide) .cc-kan__acts{grid-column:1/-1;grid-row:6;}
+.cc-kan.is-narrow.is-result .cc-kan__legend span{font-size:.93em;}
+</style>
+
+<script>
+(function(){
+  var root=document.querySelector('[data-cc-kan]');
+  if(!root||root.dataset.ccInit)return; root.dataset.ccInit='1';
+
+  /* ===== DATA – před nasazením aktualizovat ceny ===== */
+  var DPH=0.21, TANK=50, TOL=3;
+  var FUEL={
+    benzin:{name:'benzin', gen:'benzinu', price:44.22, excise:12.84},
+    nafta: {name:'nafta',  gen:'nafty',   price:47.79, excise:9.95}
+  };
+  /* =================================================== */
+
+  var $=function(s){return root.querySelector(s);};
+  var svg=$('.cc-kan__svg'), l1=$('.cc-kan__l1'), l2=$('.cc-kan__l2'), tipG=$('.cc-kan__tip');
+  var pctEl=$('.cc-kan__pct'), kcEl=$('.cc-kan__kc'), pump=$('.cc-kan__pump'), go=$('.cc-kan__go');
+  var pG=root.querySelector('[data-phase="guess"]'), pR=root.querySelector('[data-phase="result"]');
+  var TOP=62, BOT=268, H=BOT-TOP, X0=34, X1=186;
+  var fuel='benzin', guess=0, shown=0, amp=0, ph=0, raf=0, split=null;
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  function dec(v,n){return v.toFixed(n).replace('.',',');}
+  function kc(v){return dec(v,2)+'\u00a0Kč';}
+  function thous(v){return Math.round(v).toLocaleString('cs-CZ').replace(/\s/g,'\u00a0');}
+  function calc(k){
+    var f=FUEL[k||fuel], vat=f.price*DPH/(1+DPH), tax=f.excise+vat;
+    return {f:f, vat:vat, tax:tax, share:tax/f.price*100, exc:f.excise/f.price*100};
+  }
+  function yOf(p){return BOT-H*Math.max(0,Math.min(100,p))/100;}
+  function wave(y,a,p){
+    var d='M'+X0+' '+BOT+'V'+y.toFixed(1);
+    for(var x=X0;x<=X1;x+=6)d+='L'+x+' '+(y+Math.sin(x*.07+p)*a+Math.sin(x*.13-p*1.3)*a*.4).toFixed(1);
+    return d+'L'+X1+' '+BOT+'Z';
+  }
+  function draw(){
+    if(split){
+      var k=shown/split.share;
+      l1.setAttribute('d',wave(yOf(shown),amp,ph)); l1.setAttribute('fill','var(--tax2)');
+      l2.setAttribute('d',wave(yOf(split.exc*k),amp*.5,ph+1));
+    }else{
+      l1.setAttribute('d',wave(yOf(shown),amp,ph)); l1.setAttribute('fill','var(--fuel)');
+      l2.setAttribute('d','');
+    }
+  }
+  var pouring=false;
+  function tick(){
+    var target=split?split.share:guess, diff=target-shown;
+    shown+=diff*(split?.055:.22);
+    if(Math.abs(diff)>.05)amp=Math.min(5.5,amp+Math.abs(diff)*.3);
+    if(pouring)amp=Math.max(amp,3);
+    amp*=.95; ph+=.16;
+    if(reduce){shown=target;amp=0;}
+    draw();
+    if(!pouring&&Math.abs(target-shown)<.03&&amp<.12){shown=target;amp=0;draw();raf=0;return;}
+    raf=requestAnimationFrame(tick);
+  }
+  function kick(){if(!raf)raf=requestAnimationFrame(tick);}
+
+  function setGuess(v){
+    guess=Math.max(0,Math.min(100,Math.round(v)));
+    pctEl.firstChild.nodeValue=guess;
+    var c=calc();
+    kcEl.textContent=kc(c.f.price*guess/100)+' z litru';
+    svg.setAttribute('aria-valuenow',guess);
+    svg.setAttribute('aria-valuetext',guess+' %');
+    pump.style.setProperty('--fill',guess/100);
+    go.disabled=guess===0;
+    kick();
+  }
+  function setFuel(k){
+    fuel=k;
+    root.querySelectorAll('[data-fuel]').forEach(function(b){b.setAttribute('aria-checked',b.dataset.fuel===k?'true':'false');});
+    $('.cc-kan__price').textContent=kc(FUEL[k].price);
+    setGuess(guess);
+  }
+
+  /* --- tankování: drží se, rychlost roste --- */
+  var timer=0, t0=0, acc=0;
+  function startPour(e){
+    if(split||timer||guess>=100)return;
+    if(e){e.preventDefault();try{pump.setPointerCapture(e.pointerId);}catch(_){}}
+    t0=performance.now(); pouring=true; root.classList.add('is-pouring');
+    $('.cc-kan__pumpTxt').textContent='Tankuji…';
+    timer=setInterval(function(){
+      var t=performance.now()-t0;
+      acc+= t<700?.35 : t<1800?.8 : 1.5;
+      if(acc>=1){var n=Math.floor(acc);acc-=n;setGuess(guess+n);}
+      if(guess>=100)stopPour();
+    },50);
+    kick();
+  }
+  function stopPour(){
+    if(!timer)return;
+    clearInterval(timer);timer=0;acc=0;pouring=false;
+    root.classList.remove('is-pouring');
+    $('.cc-kan__pumpTxt').textContent=guess?'Držte a dotankujte':'Držte a tankujte';
+    kick();
+  }
+  pump.addEventListener('pointerdown',startPour);
+  ['pointerup','pointercancel','lostpointercapture'].forEach(function(n){pump.addEventListener(n,stopPour);});
+  pump.addEventListener('contextmenu',function(e){e.preventDefault();});
+  pump.addEventListener('keydown',function(e){if((e.key===' '||e.key==='Enter')&&!e.repeat){e.preventDefault();startPour();}});
+  pump.addEventListener('keyup',function(e){if(e.key===' '||e.key==='Enter')stopPour();});
+  window.addEventListener('blur',stopPour);
+
+  root.querySelectorAll('.cc-kan__step').forEach(function(b){
+    b.addEventListener('click',function(){if(!split)setGuess(guess+ +b.dataset.step);});
+  });
+  root.querySelectorAll('[data-fuel]').forEach(function(b){
+    b.addEventListener('click',function(){setFuel(b.dataset.fuel);});
+    b.addEventListener('keydown',function(e){
+      if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();var k=fuel==='benzin'?'nafta':'benzin';setFuel(k);root.querySelector('[data-fuel="'+k+'"]').focus();}
+    });
+  });
+
+  /* --- tah myší po kanystru, šipky --- */
+  var drag=false;
+  function fromPointer(e){
+    var r=svg.getBoundingClientRect(), m=svg.getScreenCTM();
+    var y=(e.clientY-m.f)/m.d;
+    setGuess((BOT-y)/H*100);
+  }
+  svg.addEventListener('pointerdown',function(e){if(split||e.pointerType==='touch')return;drag=true;fromPointer(e);svg.setPointerCapture(e.pointerId);});
+  svg.addEventListener('pointermove',function(e){if(drag)fromPointer(e);});
+  svg.addEventListener('pointerup',function(){drag=false;});
+  svg.addEventListener('keydown',function(e){
+    if(split)return;
+    var s={ArrowUp:1,ArrowRight:1,ArrowDown:-1,ArrowLeft:-1,PageUp:10,PageDown:-10}[e.key];
+    if(s){e.preventDefault();setGuess(guess+s);}
+  });
+
+  /* --- počítadlo ve výsledku --- */
+  function countUp(el,to,ms){
+    if(reduce){el.textContent=dec(to,1)+'\u00a0%';return;}
+    var s=performance.now();
+    (function f(t){var p=Math.min(1,(t-s)/ms);p=1-Math.pow(1-p,3);
+      el.textContent=dec(to*p,1)+'\u00a0%'; if(p<1)requestAnimationFrame(f);})(s);
+  }
+
+  go.addEventListener('click',function(){
+    if(!guess)return;
+    stopPour();
+    var c=calc(), d=guess-c.share, v=$('.cc-kan__verdict');
+    split={share:c.share, exc:c.exc};
+    root.classList.add('is-result');
+    tipG.setAttribute('transform','translate(0 '+yOf(guess).toFixed(1)+')');
+    tipG.setAttribute('opacity','1');
+    var n=Math.round(Math.abs(d)), body=n===1?'bod':(n>=2&&n<=4?'body':'bodů');
+    v.textContent = Math.abs(d)<=TOL ? 'Trefa! Víte, jak to u pumpy chodí.'
+                  : d<0 ? 'Stát si bere víc, než čekáte.'
+                  : 'Tak zlé to není.';
+    $('.cc-kan__diff').textContent = n===0 ? 'přesně na bod' : 'o '+n+' '+body+(d<0?' víc':' míň')+' než váš tip';
+    $('.cc-kan__cG').textContent=guess+'\u00a0%';
+    countUp($('.cc-kan__cR'),c.share,1400);
+    $('.cc-kan__v1').textContent=kc(c.f.excise);
+    $('.cc-kan__v2').textContent=kc(c.vat);
+    $('.cc-kan__v3').textContent=kc(c.f.price-c.tax);
+    $('.cc-kan__tank').innerHTML='Z plné '+TANK+'litrové nádrže za '+thous(c.f.price*TANK)+'\u00a0Kč jde státu <b>'+thous(c.tax*TANK)+'\u00a0Kč</b>.';
+    var other=fuel==='benzin'?'nafta':'benzin';
+    $('.cc-kan__other').textContent=other==='nafta'?'A co nafta?':'A co benzin?';
+    pG.hidden=true; pR.hidden=false;
+    shown=0; amp=0; kick(); fit();
+    svg.setAttribute('aria-valuetext','Skutečnost '+dec(c.share,1)+' %');
+    $('.cc-kan__other').focus({preventScroll:true});
+  });
+
+  function reset(k){
+    split=null; root.classList.remove('is-result');
+    tipG.setAttribute('opacity','0');
+    pR.hidden=true; pG.hidden=false; shown=0;
+    $('.cc-kan__pumpTxt').textContent='Držte a tankujte';
+    guess=0; setFuel(k||fuel); fit();
+    pump.focus({preventScroll:true});
+  }
+  $('.cc-kan__again').addEventListener('click',function(){reset();});
+  $('.cc-kan__other').addEventListener('click',function(){reset(fuel==='benzin'?'nafta':'benzin');});
+
+  /* ===== vejít se do rámu ===== */
+  function fit(){
+    var w=root.clientWidth, st=$('.cc-kan__stage'), sc=1;
+    /* v úzkém výsledku pistole nesvítí, ořízneme ji z výřezu a kanystr naroste */
+    svg.setAttribute('viewBox', split&&w<560 ? '22 18 228 258' : '-34 -58 290 336');
+    root.classList.toggle('is-wide',w>=560);
+    root.classList.toggle('is-narrow',w<420);
+    root.classList.toggle('is-short',w<560&&window.innerHeight<600);
+    root.style.setProperty('--sc',1);
+    for(var k=0;k<12;k++){
+      if(document.documentElement.scrollHeight<=window.innerHeight+1 && st.clientHeight>=(w>=560?220:100))break;
+      sc*=.94; root.style.setProperty('--sc',sc.toFixed(3));
+    }
+  }
+  var rt; window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(fit,60);});
+  window.addEventListener('load',fit);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+
+  setFuel('benzin'); draw(); fit();
+})();
+</script>
+`), NE na prvním výskytu "<style>". Komentáře v hlavičkách
+     šablon to slovo obsahují a řez na něm spolkne celý první blok stylů do
+     textového uzlu — prvek se pak vykreslí úplně bez stylů.
+     ============================================================ -->
+
+</body>
+</html>
