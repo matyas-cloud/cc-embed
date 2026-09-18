@@ -10,28 +10,34 @@
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:#05090F}
-.m46-driven,.m46-driven body,.m46-driven .m46,.m46-driven .m46__track{height:100%}
-.m46-driven,.m46-driven body{overflow:hidden}
-.m46-driven .m46__pin{position:static;height:100%}
+/* v iframu: rámeček má pevnou výšku, vše ho vyplní a nic se uvnitř nescrolluje */
+.m46-embed,.m46-embed body,.m46-embed .m46,.m46-embed .m46__track{height:100%}
+.m46-embed,.m46-embed body{overflow:hidden}
+.m46-embed .m46__pin{position:static;height:100%}
 
 .m46{--ink:#05090F;--ok:#3DDC84;--flag:#FF2E88;--tx:#E9EFF8;--dim:#6F819B;
   font-family:'Inter',system-ui,-apple-system,sans-serif;color:var(--tx);background:var(--ink)}
-.m46__track{height:900vh;position:relative}
+.m46__track{height:800vh;position:relative}
 .m46__pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;justify-content:center}
-.m46__stage{position:relative;width:100%;max-width:1140px;height:100%;overflow:hidden;
+.m46__stage{--gx:clamp(56px,7vw,100px);
+  position:relative;width:100%;max-width:1140px;height:100%;overflow:hidden;
   background:radial-gradient(130% 95% at 52% 38%,#0D1A2C 0%,#070D17 55%,#04080E 100%)}
 .m46__cv{position:absolute;inset:0;width:100%;height:100%;display:block}
 
-.m46__caps{position:absolute;left:clamp(56px,7vw,100px);bottom:clamp(48px,8vh,86px);
+.m46__caps{position:absolute;left:var(--gx);bottom:clamp(48px,8vh,86px);
   width:min(620px,70%);height:0;pointer-events:none}
+/* bez ručních zlomů: prohlížeč vyrovná délku řádků, aby nezůstalo osamocené slovo */
 .m46__cap{position:absolute;left:0;bottom:0;margin:0;opacity:0;transform:translateY(10px);
+  text-wrap:balance;
   transition:opacity .4s ease,transform .4s ease;
   font-family:'Poppins',system-ui,sans-serif;font-weight:300;
   font-size:clamp(18px,2.3vw,32px);line-height:1.42;letter-spacing:-.005em}
+.m46__cap.is-on{opacity:1;transform:none}
+.m46__cap b{font-weight:500;color:var(--ok)}
+.m46__cap em{font-style:normal;font-weight:500;color:var(--flag)}
 
 /* ukazatel fází — plnicí osa při levém okraji */
-.m46__axis{position:absolute;left:clamp(20px,3vw,44px);top:14%;bottom:24%;width:12px;
-  pointer-events:none}
+.m46__axis{position:absolute;left:clamp(20px,3vw,44px);top:14%;bottom:24%;width:12px;pointer-events:none}
 .m46__axis i{position:absolute;left:50%;transform:translateX(-50%);width:2px;border-radius:2px}
 .m46__axis .tr{top:0;bottom:0;background:rgba(233,239,248,.16)}
 .m46__axis .fi{top:0;height:0;background:linear-gradient(180deg,rgba(61,220,132,.32),var(--ok))}
@@ -43,42 +49,39 @@ html,body{margin:0;padding:0;background:#05090F}
 .m46__axis b.is-next{width:8px;height:8px;margin:-4px 0 0 -4px;background:transparent;border:1.5px solid rgba(61,220,132,.5)}
 .m46__axis b.is-now{width:10px;height:10px;margin:-5px 0 0 -5px;background:var(--ink);
   border:2px solid var(--ok);box-shadow:0 0 13px rgba(61,220,132,.6)}
-.m46__cap.is-on{opacity:1;transform:none}
-.m46__cap b{font-weight:500;color:var(--ok)}
-.m46__cap em{font-style:normal;font-weight:500;color:var(--flag)}
 
 .m46__note{position:absolute;right:clamp(20px,4vw,60px);bottom:clamp(20px,3.5vh,34px);margin:0;
   font-size:11px;letter-spacing:.05em;color:var(--dim);opacity:.65}
-.m46__sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.m46__nav{position:absolute;right:clamp(20px,4vw,60px);top:clamp(20px,4vh,40px);display:none;gap:8px}
-.m46.has-nav .m46__nav{display:flex}
-.m46__nav button{width:36px;height:36px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.04);
-  color:var(--tx);border-radius:50%;cursor:pointer;font-size:15px;line-height:1}
-@media (max-width:619px){.m46__caps{width:86%}}
+.m46__sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+@media (max-width:619px){
+  .m46__stage{--gx:20px}
+  .m46__caps{width:calc(100% - 40px)}
+  .m46__axis{display:none}
+}
 @media (prefers-reduced-motion: reduce){.m46__cap{transition:none}}
 </style>
 </head>
 <body>
 
-<div class="m46" data-cc-scrolly data-cc-snap="1">
+<div class="m46" data-cc-scrolly>
   <div class="m46__track"><div class="m46__pin"><div class="m46__stage">
-    <canvas class="m46__cv"></canvas>
+    <canvas class="m46__cv" role="img" aria-label="Animace: mezi miliony spermií protilátka Molecule 46 označí poškozené buňky s předčasně odhaleným proteinem CD46 a magnet je odtáhne, zbudou jen zdravé."></canvas>
 
     <div class="m46__axis" aria-hidden="true"><i class="tr"></i><i class="fi"></i></div>
 
-    <div class="m46__caps">
-      <p class="m46__cap">Ve vzorku plavou desítky milionů buněk.<br>Pod mikroskopem vypadají všechny stejně.</p>
-      <p class="m46__cap">Embryolog dnes vybírá tu nejhezčí.<br>Tvar ale o zdraví buňky neříká nic.</p>
-      <p class="m46__cap">Zdravá drží protein <b>CD46</b> v hlavičce.<br>Poškozená ho má <em>odhalený předčasně</em>.</p>
-      <p class="m46__cap">Zdravá ho vytáhne teprve u vajíčka.<br>Je to <b>klíč</b>, kterým si otevře cestu.</p>
-      <p class="m46__cap">Poškozená ho vyplýtvala dávno předtím.<br>U vajíčka už <em>nemá čím otevřít</em>.</p>
-      <p class="m46__cap">Patentovaná protilátka s magnetickou částicí<br><b>Molecule 46</b> ulpí jen na <em>odhaleném CD46</em>.</p>
-      <p class="m46__cap">Magnet označené buňky odtáhne.<br>Bez odstřeďování, bez mechanického stresu.</p>
-      <p class="m46__cap">Zbude výběr, který by udělalo samo vajíčko.<br>K oplození pak stačí <b>jediná buňka</b>.</p>
+    <div class="m46__caps" aria-hidden="true">
+      <p class="m46__cap">Ve vzorku plavou desítky milionů buněk. Pod mikroskopem vypadají všechny stejně.</p>
+      <p class="m46__cap">Embryolog dnes vybírá tu nejhezčí. Tvar ale o&nbsp;zdraví buňky neříká nic.</p>
+      <p class="m46__cap">Zdravá drží protein <b>CD46</b> v&nbsp;hlavičce. Poškozená ho má <em>odhalený předčasně</em>.</p>
+      <p class="m46__cap">Zdravá ho vytáhne teprve u&nbsp;vajíčka. Je to <b>klíč</b>, kterým si otevře cestu.</p>
+      <p class="m46__cap">Poškozená ho vyplýtvala dávno předtím. U&nbsp;vajíčka už <em>nemá čím otevřít</em>.</p>
+      <p class="m46__cap">Patentovaná protilátka s&nbsp;magnetickou částicí <b>Molecule&nbsp;46</b> ulpí jen na <em>odhaleném CD46</em>.</p>
+      <p class="m46__cap">Magnet označené buňky odtáhne. Bez odstřeďování, bez mechanického stresu.</p>
+      <p class="m46__cap">Zbude výběr, který by udělalo samo vajíčko. K&nbsp;oplození pak stačí <b>jediná buňka</b>.</p>
     </div>
 
     <p class="m46__note">Zjednodušená ilustrace procesu</p>
-    <div class="m46__nav"><button type="button" data-d="-1" aria-label="Předchozí fáze">‹</button><button type="button" data-d="1" aria-label="Další fáze">›</button></div>
     <p class="m46__sr" aria-live="polite"></p>
   </div></div></div>
 </div>
@@ -96,64 +99,78 @@ html,body{margin:0;padding:0;background:#05090F}
 
   var C={neu:'#7E93B0',ok:'#3DDC84',flag:'#FF2E88',bead:'#CFE0F2'};
   var SC=[[0,.115],[.115,.245],[.245,.378],[.378,.545],[.545,.700],[.700,.848],[.848,.950],[.950,1.001]];
-  var TAU=6.28318;
+  var N=SC.length, TAU=Math.PI*2;
 
-  var W=0,H=0,WW=0,WH=0,DPR=1,P=[],BEADS=[],HD=null,HH=null,EGG=null,MAG=null;
-  var driven=false,manual=-1,t0=performance.now();
-  /* demo = this page is the whole document (opened directly, or a preview build).
-     Anything else is an embed: fixed height, no inner scrolling, ever. */
-  var demo=(window.parent===window)||root.hasAttribute('data-cc-demo');
-  if(!demo) document.documentElement.classList.add('m46-driven');
-  var visible=true, frames=0;
-  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* Dva zdroje průběhu scrollu:
+     embed      — vloženo komponentou CC ve WordPressu: iframe má pevnou výšku a rodičovská stránka
+                  posílá průběh scrollu (0–1) přes postMessage {source:'cc-scrolly',type:'progress',value}.
+     standalone — stránka otevřená přímo (náhled na GitHubu): čtenář scrolluje vlastní dráhou. */
+  var standalone=(window.parent===window)||root.hasAttribute('data-cc-demo');
+  if(!standalone) document.documentElement.classList.add('m46-embed');
+
+  var rmq=matchMedia('(prefers-reduced-motion: reduce)'), reduce=rmq.matches;
+  if(rmq.addEventListener) rmq.addEventListener('change',function(e){reduce=e.matches;});
 
   function cl(v,a,b){return v<a?a:(v>b?b:v)}
   function seg(p,a,b){return cl((p-a)/(b-a),0,1)}
   function ez(t){return t*t*(3-2*t)}
   function mix(a,b,t){return a+(b-a)*t}
 
-  /* ---------------- world ---------------- */
-  var HX=0,HY=0,HOMEX=0,HOMEY=0,EGR=0;
-  function build(){
+  /* ---------------- svět ---------------- */
+  /* Dav se rozhodí jednou, v poměrných souřadnicích — změna velikosti ho už nepřehází. */
+  var P=[], BEADS=[];
+  (function seed(){
+    for(var i=0;i<420;i++){
+      P.push({u:Math.random(), v:Math.random(), a:Math.random()*TAU,
+        sp:mix(4,11,Math.random()), ph:Math.random()*TAU, wob:mix(.2,.5,Math.random()),
+        s:mix(.85,1.3,Math.random()), dmg:Math.random()<.38,
+        k:Math.random(), dy:Math.random(), lod:Math.random()});
+    }
+    for(var j=0;j<90;j++) BEADS.push({y:Math.random(),r:mix(.9,2.1,Math.random()),k:Math.random()});
+  })();
+
+  var W=0,H=0,WW=0,WH=0,DPR=0,SHOW=1,SMALL=1,HH=null,HD=null,MAG=null;
+  var HX=0,HY=0,HOMEX=0,HOMEY=0,OX=0,OY=0,EGR=0;
+  function layout(){
     WW=W*1.95; WH=H*1.20;
     HOMEX=WW*.26; HOMEY=WH*.50;
+    OX=HOMEX-W/2; OY=HOMEY-H/2;          /* při zoomu 1 platí: obrazovka = svět − O */
     HX=WW*.30; HY=WH*.47; EGR=W*.15;
-    var dens = W<620 ? 190 : (W<900 ? 300 : 420);
-    P=[];
-    for(var i=0;i<dens;i++){
-      P.push({x:Math.random()*WW, y:Math.random()*WH, a:Math.random()*TAU,
-        sp:mix(4,11,Math.random()), ph:Math.random()*TAU, wob:mix(.2,.5,Math.random()),
-        s:mix(.85,1.3,Math.random())*(W<620?.9:1), dmg:Math.random()<.38,
-        k:Math.random(), dy:Math.random()});
-    }
+    SHOW = W<620 ? 190/420 : (W<900 ? 300/420 : 1);
+    SMALL= W<620 ? .9 : 1;
     HH={y:HY-W*.030, s:1.25, ph:2.6};
     HD={y:HY+W*.030, s:1.25, ph:1.1};
-    MAG={x:W*.115, w:22, y0:H*.16, y1:H*.84};
-    BEADS=[];
-    for(var j=0;j<90;j++) BEADS.push({x:Math.random()*WW,y:Math.random()*WH,r:mix(.9,2.1,Math.random()),k:Math.random()});
+    MAG={x:W*.115, w:22, y0:H*.16, y1:H*.80};   /* v souřadnicích obrazovky */
   }
 
   function resize(){
     var r=stage.getBoundingClientRect();
-    DPR=Math.min(window.devicePixelRatio||1,2);
-    W=Math.max(320,r.width); H=Math.max(320,r.height);
-    cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
-    build();
+    var w=Math.round(r.width), h=Math.round(r.height), d=Math.min(window.devicePixelRatio||1,2);
+    if(w<10||h<10) return;
+    if(w===W&&h===H&&d===DPR) return;
+    W=w; H=h; DPR=d;
+    cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0);
+    layout();
+    if(started) draw(cur,performance.now(),0);
   }
 
-  /* the egg slides in from the right, stays for two beats, slides back out */
+  /* vajíčko přijede zprava, zůstane dvě scény a zase odjede */
   function eggAt(p){
     var inT=ez(seg(p,.370,.455)), outT=ez(seg(p,.700,.765));
     var rest=HX+W*.358, away=HX+W*1.15;
-    return {x:mix(away,rest,inT)+ (away-rest)*outT, y:HY+W*.02, r:EGR,
-            a:inT*(1-outT)};
+    return {x:mix(away,rest,inT)+(away-rest)*outT, y:HY+W*.02, r:EGR, a:inT*(1-outT)};
   }
 
-  /* camera: parks on the two cells and only eases out at the end */
+  /* kamera: každá klidová poloha (kotva) je kompozice, ne mezistav */
   function cam(p){
+    /* detailní záběry míří nad popisek: bod zájmu leží ve výšce FY, ne ve středu */
+    var FY=W<620?.36:.44;
+    function fy(y,z){return y+H*(.5-FY)/z;}
+    var MX=mix(HOMEX,HX,.8), MY=mix(HOMEY,HY,.8);
     var K=[[0,HOMEX,HOMEY,1],[.125,HOMEX,HOMEY,1],
-           [.300,HX,HY,6.5],[.372,HX,HY,6.5],
-           [.440,HX+W*.135,HY,3.0],[.700,HX+W*.135,HY,3.0],
+           [.205,MX,fy(MY,2.2),2.2],[.250,MX,fy(MY,2.2),2.2],
+           [.310,HX,fy(HY,6.5),6.5],[.372,HX,fy(HY,6.5),6.5],
+           [.440,HX+W*.135,fy(HY,3),3.0],[.700,HX+W*.135,fy(HY,3),3.0],
            [.733,HOMEX,HOMEY,1],[1.01,HOMEX,HOMEY,1]];
     for(var i=0;i<K.length-1;i++){
       if(p<=K[i+1][0]){
@@ -165,17 +182,29 @@ html,body{margin:0;padding:0;background:#05090F}
     return {x:HOMEX,y:HOMEY,z:1};
   }
 
-  /* ---------------- drawing ---------------- */
+  /* ---------------- kreslení ---------------- */
+  var _c={};
+  function hx(h){
+    if(_c[h]) return _c[h];
+    var v;
+    if(h.charAt(0)==='#') v=[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+    else { var m=h.match(/[\d.]+/g); v=m?[+m[0]|0,+m[1]|0,+m[2]|0]:[126,147,176]; }
+    if(v[0]!==v[0]||v[1]!==v[1]||v[2]!==v[2]) v=[126,147,176];
+    return (_c[h]=v);
+  }
   function rgba(h,a){var c=hx(h);return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';}
+  function mixCol(a,b,t){ if(t<=0)return a; if(t>=1)return b;
+    var A=hx(a),B=hx(b);
+    return 'rgb('+Math.round(mix(A[0],B[0],t))+','+Math.round(mix(A[1],B[1],t))+','+Math.round(mix(A[2],B[2],t))+')';}
 
   function glow(x,y,r,col,a){
-    if(a<=.01) return;
+    if(a<=.01||r<=0) return;
     var g=ctx.createRadialGradient(x,y,0,x,y,r);
     g.addColorStop(0,rgba(col,.30*a)); g.addColorStop(.45,rgba(col,.11*a)); g.addColorStop(1,rgba(col,0));
     ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,TAU); ctx.fill();
   }
 
-  /* cd46: 0 none, 1 hidden inside, 2 exposed on the surface */
+  /* cd46: 0 nic, 1 skrytý uvnitř, 2 odhalený na povrchu */
   function sperm(x,y,ang,s,col,alpha,ph,beads,cd46,cdCol){
     if(alpha<=.01||s<=0) return;
     ctx.save(); ctx.translate(x,y); ctx.rotate(ang);
@@ -225,30 +254,18 @@ html,body{margin:0;padding:0;background:#05090F}
   function label(txt,x,y,col,alpha,size){
     if(alpha<=.02) return;
     ctx.save(); ctx.globalAlpha=alpha; ctx.fillStyle=col;
-    ctx.font='500 '+Math.round(size||Math.max(10,W*.0095))+'px Inter, system-ui, sans-serif';
+    ctx.font='500 '+Math.round(size)+'px Inter, system-ui, sans-serif';
     ctx.textAlign='center'; ctx.fillText(txt.toUpperCase(),x,y); ctx.restore();
   }
 
-  function mixCol(a,b,t){ if(t<=0)return a; if(t>=1)return b;
-    var A=hx(a),B=hx(b);
-    return 'rgb('+Math.round(mix(A[0],B[0],t))+','+Math.round(mix(A[1],B[1],t))+','+Math.round(mix(A[2],B[2],t))+')';}
-  var _c={};
-  function hx(h){
-    if(_c[h]) return _c[h];
-    var v;
-    if(h.charAt(0)==='#') v=[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
-    else { var m=h.match(/[\d.]+/g); v=m?[+m[0]|0,+m[1]|0,+m[2]|0]:[126,147,176]; }
-    if(v[0]!==v[0]||v[1]!==v[1]||v[2]!==v[2]) v=[126,147,176];
-    if(h.charAt(0)==='#') _c[h]=v;
-    return v;
-  }
-
-  /* ---------------- frame ---------------- */
-  function draw(p,now){
+  /* ---------------- snímek ---------------- */
+  var t0=performance.now();
+  function draw(p,now,dt){
     var tt=reduce?0:(now-t0)/1000;
     var K=cam(p), Z=K.z, E=eggAt(p);
     function sx(wx){return (wx-K.x)*Z + W/2;}
     function sy(wy){return (wy-K.y)*Z + H/2;}
+    var LS=Math.max(11,Math.min(14,W*.012));
 
     var anat  = ez(seg(p,.258,.310))*(1-ez(seg(p,.378,.416)));
     var idn   = ez(seg(p,.252,.306));
@@ -262,12 +279,13 @@ html,body{margin:0;padding:0;background:#05090F}
     var magIn = ez(seg(p,.855,.885));
     var pull  = ez(seg(p,.885,.925));
     var clear = ez(seg(p,.945,.975));
+    var win   = ez(seg(p,.958,.992));
 
     ctx.clearRect(0,0,W,H);
     var mgn=190;
     function reachOf(x){ return swept<=0?0:cl((x-FRONT)/(W*.085),0,1)*swept; }
 
-    /* keep everything out of the egg's body while it is present */
+    /* dokud je vajíčko na scéně, nic nesmí vplout do jeho těla */
     function outEgg(x,y){
       if(E.a<.02) return [x,y];
       var dx=x-E.x, dy=y-E.y, d=Math.sqrt(dx*dx+dy*dy), R=E.r*1.06;
@@ -276,62 +294,62 @@ html,body{margin:0;padding:0;background:#05090F}
       var k=R/d; return [mix(x,E.x+dx*k,E.a), mix(y,E.y+dy*k,E.a)];
     }
 
-    /* the magnet is a physical object: on arrival it displaces every cell near it,
-       only afterwards does it attract the tagged ones */
-    function place(x,y,dmg,k,dy,skipEgg){
-      if(!skipEgg){ var o=outEgg(x,y); x=o[0]; y=o[1]; }
-      if(magIn>0){ var d=W*.37-x; if(d>0) x+=ez(magIn)*(d+k*W*.12); }
+    /* magnet je fyzický předmět: při příjezdu odsune všechno kolem,
+       teprve pak přitáhne označené buňky (jeho poloha je na obrazovce → + O) */
+    function place(x,y,dmg,k,dy){
+      var o=outEgg(x,y); x=o[0]; y=o[1];
+      if(magIn>0){ var d=OX+W*.37-x; if(d>0) x+=ez(magIn)*(d+k*W*.12); }
       if(dmg&&pull>0){
-        var st=cl((pull-k*.24)/.76,0,1), acc=Math.pow(st,2.4);   /* pomalu se odlepí, pak zrychluje */
-        x=mix(x,MAG.x+MAG.w+16+k*38,acc);
-        y=mix(y,MAG.y0+dy*(MAG.y1-MAG.y0),acc);
+        var acc=Math.pow(cl((pull-k*.24)/.76,0,1),2.4);   /* pomalu se odlepí, pak zrychluje */
+        x=mix(x,OX+MAG.x+MAG.w+16+k*38,acc);
+        y=mix(y,OY+MAG.y0+dy*(MAG.y1-MAG.y0),acc);
       }
       return [x,y];
     }
 
-    /* --- crowd --- */
-    var cAl=mix(.60,.30,focus);
+    /* --- dav --- */
+    var cAl=mix(mix(.60,.30,focus),.24,win);
     for(var i=0;i<P.length;i++){
       var q=P[i];
+      if(q.lod>SHOW) continue;
       var ang=q.a+Math.sin(tt*.55*q.wob+q.ph)*.16;
-      var x=q.x+Math.cos(ang)*q.sp*tt, y=q.y+Math.sin(ang)*q.sp*tt;
-      x=((x%WW)+WW)%WW; y=((y%WH)+WH)%WH;
+      if(dt>0){                                   /* poloha se integruje po snímcích — rychlost je stálá */
+        q.u+=Math.cos(ang)*q.sp*dt/WW; q.v+=Math.sin(ang)*q.sp*dt/WH;
+        q.u-=Math.floor(q.u); q.v-=Math.floor(q.v);
+      }
+      var x=q.u*WW, y=q.v*WH;
       var rc=reachOf(x), pos=place(x,y,q.dmg,q.k,q.dy), al=cAl;
       if(q.dmg&&pull>0){ ang=mix(ang,Math.PI,Math.pow(cl((pull-q.k*.24)/.76,0,1),2.4)*.9); al*=(1-clear*.80); }
       var X=sx(pos[0]),Y=sy(pos[1]);
       if(X<-mgn||X>W+mgn||Y<-mgn||Y>H+mgn) continue;
-      sperm(X,Y,ang,q.s*Z,mixCol(C.neu,q.dmg?C.flag:C.ok,rc),al,tt*2.6+q.ph,q.dmg?rc:0,0);
+      sperm(X,Y,ang,q.s*SMALL*Z,mixCol(C.neu,q.dmg?C.flag:C.ok,rc),al,tt*2.6+q.ph,q.dmg?rc:0,0);
     }
 
-    /* --- the two cells: they do the whole journey themselves --- */
-    var eggEdge=E.x-E.r;
+    /* --- dvě hlavní buňky: celou cestu urazí samy --- */
     var drift=Math.sin(tt*.5)*W*.0016, drift2=Math.cos(tt*.42)*W*.0015;
 
-    /* poloha obou buněk jako funkce průběhu — kvůli stopě se vzorkuje i do minulosti */
+    /* poloha obou buněk jako funkce průběhu */
     function heroAt(q){
       var E2=eggAt(q), edge=E2.x-E2.r;
       var tH2=ez(seg(q,.392,.505)), tD2=ez(seg(q,.545,.645));
       var hit2=cl(tD2/.62,0,1), aft2=cl((tD2-.62)/.38,0,1);
-      return { tH:tH2, tD:tD2, hit:hit2, aft:aft2,
+      return { tH:tH2, hit:hit2, aft:aft2,
         hx:mix(HX+drift, edge+E2.r*.26, tH2), hy:mix(HH.y+drift2, E2.y-E2.r*.06, tH2),
-        dx:mix(HX+drift2, edge-W*.016, hit2)-aft2*W*.034, dy:mix(HD.y+drift, E2.y+E2.r*.30, hit2)+aft2*W*.050 };
+        dx:mix(HX+drift2, edge-W*.016, hit2)-aft2*W*.030, dy:mix(HD.y+drift, E2.y+E2.r*.06, hit2)+aft2*W*.018 };
     }
     var h0=heroAt(p);
-    /* healthy: swims to the coat, opens it with CD46, slips inside */
+    /* zdravá: doplave k obalu, otevře ho CD46 a vklouzne dovnitř */
     var tH=h0.tH, key=cl((tH-.42)/.22,0,1), inside=cl((tH-.72)/.28,0,1);
-    var hhX=h0.hx, hhY=h0.hy;
-    /* damaged: swims to the coat, nothing happens, drops away */
-    var tD=h0.tD, hit=h0.hit, aft=h0.aft;
-    var hdX=h0.dx, hdY=h0.dy;
+    /* poškozená: doplave k obalu, nic se nestane, odpadne */
+    var hit=h0.hit, aft=h0.aft;
 
-    /* once the story is told they are gone — absorbed, or drifted off */
+    /* když je příběh odvyprávěn, zmizí — vstřebaná, nebo odplavaná */
     var aliveH=1-ez(seg(p,.535,.585)), aliveD=1-ez(seg(p,.680,.725));
 
-    var pH=(key>.02)?[hhX,hhY]:outEgg(hhX,hhY), pD=outEgg(hdX,hdY);
+    var pH=(key>.02)?[h0.hx,h0.hy]:outEgg(h0.hx,h0.hy), pD=outEgg(h0.dx,h0.dy);
     var HHx=sx(pH[0]),HHy=sy(pH[1]),HDx=sx(pD[0]),HDy=sy(pD[1]);
-    
 
-    /* --- the egg --- */
+    /* --- vajíčko --- */
     var ex=sx(E.x), ey=sy(E.y), ER=E.r*Z;
     if(E.a>.02 && ex-ER<W+40 && ex+ER>-40){
       ctx.save(); ctx.globalAlpha=E.a;
@@ -345,7 +363,7 @@ html,body{margin:0;padding:0;background:#05090F}
       ctx.lineWidth=1.1; ctx.strokeStyle='rgba(233,239,248,.26)';
       ctx.beginPath(); ctx.arc(ex,ey,ER*1.002,0,TAU); ctx.closePath(); ctx.stroke();
 
-      /* the healthy cell punches a hole through the coat and slips in */
+      /* zdravá buňka prorazí obal a vklouzne dovnitř */
       var open=cl((tH-.40)/.24,0,1)*(1-cl((tH-.84)/.16,0,1))*aliveH;
       if(open>.01){
         var ea=Math.atan2(pH[1]-E.y,pH[0]-E.x);
@@ -361,41 +379,40 @@ html,body{margin:0;padding:0;background:#05090F}
       ctx.restore();
     }
 
-
-    /* the coat opens where the healthy cell pushes through */
-    if(inside>.02){ glow(HHx,HHy,ER*.42*inside,C.ok,inside*(1-inside*.30)*E.a*.8*(1-ez(seg(p,.585,.640)))); }
+    /* uvnitř vajíčka se po vstupu rozsvítí zdravá záře */
+    if(inside>.02){ glow(HHx,HHy,ER*.5*inside,C.ok,inside*(1-inside*.3)*E.a*(.9-.4*ez(seg(p,.585,.640)))); }
+    /* klíč: kruh, který se od hlavičky rozevře */
     if(key>.02&&key<.99){
       ctx.save(); ctx.globalAlpha=(1-key)*.8; ctx.strokeStyle=rgba(C.ok,.9); ctx.lineWidth=1.6;
       ctx.beginPath(); ctx.arc(HHx,HHy,HH.s*Z*5+key*HH.s*Z*13,0,TAU); ctx.stroke(); ctx.restore();
     }
-    if(inside>.02){ glow(HHx,HHy,ER*.55*inside,C.ok,inside*(1-inside*.35)*E.a*.9); }
-
+    /* náraz poškozené: odraz bez odezvy */
     var imp=Math.max(0,1-Math.abs(hit-1)*6)*(1-aft);
     if(imp>.01&&E.a>.3){
       ctx.save(); ctx.globalAlpha=E.a*imp*.75*aliveD; ctx.strokeStyle=rgba(C.flag,.9); ctx.lineWidth=1.6;
       ctx.beginPath(); ctx.arc(HDx,HDy,HD.s*Z*3+(1-imp)*HD.s*Z*12,0,TAU); ctx.stroke(); ctx.restore();
     }
 
-    /* selection glow instead of a reticle */
-    var idnG=ez(seg(p,.245,.306));
-    var glowH=Math.max(idnG*.34, ez(seg(p,.398,.436))*.95)*aliveH;
+    /* výběr se ukazuje září, ne zaměřovačem */
+    var glowH=Math.max(idn*.34, ez(seg(p,.398,.436))*.95)*aliveH;
     var glowD=Math.max(pick*(1-ez(seg(p,.300,.360))*.66), ez(seg(p,.556,.598))*.95)*aliveD;
     glow(HDx,HDy,HD.s*Z*13,C.flag,glowD*.9);
     glow(HHx,HHy,HH.s*Z*13,C.ok,glowH*.9);
 
-    
-    var hAng=.06+aft*1.05;
     var early=ez(seg(p,.150,.205));
-    sperm(HDx,HDy,hAng,HD.s*Z,mixCol(C.neu,C.flag,Math.max(early*.85,idn)),.95*aliveD,tt*2.6+HD.ph,0,2,C.flag);
+    sperm(HDx,HDy,.06+aft*.7,HD.s*Z,mixCol(C.neu,C.flag,Math.max(early*.85,idn)),.95*aliveD,tt*2.6+HD.ph,0,2,C.flag);
     sperm(HHx,HHy,.06,HH.s*Z,mixCol(C.neu,C.ok,idn),.95*aliveH,tt*2.6+HH.ph,0,key>.06?2:1,C.ok);
 
+    /* popisky: co přesně na obraze právě vidíme */
+    var picked=pick*(1-ez(seg(p,.235,.262)));
+    label('vybraná podle tvaru',HDx,HDy+HD.s*Z*5.2+LS,'rgba(255,46,136,.85)',picked,LS);
     if(anat>.02){
-      var LS=cl(HD.s*Z*1.25,11,20);
-      label('zdravá',   HHx,HHy-HH.s*Z*4.4,'rgba(233,239,248,.60)',anat,LS);
-      label('poškozená',HDx,HDy+HD.s*Z*5.2,'rgba(255,46,136,.85)',anat,LS);
+      var LA=cl(HD.s*Z*1.25,11,20);
+      label('zdravá',   HHx,HHy-HH.s*Z*4.4,'rgba(233,239,248,.60)',anat,LA);
+      label('poškozená',HDx,HDy+HD.s*Z*5.2,'rgba(255,46,136,.85)',anat,LA);
     }
 
-    /* --- antibody front --- */
+    /* --- čelo protilátek --- */
     if(bandA>.01){
       var fxs=sx(FRONT), bw=Math.max(200,W*.30);
       ctx.save();
@@ -406,12 +423,13 @@ html,body{margin:0;padding:0;background:#05090F}
       ctx.fillStyle=C.bead;
       for(var b2=0;b2<BEADS.length;b2++){
         var o=BEADS[b2];
-        var bx=sx(FRONT+o.k*W*.42-W*.06), by=sy((o.y+Math.sin(tt*.5+o.k*6)*12+WH)%WH);
+        var bx=sx(FRONT+o.k*W*.42-W*.06), by=sy((o.y*WH+Math.sin(tt*.5+o.k*6)*12+WH)%WH);
         if(bx<-20||bx>W+20||by<-20||by>H+20) continue;
         ctx.globalAlpha=bandA*(.65-o.k*.42);
         ctx.beginPath(); ctx.arc(bx,by,o.r*Math.min(Z,2),0,TAU); ctx.fill();
       }
       ctx.restore();
+      label('Molecule 46',fxs+W*.10,H*.13,'rgba(207,224,242,.8)',bandA*(1-ez(seg(p,.785,.808))),LS);
     }
 
     /* --- magnet --- */
@@ -424,61 +442,64 @@ html,body{margin:0;padding:0;background:#05090F}
       if(ctx.roundRect) ctx.roundRect(bx2,MAG.y0,MAG.w,bh,MAG.w/2); else ctx.rect(bx2,MAG.y0,MAG.w,bh);
       ctx.fill();
       ctx.globalAlpha=ma*.14*pull; ctx.strokeStyle='#E9EFF8'; ctx.lineWidth=1;
+      var my=(MAG.y0+MAG.y1)/2;
       for(var f=1;f<=3;f++){ctx.beginPath();
-        ctx.ellipse(bx2+MAG.w/2,H/2,f*W*.072,bh*.52*(1+f*.06),0,-1.15,1.15); ctx.stroke();}
+        ctx.ellipse(bx2+MAG.w/2,my,f*W*.072,bh*.52*(1+f*.06),0,-1.15,1.15); ctx.stroke();}
       ctx.restore();
+      label('magnet',bx2+MAG.w/2+(W<620?14:0),MAG.y0-12,'rgba(233,239,248,.7)',ma*(1-win),LS);
     }
 
-    /* --- scrim + chrome --- */
+    /* --- jediná buňka: co po výběru zbude --- */
+    if(win>.01){
+      var wx=W*.62+Math.sin(tt*.6)*W*.008, wy=H*.34+Math.cos(tt*.5)*H*.008, ws=1.9;
+      glow(wx,wy,46,C.ok,win);
+      ctx.save(); ctx.globalAlpha=win*.55; ctx.strokeStyle=rgba(C.ok,.9); ctx.lineWidth=1.4;
+      ctx.beginPath(); ctx.arc(wx-3,wy,24,0,TAU); ctx.stroke(); ctx.restore();
+      sperm(wx,wy,.22+Math.sin(tt*.7)*.08,ws,C.ok,win,tt*2.6,0,0);
+      label('jediná buňka',wx-3,wy-34,'rgba(61,220,132,.9)',win,LS);
+    }
+
+    /* --- ztmavení pod popiskem --- */
     var sg=ctx.createLinearGradient(0,H*.56,0,H);
     sg.addColorStop(0,'rgba(5,9,15,0)');sg.addColorStop(.62,'rgba(5,9,15,.62)');sg.addColorStop(1,'rgba(5,9,15,.94)');
     ctx.globalAlpha=1; ctx.fillStyle=sg; ctx.fillRect(0,H*.56,W,H*.44);
-
-    /* popisek a osa se řídí mimo draw() — přijíždějí v jiném rytmu než obraz */
   }
 
-  /* ---------------- průběh ---------------- */
-  /* raw = kam ukazuje scroll čtenáře.  cur = co se opravdu kreslí.
-     cur jede za raw RYCHLOSTÍ PŘÍBĚHU, ne rychlostí kolečka: když je čtenář
-     napřed, animace jede pořád (nikdy nestojí, nikdy neskočí); když scrolluje
-     pomalu, drží se ho; když zastaví, dojede k němu a stojí. */
-  var raw=0, cur=0, capIdx=-1, tPrev=performance.now();
+  /* ---------------- průběh ----------------
+     raw    = průběh scrollu 0–1 (od komponenty CC, nebo z vlastní dráhy).
+     target = snímek příběhu, který k tomu scrollu patří.
+     Scroll je rozdělený rovnoměrně na 8 úseků, jeden na popisek. V každém úseku první
+     část scrollu přehraje přechod do další scény a zbytek ji podrží v klidu, aby se dal
+     dočíst popisek. Obraz jde se scrollem plynule oběma směry.
+     cur    = co se opravdu kreslí: jde za targetem vyhlazeně, takže ani trhaný scroll
+              kolečkem nebo švih na mobilu neudělá v animaci skok. */
+  var raw=0, target=0, cur=0, capIdx=-1, started=false, visible=true, driven=false, tPrev=performance.now();
 
-  var SNAP=(function(){
-    var q=(location.search.match(/[?&]snap=([^&]+)/)||[])[1];
-    if(q) return q!=='0'&&q!=='off';
-    return root.getAttribute('data-cc-snap')!=='0';
-  })();
-
-  /* kotvy: klidové stavy scén (šipky ve fallbacku, mapování osy) */
-  var ANCH =[.060,.215,.350,.520,.672,.820,.935,.980];
-  /* kolik sekund má scéna trvat, když ji čtenář nechá jet samotnou */
-  var DUR  =[ .50, .70, .90,1.40,1.20,1.50,1.10, .70];
-  /* v jaké části scény přijede její popisek (u vajíčka až v půlce) */
-  var CAPAT=[ .25, .25, .25, .55, .55, .25, .25, .25];
-  /* zpomalení v pointě: [střed, šířka, hloubka] — klíč, náraz, tah magnetu */
-  var TEMPO=[[.462,.022,.55],[.612,.018,.55],[.905,.018,.45]];
-  var BACKX=2.5;   /* zpátky tolikrát rychleji */
+  /* kotvy: klidové stavy scén */
+  var ANCH =[.060,.232,.350,.520,.672,.820,.935,.990];
+  /* v jaké části scény přijede její popisek — u vajíčka dřív, než buňka dorazí k obalu */
+  var CAPAT=[ .25, .25, .25, .30, .30, .25, .25, .25];
+  /* jakou část úseku zabere pohyb; zbytek je klid na čtení */
+  var MOVE=.72;
 
   function sceneOf(p){
-    for(var i=0;i<SC.length;i++) if(p>=SC[i][0]&&p<SC[i][1]) return i;
-    return p<SC[0][0]?0:SC.length-1;
-  }
-  function tempo(q){
-    var m=1;
-    for(var i=0;i<TEMPO.length;i++){ var d=(q-TEMPO[i][0])/TEMPO[i][1]; m-=TEMPO[i][2]*Math.exp(-d*d); }
-    return Math.max(.3,m);
+    for(var i=0;i<N;i++) if(p>=SC[i][0]&&p<SC[i][1]) return i;
+    return p<SC[0][0]?0:N-1;
   }
   function capOf(c){
     var i=sceneOf(c), sp=SC[i][1]-SC[i][0];
     return c>=SC[i][0]+CAPAT[i]*sp ? i : Math.max(0,i-1);
   }
+  function progressOf(r){
+    var x=cl(r,0,1)*N, i=Math.min(N-1,Math.floor(x)), u=x-i;
+    return mix(i?ANCH[i-1]:0, ANCH[i], ez(Math.min(1,u/MOVE)));
+  }
 
   /* ---- osa fází ---- */
   var axis=root.querySelector('.m46__axis'), axFill=axis.querySelector('.fi'), nodes=[], nodeCls=[];
-  for(var ai=0;ai<SC.length;ai++){
+  for(var ai=0;ai<N;ai++){
     var nd=document.createElement('b');
-    nd.style.top=(ai/(SC.length-1)*100).toFixed(4)+'%';
+    nd.style.top=(ai/(N-1)*100).toFixed(4)+'%';
     axis.appendChild(nd); nodes.push(nd); nodeCls.push('');
   }
   function axisPos(c){
@@ -488,96 +509,88 @@ html,body{margin:0;padding:0;background:#05090F}
     return ANCH.length-1;
   }
   function paintAxis(){
-    var now=sceneOf(cur), nxt=sceneOf(raw);
+    var now=sceneOf(cur), nxt=sceneOf(target);
     for(var i=0;i<nodes.length;i++){
       var c = i===now ? 'is-now' : (i<now ? 'is-past' : (i===nxt&&nxt>now ? 'is-next' : ''));
       if(c!==nodeCls[i]){ nodes[i].className=c; nodeCls[i]=c; }
     }
-  }
-  function paintFill(){
-    axFill.style.height=(axisPos(cur)/(nodes.length-1)*100).toFixed(3)+'%';
+    axFill.style.height=(axisPos(cur)/(N-1)*100).toFixed(3)+'%';
   }
   function showCap(i){
-    if(capIdx===i) return; capIdx=i;
+    if(capIdx===i) return;
+    var first=capIdx<0; capIdx=i;
     for(var k=0;k<caps.length;k++) caps[k].classList.toggle('is-on',k===i);
-    sr.textContent=caps[i].textContent;
+    if(!first) sr.textContent=caps[i].textContent.replace(/\s+/g,' ').trim();
   }
 
   /* ---- sledování ---- */
   function follow(dt){
-    if(!SNAP||reduce){ cur=raw; return; }          /* holé scrubování */
-    var diff=raw-cur;
-    if(Math.abs(diff)<1e-5){ cur=raw; return; }
-    var fwd=diff>0, i=sceneOf(cur), span=SC[i][1]-SC[i][0];
-    var vmax=span/DUR[i]*(fwd?1:BACKX)*tempo(cur);   /* rychlost příběhu */
-    var lim=vmax*dt;
-    var chase=diff*Math.min(1,dt*10);                 /* blízko: jde s tebou */
-    cur+=cl(chase,-lim,lim);                          /* daleko: jede tempem */
+    if(reduce){ cur=target; return; }
+    var diff=target-cur;
+    if(Math.abs(diff)<1e-5){ cur=target; return; }
+    var lim=.9*dt;                                    /* ani při prudkém švihu ne rychleji než ~1 s na celý příběh */
+    cur+=cl(diff*Math.min(1,dt*8),-lim,lim);
   }
 
-  function ownScroll(){
-    if(!demo) return;
+  function readScroll(){
     var r=track.getBoundingClientRect(), span=r.height-pin.offsetHeight;
     raw=span>0?cl(-r.top/span,0,1):0;
   }
+
+  /* ---- protokol cc-scrolly: komponenta CC posílá průběh scrollu ---- */
   function okOrigin(o){
     return /^https:\/\/(www\.)?cc\.cz$/.test(o)
         || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o);
   }
   window.addEventListener('message',function(e){
-    if(e.source!==window.parent) return;
-    if(!okOrigin(e.origin)) return;
+    if(standalone||e.source!==window.parent||!okOrigin(e.origin)) return;
     var d=e.data;
     if(!d||d.source!=='cc-scrolly'||d.type!=='progress') return;
-    var first=!driven;
-    if(first){driven=true; root.classList.remove('has-nav'); manual=-1;}
-    raw=cl(+d.value||0,0,1);
-    /* První zpráva = teleport. Čtenář se mohl vrátit do půlky článku
-       a nemá koukat, jak se mu přehrává cesta, kterou neušel. */
-    if(first) cur=raw;
+    raw=cl(+d.value||0,0,1); target=progressOf(raw);
+    /* první zpráva = teleport: čtenář se mohl vrátit doprostřed článku */
+    if(!driven){ driven=true; cur=target; }
   },false);
-
   var hellos=0;
   function hello(){
-    if(driven||demo) return;
+    if(standalone||driven) return;
     try{ window.parent.postMessage({source:'cc-scrolly',type:'ready'},'*'); }catch(err){}
     if(++hellos<6) setTimeout(hello,300);
   }
-  setTimeout(function(){
-    if(driven||demo) return;
-    root.classList.add('has-nav'); manual=0; raw=ANCH[0]; cur=raw;
-  },2500);
 
-  root.querySelector('.m46__nav').addEventListener('click',function(e){
-    var b=e.target.closest('button'); if(!b) return;
-    manual=cl(manual+(+b.dataset.d),0,SC.length-1);
-    raw=ANCH[manual];
-  });
-
-  window.addEventListener('scroll',ownScroll,{passive:true});
   try{ new ResizeObserver(resize).observe(stage); }
   catch(err){ window.addEventListener('resize',resize); }
-  try{ new IntersectionObserver(function(es){ visible=es[0].isIntersecting; },{threshold:0}).observe(stage); }
-  catch(err){ visible=true; }
+  try{
+    new IntersectionObserver(function(es){
+      var v=es[es.length-1].isIntersecting;
+      /* po návratu do záběru nepřehrávat, co se mezitím odscrollovalo */
+      if(v&&!visible){ if(standalone) readScroll(); target=progressOf(raw); cur=target; }
+      visible=v;
+    },{threshold:0}).observe(stage);
+  }catch(err){ visible=true; }
 
   function loop(now){
     requestAnimationFrame(loop);
-    var dt=Math.min(.05,(now-tPrev)/1000); tPrev=now;
+    var dt=Math.min(.05,Math.max(0,(now-tPrev)/1000)); tPrev=now;
     if(document.hidden||!visible) return;
-    if(demo&&manual<0) ownScroll();
+    if(!W){ resize(); if(!W) return; }        /* rámeček zatím nemá rozměr (skrytý, ještě nerozložený) */
+    if(standalone) readScroll();
+    target=progressOf(raw);
     follow(dt);
-    paintAxis(); paintFill(); showCap(capOf(cur));
-    draw(cur,now); frames++;
+    paintAxis(); showCap(capOf(cur));
+    draw(cur,now,reduce?0:dt);
   }
-  window.__m46=function(){return{frames:frames,visible:visible,demo:demo,driven:driven,
-    snap:SNAP,raw:+raw.toFixed(3),cur:+cur.toFixed(3),scene:sceneOf(cur),cap:capIdx,
-    moving:Math.abs(raw-cur)>1e-3};};
 
-  resize(); ownScroll(); cur=raw;
-  paintAxis(); paintFill(); showCap(capOf(cur));
-  hello();
-  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(resize);
+  if(/[?&]debug\b/.test(location.search))
+    window.__m46=function(){return{standalone:standalone,driven:driven,visible:visible,
+      raw:+raw.toFixed(3),target:+target.toFixed(3),cur:+cur.toFixed(3),scene:sceneOf(cur),cap:capIdx};};
+
   requestAnimationFrame(loop);
+  resize();
+  if(standalone) readScroll();
+  target=progressOf(raw); cur=target; started=true;
+  paintAxis(); showCap(capOf(cur));
+  if(W) draw(cur,performance.now(),0);
+  hello();
 })();
 </script>
 </body>
