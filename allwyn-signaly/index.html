@@ -22,6 +22,9 @@ body{background:#fff;color:var(--ink);overflow:hidden;font:400 16px/1.45 var(--f
 .stage{flex:1 1 auto;position:relative;min-height:0;overflow:hidden;cursor:grab;
  perspective:1600px;perspective-origin:50% 48%;touch-action:pan-y;outline:none}
 .stage.drag{cursor:grabbing}
+@media (hover:hover){
+ .c.is-active:hover .ci{transform:rotateY(var(--flip)) translateZ(26px)}
+}
 .stage:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:12px}
 .flow{position:absolute;inset:0;transform-style:preserve-3d;
  transition:transform .5s cubic-bezier(.3,.85,.3,1)}
@@ -212,23 +215,34 @@ var stage=document.getElementById('stage'),flow=document.getElementById('flow'),
     bar=document.getElementById('bar'),bh=document.getElementById('barh');
 var cards=[].slice.call(stage.querySelectorAll('.c'));
 var st=D.map(function(){return false}),act=0,armed=false,fx=0;
+var PX=[],PERSP=1600;
 
 function layout(){
  var Hh=stage.clientHeight,Ww=stage.clientWidth,narrow=Ww<560;
  var w=Math.min(Hh*0.63,Ww*(narrow?0.56:0.46));
  stage.style.setProperty('--w',w+'px');
- var s1=w*(narrow?0.44:0.50),s2=w*(narrow?0.15:0.20),xs=[];
+ var s1=w*(narrow?0.44:0.50),s2=w*(narrow?0.15:0.20),xs=[];PX=[];
  cards.forEach(function(e,i){
   var d=i-act,ad=Math.abs(d),sg=d>0?1:-1;
   var x=d===0?0:sg*(s1+(ad-1)*s2);xs.push(x);
   var zz=d===0?0:-(130+(ad-1)*58),ry=d===0?0:-sg*42,sc=d===0?1:0.9;
   e.style.zIndex=30-ad;e.style.opacity=ad>3?'.62':'1';
+  e.classList.toggle('is-active',d===0);
   e.style.transform='translateX('+x+'px) translateZ('+zz+'px) rotateY('+ry+'deg) scale('+sc+')';
+  /* kam kartu doopravdy promítne perspektiva — podle toho hledáme, na kterou se kliklo */
+  PX[i]=x*(PERSP/(PERSP+Math.abs(zz)));
  });
  var mid=(Math.min.apply(null,xs)+Math.max.apply(null,xs))/2;
  fx=-mid*0.38; flow.style.setProperty('--fx',fx+'px');
  flow.style.transform='translateX('+fx+'px)';
  fitText();
+}
+/* index karty nejbližší k místu kliknutí */
+function nearest(clientX){
+ var r=stage.getBoundingClientRect();
+ var rel=clientX-(r.left+r.width/2)-fx,best=act,bd=1e9;
+ for(var i=0;i<PX.length;i++){var d=Math.abs(PX[i]-rel);if(d<bd){bd=d;best=i}}
+ return best;
 }
 /* pojistka na delší texty i jiné písmo: zmenší, dokud se nevejde */
 function fitText(){
@@ -248,32 +262,46 @@ function updBar(){
  if(n>=3){bh.textContent='Otočili jste '+n+' '+(n<5?'karty':'karet');bar.classList.add('on')}
  else bar.classList.remove('on');
 }
-function paint(){cards.forEach(function(e,i){e.setAttribute('aria-pressed',st[i]?'true':'false')});
+function paint(){cards.forEach(function(e,i){
+  e.setAttribute('aria-pressed',st[i]?'true':'false');
+  e.setAttribute('aria-label','Karta '+(i+1)+' ze 6: '+D[i].say+' '+
+    (i!==act?'Zobrazit kartu.':(st[i]?'Otočit zpět.':'Otočit.')));
+ });
  layout();updBar()}
 function go(n){var v=Math.max(0,Math.min(5,n));if(v===act)return;act=v;paint()}
 
-var px=null,moved=0,pid=null;
+var px=null,moved=0,pid=null,dragged=false;
 stage.addEventListener('pointerdown',function(e){
  if(e.pointerType==='mouse'&&e.button!==0)return;
- px=e.clientX;moved=0;pid=e.pointerId;stage.classList.add('drag');flow.classList.remove('nudge');
+ px=e.clientX;moved=0;dragged=false;pid=e.pointerId;
+ stage.classList.add('drag');flow.classList.remove('nudge');
 });
 stage.addEventListener('pointermove',function(e){
  if(px===null||e.pointerId!==pid)return;
  var dx=e.clientX-px;if(Math.abs(dx)>Math.abs(moved))moved=dx;
  var step=stage.clientWidth*0.13;
- if(Math.abs(dx)>step){go(act+(dx<0?1:-1));px=e.clientX}
+ if(Math.abs(dx)>step){go(act+(dx<0?1:-1));px=e.clientX;dragged=true}
 });
 function endDrag(){px=null;pid=null;stage.classList.remove('drag')}
 ['pointerup','pointercancel','pointerleave'].forEach(function(t){stage.addEventListener(t,endDrag)});
 
-var wlock=0;
+/* trackpad: dvěma prsty do stran. Posun je úměrný gestu, ne po jedné kartě za tik. */
+var acc=0,wt=0;
 stage.addEventListener('wheel',function(e){
  var hx=Math.abs(e.deltaX)>Math.abs(e.deltaY);
- if(!hx&&!e.shiftKey)return;              /* svislé kolečko patří stránce */
+ if(!hx&&!e.shiftKey)return;              /* svislé rolování patří stránce */
  e.preventDefault();
- var now=Date.now();if(now-wlock<260)return;wlock=now;
  var d=hx?e.deltaX:e.deltaY;
- if(Math.abs(d)>4)go(act+(d>0?1:-1));
+ if(e.deltaMode===1)d*=16; else if(e.deltaMode===2)d*=stage.clientWidth;
+ var now=Date.now();
+ if(now-wt>180||(acc>0)!==(d>0))acc=0;    /* nové gesto nebo obrat směru */
+ wt=now;acc+=d;
+ var need=58,guard=0;
+ while(Math.abs(acc)>=need&&guard++<6){
+  var dir=acc>0?1:-1,before=act;
+  go(act+dir);acc-=dir*need;
+  if(act===before){acc=0;break}           /* konec balíčku */
+ }
 },{passive:false});
 
 stage.addEventListener('keydown',function(e){
@@ -281,12 +309,15 @@ stage.addEventListener('keydown',function(e){
  if(e.key==='ArrowLeft'){go(act-1);e.preventDefault()}
 });
 stage.addEventListener('click',function(ev){
- if(Math.abs(moved)>8){moved=0;return}
- var b=ev.target.closest('.c');if(!b)return;
- var i=+b.dataset.i;
- if(i===act){st[i]=!st[i]} else {act=i}
- flow.classList.remove('nudge');paint();
+ if(dragged){dragged=false;return}          /* spolkneme klik jen po skutečném listování */
+ flow.classList.remove('nudge');
+ var b=ev.target.closest('.c');
+ /* na kartu se klikne přímo, do prázdna se vybere nejbližší karta */
+ var i=b?+b.dataset.i:nearest(ev.clientX);
+ if(i===act){st[i]=!st[i];paint();return}
+ act=i;paint();
 });
+
 
 addEventListener('resize',layout);
 try{new ResizeObserver(function(){layout()}).observe(stage)}catch(e){}
