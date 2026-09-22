@@ -16,7 +16,7 @@ html,body{margin:0;padding:0;background:#05090F}
 
 .m46{--ink:#05090F;--ok:#3DDC84;--flag:#FF2E88;--tx:#E9EFF8;--dim:#6F819B;
   font-family:'Inter',system-ui,-apple-system,sans-serif;color:var(--tx);background:var(--ink)}
-.m46__track{height:900vh;position:relative}
+.m46__track{height:420vh;position:relative}
 .m46__pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;justify-content:center}
 .m46__stage{position:relative;width:100%;max-width:1140px;height:100%;overflow:hidden;
   background:radial-gradient(130% 95% at 52% 38%,#0D1A2C 0%,#070D17 55%,#04080E 100%)}
@@ -25,7 +25,7 @@ html,body{margin:0;padding:0;background:#05090F}
 .m46__caps{position:absolute;left:clamp(56px,7vw,100px);bottom:clamp(48px,8vh,86px);
   width:min(620px,70%);height:0;pointer-events:none}
 .m46__cap{position:absolute;left:0;bottom:0;margin:0;opacity:0;transform:translateY(10px);
-  transition:opacity .2s ease,transform .2s ease;
+  transition:opacity .16s ease,transform .16s ease;
   font-family:'Poppins',system-ui,sans-serif;font-weight:300;
   font-size:clamp(18px,2.3vw,32px);line-height:1.42;letter-spacing:-.005em}
 
@@ -43,17 +43,13 @@ html,body{margin:0;padding:0;background:#05090F}
 .m46__axis b.is-next{width:8px;height:8px;margin:-4px 0 0 -4px;background:transparent;border:1.5px solid rgba(61,220,132,.5)}
 .m46__axis b.is-now{width:10px;height:10px;margin:-5px 0 0 -5px;background:var(--ink);
   border:2px solid var(--ok);box-shadow:0 0 13px rgba(61,220,132,.6)}
-.m46__cap.is-on{opacity:1;transform:none;transition:opacity .34s ease .18s,transform .34s ease .18s}
+.m46__cap.is-on{opacity:1;transform:none;transition:opacity .3s ease,transform .3s ease}
 .m46__cap b{font-weight:500;color:var(--ok)}
 .m46__cap em{font-style:normal;font-weight:500;color:var(--flag)}
 
 .m46__note{position:absolute;right:clamp(20px,4vw,60px);bottom:clamp(20px,3.5vh,34px);margin:0;
   font-size:11px;letter-spacing:.05em;color:var(--dim);opacity:.65}
 .m46__sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.m46__nav{position:absolute;right:clamp(20px,4vw,60px);top:clamp(20px,4vh,40px);display:none;gap:8px}
-.m46.has-nav .m46__nav{display:flex}
-.m46__nav button{width:36px;height:36px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.04);
-  color:var(--tx);border-radius:50%;cursor:pointer;font-size:15px;line-height:1}
 @media (max-width:619px){.m46__caps{width:86%}}
 
 /* laděcí lišta — jen v náhledu */
@@ -69,7 +65,6 @@ html,body{margin:0;padding:0;background:#05090F}
 </style>
 </head>
 <body>
-
 <div class="m46" data-cc-scrolly data-cc-snap="1">
   <div class="m46__track"><div class="m46__pin"><div class="m46__stage">
     <canvas class="m46__cv"></canvas>
@@ -88,7 +83,6 @@ html,body{margin:0;padding:0;background:#05090F}
     </div>
 
     <p class="m46__note">Zjednodušená ilustrace procesu</p>
-    <div class="m46__nav"><button type="button" data-d="-1" aria-label="Předchozí fáze">‹</button><button type="button" data-d="1" aria-label="Další fáze">›</button></div>
     <div class="m46__ab" role="group" aria-label="Zkušební režimy">
       <button type="button" data-m="page">po scénách</button>
       <button type="button" data-m="direct">pixel po pixelu</button>
@@ -472,7 +466,7 @@ html,body{margin:0;padding:0;background:#05090F}
   /* kotvy: klidové stavy scén (šipky ve fallbacku, mapování osy) */
   var ANCH =[.060,.215,.350,.520,.672,.820,.935,.980];
   /* kolik sekund má scéna trvat, když ji čtenář nechá jet samotnou */
-  var DUR  =[ .50, .70, .90,1.40,1.20,1.50,1.10, .70];
+  var DUR  =[ .50,1.80,2.20,2.60,2.40,2.60,2.20,1.60];   /* s na list, scénický režim */
   /* v jaké části scény přijede její popisek (u vajíčka až v půlce) */
   var CAPAT=[ .25, .25, .25, .55, .55, .25, .25, .25];
   /* zpomalení v pointě: [střed, šířka, hloubka] — klíč, náraz, tah magnetu */
@@ -480,8 +474,10 @@ html,body{margin:0;padding:0;background:#05090F}
   var BACKX=2.5;   /* zpátky tolikrát rychleji */
   /* kolik dráhy (lineárně) stojí jedno otočení listu. Úvodní záběr je levnější —
      první scéna jen ukazuje vzorek, nemá cenu ho platit celým gestem. */
-  var GATE=1/(SC.length+4);
-  function gate(){ return SCN===0 ? GATE*.5 : GATE; }
+  var GATE=1/(SC.length+4);          /* bez srovnávání scrollu: list = 1/12 dráhy */
+  var GATE_SEEK=.035;                 /* se srovnáváním: stačí jeden zub kolečka */
+  var seekOK=false;                   /* rodič umí 'seek' — hlásí to ve zprávě progress (seek:true) */
+  function gate(){ var g=seekOK?GATE_SEEK:GATE; return SCN===0 ? g*.5 : g; }
 
   function sceneOf(p){
     for(var i=0;i<SC.length;i++) if(p>=SC[i][0]&&p<SC[i][1]) return i;
@@ -538,8 +534,9 @@ html,body{margin:0;padding:0;background:#05090F}
       if(c<=nodeAt(i+1)) return i+(c-nodeAt(i))/Math.max(1e-9,nodeAt(i+1)-nodeAt(i));
     return n-1;
   }
+  function storyIdx(){ return MODE==='page' ? SCN : capOf(cur); }
   function paintAxis(){
-    var now=capOf(cur), nxt=sceneOf(raw);
+    var now=storyIdx(), nxt=sceneOf(raw);
     for(var i=0;i<nodes.length;i++){
       var c = i===now ? 'is-now' : (i<now ? 'is-past' : (i===nxt&&nxt>now ? 'is-next' : ''));
       if(c!==nodeCls[i]){ nodes[i].className=c; nodeCls[i]=c; }
@@ -548,17 +545,63 @@ html,body{margin:0;padding:0;background:#05090F}
   function paintFill(){
     axFill.style.height=(axisPos(cur)/(nodes.length-1)*100).toFixed(3)+'%';
   }
+  var capTimer=0;
   function showCap(i){
-    if(capIdx===i) return; capIdx=i;
-    for(var k=0;k<caps.length;k++) caps[k].classList.toggle('is-on',k===i);
+    if(capIdx===i) return;
+    var had=capIdx>=0; capIdx=i;
+    for(var k=0;k<caps.length;k++) caps[k].classList.remove('is-on');
+    clearTimeout(capTimer);
+    /* starý text nejdřív dohasne (160 ms), nový naskočí těsně za ním —
+       nikdy dva naráz, nikdy dlouhá díra */
+    capTimer=setTimeout(function(){ caps[i].classList.add('is-on'); }, had?150:0);
     sr.textContent=caps[i].textContent;
   }
 
   /* ---- navázání na scroll ----
      SCN = scéna, na jejímž KONCI stojíme (nebo kterou právě hrajeme).
      Pozor: 'seg' je už název pomocné funkce výš, proto SCN. */
-  var SCN=0, playing=false, rwV=0, bacc=0;
+  var SCN=0, playing=false, rwV=0, rwTo=-1, bacc=0;
+  var fired=false, bfired=false, tFwd=0, tBack=0, queue=0, tDone=0;
+  var seekT=-1, seekAt=0;
+  var QUIET=220;          /* ms ticha = konec gesta */
   function restAt(i){ return SC[i][1]; }     /* klid = konec scény, ne její střed */
+
+  /* inverze remap(): kde na LINEÁRNÍ dráze leží bod příběhu p */
+  function unmap(p){
+    if(!DENSITY) return cl(p,0,1);
+    var x=cl(p,0,1)*MAPN, i=Math.floor(x), t=x-i;
+    if(i>=MAPN) return 1;
+    return MAP[i]+(MAP[i+1]-MAP[i])*t;
+  }
+
+  /* Po každém otočení listu se scroll stránky srovná na uzel scény.
+     Prvek je celou dobu přišpendlený, takže srovnání není vidět — jen se
+     příští gesto začne měřit od uzlu, a jeden list = jedno gesto, vždycky.
+     V náhledu to udělá sám; v embedu o to poprosí rodiče ('seek'). */
+  function alignScroll(){
+    if(!seekOK) return;
+    var lin=unmap(restAt(SCN));
+    if(Math.abs(lin-rawLin)<.004) return;
+    seekT=lin; seekAt=performance.now();
+    if(demo||selfScroll){
+      var r=track.getBoundingClientRect(), span=r.height-pin.offsetHeight;
+      if(span>0) window.scrollTo(0, Math.round(r.top+window.pageYOffset+lin*span));
+    } else {
+      try{ window.parent.postMessage({source:'cc-scrolly',type:'seek',value:lin},'*'); }catch(err){}
+    }
+  }
+
+  function turn(dir){
+    var last=SC.length-1;
+    if(dir>0){
+      if(SCN>=last) return;
+      if(playing||rwTo>=0){ queue=Math.min(3,queue+1); return; }   /* dohraje se, pak další — nikdy dva naráz */
+      SCN++; playing=true;
+    } else {
+      if(SCN<=0) return;
+      queue=0; playing=false; SCN--; rwTo=restAt(SCN); rwV=0;
+    }
+  }
 
   function follow(dt){
     if(reduce||MODE==='direct'){ cur=raw; return; }
@@ -576,59 +619,75 @@ html,body{margin:0;padding:0;background:#05090F}
       return;
     }
 
-    /* 'page' — jedno scrollnutí otočí list.
-       Scroll se měří jako GESTO (kolik ho přibylo), ne jako poloha. Proto se
-       nedělá dluh: animace může předběhnout scroll a čtenář ji nemusí dohánět.
-       Scéna se pak odehraje CELÁ, konstantní rychlostí, a zastaví se na svém
-       konci. Nepřeskočí se nikdy — při velkém scrollnutí se přehrají po sobě. */
-    var last=SC.length-1;
+    /* 'page' — jedno GESTO otočí jeden list.
+       Gesto = souvislý pohyb scrollu; končí, když QUIET ms nic nepřijde.
+       V jednom gestu se list otočí nejvýš jednou, ať je gesto jakkoli dlouhé
+       (touchpad se setrvačností). Drobná gesta (jeden zub kolečka) se sčítají.
+       Scéna se odehraje CELÁ, konstantní rychlostí, a stojí na svém konci.
+       Přeskočit se nedá nikdy: další list se otočí až po dohrání. */
+    var last=SC.length-1, now=performance.now();
     var dLin=rawLin-prevLin; prevLin=rawLin;
 
-    /* Směr se bere z GESTA, ne z toho, že animace je napřed před scrollem —
-       po otočení listu je napřed skoro vždycky a couvat se kvůli tomu nesmí. */
-    if(dLin>0){ acc+=dLin; bacc=0; }
-    else if(dLin<0){ bacc-=dLin; acc=0; }
+    /* dosednutí po srovnání scrollu není gesto čtenáře */
+    if(seekT>=0){
+      if(Math.abs(rawLin-seekT)<.006 || now-seekAt>1500) seekT=-1;
+      dLin=0;
+    }
 
-    if(rwV>0 || bacc>GATE*.35){                /* couvání: rychle a přímo */
-      var tgt=capOf(raw);
-      if(cur>restAt(tgt)+1e-4){
-        if(!rwV) rwV=Math.max(.10,cur-restAt(tgt))/.55;
-        cur-=rwV*dt; playing=false;
-        if(cur<=restAt(tgt)){ cur=restAt(tgt); SCN=tgt; rwV=0; bacc=0; }
-        return;
-      }
-      rwV=0; bacc=0;
+    if(dLin>0){ acc+=dLin; bacc=0; tFwd=now; }
+    else if(dLin<0){ bacc-=dLin; acc=0; tBack=now; }
+
+    if(fired && now-tFwd>QUIET){ fired=false; acc=0; alignScroll(); }
+    if(bfired && now-tBack>QUIET){ bfired=false; bacc=0; alignScroll(); }
+
+    if(!fired && acc>=gate()){ fired=true; acc=0; turn(+1); }
+    if(!bfired && bacc>=gate()*.7){ bfired=true; bacc=0; turn(-1); }
+
+    if(rwTo>=0){                               /* couvání: rychle a přímo */
+      if(!rwV) rwV=Math.max(.10,cur-rwTo)/.55;
+      cur-=rwV*dt;
+      if(cur<=rwTo){ cur=rwTo; rwV=0; rwTo=-1; tDone=now; }
+      return;
     }
 
     if(playing){
       var from=restAt(SCN-1), to=restAt(SCN);
-      cur+=(to-from)/DUR[SCN]*tempo(cur)*dt;
-      if(cur>=to){ cur=to; playing=false; }
-    } else if(SCN<last && acc>=gate()){
-      SCN++; playing=true; acc-=gate();          /* vždy jen o jednu scénu */
+      cur+=(to-from)/DUR[SCN]*dt;                /* konstantní, bez bullet-time */
+      if(cur>=to){ cur=to; playing=false; tDone=now; if(queue===0&&!fired&&!bfired) alignScroll(); }
+      return;
     }
+
+    /* Pojistka bez podpory 'seek' u rodiče: když scroll uteče o dvě scény
+       dopředu (nebo dojel na konec dráhy), listy se dotočí po sobě — s nádechem. */
+    var lead=capOf(raw)-SCN;
+    if(SCN<last && queue===0 && (lead>=2 || rawLin>=.985) && now-tDone>350) queue=1;
+
+    if(queue>0 && SCN<last && now-tDone>150){ queue--; SCN++; playing=true; }
   }
 
+  var selfScroll=false;
   function ownScroll(){
-    if(!demo) return;
+    if(!demo&&!selfScroll) return;
     var r=track.getBoundingClientRect(), span=r.height-pin.offsetHeight;
     rawLin=span>0?cl(-r.top/span,0,1):0; raw=remap(rawLin);
   }
-  function okOrigin(o){
-    return /^https:\/\/(www\.)?cc\.cz$/.test(o)
-        || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o);
-  }
+  /* Zprávy bere jen od okna, které nás vložilo (e.source). Doména se nehlídá:
+     zpráva nese jediné číslo a nic jiného než pozici v příběhu ovlivnit nemůže —
+     a staging/preview domény by jinak skončily bez scrollu. */
   window.addEventListener('message',function(e){
     if(e.source!==window.parent) return;
-    if(!okOrigin(e.origin)) return;
     var d=e.data;
     if(!d||d.source!=='cc-scrolly'||d.type!=='progress') return;
     var first=!driven;
-    if(first){driven=true; root.classList.remove('has-nav'); manual=-1;}
+    if(first){
+      driven=true; manual=-1;
+      if(selfScroll){ selfScroll=false; root.classList.remove('is-self'); document.documentElement.classList.add('m46-driven'); }
+    }
+    seekOK=(d.seek===true);
     rawLin=cl(+d.value||0,0,1); raw=remap(rawLin);
     /* První zpráva = teleport. Čtenář se mohl vrátit do půlky článku
        a nemá koukat, jak se mu přehrává cesta, kterou neušel. */
-    if(first){ SCN=capOf(raw); cur=(MODE==='page')?restAt(SCN):raw; playing=false; rwV=0; prevLin=rawLin; acc=0; }
+    if(first){ SCN=capOf(raw); cur=(MODE==='page')?restAt(SCN):raw; playing=false; rwV=0; rwTo=-1; queue=0; prevLin=rawLin; acc=0; bacc=0; }
   },false);
 
   var hellos=0;
@@ -637,16 +696,15 @@ html,body{margin:0;padding:0;background:#05090F}
     try{ window.parent.postMessage({source:'cc-scrolly',type:'ready'},'*'); }catch(err){}
     if(++hellos<6) setTimeout(hello,300);
   }
+  /* Bez rodiče (náhled souboru, cizí vložení): po 2,5 s se prvek odemkne
+     a scrolluje sám uvnitř svého rámu. Jakmile se rodič ozve, vrátí se k němu. */
   setTimeout(function(){
     if(driven||demo) return;
-    root.classList.add('has-nav'); manual=0; raw=ANCH[0]; cur=raw;
+    selfScroll=true; seekOK=true; root.classList.add('is-self');
+    document.documentElement.classList.remove('m46-driven');
+    resize(); ownScroll(); prevLin=rawLin; acc=0; bacc=0;
+    SCN=capOf(raw); cur=(MODE==='page')?restAt(SCN):raw;
   },2500);
-
-  root.querySelector('.m46__nav').addEventListener('click',function(e){
-    var b=e.target.closest('button'); if(!b) return;
-    manual=cl(manual+(+b.dataset.d),0,SC.length-1);
-    raw=ANCH[manual];
-  });
 
   window.addEventListener('scroll',ownScroll,{passive:true});
   try{ new ResizeObserver(resize).observe(stage); }
@@ -658,16 +716,19 @@ html,body{margin:0;padding:0;background:#05090F}
     requestAnimationFrame(loop);
     var dt=Math.min(.05,(now-tPrev)/1000); tPrev=now;
     if(document.hidden||!visible) return;
-    if(demo&&manual<0) ownScroll();
+    if((demo||selfScroll)&&manual<0) ownScroll();
     follow(dt);
-    paintAxis(); paintFill(); showCap(capOf(cur));
+    paintAxis(); paintFill(); showCap(storyIdx());
     draw(cur,now); frames++;
   }
-  window.__m46=function(){return{frames:frames,visible:visible,demo:demo,driven:driven,
-    mode:MODE,dens:DENSITY,scn:SCN,playing:playing,acc:+acc.toFixed(3),raw:+raw.toFixed(3),cur:+cur.toFixed(3),scene:sceneOf(cur),cap:capIdx,
+  window.__m46=function(){return{frames:frames,visible:visible,demo:demo,driven:driven,self:selfScroll,queue:queue,seek:seekT,seekOK:seekOK,
+    mode:MODE,dens:DENSITY,scn:SCN,playing:playing,acc:+acc.toFixed(3),raw:+raw.toFixed(3),rawLin:+rawLin.toFixed(3),cur:+cur.toFixed(3),scene:sceneOf(cur),cap:capIdx,
     moving:Math.abs(raw-cur)>1e-3};};
 
+  var errs=[];
+  window.addEventListener('error',function(e){ errs.push((e.message||'?')+' @'+(e.lineno||'?')); });
   if(demo){
+    seekOK=true;
     root.classList.add('is-demo');
     var ab=root.querySelector('.m46__ab');
     function paintAB(){
@@ -679,18 +740,19 @@ html,body{margin:0;padding:0;background:#05090F}
       var b=e.target.closest('button'); if(!b) return;
       if(b.dataset.m) MODE=b.dataset.m; else DENSITY=!DENSITY;
       paintAB(); ownScroll();
-      SCN=capOf(raw); cur=(MODE==='page')?restAt(SCN):raw; playing=false; rwV=0; prevLin=rawLin; acc=0;
+      SCN=capOf(raw); cur=(MODE==='page')?restAt(SCN):raw; playing=false; rwV=0; rwTo=-1; queue=0; prevLin=rawLin; acc=0; bacc=0;
     });
     paintAB();
   }
 
   resize(); ownScroll();
   SCN=capOf(raw); cur=(MODE==='page')?restAt(SCN):raw; playing=false; prevLin=rawLin; acc=0;
-  paintAxis(); paintFill(); showCap(capOf(cur));
+  paintAxis(); paintFill(); showCap(storyIdx());
   hello();
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(resize);
   requestAnimationFrame(loop);
 })();
 </script>
+
 </body>
 </html>
