@@ -184,7 +184,7 @@
   box-sizing:border-box;
   position:relative;
   display:flex;flex-direction:column;
-  min-height:100vh;
+  min-height:100vh;min-height:100dvh;
   padding:clamp(14px,2.6vw,28px);
   background:var(--plocha);
   color:var(--ink);
@@ -231,9 +231,14 @@
   vertical-align:middle;margin-right:7px;}
 .cc-aed__legend i.dash{border-top-style:dashed;border-top-width:3px;}
 .cc-aed__lgshort{display:none;}
-.cc-aed__canvaswrap{position:relative;flex:1 1 auto;min-height:0;}
+.cc-aed__canvaswrap{position:relative;flex:1 1 auto;min-height:calc(140px*var(--sc));}
 .cc-aed__canvaswrap canvas{position:absolute;inset:0;width:100%;height:100%;
-  touch-action:pan-y;cursor:crosshair;border-radius:8px;}
+  /* touch-action:none je podmínka funkčního kreslení: s pan-y si prohlížeč
+     vezme každý tah, který má svislou složku, a odroluje s ním článek. */
+  touch-action:none;-webkit-touch-callout:none;
+  cursor:crosshair;border-radius:8px;}
+/* po odhalení se už nekreslí, plochu tedy vrátíme stránce pro rolování */
+.cc-aed__canvaswrap--locked canvas{touch-action:pan-y;cursor:default;}
 .cc-aed__canvaswrap canvas:focus-visible{outline:3px solid var(--ac);outline-offset:2px;}
 
 /* trenažér */
@@ -348,8 +353,14 @@
 
 .cc-aed :focus-visible{outline:3px solid var(--ac);outline-offset:2px;}
 
+@media (max-height:470px){
+  .cc-aed__say{--sayh:40px;margin-top:calc(6px*var(--sc));}
+  .cc-aed__stage{margin-top:calc(7px*var(--sc));}
+  .cc-aed__foot{margin-top:calc(6px*var(--sc));}
+}
 @media (max-width:619px){
   .cc-aed__head{gap:10px;}
+  .cc-aed .cc-aed__title{font-size:calc(clamp(17px,4.6vw,22px)*var(--sc));line-height:1.18;}
   .cc-aed__legend{gap:calc(12px*var(--sc));font-size:calc(12px*var(--sc));}
   .cc-aed__legend i{width:16px;margin-right:5px;}
   .cc-aed__lgfull{display:none;}
@@ -447,25 +458,80 @@
   var CANVAS_LABEL_BASE = 'Graf: vodorovně minuty od zástavy srdce, svisle šance na přežití. Nakreslete odhad tažením zleva doprava.';
 
   /* ---------- univerzální „klepnutí" ----------
-     click sám o sobě na mobilu vypadává: při rychlém ťukání se prst pohne
-     a prohlížeč click zahodí. Bereme proto pointerdown, s fallbackem na
-     touchstart/mousedown pro prohlížeče bez Pointer Events, a klávesnici. */
-  function bindTap(node, fn){
-    var lastTouch = 0, hasPtr = !!window.PointerEvent;
+     Na mobilu se nedá spolehnout na click: při rychlém ťuknutí se prst pohne
+     a prohlížeč click zahodí. Ale ani na pointerdown: kdo začne rolovat článek
+     prstem položeným na odpovědi, ten ji odpálí, aniž by chtěl. Bereme proto
+     pointerup, když se prst mezitím posunul jen málo a stisk byl krátký.
+     Trenažér tempa je výjimka (immediate), tam musí reagovat stisk. */
+  var TAP_MOVE = 11, TAP_HOLD = 900;
+  function bindTap(node, fn, immediate){
+    var sx = 0, sy = 0, st = 0, armed = false, id = null, lastTouch = 0;
     function go(e){
       if(node.disabled) return;
       if(e && e.cancelable) e.preventDefault();
       try{ node.focus({preventScroll:true}); }catch(err){ try{ node.focus(); }catch(e2){} }
       fn();
     }
-    if(hasPtr){
-      node.addEventListener('pointerdown', go);
+    function far(x, y){ return Math.abs(x - sx) > TAP_MOVE || Math.abs(y - sy) > TAP_MOVE; }
+
+    if(window.PointerEvent){
+      node.addEventListener('pointerdown', function(e){
+        if(e.pointerType === 'mouse' && e.button !== 0) return;
+        if(immediate){ go(e); return; }
+        armed = true; id = e.pointerId;
+        sx = e.clientX; sy = e.clientY; st = Date.now();
+        try{ node.setPointerCapture(e.pointerId); }catch(err){}
+      });
+      node.addEventListener('pointermove', function(e){
+        if(armed && e.pointerId === id && far(e.clientX, e.clientY)) armed = false;
+      });
+      node.addEventListener('pointerup', function(e){
+        if(!armed || e.pointerId !== id) return;
+        armed = false;
+        if(Date.now() - st > TAP_HOLD || far(e.clientX, e.clientY)) return;
+        go(e);
+      });
+      node.addEventListener('pointercancel', function(e){ if(e.pointerId === id) armed = false; });
+      // odjištění při opuštění tlačítka jen tehdy, když prst opravdu odjel;
+      // drobné chvění na hraně by jinak klepnutí zahodilo
+      node.addEventListener('pointerleave', function(e){
+        if(e.pointerId === id && far(e.clientX, e.clientY)) armed = false;
+      });
     } else {
-      node.addEventListener('touchstart', function(e){ lastTouch = Date.now(); go(e); }, {passive:false});
-      node.addEventListener('mousedown', function(e){ if(Date.now() - lastTouch > 700) go(e); });
+      node.addEventListener('touchstart', function(e){
+        var t = e.touches[0]; if(!t) return;
+        lastTouch = Date.now();
+        if(immediate){ armed = false; go(e); return; }
+        armed = true; sx = t.clientX; sy = t.clientY; st = Date.now();
+      }, {passive:false});
+      node.addEventListener('touchmove', function(e){
+        var t = e.touches[0];
+        if(armed && t && far(t.clientX, t.clientY)) armed = false;
+      }, {passive:true});
+      node.addEventListener('touchend', function(e){
+        lastTouch = Date.now();
+        if(!armed) return;
+        armed = false;
+        if(Date.now() - st > TAP_HOLD) return;
+        go(e);
+      }, {passive:false});
+      node.addEventListener('touchcancel', function(){ armed = false; });
+      node.addEventListener('mousedown', function(e){
+        if(e.button !== 0 || Date.now() - lastTouch < 800) return;
+        if(immediate){ go(e); return; }
+        armed = true; sx = e.clientX; sy = e.clientY; st = Date.now();
+      });
+      node.addEventListener('mouseup', function(e){
+        if(!armed) return; armed = false;
+        if(far(e.clientX, e.clientY)) return;
+        go(e);
+      });
+      node.addEventListener('mouseleave', function(){ armed = false; });
     }
     node.addEventListener('keydown', function(e){
-      if(e.key === ' ' || e.key === 'Enter' || e.key === 'Spacebar'){ e.preventDefault(); fn(); }
+      if(e.key === ' ' || e.key === 'Enter' || e.key === 'Spacebar'){
+        e.preventDefault(); if(!node.disabled) fn();
+      }
     });
     node.addEventListener('click', function(e){ e.preventDefault(); });
     node.addEventListener('contextmenu', function(e){ e.preventDefault(); });
@@ -538,15 +604,22 @@
     return a;
   }
 
+  /* Backing store se přealokuje jen při skutečné změně rozměru. Dřív se
+     přepisoval při každém snímku, což na mobilu zahazovalo pointermove. */
+  var cvW = 0, cvH = 0, cvDpr = 0;
   function sizeCanvas(){
     var w = el.canvaswrap.clientWidth, h = el.canvaswrap.clientHeight;
     if(w < 2 || h < 2) return false;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr);
+    if(w !== cvW || h !== cvH || dpr !== cvDpr){
+      cvW = w; cvH = h; cvDpr = dpr;
+      cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr);
+      rectC = null;
+      var narrow = w < 400;
+      var padL = narrow ? 50 : 58, padB = narrow ? 26 : 30, padT = 14, padR = narrow ? 12 : 18;
+      plot = {x:padL, y:padT, w:Math.max(10, w-padL-padR), h:Math.max(10, h-padT-padB)};
+    }
     ctx.setTransform(dpr,0,0,dpr,0,0);
-    var narrow = w < 400;
-    var padL = narrow ? 50 : 58, padB = narrow ? 26 : 30, padT = 14, padR = narrow ? 12 : 18;
-    plot = {x:padL, y:padT, w:Math.max(10, w-padL-padR), h:Math.max(10, h-padT-padB)};
     return true;
   }
   function px(t){ return plot.x + (t/10) * plot.w; }
@@ -652,8 +725,13 @@
     for(var i=1;i<N;i++) if(!isNaN(user[i])) n++;
     return n;
   }
+  /* Rámeček canvasu se čte jednou za tah, ne při každém pohybu prstu.
+     Rolování a resize cache zneplatní. */
+  var rectC = null;
+  function refreshRect(){ rectC = cv.getBoundingClientRect(); }
+  function dropRect(){ rectC = null; }
   function fromPoint(clientX, clientY){
-    var r = cv.getBoundingClientRect();
+    var r = rectC || (rectC = cv.getBoundingClientRect());
     return { t: ((clientX - r.left) - plot.x) / plot.w * 10,
              v: (1 - ((clientY - r.top) - plot.y) / plot.h) * 100 };
   }
@@ -680,7 +758,8 @@
     drawn = countDrawn();
   }
 
-  var drawing = false, lastIx = -1, lastVal = 0, rafOn = false;
+  var drawing = false, drawId = null, lastIx = -1, lastVal = 0, rafOn = false;
+  var strokes = 0, hijacked = false;
   function drawSoon(){
     if(rafOn) return;
     rafOn = true;
@@ -700,25 +779,73 @@
     drawn = countDrawn();
     drawSoon(); syncNext();
   }
-  function startDraw(x,y){ if(revealT > 0) return; drawing = true; lastIx = -1; paint(x,y); }
+  function startDraw(x,y){
+    if(revealT > 0) return;
+    drawing = true; lastIx = -1; refreshRect(); paint(x,y);
+  }
   function moveDraw(x,y){ if(!drawing || revealT > 0) return; paint(x,y); }
-  function endDraw(){ drawing = false; lastIx = -1; }
+  function endDraw(){
+    if(!drawing) return;
+    drawing = false; drawId = null; lastIx = -1;
+    strokes++;
+    if(revealT > 0) return;
+    if(drawn >= CFG.minDrawn){
+      if(el.say.dataset.mode === 'shapes') say('');   // pomocné tvary už nejsou potřeba
+    } else if(hijacked || strokes >= 3){
+      showShapes();                                    // dvakrát to nevyšlo, nabídni náhradu
+    }
+  }
 
   if(window.PointerEvent){
     cv.addEventListener('pointerdown', function(e){
-      startDraw(e.clientX, e.clientY);
+      if(drawing) return;                              // druhý prst ignoruj
+      if(e.pointerType === 'mouse' && e.button !== 0) return;
+      if(e.cancelable) e.preventDefault();
+      drawId = e.pointerId;
       try{ cv.setPointerCapture(e.pointerId); }catch(err){}
+      startDraw(e.clientX, e.clientY);
     });
-    cv.addEventListener('pointermove', function(e){ moveDraw(e.clientX, e.clientY); });
-    ['pointerup','pointercancel','pointerleave'].forEach(function(t){ cv.addEventListener(t, endDraw); });
+    cv.addEventListener('pointermove', function(e){
+      if(!drawing || e.pointerId !== drawId) return;
+      if(e.cancelable) e.preventDefault();
+      var co = e.getCoalescedEvents ? e.getCoalescedEvents() : null;
+      if(co && co.length > 1){
+        for(var i=0;i<co.length;i++) moveDraw(co[i].clientX, co[i].clientY);
+      } else moveDraw(e.clientX, e.clientY);
+    });
+    cv.addEventListener('pointerup', function(e){ if(e.pointerId === drawId) endDraw(); });
+    cv.addEventListener('pointercancel', function(e){
+      if(e.pointerId !== drawId) return;
+      hijacked = true;                                 // prohlížeč si gesto vzal pro sebe
+      endDraw();
+    });
+    // pojistka, kdyby setPointerCapture selhal a prst vyjel mimo plochu
+    window.addEventListener('pointermove', function(e){
+      if(!drawing || e.pointerId !== drawId || e.target === cv) return;
+      moveDraw(e.clientX, e.clientY);
+    });
+    window.addEventListener('pointerup', function(e){
+      if(drawing && e.pointerId === drawId && e.target !== cv) endDraw();
+    });
   } else {
-    cv.addEventListener('touchstart', function(e){ var t=e.touches[0]; if(t) startDraw(t.clientX,t.clientY); }, {passive:true});
-    cv.addEventListener('touchmove', function(e){ var t=e.touches[0]; if(t) moveDraw(t.clientX,t.clientY); }, {passive:true});
-    ['touchend','touchcancel'].forEach(function(t){ cv.addEventListener(t, endDraw); });
-    cv.addEventListener('mousedown', function(e){ startDraw(e.clientX, e.clientY); });
-    cv.addEventListener('mousemove', function(e){ moveDraw(e.clientX, e.clientY); });
-    ['mouseup','mouseleave'].forEach(function(t){ cv.addEventListener(t, endDraw); });
+    cv.addEventListener('touchstart', function(e){
+      if(drawing) return;
+      var t = e.touches[0]; if(!t) return;
+      if(e.cancelable) e.preventDefault();             // bez tohohle uteče stránka
+      startDraw(t.clientX, t.clientY);
+    }, {passive:false});
+    cv.addEventListener('touchmove', function(e){
+      var t = e.touches[0]; if(!t) return;
+      if(e.cancelable) e.preventDefault();
+      moveDraw(t.clientX, t.clientY);
+    }, {passive:false});
+    cv.addEventListener('touchend', endDraw);
+    cv.addEventListener('touchcancel', function(){ hijacked = true; endDraw(); });
+    cv.addEventListener('mousedown', function(e){ if(e.button === 0) startDraw(e.clientX, e.clientY); });
+    window.addEventListener('mousemove', function(e){ moveDraw(e.clientX, e.clientY); });
+    window.addEventListener('mouseup', endDraw);
   }
+  window.addEventListener('scroll', dropRect, true);
 
   // klávesová cesta: po zaostření canvasu se ve slotu nabídnou hotové tvary
   cv.addEventListener('focus', function(){
@@ -730,12 +857,12 @@
   function showShapes(){
     if(el.say.dataset.mode === 'shapes') return;
     el.say.dataset.mode = 'shapes';
-    el.say.innerHTML = '<div class="cc-aed__shapes cc-aed__shapes--on"><b>Nebo vyberte tvar:</b>'+
+    el.say.innerHTML = '<div class="cc-aed__shapes cc-aed__shapes--on"><b>Nebo rovnou vyberte tvar:</b>'+
       '<button type="button" class="cc-aed__shape" data-shape="steep">Prudký pokles</button>'+
       '<button type="button" class="cc-aed__shape" data-shape="lin">Rovnoměrný</button>'+
       '<button type="button" class="cc-aed__shape" data-shape="soft">Mírný pokles</button></div>';
     el.say.querySelectorAll('[data-shape]').forEach(function(b){
-      b.addEventListener('click', function(){
+      bindTap(b, function(){
         var s = b.dataset.shape;
         for(var i=0;i<N;i++){
           var t = i/10;
@@ -753,6 +880,7 @@
      Sekvence hlídá, aby doběhlá animace nepřepsala už přepnutou obrazovku. */
   function reveal(){
     var my = ++revealSeq;
+    el.canvaswrap.classList.add('cc-aed__canvaswrap--locked');  // plochu vrať rolování
     finishCurve();                     // teprve teď doplň mezery a chybějící konec
     revealT = 0; revealing = true;
     syncNext();                        // zamkni tlačítko hned, ne až po doběhnutí
@@ -892,7 +1020,7 @@
     syncNext();
   }
 
-  bindTap(el.tap, tapHit);
+  bindTap(el.tap, tapHit, true);   // trenažér měří stisk, ne zvednutí
 
   function footTempoButtons(withAgain){
     el.footleft.innerHTML = '';
@@ -956,6 +1084,7 @@
   function restart(){
     pass = {}; stepIx = 0; chartStep = 1;
     user = newUser(); drawn = 0; lastIx = -1; revealT = 0; revealing = false; revealSeq++;
+    strokes = 0; hijacked = false; drawing = false; drawId = null;
     tapReset(); enter();
   }
 
@@ -1027,7 +1156,9 @@
 
     if(s === 'k1' || s === 'k2'){
       chartStep = (s === 'k1') ? 1 : 2;
+      el.canvaswrap.classList.remove('cc-aed__canvaswrap--locked');
       user = newUser(); drawn = 0; lastIx = -1; revealT = 0; revealing = false;
+      strokes = 0; hijacked = false; drawing = false; drawId = null;
       cv.setAttribute('aria-label', CANVAS_LABEL_BASE);
       el.kicker.textContent = 'Odhadněte realitu';
       el.title.textContent = chartStep === 1
@@ -1070,7 +1201,7 @@
      je jen pojistka pro delší texty nebo širší náhradní font – běžně
      se ani jednou neotočí.
      ============================================================ */
-  var fitT = null, lastSc = 1;
+  var fitT = null, lastSc = 1, fitting = false, seenW = 0, seenH = 0;
   function overflow(){ return document.documentElement.scrollHeight - window.innerHeight; }
   function setSc(sc){
     if(sc === lastSc) return;
@@ -1085,14 +1216,20 @@
     root.style.setProperty('--tapd', d.toFixed(0) + 'px');
   }
   function fit(){
+    if(fitting) return;
+    fitting = true;
     setSc(1);
     tapSize();
-    if(overflow() <= 1){ if(!scenes.chart.hidden) draw(); return; }
-    var sc = 1;
-    for(var k=0;k<14 && overflow() > 1;k++){
-      sc *= 0.93; setSc(sc); tapSize();
+    if(overflow() > 1){
+      var sc = 1;
+      for(var k=0;k<14 && overflow() > 1;k++){
+        sc *= 0.93; setSc(sc); tapSize();
+      }
     }
+    dropRect();
     if(!scenes.chart.hidden) draw();
+    seenW = root.clientWidth; seenH = root.clientHeight;
+    fitting = false;
   }
   function fitSoon(){ clearTimeout(fitT); fitT = setTimeout(fit, 60); }
 
@@ -1100,7 +1237,18 @@
   window.addEventListener('load', fit);
   window.addEventListener('orientationchange', fitSoon);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
-  if(window.ResizeObserver) new ResizeObserver(fitSoon).observe(root);
+  if(window.ResizeObserver){
+    // jen skutečná změna rámu, ne naše vlastní přepsání --sc
+    new ResizeObserver(function(){
+      if(fitting) return;
+      if(root.clientWidth === seenW && root.clientHeight === seenH) return;
+      fitSoon();
+    }).observe(root);
+    // graf se překreslí, jakmile plocha poprvé dostane rozměr (líné iframe)
+    new ResizeObserver(function(){
+      if(!scenes.chart.hidden) drawSoon();
+    }).observe(el.canvaswrap);
+  }
 
   (function(){
     var v = getComputedStyle(root).getPropertyValue('--ac').trim();
