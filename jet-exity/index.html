@@ -142,7 +142,7 @@
 .cc-jetex{
   --cc-ui:Poppins,-apple-system,"Segoe UI",sans-serif;  /* cc.cz nemá Inter, UI i čísla sází Poppinsem */
   --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
-  --bg:transparent;   /* bez vlastní plochy: prvek leží přímo na pozadí stránky (speciál i článek) */
+  --bg:#fff;   /* bílý infobox: odliší se od krémového nativu i od bílého článku (díky linii) */
   --ink:#16181c;  --ink2:#5b616b;
   --fs-m:14px; --fs-s:13px;
   --sc:1; --mult:60px;
@@ -151,8 +151,7 @@
   display:flex;flex-direction:column;
   height:100vh;overflow:hidden;
   background-color:var(--bg);
-  border:0;border-radius:0;color:var(--ink);
-  padding:2px 0 4px;   /* bez boxu zarovnáno se sloupcem textu; dole místo na stín karet */
+  border:1px solid var(--cc-line);border-radius:var(--cc-radius);color:var(--ink);
 }
 .cc-jetex .cc-jetex__head{flex:0 0 auto;margin-bottom:calc(14px*var(--sc));}
 .cc-jetex .cc-jetex__title{margin:0 0 4px;color:var(--ink);font-size:calc(clamp(19px,3.2vw,27px)*var(--sc));letter-spacing:-.01em;}
@@ -235,7 +234,7 @@
 
 /* overlay */
 .cc-jetex__overlay{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;
-  padding:var(--cc-pad);background:rgba(249,247,243,.82);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
+  padding:var(--cc-pad);background:rgba(255,255,255,.8);border-radius:var(--cc-radius);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
 .cc-jetex__overlay[hidden]{display:none;}
 .cc-jetex__panel{position:relative;display:flex;flex-direction:column;width:100%;max-width:520px;max-height:100%;
   background:#fff;border-top:5px solid #16181c;border-radius:14px;box-shadow:0 20px 50px -10px rgba(0,0,0,.3);padding:18px 20px 16px;}
@@ -253,7 +252,7 @@
 .cc-jetex__tabs{display:none;flex:0 0 auto;gap:8px;margin:0 0 calc(12px*var(--sc));}
 .cc-jetex:not(.is-row) .cc-jetex__tabs{display:flex;}
 .cc-jetex__tab{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
-  height:calc(62px*var(--sc));padding:0 8px;border:1px solid rgba(22,24,28,.1);border-radius:14px;background:#fff;
+  height:calc(62px*var(--sc));padding:0 8px;border:1px solid rgba(22,24,28,.08);border-radius:14px;background:#f4f4f5;
   color:var(--brand);cursor:pointer;transition:background .25s,color .25s,box-shadow .25s,transform .25s;}
 .cc-jetex__tab .cc-jetex__logo{height:calc(15px*var(--sc));color:inherit;opacity:.8;}
 .cc-jetex__tab small{font:700 calc(12px*var(--sc))/1 var(--cc-ui);letter-spacing:.02em;color:var(--ink2);font-variant-numeric:tabular-nums;}
