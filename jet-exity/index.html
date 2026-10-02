@@ -142,7 +142,7 @@
 .cc-jetex{
   --cc-ui:Poppins,-apple-system,"Segoe UI",sans-serif;  /* cc.cz nemá Inter, UI i čísla sází Poppinsem */
   --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
-  --bg:#f2f0eb;
+  --bg:transparent;   /* bez vlastní plochy: prvek leží přímo na pozadí stránky (speciál i článek) */
   --ink:#16181c;  --ink2:#5b616b;
   --fs-m:14px; --fs-s:13px;
   --sc:1; --mult:60px;
@@ -151,7 +151,8 @@
   display:flex;flex-direction:column;
   height:100vh;overflow:hidden;
   background-color:var(--bg);
-  border:0;color:var(--ink);
+  border:0;border-radius:0;color:var(--ink);
+  padding:2px 0 4px;   /* bez boxu zarovnáno se sloupcem textu; dole místo na stín karet */
 }
 .cc-jetex .cc-jetex__head{flex:0 0 auto;margin-bottom:calc(14px*var(--sc));}
 .cc-jetex .cc-jetex__title{margin:0 0 4px;color:var(--ink);font-size:calc(clamp(19px,3.2vw,27px)*var(--sc));letter-spacing:-.01em;}
@@ -234,7 +235,7 @@
 
 /* overlay */
 .cc-jetex__overlay{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;
-  padding:var(--cc-pad);background:rgba(242,240,235,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
+  padding:var(--cc-pad);background:rgba(249,247,243,.82);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
 .cc-jetex__overlay[hidden]{display:none;}
 .cc-jetex__panel{position:relative;display:flex;flex-direction:column;width:100%;max-width:520px;max-height:100%;
   background:#fff;border-top:5px solid #16181c;border-radius:14px;box-shadow:0 20px 50px -10px rgba(0,0,0,.3);padding:18px 20px 16px;}
