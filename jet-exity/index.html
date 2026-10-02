@@ -7,14 +7,17 @@
 <meta name="robots" content="noindex">
 <!-- Jet Investment × CzechCrunch — infografika „Dva prodeje fondu Jet 2".
      Nasazení: matyas-cloud/cc-embed/jet-exity/index.html, do článku jen řádek z jet-exity-vlozeni.html.
-     Písmo jako na cc.cz: Poppins (400/500/700, soubory ve fonts/) na vše kromě perexu a vysvětlivek (Georgia). Loga jsou inline.
+     Písmo jako na cc.cz: Poppins (400/500/700, sdílená složka cc-embed/fonts/) na vše kromě perexu a vysvětlivek (Georgia). Loga jsou inline.
      Data a texty jsou v bloku FIRMY ve skriptu. -->
 <style>
-  /* Poppins hostujeme vedle prvku (složka fonts/): iframe je samostatný dokument, z Google Fonts by si ho
-     stahoval znovu (probliknutí náhradního písma + IP čtenáře odchází Googlu). Podmnožina latin + čeština. */
-  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(fonts/poppins-400.woff2) format('woff2');}
-  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(fonts/poppins-500.woff2) format('woff2');}
-  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(fonts/poppins-700.woff2) format('woff2');}
+  /* Poppins ze sdílené složky cc-embed/fonts/ (iframe je samostatný dokument, z Google Fonts by si ho stahoval znovu:
+     probliknutí náhradního písma + IP čtenáře odchází Googlu). latin + latin-ext kvůli češtině. */
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-500.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-ext-500.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-700.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-ext-700.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
 </style>
 <style>
   html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;}
@@ -118,7 +121,7 @@
 
   <header class="cc-jetex__head">
     <h3 class="cc-title cc-jetex__title">Dva prodeje, na kterých Jet ukazuje, jak vzniká hodnota</h3>
-    <p class="cc-jetex__lede">Obě firmy koupil fond Jet 2. Prozkoumejte v grafech, co firma daný rok zažívala.</p>
+    <p class="cc-jetex__lede">Obě firmy koupil fond Jet 2. Klikněte na body na&nbsp;křivce tržeb a&nbsp;uvidíte, co firma daný rok zažívala.</p>
   </header>
 
   <div class="cc-jetex__tabs" role="tablist" aria-label="Firma" data-tabs></div>
