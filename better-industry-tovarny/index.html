@@ -7,12 +7,19 @@
 <meta name="robots" content="noindex">
 <!-- Better Industry × CzechCrunch — interaktivní infografika „Čtyři továrny".
      Nasazení: matyas-cloud/cc-embed/better-industry-tovarny/index.html, do článku jen <iframe>.
-     Fonty neblokujícím způsobem, prvek se přeměří na document.fonts.ready. -->
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" media="print" onload="this.media='all'"
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
-<noscript><link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"></noscript>
+     Poppins se hostuje ve složce fonts/ vedle index.html, prvek se přeměří na document.fonts.ready. -->
+<style>
+  /* Poppins hostujeme vedle prvku: iframe je samostatný dokument, takže by si ho jinak
+     stahoval z Google Fonts znovu (FOUT + IP čtenáře odchází Googlu). */
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(fonts/poppins-latin-500.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(fonts/poppins-latin-ext-500.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(fonts/poppins-latin-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(fonts/poppins-latin-ext-600.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(fonts/poppins-latin-700.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(fonts/poppins-latin-ext-700.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+</style>
 <style>
   html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;}
   .cc-embed{margin:0!important;}
@@ -128,24 +135,25 @@
 </div>
 
 <style>
-/* ------ .cc-tovarny — tmavá varianta ------ */
+/* ------ .cc-tovarny — barevné karty na bílém infoboxu ------ */
 .cc-tovarny{
   --bg:#fff;   /* bílý infobox s linkou, stejně jako prvek Jet */
   --ink:#16181c;  --ink2:#5b616b;
-  --line:rgba(255,255,255,.22);  --line2:rgba(255,255,255,.35);
-  --txt:#fff;  --fs-m:14px;  --fs-s:12.5px;
-  --acc:#087eeb;
+  --fs-m:14px;  --fs-s:12.5px;  --fs-sub:15.5px;   /* obor pod logem je nadpis karty */
+  /* podlahy čitelnosti: pod tyhle velikosti text nejde, místo zmenšování se škrtá obsah */
+  --fs-m-min:13px;  --fs-s-min:12px;  --lede-min:14px;  --title-min:17px;  --fs-sub-min:14px;
   box-sizing:border-box;
   position:relative;
   display:flex;flex-direction:column;
   height:100vh;overflow:hidden;
   background-color:var(--bg);
-  border:1px solid var(--cc-line);border-radius:var(--cc-radius);color:var(--ink);
+  border:1px solid #e0e0e0;border-radius:var(--cc-radius);color:var(--ink);
   --sc:1; --revsize:44px; --empsize:24px;
 }
 .cc-tovarny .cc-tovarny__head{flex:0 0 auto;margin-bottom:calc(16px*var(--sc));}
-.cc-tovarny .cc-tovarny__title{margin:0 0 4px;color:var(--ink);font-size:calc(clamp(19px,3.2vw,27px)*var(--sc));letter-spacing:-.01em;}
-.cc-tovarny .cc-tovarny__lede{margin:0;font:400 calc(var(--fs-m)*var(--sc))/1.5 var(--cc-serif);color:var(--ink2);}
+.cc-tovarny .cc-tovarny__title{margin:0 0 4px;color:var(--ink);font-size:max(var(--title-min), calc(clamp(19px,3.2vw,27px)*var(--sc)));letter-spacing:-.01em;}
+.cc-tovarny .cc-tovarny__lede{margin:0;font:400 max(var(--lede-min), calc(var(--fs-m)*var(--sc)))/1.5 var(--cc-serif);color:var(--ink2);}
+.cc-tovarny.is-nolede .cc-tovarny__lede{display:none;}
 
 .cc-tovarny__grid{
   flex:1 1 auto;min-height:0;
@@ -161,7 +169,7 @@
   position:relative;isolation:isolate;
   display:flex;flex-direction:column;min-width:0;overflow:hidden;
   background:linear-gradient(160deg,var(--c1) 0%,var(--c2) 100%);
-  border:0;border-radius:16px;color:var(--txt);
+  border:0;border-radius:16px;color:#fff;
   box-shadow:0 1px 2px rgba(0,0,0,.08),0 10px 24px -12px var(--c2);
   --pad:calc(clamp(12px,1.8vw,16px)*var(--sc));
   padding:var(--pad);
@@ -185,22 +193,22 @@
   height:var(--band,64px);margin:calc(-1*var(--pad)) calc(-1*var(--pad)) calc(14px*var(--sc));padding:0 var(--pad);
   background:#fff;border-bottom:1px solid rgba(0,0,0,.06);}
 .cc-tovarny__plate{flex:0 1 auto;min-width:0;display:flex;align-items:center;height:100%;}
-.cc-tovarny__plname{font:700 calc(16px*var(--sc))/1 var(--cc-display);color:var(--c2);white-space:nowrap;}
+.cc-tovarny__plname{font:700 max(14px, calc(16px*var(--sc)))/1 var(--cc-display);color:var(--c2);white-space:nowrap;}
 .cc-tovarny__id{min-width:0;}
 .cc-tovarny__logo{display:block;width:auto;max-width:100%;height:30px;}
-.cc-tovarny .cc-tovarny__sub{margin:0;font:600 calc(var(--fs-m)*var(--sc))/1.3 var(--cc-display);color:#fff;letter-spacing:-.015em;}
+.cc-tovarny .cc-tovarny__sub{margin:0;font:600 max(var(--fs-sub-min), calc(var(--fs-sub)*var(--sc)))/1.3 var(--cc-display);color:#fff;letter-spacing:-.015em;}
 
 .cc-tovarny__rev{display:flex;flex-direction:column;justify-content:center;padding:calc(12px*var(--sc)) 0 calc(10px*var(--sc));}
 .cc-tovarny__revnum{display:block;font:700 calc(var(--revsize)*var(--sc))/1 var(--cc-display);letter-spacing:-.03em;white-space:nowrap;
   color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.12);}
-.cc-tovarny__lbl{display:block;margin-top:calc(6px*var(--sc));font:500 calc(var(--fs-s)*var(--sc))/1.3 var(--cc-display);color:#fff;}
+.cc-tovarny__lbl{display:block;margin-top:calc(6px*var(--sc));font:500 max(var(--fs-s-min), calc(var(--fs-s)*var(--sc)))/1.3 var(--cc-display);color:#fff;}
 
 .cc-tovarny__emp{padding-top:calc(12px*var(--sc));border-top:1px solid rgba(255,255,255,.28);}
 .cc-tovarny__empnum{display:block;font:700 calc(var(--empsize)*var(--sc))/1 var(--cc-display);color:#fff;letter-spacing:-.025em;white-space:nowrap;}
 .cc-tovarny__plus{margin-left:.04em;}
 .cc-tovarny.is-counting .cc-tovarny__plus{visibility:hidden;}
 
-.cc-tovarny .cc-tovarny__hl{margin:calc(14px*var(--sc)) 0 0;font:400 calc(var(--fs-s)*var(--sc))/1.45 var(--cc-display);color:#fff;}
+.cc-tovarny .cc-tovarny__hl{margin:calc(14px*var(--sc)) 0 0;font:400 max(var(--fs-m-min), calc(var(--fs-s)*var(--sc)))/1.45 var(--cc-display);color:#fff;}
 .cc-tovarny.is-nohl .cc-tovarny__hl,
 .cc-tovarny.is-compact .cc-tovarny__hl,
 .cc-tovarny.is-compact .cc-tovarny__sub{display:none;}
@@ -225,6 +233,7 @@
 .cc-tovarny__pbody{flex:1 1 auto;min-height:0;overflow-y:auto;font:400 15px/1.6 var(--cc-serif);color:var(--ink);
   -webkit-mask-image:linear-gradient(to bottom,#000 90%,rgba(0,0,0,.3));mask-image:linear-gradient(to bottom,#000 90%,rgba(0,0,0,.3));}
 .cc-tovarny .cc-tovarny__pbody p{margin:0 0 8px;}
+.cc-tovarny .cc-tovarny__phl{margin:0 0 12px;padding-bottom:10px;border-bottom:1px solid #ececec;font-weight:700;}
 .cc-tovarny__close{position:absolute;top:10px;right:10px;width:32px;height:32px;padding:0;border:0;border-radius:50%;
   background:#f1f2f4;color:var(--ink);font:400 22px/1 var(--cc-display);cursor:pointer;}
 .cc-tovarny__close:hover{background:#e4e6ea;}
@@ -318,7 +327,7 @@
     var f = FIRMY[i];
     pTitle.textContent = f.name;
     ov.querySelector('.cc-tovarny__panel').style.setProperty('--pc', f.c2);
-    pBody.innerHTML = f.info.map(function(t){return '<p>'+nb(t)+'</p>';}).join('');
+    pBody.innerHTML = '<p class="cc-tovarny__phl">'+nb(f.hl)+'</p>' + f.info.map(function(t){return '<p>'+nb(t)+'</p>';}).join('');
     pBody.scrollTop = 0;
     ov.hidden = false;
     if(lastBtn) lastBtn.setAttribute('aria-expanded','false');
@@ -376,8 +385,8 @@
   }
   function fit(){
     var w = root.clientWidth;
-    root.classList.toggle('is-row', w >= 700);
-    root.classList.remove('is-compact','is-nohl');
+    root.classList.toggle('is-row', w >= 640);
+    root.classList.remove('is-compact','is-nohl','is-nolede');
     root.style.setProperty('--sc', 1);
     var c = grid.children[0]; if(!c) return;
     var cs = getComputedStyle(c);
@@ -386,11 +395,13 @@
     sizeLogos(inner);
     var rev0 = Math.max(26, Math.min(66, inner/2.75)), rev = rev0, sc = 1;
     setSizes(rev);
-    // ústupky: 1) bez highlightu, 2) bez oboru, 3) velká čísla až na 70 %, 4) zmenšit vše
+    // ústupky: 1) bez highlightu (zůstává v (i)), 2) bez perexu, 3) velká čísla až na 55 %, 4) bez oboru, 5) zbytek
+    // Drobný text má v CSS podlahu přes max(), takže smyčka zmenšuje hlavně čísla a mezery, ne čitelnost.
     for(var k=0;k<24 && overflows();k++){
       if(!root.classList.contains('is-nohl')) root.classList.add('is-nohl');
+      else if(!root.classList.contains('is-nolede')) root.classList.add('is-nolede');
+      else if(rev > rev0*0.55){ rev *= 0.93; setSizes(rev); }   // radši menší čísla než škrtnutý obor
       else if(!root.classList.contains('is-compact')) root.classList.add('is-compact');
-      else if(rev > rev0*0.7){ rev *= 0.93; setSizes(rev); }
       else { sc *= 0.94; root.style.setProperty('--sc', sc.toFixed(3)); }
     }
   }
@@ -409,7 +420,12 @@
   function play(){
     if(played) return; played = true;
     root.classList.add('is-pre','is-counting');
-    for(var i=0;i<cards.length;i++){ cards[i].style.transitionDelay = (i*STAG)+'ms'; counts[i].textContent = '0'; }
+    for(var i=0;i<cards.length;i++){
+      cards[i].style.transitionDelay = (i*STAG)+'ms';
+      counts[i].style.display = 'inline-block';
+      counts[i].style.minWidth = counts[i].getBoundingClientRect().width.toFixed(1)+'px';  // Poppins nemá tabulární číslice
+      counts[i].textContent = '0';
+    }
     root.offsetWidth;
     root.classList.add('is-in'); root.classList.remove('is-pre');
     setTimeout(function(){ for(var i=0;i<cards.length;i++) cards[i].style.transitionDelay = ''; }, 1200);
@@ -421,7 +437,8 @@
         if(p < 1) done = false;
         counts[i].textContent = fmt(FIRMY[i].emp*ease(p));
       }
-      if(!done) requestAnimationFrame(step); else root.classList.remove('is-counting');
+      if(!done) requestAnimationFrame(step); else { root.classList.remove('is-counting');
+        for(var j=0;j<counts.length;j++){ counts[j].style.minWidth=''; counts[j].style.display=''; } }
     })(t0);
   }
   if(!reduce && 'IntersectionObserver' in window){
