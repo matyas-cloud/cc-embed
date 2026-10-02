@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Čtyři továrny, které vidí do své výroby</title>
+<meta name="robots" content="noindex">
+<!-- Better Industry × CzechCrunch — interaktivní infografika „Čtyři továrny".
+     Nasazení: matyas-cloud/cc-embed/better-industry-tovarny/index.html, do článku jen <iframe>.
+     Fonty neblokujícím způsobem, prvek se přeměří na document.fonts.ready. -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" media="print" onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+<noscript><link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"></noscript>
+<style>
+  html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;}
+  .cc-embed{margin:0!important;}
+</style>
+</head>
+<body>
+<!-- .cc-embed základ (verbatim ze skillu) -->
+<style>
+.cc-embed{
+  /* --- barvy --- */
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  /* --- shape --- */
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  /* --- font --- */
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}      /* prvek do krajů (fotka, mapa) */
+.cc-embed--bare{background:none;border:0;padding:0;} /* bez rámečku */
+/* --- typo --- */
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{margin:12px 0 0;font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);
+  letter-spacing:.02em;text-transform:uppercase;}
+.cc-embed .cc-num{font-family:var(--cc-display);font-weight:700;
+  font-size:clamp(22px,4vw,32px);color:var(--cc-blue);font-variant-numeric:tabular-nums;}
+.cc-embed a{color:var(--cc-blue);}
+/* --- UI --- */
+.cc-embed .cc-btn{
+  display:inline-block;padding:10px 20px;
+  border:1px solid var(--cc-blue);border-radius:var(--cc-radius);
+  background:var(--cc-blue);color:#fff;text-decoration:none;
+  font:700 18px/26px var(--cc-display);cursor:pointer;
+  transition:background .18s,color .18s;}
+.cc-embed .cc-btn:hover{background:var(--cc-blue-dark);border-color:var(--cc-blue-dark);}
+.cc-embed .cc-btn--ghost{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-btn--ghost:hover{background:var(--cc-blue);color:#fff;}
+.cc-embed .cc-btn--sm{padding:7px 14px;font-size:15px;line-height:22px;}
+.cc-embed .cc-btn[aria-pressed="true"]{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-card{background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);padding:14px 16px;}
+.cc-embed .cc-badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  background:var(--cc-blue);color:#fff;font:700 12px/18px var(--cc-ui);}
+.cc-embed .cc-badge--red{background:var(--cc-red);}
+.cc-embed .cc-badge--soft{background:#eaf3fd;color:var(--cc-blue-dark);}
+.cc-embed input,.cc-embed select,.cc-embed textarea{
+  font:400 16px/24px var(--cc-ui);color:var(--cc-ink);
+  padding:9px 12px;background:#fff;border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);}
+.cc-embed input[type=range]{padding:0;border:0;background:none;accent-color:var(--cc-blue);width:100%;}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed table{width:100%;border-collapse:collapse;font:400 15px/1.4 var(--cc-ui);}
+.cc-embed th{text-align:left;font-weight:700;color:var(--cc-muted);
+  text-transform:uppercase;font-size:12px;letter-spacing:.05em;padding:8px 10px;}
+.cc-embed td{padding:10px;border-top:1px solid var(--cc-line);}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-grid{display:grid;gap:var(--cc-gap);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.cc-embed .cc-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--cc-gap);}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+
+<div class="cc-embed cc-tovarny" data-cc-tovarny>
+  <p class="cc-sr">Infografika: čtyři výrobní firmy, které používají systém Better Industry, seřazené podle počtu zaměstnanců.
+    Marlenka: tržby 0,95 miliardy korun, 348 zaměstnanců (rok 2024).
+    Madeta: tržby 7,55 miliardy korun, 1 317 zaměstnanců (rok 2024).
+    Tatra Trucks: tržby skupiny 11,5 miliardy korun, přes 1 800 zaměstnanců (rok 2025).
+    CSG: tržby 163 miliard korun (rok 2025), přes 14 000 zaměstnanců v celé skupině a 37 závodech po světě (rok 2024).</p>
+
+  <header class="cc-tovarny__head">
+    <h3 class="cc-title cc-tovarny__title">Čtyři továrny, které vidí do své výroby</h3>
+    <p class="cc-tovarny__lede">Stejný software běží ve firmě o&nbsp;348 lidech i&nbsp;ve skupině o&nbsp;14&nbsp;tisících.</p>
+  </header>
+
+  <div class="cc-tovarny__grid" data-grid></div>
+
+  <div class="cc-tovarny__overlay" data-overlay hidden>
+    <div class="cc-tovarny__panel" role="dialog" aria-modal="true" aria-labelledby="cc-tovarny-dlg-t">
+      <button type="button" class="cc-tovarny__close" data-close aria-label="Zavřít">×</button>
+      <p class="cc-tovarny__plabel">Rok a metodika dat</p>
+      <h4 class="cc-tovarny__ptitle" id="cc-tovarny-dlg-t" data-ptitle></h4>
+      <div class="cc-tovarny__pbody" data-pbody></div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ------ .cc-tovarny — tmavá varianta ------ */
+.cc-tovarny{
+  --bg:#fff;   /* bílý infobox s linkou, stejně jako prvek Jet */
+  --ink:#16181c;  --ink2:#5b616b;
+  --line:rgba(255,255,255,.22);  --line2:rgba(255,255,255,.35);
+  --txt:#fff;  --fs-m:14px;  --fs-s:12.5px;
+  --acc:#087eeb;
+  box-sizing:border-box;
+  position:relative;
+  display:flex;flex-direction:column;
+  height:100vh;overflow:hidden;
+  background-color:var(--bg);
+  border:1px solid var(--cc-line);border-radius:var(--cc-radius);color:var(--ink);
+  --sc:1; --revsize:44px; --empsize:24px;
+}
+.cc-tovarny .cc-tovarny__head{flex:0 0 auto;margin-bottom:calc(16px*var(--sc));}
+.cc-tovarny .cc-tovarny__title{margin:0 0 4px;color:var(--ink);font-size:calc(clamp(19px,3.2vw,27px)*var(--sc));letter-spacing:-.01em;}
+.cc-tovarny .cc-tovarny__lede{margin:0;font:400 calc(var(--fs-m)*var(--sc))/1.5 var(--cc-serif);color:var(--ink2);}
+
+.cc-tovarny__grid{
+  flex:1 1 auto;min-height:0;
+  display:grid;column-gap:clamp(8px,1.5vw,12px);row-gap:0;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  /* 5 řádků na kartu: logo+(i) | obor | tržby (pružné) | zaměstnanci | highlight — sdílené přes subgrid */
+  grid-template-rows:auto auto 1fr auto auto auto auto 1fr auto auto;
+}
+.cc-tovarny.is-row .cc-tovarny__grid{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:auto auto 1fr auto auto;}
+.cc-tovarny:not(.is-row) .cc-tovarny__card:nth-child(n+3){margin-top:clamp(8px,1.5vw,12px);}
+
+.cc-tovarny__card{
+  position:relative;isolation:isolate;
+  display:flex;flex-direction:column;min-width:0;overflow:hidden;
+  background:linear-gradient(160deg,var(--c1) 0%,var(--c2) 100%);
+  border:0;border-radius:16px;color:var(--txt);
+  box-shadow:0 1px 2px rgba(0,0,0,.08),0 10px 24px -12px var(--c2);
+  --pad:calc(clamp(12px,1.8vw,16px)*var(--sc));
+  padding:var(--pad);
+  transition:border-color .25s, transform .25s;
+}
+@supports (grid-template-rows:subgrid){
+  .cc-tovarny__card{display:grid;grid-row:span 5;grid-template-rows:subgrid;row-gap:0;}
+}
+/* záře v rohu + vodoznak ikony */
+.cc-tovarny__card::before{content:"";position:absolute;z-index:-1;right:-30%;top:-35%;width:90%;aspect-ratio:1;
+  background:radial-gradient(closest-side,rgba(255,255,255,.28),transparent);pointer-events:none;transition:opacity .3s;opacity:.7;}
+.cc-tovarny__wm{position:absolute;z-index:-1;right:-14%;bottom:-8%;width:78%;color:#fff;opacity:.11;pointer-events:none;}
+.cc-tovarny__wm svg{display:block;width:100%;height:auto;}
+@media (hover:hover){
+  .cc-tovarny__card:hover{transform:translateY(-3px);box-shadow:0 1px 2px rgba(0,0,0,.08),0 16px 30px -12px var(--c2);}
+  .cc-tovarny__card:hover::before{opacity:1;}
+}
+.cc-tovarny__card:focus-within{box-shadow:0 0 0 3px rgba(255,255,255,.9),0 0 0 5px var(--c2);}
+
+.cc-tovarny__top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  height:var(--band,64px);margin:calc(-1*var(--pad)) calc(-1*var(--pad)) calc(14px*var(--sc));padding:0 var(--pad);
+  background:#fff;border-bottom:1px solid rgba(0,0,0,.06);}
+.cc-tovarny__plate{flex:0 1 auto;min-width:0;display:flex;align-items:center;height:100%;}
+.cc-tovarny__plname{font:700 calc(16px*var(--sc))/1 var(--cc-display);color:var(--c2);white-space:nowrap;}
+.cc-tovarny__id{min-width:0;}
+.cc-tovarny__logo{display:block;width:auto;max-width:100%;height:30px;}
+.cc-tovarny .cc-tovarny__sub{margin:0;font:600 calc(var(--fs-m)*var(--sc))/1.3 var(--cc-display);color:#fff;letter-spacing:-.015em;}
+
+.cc-tovarny__rev{display:flex;flex-direction:column;justify-content:center;padding:calc(12px*var(--sc)) 0 calc(10px*var(--sc));}
+.cc-tovarny__revnum{display:block;font:700 calc(var(--revsize)*var(--sc))/1 var(--cc-display);letter-spacing:-.03em;white-space:nowrap;
+  color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.12);}
+.cc-tovarny__lbl{display:block;margin-top:calc(6px*var(--sc));font:500 calc(var(--fs-s)*var(--sc))/1.3 var(--cc-display);color:#fff;}
+
+.cc-tovarny__emp{padding-top:calc(12px*var(--sc));border-top:1px solid rgba(255,255,255,.28);}
+.cc-tovarny__empnum{display:block;font:700 calc(var(--empsize)*var(--sc))/1 var(--cc-display);color:#fff;letter-spacing:-.025em;white-space:nowrap;}
+.cc-tovarny__plus{margin-left:.04em;}
+.cc-tovarny.is-counting .cc-tovarny__plus{visibility:hidden;}
+
+.cc-tovarny .cc-tovarny__hl{margin:calc(14px*var(--sc)) 0 0;font:400 calc(var(--fs-s)*var(--sc))/1.45 var(--cc-display);color:#fff;}
+.cc-tovarny.is-nohl .cc-tovarny__hl,
+.cc-tovarny.is-compact .cc-tovarny__hl,
+.cc-tovarny.is-compact .cc-tovarny__sub{display:none;}
+
+.cc-tovarny__info{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:26px;height:26px;padding:0;border-radius:50%;
+  border:1px solid #d5d9df;background:#fff;color:#6b7380;
+  font:600 13px/1 var(--cc-display);cursor:pointer;transition:color .15s,border-color .15s,background .15s;}
+.cc-tovarny__info:hover,.cc-tovarny__info[aria-expanded="true"]{color:#fff;background:var(--c2);border-color:var(--c2);}
+.cc-tovarny :focus-visible{outline-color:var(--c2,#087eeb);}
+
+
+/* overlay */
+.cc-tovarny__overlay{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;
+  padding:var(--cc-pad);background:rgba(255,255,255,.8);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);border-radius:var(--cc-radius);}
+.cc-tovarny__overlay[hidden]{display:none;}
+.cc-tovarny__panel{position:relative;display:flex;flex-direction:column;width:100%;max-width:440px;max-height:100%;
+  background:#fff;border:0;border-top:5px solid var(--pc,#16181c);border-radius:14px;box-shadow:0 20px 50px -10px rgba(0,0,0,.3);padding:18px 20px 16px;}
+.cc-tovarny .cc-tovarny__plabel{margin:0 32px 4px 0;font:600 13px/1.3 var(--cc-display);color:var(--pc,#5b616b);}
+.cc-tovarny .cc-tovarny__ptitle{margin:0 32px 8px 0;font:700 19px/1.25 var(--cc-display);color:var(--ink);}
+.cc-tovarny__pbody{flex:1 1 auto;min-height:0;overflow-y:auto;font:400 15px/1.6 var(--cc-serif);color:var(--ink);
+  -webkit-mask-image:linear-gradient(to bottom,#000 90%,rgba(0,0,0,.3));mask-image:linear-gradient(to bottom,#000 90%,rgba(0,0,0,.3));}
+.cc-tovarny .cc-tovarny__pbody p{margin:0 0 8px;}
+.cc-tovarny__close{position:absolute;top:10px;right:10px;width:32px;height:32px;padding:0;border:0;border-radius:50%;
+  background:#f1f2f4;color:var(--ink);font:400 22px/1 var(--cc-display);cursor:pointer;}
+.cc-tovarny__close:hover{background:#e4e6ea;}
+
+/* vstup: karty najedou zespodu, tržby se objeví, zaměstnanci počítají */
+.cc-tovarny__card{animation:none;}
+.cc-tovarny.is-pre .cc-tovarny__card{opacity:0;transform:translateY(14px);}
+.cc-tovarny.is-in .cc-tovarny__card{transition:opacity .55s ease, transform .55s cubic-bezier(.2,.7,.2,1), border-color .25s;}
+</style>
+
+<script>
+(function(){
+  var root = document.querySelector('[data-cc-tovarny]');
+  if(!root || root.dataset.ccInit) return;
+  root.dataset.ccInit = '1';
+
+  /* ===== IKONKY OBORŮ (vlastní kresba, 24×24, tah currentColor) ===== */
+  var ICO = {
+    plastev:'<path d="M8 3.2l3.5 2v4l-3.5 2-3.5-2v-4z"/><path d="M15.5 3.2l3.5 2v4l-3.5 2-3.5-2v-4z"/><path d="M11.8 11.6l3.5 2v4l-3.5 2-3.5-2v-4z"/><path d="M11.8 19.6v1.6"/>',
+    mleko:  '<path d="M8 2.5h8V6l2.5 3.5V21h-13V9.5L8 6z"/><path d="M5.5 9.5h13"/><path d="M8 6h8"/><path d="M9.5 14.5c1 .8 2 .8 2.5 0s1.5-.8 2.5 0"/>',
+    nakladak:'<path d="M2 6.5h11.5v10H2z"/><path d="M13.5 9.5h4.2l3.3 3.6v3.4h-7.5"/><circle cx="6" cy="17.8" r="1.9"/><circle cx="17" cy="17.8" r="1.9"/>',
+    tovarna:'<path d="M2.5 20.5h19"/><path d="M3.5 20.5V11l5 3.4V11l5 3.4V11l5 3.4V4h2.5v16.5"/><path d="M7 18h2M12 18h2"/>'
+  };
+  function svg(k, sw){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+sw+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICO[k]+'</svg>'; }
+
+  /* ===== DATA — závazná, nepřepočítávat (zadání v2) =====
+     Pořadí = vzestupně podle počtu zaměstnanců.
+     logo: soubor vedle index.html v repu, oříznutý na hranu kresby, v barvách pro bílý podklad.
+           ar = poměr stran loga (šířka/výška), opt = optická korekce velikosti (tučné logo < 1).
+           Velikost se počítá tak, aby všechna loga měla stejnou plochu. Prázdné logo = název písmem.
+     c1/c2: barva karty (přechod), odvozená z barev značky. */
+  var FIRMY = [
+    { name:'Marlenka', logo:'logo-marlenka.svg', ar:3.488, opt:1.05, c1:'#94671f', c2:'#5f3f10', ico:'plastev', sub:'Medovníky z Frýdku-Místku',
+      rev:'0,95', revUnit:'mld. Kč tržby',
+      emp:348, over:false,
+      hl:'Export do zhruba 50 zemí, 72 % tržeb',
+      info:['Tržby a počet zaměstnanců za rok 2024.','Podle zakladatele Gevorga Avetisjana firma míří k 1,5 miliardy korun.'] },
+    { name:'Madeta', logo:'logo-madeta.svg', ar:2.542, opt:1, c1:'#2f7fd6', c2:'#124a9c', ico:'mleko', sub:'Největší český zpracovatel mléka',
+      rev:'7,55', revUnit:'mld. Kč tržby',
+      emp:1317, over:false,
+      hl:'Čtyři závody, od Plané po Pelhřimov',
+      info:['Tržby a počet zaměstnanců za rok 2024.'] },
+    { name:'Tatra Trucks', logo:'logo-tatra.svg', ar:0.865, opt:.92, c1:'#e2323c', c2:'#9e1119', ico:'nakladak', sub:'Kopřivnická automobilka',
+      rev:'11,5', revUnit:'mld. Kč tržby',
+      emp:1800, over:true,
+      hl:'1 349 vozů, z toho přes tisíc pro obranu',
+      info:['Tržby celé skupiny Tatra Trucks a počet zaměstnanců za rok 2025.','Samotná automobilka měla tržby přes 10 miliard korun.'] },
+    { name:'CSG', logo:'logo-csg.svg', ar:3.125, opt:.86, c1:'#434a56', c2:'#1d2129', ico:'tovarna', sub:'Zbrojařská skupina Michala Strnada',
+      rev:'163', revUnit:'mld. Kč tržby',
+      emp:14000, over:true,
+      hl:'Na burze Euronext od ledna 2026',
+      info:['Tržby za rok 2025, původně 6,7 miliardy eur, přepočteno kurzem ČNB 24,34 Kč/EUR.','Počet zaměstnanců je údaj skupiny za rok 2024 a zahrnuje všech 37 závodů po celém světě.'] }
+  ];
+
+  function fmt(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,' '); }
+  function zam(n){ n=Math.round(n); return n===1?'zaměstnanec':(n>=2&&n<=4?'zaměstnanci':'zaměstnanců'); }
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function nb(s){ return esc(s).replace(/ (\S{1,2}) /g,' $1 '); }
+
+  var grid = root.querySelector('[data-grid]');
+  grid.innerHTML = FIRMY.map(function(f,i){
+    var plate = '<span class="cc-tovarny__plate">'+
+      (f.logo ? '<img class="cc-tovarny__logo" src="'+esc(f.logo)+'" alt="" data-ar="'+f.ar+'" data-opt="'+f.opt+'">' : '<span class="cc-tovarny__plname">'+esc(f.name)+'</span>')+'</span>';
+    return '<article class="cc-tovarny__card" data-i="'+i+'" style="--c1:'+f.c1+';--c2:'+f.c2+'">'+
+      '<span class="cc-tovarny__wm" aria-hidden="true">'+svg(f.ico,.7)+'</span>'+
+      '<div class="cc-tovarny__top">'+plate+
+        '<button type="button" class="cc-tovarny__info" data-info="'+i+'" aria-expanded="false" aria-haspopup="dialog" aria-label="Rok a metodika dat pro firmu '+esc(f.name)+'">i</button></div>'+
+      '<div class="cc-tovarny__id"><h4 class="cc-sr">'+esc(f.name)+'</h4><p class="cc-tovarny__sub">'+nb(f.sub)+'</p></div>'+
+      '<div class="cc-tovarny__rev"><span class="cc-tovarny__revnum">'+esc(f.rev)+'</span>'+
+        '<span class="cc-tovarny__lbl">'+esc(f.revUnit)+'</span></div>'+
+      '<div class="cc-tovarny__emp">'+
+        '<span class="cc-tovarny__empnum"><span data-count>'+fmt(f.emp)+'</span>'+(f.over?'<span class="cc-tovarny__plus">+</span>':'')+'</span>'+
+        '<span class="cc-tovarny__lbl">'+zam(f.emp)+'</span></div>'+
+      '<p class="cc-tovarny__hl">'+nb(f.hl)+'</p>'+
+    '</article>';
+  }).join('');
+  // rozbité logo → zpět na název písmem
+  Array.prototype.forEach.call(grid.querySelectorAll('.cc-tovarny__logo'), function(img){
+    img.addEventListener('error', function(){ var n=FIRMY[+img.closest('[data-i]').getAttribute('data-i')].name;
+      img.parentNode.innerHTML = '<span class="cc-tovarny__plname">'+esc(n)+'</span>'; fit(); });
+    img.addEventListener('load', function(){ fit(); });
+  });
+
+  /* ===== overlay (i) ===== */
+  var ov = root.querySelector('[data-overlay]'),
+      pTitle = root.querySelector('[data-ptitle]'),
+      pBody = root.querySelector('[data-pbody]'),
+      btnClose = root.querySelector('[data-close]'),
+      lastBtn = null;
+  function openInfo(i, btn){
+    var f = FIRMY[i];
+    pTitle.textContent = f.name;
+    ov.querySelector('.cc-tovarny__panel').style.setProperty('--pc', f.c2);
+    pBody.innerHTML = f.info.map(function(t){return '<p>'+nb(t)+'</p>';}).join('');
+    pBody.scrollTop = 0;
+    ov.hidden = false;
+    if(lastBtn) lastBtn.setAttribute('aria-expanded','false');
+    lastBtn = btn; btn.setAttribute('aria-expanded','true');
+    btnClose.focus();
+  }
+  function closeInfo(){
+    if(ov.hidden) return;
+    ov.hidden = true;
+    if(lastBtn){ lastBtn.setAttribute('aria-expanded','false'); lastBtn.focus(); }
+  }
+  grid.addEventListener('click', function(e){
+    var b = e.target.closest('[data-info]'); if(!b) return;
+    openInfo(+b.getAttribute('data-info'), b);
+  });
+  btnClose.addEventListener('click', closeInfo);
+  ov.addEventListener('click', function(e){ if(e.target === ov) closeInfo(); });
+  document.addEventListener('keydown', function(e){
+    if(ov.hidden) return;
+    if(e.key === 'Escape'){ e.preventDefault(); closeInfo(); }
+    else if(e.key === 'Tab'){ e.preventDefault(); btnClose.focus(); }
+  });
+
+  /* ===== vyplnění rámu ===== */
+  function overflows(){
+    if(root.scrollHeight > root.clientHeight + 1 || grid.scrollHeight > grid.clientHeight + 1) return true;
+    var cards = grid.children, i;
+    for(i=0;i<cards.length;i++){
+      var c = cards[i];
+      // scrollHeight nejde — vodoznak a záře schválně přesahují; měří se spodek obsahu
+      var cb = c.getBoundingClientRect().bottom - parseFloat(getComputedStyle(c).paddingBottom) + 1;
+      for(var j=0;j<c.children.length;j++){ var ch=c.children[j];
+        if(ch.classList.contains('cc-tovarny__wm') || getComputedStyle(ch).position==='absolute') continue;
+        if(ch.getBoundingClientRect().bottom > cb) return true; }
+      var inner = c.clientWidth - 2*parseFloat(getComputedStyle(c).paddingLeft);
+      if(c.querySelector('.cc-tovarny__revnum').scrollWidth > inner + 1) return true;
+      if(c.querySelector('.cc-tovarny__empnum').scrollWidth > inner + 1) return true;
+    }
+    return false;
+  }
+  function setSizes(rev){
+    root.style.setProperty('--revsize', rev.toFixed(1)+'px');
+    root.style.setProperty('--empsize', Math.max(17, rev*0.5).toFixed(1)+'px');
+  }
+  /* stejná plocha pro všechna loga: w·h = A → h = √(A/ar); strop daný výškou pásu */
+  function sizeLogos(inner){
+    var band = Math.round(Math.max(50, Math.min(70, inner*0.42)));
+    root.style.setProperty('--band', band+'px');
+    var wRef = Math.min(inner*0.66, 118), A = wRef*wRef/3.3, hMax = band - 16;
+    Array.prototype.forEach.call(grid.querySelectorAll('.cc-tovarny__logo'), function(img){
+      var ar = +img.getAttribute('data-ar'), opt = +img.getAttribute('data-opt') || 1;
+      var h = Math.min(Math.sqrt(A/ar)*opt, hMax, (inner-40)/ar);
+      img.style.height = h.toFixed(1)+'px';
+    });
+  }
+  function fit(){
+    var w = root.clientWidth;
+    root.classList.toggle('is-row', w >= 700);
+    root.classList.remove('is-compact','is-nohl');
+    root.style.setProperty('--sc', 1);
+    var c = grid.children[0]; if(!c) return;
+    var cs = getComputedStyle(c);
+    var inner = c.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    // nejdelší údaj má 4 znaky ("7,55", "11,5") ≈ 2,3 em
+    sizeLogos(inner);
+    var rev0 = Math.max(26, Math.min(66, inner/2.75)), rev = rev0, sc = 1;
+    setSizes(rev);
+    // ústupky: 1) bez highlightu, 2) bez oboru, 3) velká čísla až na 70 %, 4) zmenšit vše
+    for(var k=0;k<24 && overflows();k++){
+      if(!root.classList.contains('is-nohl')) root.classList.add('is-nohl');
+      else if(!root.classList.contains('is-compact')) root.classList.add('is-compact');
+      else if(rev > rev0*0.7){ rev *= 0.93; setSizes(rev); }
+      else { sc *= 0.94; root.style.setProperty('--sc', sc.toFixed(3)); }
+    }
+  }
+  var t;
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  if(window.ResizeObserver) new ResizeObserver(function(){ clearTimeout(t); t=setTimeout(fit,90); }).observe(root);
+  fit();
+
+  /* ===== vstupní animace — finální stav je vidět, dokud observer nesepne ===== */
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cards = grid.children, counts = root.querySelectorAll('[data-count]');
+  var played = false, ioAlive = false, DUR = 1100, STAG = 110, DELAY = 180;
+  function ease(x){ return 1 - Math.pow(1-x, 3); }
+  function play(){
+    if(played) return; played = true;
+    root.classList.add('is-pre','is-counting');
+    for(var i=0;i<cards.length;i++){ cards[i].style.transitionDelay = (i*STAG)+'ms'; counts[i].textContent = '0'; }
+    root.offsetWidth;
+    root.classList.add('is-in'); root.classList.remove('is-pre');
+    setTimeout(function(){ for(var i=0;i<cards.length;i++) cards[i].style.transitionDelay = ''; }, 1200);
+    var t0 = performance.now();
+    (function step(now){
+      var done = true;
+      for(var i=0;i<counts.length;i++){
+        var p = Math.min(1, Math.max(0, (now - t0 - DELAY - i*STAG)/DUR));
+        if(p < 1) done = false;
+        counts[i].textContent = fmt(FIRMY[i].emp*ease(p));
+      }
+      if(!done) requestAnimationFrame(step); else root.classList.remove('is-counting');
+    })(t0);
+  }
+  if(!reduce && 'IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(en){
+      ioAlive = true;
+      for(var i=0;i<en.length;i++){ if(en[i].isIntersecting){ io.disconnect(); play(); } }
+    }, {threshold:0.25});
+    io.observe(root);
+    setTimeout(function(){ if(!ioAlive){ io.disconnect(); played = true; } }, 1500);
+  }
+})();
+</script>
+
+</body>
+</html>
