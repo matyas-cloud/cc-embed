@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CM-70 SPEAR – video North Vector Dynamics</title>
+<!--
+  Video k článku CC o CSG × North Vector Dynamics.
+  Soubory ve stejné složce: cm70.mp4 (video bez zvuku – originál má němou stopu), poster.jpg (náhled).
+  Video vyplní rámec, který mu dá šablona CC, a zbytek doplní černou (video samo má černé pozadí).
+  Zvětšení: nativní tlačítko přehrávače. Když iframe nemá povolený fullscreen,
+  zobrazí se v rohu odkaz, který otevře video samostatně v nové záložce.
+-->
+<style>
+  html,body{height:100%;margin:0;background:#000;overflow:hidden;}
+  .v{position:relative;width:100%;height:100%;}
+  .v video{display:block;width:100%;height:100%;object-fit:contain;background:#000;}
+  .v a{position:absolute;top:8px;right:8px;display:none;padding:6px 10px;border-radius:999px;
+       background:rgba(0,0,0,.6);color:#fff;font:600 13px/1.2 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+       text-decoration:none;border:1px solid rgba(255,255,255,.35);}
+  .v a:hover,.v a:focus-visible{background:rgba(0,0,0,.85);outline:none;border-color:#fff;}
+  .v.no-fs a{display:block;}
+</style>
+</head>
+<body>
+<div class="v">
+  <video src="cm70.mp4" poster="poster.jpg" controls playsinline muted preload="metadata"
+         aria-label="Video: protidronová střela CM-70 SPEAR společnosti North Vector Dynamics"></video>
+  <a href="cm70.mp4" target="_blank" rel="noopener">Zvětšit ↗</a>
+</div>
+<script>
+(function(){
+  var root=document.querySelector('.v'), v=root.querySelector('video');
+  // Fullscreen uvnitř iframu funguje jen s atributem allowfullscreen.
+  // iOS má vlastní celoobrazovkový přehrávač (webkitEnterFullscreen), ten jde vždy.
+  var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+  var canFs = document.fullscreenEnabled || document.webkitFullscreenEnabled || iOS;
+  if(!canFs) root.classList.add('no-fs');
+})();
+</script>
+</body>
+</html>
