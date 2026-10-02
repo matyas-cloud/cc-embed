@@ -35,7 +35,12 @@
   // iOS má vlastní celoobrazovkový přehrávač (webkitEnterFullscreen), ten jde vždy.
   var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
   var canFs = document.fullscreenEnabled || document.webkitFullscreenEnabled || iOS;
-  if(!canFs) root.classList.add('no-fs');
+  if(!canFs){
+    root.classList.add('no-fs');
+    // Nativní ikona fullscreenu by bez povolení jen mrtvě visela – schovat, zůstane odkaz „Zvětšit“.
+    if(v.controlsList) v.controlsList.add('nofullscreen'); else v.setAttribute('controlslist','nofullscreen');
+    v.controls=false; v.controls=true; // překreslit ovládání
+  }
 })();
 </script>
 </body>
