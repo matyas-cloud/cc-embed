@@ -632,7 +632,7 @@ html,body{margin:0;padding:0;background:#05090F}
      Malý návrat uvnitř kroku nic nemění; návrat za hranici vrátí předchozí
      scénu. Nad prvkem stojí první snímek. Nic se nedrží, nic se neblokuje —
      čtenář má scroll pořád ve své moci. */
-  var HYST=.012;          /* hystereze hranice kroku (v jednotkách příběhu) */
+  var HYST=.03;           /* hystereze hranice kroku — ať dojezd touchpadu sám o sobě nepřekročí hranici */
   var CATCH=1.5;          /* zrychlení, když je obraz ≥ 2 scény za scrollem */
   var JUMP=3;             /* ≥ 3 scény za scrollem: skok na začátek předminulé */
   function stepTarget(){
