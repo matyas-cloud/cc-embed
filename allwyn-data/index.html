@@ -15,13 +15,15 @@
                        prvek rám vyplní (height:100vh) a zmenšovací smyčkou se do něj vejde,
                        ověřeno 320×480, 375×563, 430×645, 720×612, 786×560, 840×617
      Data:             převzata 1:1 ze statické infografiky redakce (čtyři karty),
-                       zdroje čísel jsou u redakce — prvek nic nedopočítává ani nepřidává
+                       zdroje čísel jsou u redakce — prvek nic nedopočítává ani nepřidává;
+                       tučně navíc 3 %, 49 % a 2–3 % (rozhodnutí redakce 9. 10. 2026)
      Fonty:            sdílený Poppins z repa (../fonts/poppins-latin*.woff2), načítá se
                        neblokujícím způsobem (font-display:swap), přeměření na document.fonts.ready
-     Pohyb:            vstupní animace jen přes IntersectionObserver (do té doby finální stav),
-                       hover jen při (hover:hover), vše vypnuto při prefers-reduced-motion;
+     Pohyb:            vstupní animace: skrytý výchozí stav hned od načtení, IntersectionObserver
+                       přepne do finálního (bez IO / při reduced-motion rovnou finální stav, pojistka 6 s),
+                       hover jen při (hover:hover) — mřížka má vnitřní okraj, aby se zvednutá karta neořízla;
                        žádný postMessage, žádný lazy-loading, nic se v klidu nehýbe
-     Rozložení:        ≥700 px mřížka 2×2 (třetí karta širší, druhá řada vyšší),
+     Rozložení:        ≥700 px mřížka 2×2 (třetí karta širší, druhá řada vyšší; číslo nahoře, čtení u dolní hrany),
                        <700 px čtyři karty pod sebou s číslem vlevo
      ============================================================ -->
 <style>
@@ -125,7 +127,7 @@
 <div class="cc-embed cc-embed--bare cc-ad" data-cc-ad>
   <p class="cc-sr">1 z 10 lidí tráví na sociálních sítích 4 a více hodin denně; 3 % jsou online víc než 6 hodin denně. 76 % Čechů se cítí z práce vyčerpaných; 49 % lidí zasahuje práce do soukromí. 7 z 10 dospělých Čechů si alespoň 1× ročně zahraje u Allwynu loterii nebo setře los; každý 4. hráč využívá limity online her Allwynu; více než polovina hazardního trhu se již odehrává online; v riziku problémového hraní je 2–3 % dospělé populace. 55 % Čechů chybí základní přehled o vlastních financích a nenastavují si rozpočet.</p>
 
-  <div class="cc-ad__grid" data-grid>
+  <div class="cc-ad__grid" data-grid aria-hidden="true">
 
     <div class="cc-ad__card cc-ad__card--1" style="--i:0">
       <svg class="cc-ad__deco cc-ad__deco--top" viewBox="0 0 100 50" preserveAspectRatio="xMaxYMin meet" aria-hidden="true">
@@ -148,7 +150,7 @@
           <path d="M21 39h6" pathLength="1"/>
         </svg>
         <p class="cc-ad__main">lidí tráví na&nbsp;sociálních sítích 4&nbsp;a&nbsp;více hodin denně</p>
-        <p class="cc-ad__sub">3&nbsp;% jsou online víc než 6&nbsp;hodin denně</p>
+        <p class="cc-ad__sub"><b>3&nbsp;%</b> jsou online víc než 6&nbsp;hodin denně</p>
       </div>
     </div>
 
@@ -175,7 +177,7 @@
           <path d="M34 35v-2.5a3 3 0 0 1 6 0V35" pathLength="1"/>
         </svg>
         <p class="cc-ad__main">Čechů se cítí z&nbsp;práce vyčerpaných</p>
-        <p class="cc-ad__sub">49&nbsp;% lidí zasahuje práce do&nbsp;soukromí</p>
+        <p class="cc-ad__sub"><b>49&nbsp;%</b> lidí zasahuje práce do&nbsp;soukromí</p>
       </div>
     </div>
 
@@ -200,7 +202,7 @@
       <div class="cc-ad__lines">
         <p class="cc-ad__line"><b>Každý 4.&nbsp;hráč</b> využívá limity online her Allwynu</p>
         <p class="cc-ad__line">Více než <b>polovina</b> hazardního trhu se již odehrává online</p>
-        <p class="cc-ad__line">V&nbsp;riziku problémového hraní je 2–3&nbsp;% dospělé populace</p>
+        <p class="cc-ad__line">V&nbsp;riziku problémového hraní je <b>2–3&nbsp;%</b> dospělé populace</p>
       </div>
     </div>
 
@@ -247,13 +249,13 @@
   clip-path:polygon(0 0,100% 0,100% 72%,0 86%);}
 .cc-ad .cc-ad__deco{position:absolute;right:0;z-index:-1;pointer-events:none;}
 .cc-ad .cc-ad__deco--top{display:none;}
-.cc-ad .cc-ad__deco--bot{bottom:0;height:40px;width:40px;}
+.cc-ad .cc-ad__deco--bot{bottom:0;height:34px;width:34px;}
 .cc-ad .cc-ad__icon{float:right;width:28px;height:28px;margin:0 0 4px 10px;
   fill:none;stroke:var(--tq);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
 .cc-ad .cc-ad__num{grid-column:1;align-self:start;white-space:nowrap;
   font-weight:700;line-height:1;letter-spacing:-.02em;color:var(--tq);
   font-size:max(var(--num-min),calc(32px*var(--sc)));margin-top:1px;}
-.cc-ad .cc-ad__txt{grid-column:2;min-width:0;padding-right:22px;}
+.cc-ad .cc-ad__txt{grid-column:2;min-width:0;padding-right:30px;}
 .cc-ad .cc-ad__card .cc-ad__main{margin:0;font-weight:500;line-height:1.3;letter-spacing:-.005em;
   font-size:max(var(--main-min),calc(14px*var(--sc)));}
 .cc-ad .cc-ad__card .cc-ad__sub{position:relative;margin:7px 0 0;padding-top:6px;font-weight:400;line-height:1.35;color:var(--txt2);
@@ -271,7 +273,8 @@
   .cc-ad.cc-embed{--main-min:12.5px;--sub-min:11.5px;--num-min:24px;}
   .cc-ad .cc-ad__grid{gap:8px;}
   .cc-ad .cc-ad__card{padding:10px 12px 10px 18px;column-gap:10px;}
-  .cc-ad .cc-ad__txt{padding-right:14px;}
+  .cc-ad .cc-ad__txt{padding-right:22px;}
+  .cc-ad .cc-ad__deco--bot{height:30px;width:30px;}
   .cc-ad .cc-ad__icon{width:24px;height:24px;margin:0 0 2px 8px;}
   .cc-ad .cc-ad__card .cc-ad__line{padding:4px 0;}
   .cc-ad .cc-ad__lines{margin-top:6px;}
@@ -291,7 +294,7 @@
 /* ---------- široký rám (od 700 px: tablet ~720, desktop 786–840): 2 × 2 jako v předloze; užší rám jede ve sloupci ---------- */
 @media (min-width:700px){
   /* 10 sloupců: první řada 5+5, druhá 6+4; druhá řada vyšší, protože nese víc textu */
-  .cc-ad .cc-ad__grid{gap:14px;grid-template-columns:repeat(10,1fr);grid-template-rows:1fr 1.4fr;}
+  .cc-ad .cc-ad__grid{gap:14px;padding:6px 16px 18px;grid-template-columns:repeat(10,1fr);grid-template-rows:1fr 1.4fr;}   /* okraj pro zvednutí karty a stín při hoveru (kořen má overflow:hidden) */
   .cc-ad .cc-ad__card--1{grid-column:1/6;grid-row:1;}
   .cc-ad .cc-ad__card--2{grid-column:6/11;grid-row:1;}
   .cc-ad .cc-ad__card--3{grid-column:1/7;grid-row:2;}
@@ -299,21 +302,23 @@
 
   /* jeden rytmus pro všechny karty: číslo nahoře, ikona vpravo nahoře, text pod tím */
   .cc-ad .cc-ad__card{grid-template-columns:1fr;grid-template-rows:auto 1fr;row-gap:10px;align-content:start;
-    padding:24px 26px 22px 32px;border-radius:16px;}
+    padding:24px 26px 26px 32px;border-radius:16px;}
   .cc-ad .cc-ad__card::before{width:10px;}
   .cc-ad .cc-ad__num{grid-column:1;grid-row:1;font-size:max(var(--num-min),calc(56px*var(--sc)));margin-top:0;}
-  .cc-ad .cc-ad__txt{grid-column:1;grid-row:2;position:static;padding-right:44px;align-self:start;}
+  .cc-ad .cc-ad__txt{grid-column:1;grid-row:2;position:static;padding-right:44px;align-self:end;}   /* čtení u dolní hrany, vzduch zůstává uprostřed */
   .cc-ad .cc-ad__icon{position:absolute;float:none;top:24px;right:24px;width:48px;height:48px;margin:0;}
   .cc-ad .cc-ad__card .cc-ad__main{font-size:max(var(--main-min),calc(18px*var(--sc)));line-height:1.32;}
   .cc-ad .cc-ad__card .cc-ad__sub{font-size:max(var(--sub-min),calc(15px*var(--sc)));margin-top:12px;padding-top:9px;line-height:1.4;}
   .cc-ad .cc-ad__lines{grid-column:1;grid-row:3;margin-top:12px;padding-right:44px;}
   .cc-ad .cc-ad__card--3{grid-template-rows:auto auto 1fr;}
+  .cc-ad .cc-ad__card--3 .cc-ad__txt{align-self:start;}   /* věta patří k číslu, u dolní hrany je seznam */
+  .cc-ad .cc-ad__lines{align-self:end;}
   .cc-ad .cc-ad__card .cc-ad__line{font-size:max(var(--sub-min),calc(14.5px*var(--sc)));padding:7px 0;}
 
   /* dekor: horní trs visí z horní hrany mezi číslem a ikonou, nikdy nesahá pod řádek s číslem;
      spodní roh je malý a text má zprava rezervu, aby do něj nedosáhl */
-  .cc-ad .cc-ad__deco--top{display:block;top:0;right:90px;height:52px;width:auto;}
-  .cc-ad .cc-ad__deco--bot{height:84px;width:84px;}
+  .cc-ad .cc-ad__deco--top{display:block;top:0;right:84px;width:clamp(64px,22%,104px);height:auto;}   /* šířka z karty, aby trs nikdy nesahal na číslo */
+  .cc-ad .cc-ad__deco--bot{height:60px;width:60px;}
   .cc-ad .cc-ad__card--4 .cc-ad__txt{padding-right:20px;}   /* úzká karta, dlouhý text: rezerva vpravo jen na roh */
 }
 </style>
@@ -342,17 +347,6 @@
   if(window.ResizeObserver) new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(fit, 90); }).observe(root);
   fit();
 
-  /* ===== vstupní animace: do zobrazení finální stav, spustí IntersectionObserver; respektuje reduced-motion ===== */
-  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var played = false;
-  function play(){
-    if(played || reduce) return; played = true;
-    if(typeof window.__ccPlay === 'function') window.__ccPlay(root);
-  }
-  if('IntersectionObserver' in window){
-    var io = new IntersectionObserver(function(es){ if(es.some(function(e){ return e.isIntersecting; })){ io.disconnect(); play(); } }, {threshold:.25});
-    io.observe(root);
-  } else { play(); }
 })();
 </script>
 
@@ -385,11 +379,10 @@
 .cc-ad.is-in .cc-ad__line:nth-child(3){transition-delay:calc(var(--i)*110ms + 800ms);}
 .cc-ad.is-in .cc-ad__icon > *{transition:stroke-dashoffset 1s ease calc(var(--i)*110ms + 250ms),fill-opacity .4s calc(var(--i)*110ms + 900ms);}
 .cc-ad.is-in .cc-ad__deco{transition:opacity .6s calc(var(--i)*110ms + 700ms);}
-@keyframes ccDraw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
 @media (hover:hover){
   .cc-ad .cc-ad__card{transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s;}
   .cc-ad .cc-ad__deco,.cc-ad .cc-ad__icon{transition:transform .35s cubic-bezier(.2,.7,.2,1);}
-  .cc-ad .cc-ad__card:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(20,24,26,.22);}
+  .cc-ad .cc-ad__card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(20,24,26,.22);}
   .cc-ad .cc-ad__card:hover .cc-ad__deco--top{transform:translateY(5px);}
   .cc-ad .cc-ad__card:hover .cc-ad__deco--bot{transform:translate(-4px,-4px);}
   .cc-ad .cc-ad__card:hover .cc-ad__icon{transform:translateY(-3px);}
@@ -398,11 +391,22 @@
 .cc-ad.is-in .cc-ad__deco{transition:opacity .6s calc(var(--i)*110ms + 700ms),transform .35s cubic-bezier(.2,.7,.2,1);}
 </style>
 <script>
-/* vstup: nastavit výchozí stav, vynutit reflow, přepnout do finálního — přechody dojedou samy */
-window.__ccPlay = function(root){
-  root.classList.add('is-pre'); root.offsetWidth;
-  root.classList.remove('is-pre'); root.classList.add('is-in');
-};
+(function(){
+  /* vstupní animace: výchozí skrytý stav (.is-pre) se nastaví hned při načtení, aby čtenář neviděl hotový prvek,
+     který pak zmizí a najede znovu; IntersectionObserver ho jen přepne na .is-in. Bez IO nebo při
+     prefers-reduced-motion zůstává rovnou finální stav. Pojistka: po 6 s se prvek odkryje i mimo obraz. */
+  var root = document.querySelector('[data-cc-ad]');
+  if(!root || root.dataset.ccAnim) return; root.dataset.ccAnim = '1';
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce || !('IntersectionObserver' in window)) return;
+  root.classList.add('is-pre');
+  var done = false;
+  function play(){ if(done) return; done = true; io.disconnect(); clearTimeout(guard);
+    root.classList.remove('is-pre'); root.classList.add('is-in'); }
+  var io = new IntersectionObserver(function(es){ if(es.some(function(e){ return e.isIntersecting; })) play(); }, {threshold:.2});
+  io.observe(root);
+  var guard = setTimeout(play, 6000);
+})();
 </script>
 </body>
 </html>
