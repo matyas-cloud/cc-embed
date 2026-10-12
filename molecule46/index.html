@@ -589,14 +589,20 @@ html,body{margin:0;padding:0;background:#05090F}
     if(Math.abs(rawLin-lin)<.006){ seekT=-1; } else { seekT=lin; seekAt=performance.now(); }
   }
 
+  /* Držet se smí jen DOPŘEDU: uzel scény, nebo místo, kam čtenář už doscrolloval,
+     podle toho, co je dál. Programový scroll nahoru by Headroom v šabloně vzal jako
+     „čtenář jede nahoru" a vytáhl hlavičku webu. Zpátky se nedrží vůbec (viz back()). */
   function holdScroll(on){
     var lin=unmap(restAt(SCN));
+    if(on && rawLin>lin) lin=rawLin;
     held=on; holdAt=on?lin:-1;
     if(demo||selfScroll){ if(on){ expectLanding(lin); ownTo(lin); } }
     else if(holdMode()){
       if(on){ expectLanding(lin); block(true); tHoldSent=performance.now(); }
       post({type:'hold',value:on,at:lin});
-      if(!on){ post({type:'seek',value:lin}); }
+      /* Po puštění ŽÁDNÝ seek: stránka na uzlu už je, a seek, který rodič odloží
+         a odpálí do čtenářova dalšího gesta, skočí stránkou zpátky — na konci
+         dráhy to blikne článkem pod prvkem a vytáhne hlavičku. */
     }
   }
   var tHoldSent=0;
