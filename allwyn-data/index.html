@@ -5,6 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Allwyn – datové karty</title>
 <meta name="robots" content="noindex">
+<!-- ============================================================
+     DATOVÉ KARTY — speciál Allwyn „Hranice“ (cc.cz/special/…)
+     ============================================================
+     Umístění v repu:  cc-embed/allwyn-data/index.html
+     Vložení:          komponenta Iframe ve speciálu, jen URL
+                       https://matyas-cloud.github.io/cc-embed/allwyn-data/index.html
+     Rám:              pevný poměr šablony (≤619 px 150 %, 620–1023 px 85 %, ≥1024 px 73,5 %);
+                       prvek rám vyplní (height:100vh) a zmenšovací smyčkou se do něj vejde,
+                       ověřeno 320×480, 375×563, 430×645, 720×612, 786×560, 840×617
+     Data:             převzata 1:1 ze statické infografiky redakce (čtyři karty),
+                       zdroje čísel jsou u redakce — prvek nic nedopočítává ani nepřidává;
+                       tučně navíc 3 %, 49 % a 2–3 % (rozhodnutí redakce 9. 10. 2026)
+     Zdroje (íčko vpravo dole): 1 z 10 – CEDMO Tracking V4+5 (cedmohub.eu); 76 % – STEM / ČTK (ceskenoviny.cz);
+                       7 z 10 – Allwyn Česko, data společnosti; 55 % – MF ČR, měření fin. gramotnosti 2025
+     Fonty:            sdílený Poppins z repa (../fonts/poppins-latin*.woff2), načítá se
+                       neblokujícím způsobem (font-display:swap), přeměření na document.fonts.ready
+     Pohyb:            vstupní animace: skrytý výchozí stav hned od načtení, IntersectionObserver
+                       přepne do finálního (bez IO / při reduced-motion rovnou finální stav, pojistka 6 s),
+                       hover jen při (hover:hover) — mřížka má vnitřní okraj, aby se zvednutá karta neořízla;
+                       žádný postMessage, žádný lazy-loading, nic se v klidu nehýbe
+     Rozložení:        ≥700 px mřížka 2×2 (třetí karta širší, druhá řada vyšší; číslo nahoře, čtení u dolní hrany),
+                       <700 px čtyři karty pod sebou s číslem vlevo
+     ============================================================ -->
 <style>
   /* sdílené fonty repa cc-embed (složka /fonts v kořeni), Poppins 400/500/700 */
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
@@ -119,7 +142,7 @@
         <polygon points="18,100 30,100 100,30 100,18" fill="#27e2cc"/>
         <polygon points="0,100 8,100 100,8 100,0" fill="#0f5f5e"/>
       </svg>
-      <div class="cc-ad__num"><span class="cc-ad__nv" aria-hidden="true"><span class="cc-ad__n">1</span><span class="cc-ad__nx">&nbsp;z&nbsp;10</span></span><button type="button" class="cc-ad__info" data-src-open aria-expanded="false" aria-controls="cc-ad-src-1" aria-label="Zdroj čísla 1 z 10">i</button></div>
+      <div class="cc-ad__num"><span class="cc-ad__nv" aria-hidden="true"><span class="cc-ad__n">1</span><span class="cc-ad__nx">&nbsp;z&nbsp;10</span></span></div>
       <div class="cc-ad__txt" aria-hidden="true">
         <svg class="cc-ad__icon" viewBox="0 0 48 48" aria-hidden="true">
           <rect x="14" y="4" width="20" height="40" rx="3.5" pathLength="1"/>
@@ -131,6 +154,7 @@
         <p class="cc-ad__main">lidí tráví na&nbsp;sociálních sítích 4&nbsp;a&nbsp;více hodin denně</p>
         <p class="cc-ad__sub"><b>3&nbsp;%</b> jsou online víc než 6&nbsp;hodin denně</p>
       </div>
+      <button type="button" class="cc-ad__info" data-src-open aria-expanded="false" aria-controls="cc-ad-src-1" aria-label="Zdroj čísla 1 z 10">i</button>
       <div class="cc-ad__src" id="cc-ad-src-1" role="dialog" aria-label="Zdroj čísla 1 z 10" hidden>
         <button type="button" class="cc-ad__close" data-src-close aria-label="Zavřít zdroj">×</button>
         <p class="cc-ad__srclabel">Zdroj</p>
@@ -150,7 +174,7 @@
         <polygon points="18,100 30,100 100,30 100,18" fill="#27e2cc"/>
         <polygon points="0,100 8,100 100,8 100,0" fill="#0f5f5e"/>
       </svg>
-      <div class="cc-ad__num"><span class="cc-ad__nv" aria-hidden="true"><span class="cc-ad__n">76</span><span class="cc-ad__nx">&nbsp;%</span></span><button type="button" class="cc-ad__info" data-src-open aria-expanded="false" aria-controls="cc-ad-src-2" aria-label="Zdroj čísla 76 %">i</button></div>
+      <div class="cc-ad__num"><span class="cc-ad__nv" aria-hidden="true"><span class="cc-ad__n">76</span><span class="cc-ad__nx">&nbsp;%</span></span></div>
       <div class="cc-ad__txt" aria-hidden="true">
         <svg class="cc-ad__icon" viewBox="0 0 48 48" aria-hidden="true">
           <circle cx="29" cy="9" r="4.5" pathLength="1"/>
@@ -164,6 +188,7 @@
         <p class="cc-ad__main">Čechů se cítí z&nbsp;práce vyčerpaných</p>
         <p class="cc-ad__sub"><b>49&nbsp;%</b> lidí zasahuje práce do&nbsp;soukromí</p>
       </div>
+      <button type="button" class="cc-ad__info" data-src-open aria-expanded="false" aria-controls="cc-ad-src-2" aria-label="Zdroj čísla 76 %">i</button>
       <div class="cc-ad__src" id="cc-ad-src-2" role="dialog" aria-label="Zdroj čísla 76 %" hidden>
         <button type="button" class="cc-ad__close" data-src-close aria-label="Zavřít zdroj">×</button>
         <p class="cc-ad__srclabel">Zdroj</p>
@@ -178,7 +203,7 @@
         <polygon points="52,0 84,0 68,26" fill="#dcf5ee"/>
         <polygon points="80,0 100,0 100,16" fill="#27e2cc"/>
       </svg>
-      <div class="cc-ad__num"><span class="cc-ad__nv" aria-hidden="true"><span class="cc-ad__n">7</span><span class="cc-ad__nx">&nbsp;z&nbsp;10</span></span><button type="button" class="cc-ad__info" data-src-open aria-expanded="false" aria-controls="cc-ad-src-3" aria-label="Zdroj čísla 7 z 10">i</button></div>
+      <div class="cc-ad__num"><span class="cc-ad__nv" aria-hidden="true"><span class="cc-ad__n">7</span><span class="cc-ad__nx">&nbsp;z&nbsp;10</span></span></div>
       <div class="cc-ad__txt" aria-hidden="true">
         <svg class="cc-ad__icon" viewBox="0 0 48 48" aria-hidden="true">
           <path d="M6 8h22v9.5a3.5 3.5 0 0 0 0 7V34H6v-9.5a3.5 3.5 0 0 0 0-7z" pathLength="1"/>
@@ -195,6 +220,7 @@
         <p class="cc-ad__line">Více než <b>polovina</b> hazardního trhu se již odehrává online</p>
         <p class="cc-ad__line">V&nbsp;riziku problémového hraní je <b>2–3&nbsp;%</b> dospělé populace</p>
       </div>
+      <button type="button" class="cc-ad__info" data-src-open aria-expanded="false" aria-controls="cc-ad-src-3" aria-label="Zdroj čísla 7 z 10">i</button>
       <div class="cc-ad__src" id="cc-ad-src-3" role="dialog" aria-label="Zdroj čísla 7 z 10" hidden>
         <button type="button" class="cc-ad__close" data-src-close aria-label="Zavřít zdroj">×</button>
         <p class="cc-ad__srclabel">Zdroj</p>
@@ -209,7 +235,7 @@
         <polygon points="18,100 30,100 100,30 100,18" fill="#27e2cc"/>
         <polygon points="0,100 8,100 100,8 100,0" fill="#0f5f5e"/>
       </svg>
-      <div class="cc-ad__num"><span class="cc-ad__nv" aria-hidden="true"><span class="cc-ad__n">55</span><span class="cc-ad__nx">&nbsp;%</span></span><button type="button" class="cc-ad__info" data-src-open aria-expanded="false" aria-controls="cc-ad-src-4" aria-label="Zdroj čísla 55 %">i</button></div>
+      <div class="cc-ad__num"><span class="cc-ad__nv" aria-hidden="true"><span class="cc-ad__n">55</span><span class="cc-ad__nx">&nbsp;%</span></span></div>
       <div class="cc-ad__txt" aria-hidden="true">
         <svg class="cc-ad__icon" viewBox="0 0 48 48" aria-hidden="true">
           <path d="M8 14a3 3 0 0 1 3-3h24v3" pathLength="1"/>
@@ -221,6 +247,7 @@
         </svg>
         <p class="cc-ad__main">Čechů <b>chybí základní přehled o&nbsp;vlastních financích</b> a&nbsp;nenastavují si rozpočet</p>
       </div>
+      <button type="button" class="cc-ad__info" data-src-open aria-expanded="false" aria-controls="cc-ad-src-4" aria-label="Zdroj čísla 55 %">i</button>
       <div class="cc-ad__src" id="cc-ad-src-4" role="dialog" aria-label="Zdroj čísla 55 %" hidden>
         <button type="button" class="cc-ad__close" data-src-close aria-label="Zavřít zdroj">×</button>
         <p class="cc-ad__srclabel">Zdroj</p>
@@ -263,7 +290,7 @@
   font-size:max(var(--main-min),calc(14px*var(--sc)));}
 .cc-ad .cc-ad__card .cc-ad__sub{position:relative;margin:7px 0 0;padding-top:6px;font-weight:400;line-height:1.35;color:var(--txt2);
   font-size:max(var(--sub-min),calc(12.5px*var(--sc)));}
-.cc-ad .cc-ad__lines{grid-column:1/-1;margin-top:10px;}
+.cc-ad .cc-ad__lines{grid-column:1/-1;margin-top:10px;padding-right:24px;}   /* rezerva na íčko vpravo */
 .cc-ad .cc-ad__card .cc-ad__line{position:relative;margin:0;padding:6px 0;
   font-weight:400;line-height:1.3;color:var(--txt2);
   font-size:max(var(--sub-min),calc(13px*var(--sc)));}
@@ -272,12 +299,12 @@
 .cc-ad b{font-weight:700;color:var(--txt);}
 
 /* zdroj: íčko za číslem (jako odkaz na poznámku) a panel přes kartu; v pevném rámu nic neroste */
-.cc-ad .cc-ad__num{display:flex;flex-direction:column;align-items:flex-start;gap:7px;}   /* sloupec: íčko pod číslem, šířku textu nebere */
-.cc-ad .cc-ad__info{position:relative;display:inline-flex;align-items:center;justify-content:center;vertical-align:top;
-  width:20px;height:20px;margin:0;padding:0;border:1.5px solid rgba(255,255,255,.34);border-radius:50%;
+/* íčko: všude stejně vpravo dole, těsně nad pruhy rohu, zarovnané k pravému okraji karty */
+.cc-ad .cc-ad__info{position:absolute;right:10px;bottom:40px;z-index:2;display:flex;align-items:center;justify-content:center;
+  width:22px;height:22px;margin:0;padding:0;border:1.5px solid rgba(255,255,255,.34);border-radius:50%;
   background:transparent;color:var(--txt2);font:600 12px/1 var(--cc-display);letter-spacing:0;cursor:pointer;
   transition:border-color .2s,color .2s,background-color .2s;}
-.cc-ad .cc-ad__info::after{content:"";position:absolute;inset:-8px;border-radius:50%;}   /* dotyková plocha ~36 px */
+.cc-ad .cc-ad__info::after{content:"";position:absolute;inset:-7px;border-radius:50%;}   /* dotyková plocha ~36 px */
 .cc-ad .cc-ad__info:hover,.cc-ad .cc-ad__info[aria-expanded="true"]{border-color:var(--tq);color:var(--tq);}
 .cc-ad .cc-ad__info:focus-visible,.cc-ad .cc-ad__close:focus-visible,.cc-ad .cc-ad__srclink:focus-visible{outline:2px solid var(--tq);outline-offset:2px;}
 .cc-ad .cc-ad__src{position:absolute;top:0;right:0;bottom:0;left:8px;z-index:3;display:flex;flex-direction:column;justify-content:center;
@@ -301,9 +328,10 @@
   .cc-ad .cc-ad__card{padding:10px 12px 10px 18px;column-gap:10px;}
   .cc-ad .cc-ad__txt{padding-right:22px;}
   .cc-ad .cc-ad__deco--bot{height:30px;width:30px;}
+  .cc-ad .cc-ad__info{right:8px;bottom:36px;width:20px;height:20px;font-size:11px;}
   .cc-ad .cc-ad__icon{width:24px;height:24px;margin:0 0 2px 8px;}
   .cc-ad .cc-ad__card .cc-ad__line{padding:4px 0;}
-  .cc-ad .cc-ad__lines{margin-top:6px;}
+  .cc-ad .cc-ad__lines{margin-top:6px;padding-right:20px;}
   .cc-ad .cc-ad__card .cc-ad__sub{margin-top:5px;padding-top:4px;}
 }
 
@@ -345,10 +373,10 @@
      spodní roh je malý a text má zprava rezervu, aby do něj nedosáhl */
   .cc-ad .cc-ad__deco--top{display:block;top:0;right:84px;width:clamp(64px,22%,104px);height:auto;}   /* šířka z karty, aby trs nikdy nesahal na číslo */
   .cc-ad .cc-ad__deco--bot{height:60px;width:60px;}
-  .cc-ad .cc-ad__card--4 .cc-ad__txt{padding-right:20px;}   /* úzká karta, dlouhý text: rezerva vpravo jen na roh */
+  .cc-ad .cc-ad__card--4 .cc-ad__txt{padding-right:26px;}   /* úzká karta: rezerva vpravo na íčko */
 
-  .cc-ad .cc-ad__num{display:block;}   /* mřížka: íčko za číslem jako odkaz na poznámku */
-  .cc-ad .cc-ad__info{width:24px;height:24px;margin:6px 0 0 10px;font-size:13px;}
+  .cc-ad .cc-ad__info{right:22px;bottom:70px;width:26px;height:26px;font-size:13px;}   /* nad rohem 60 px */
+  .cc-ad .cc-ad__info::after{inset:-5px;}
   /* křížek má vlastní pás nahoře (padding-top), text pod ním jede přes celou šířku, aby se doména nelámala */
   .cc-ad .cc-ad__src{left:10px;padding:56px 24px 24px 22px;}
   .cc-ad .cc-ad__close{top:16px;right:16px;width:34px;height:34px;font-size:22px;}
@@ -431,7 +459,7 @@
 .cc-ad.is-pre .cc-ad__main,.cc-ad.is-pre .cc-ad__sub,.cc-ad.is-pre .cc-ad__line{opacity:0;transform:translateX(-8px);}
 .cc-ad.is-pre .cc-ad__icon > *{stroke-dashoffset:1;}
 .cc-ad.is-pre .cc-ad__icon > [fill="#27e2cc"]{fill-opacity:0;}
-.cc-ad.is-pre .cc-ad__deco{opacity:0;}
+.cc-ad.is-pre .cc-ad__deco,.cc-ad.is-pre .cc-ad__info{opacity:0;}
 /* přechody po vstupu: linka → číslo → text → tenké linky → doplňky; ikona se kreslí souběžně */
 .cc-ad.is-in .cc-ad__card::before{transition:transform .45s cubic-bezier(.2,.7,.2,1) calc(var(--i)*110ms);}
 .cc-ad.is-in .cc-ad__num{transition:opacity .4s calc(var(--i)*110ms + 180ms),transform .5s cubic-bezier(.2,.7,.2,1) calc(var(--i)*110ms + 180ms);}
@@ -444,6 +472,7 @@
 .cc-ad.is-in .cc-ad__line:nth-child(3){transition-delay:calc(var(--i)*110ms + 800ms);}
 .cc-ad.is-in .cc-ad__icon > *{transition:stroke-dashoffset 1s ease calc(var(--i)*110ms + 250ms),fill-opacity .4s calc(var(--i)*110ms + 900ms);}
 .cc-ad.is-in .cc-ad__deco{transition:opacity .6s calc(var(--i)*110ms + 700ms);}
+.cc-ad.is-in .cc-ad__info{transition:opacity .5s calc(var(--i)*110ms + 850ms),border-color .2s,color .2s,background-color .2s;}
 @media (hover:hover){
   .cc-ad .cc-ad__card{transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s;}
   .cc-ad .cc-ad__deco,.cc-ad .cc-ad__icon{transition:transform .35s cubic-bezier(.2,.7,.2,1);}
