@@ -156,7 +156,7 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
       <h4 class="cc-kv__ptitle" id="cc-kv-dlg">Jak kvantový výpočet funguje</h4>
       <div class="cc-kv__pbody" data-pbody>
         <p>Čtvery dveře jsou čtyři možné odpovědi, hvězda je ta správná. Kvantový počítač je zapíše do dvou qubitů. Qubit může být nula, jednička, nebo jejich kombinace zároveň, takže dva qubity drží všechny čtyři možnosti 00, 01, 10 a&nbsp;11 najednou.</p>
-        <p>Vlny nad dveřmi představují takzvané amplitudy: čísla, která počítač nese pro každou možnost. Na rozdíl od pravděpodobností můžou být záporné, a proto se umějí navzájem vyrušit. Šanci, že pohled otevře dané dveře, určuje velikost amplitudy, ne její znaménko. Obrácená vlna proto sama nic neprozradí. Teprve druhá vlna, která amplitudy překlopí kolem jejich průměru, správnou zesílí a ostatní vynuluje.</p>
+        <p>Vlny nad dveřmi představují takzvané amplitudy, tedy čísla, která počítač nese pro každou možnost. Na rozdíl od pravděpodobností můžou být záporné, a proto se umějí navzájem vyrušit. Šanci, že pohled otevře dané dveře, určuje velikost amplitudy, ne její znaménko. Obrácená vlna proto sama nic neprozradí. Teprve druhá vlna, která amplitudy překlopí kolem jejich průměru, správnou zesílí a ostatní vynuluje.</p>
         <p>Ukázka odpovídá Groverovu vyhledávacímu algoritmu. Jedno kolo jsou obě vlny. U čtyř možností stačí jedno kolo a výsledek je jistý. Pro N možností je potřeba zhruba π/4 · √N kol, u milionu asi 785. Klasický počítač musí v průměru projít polovinu.</p>
         <p>Měření vrátí vždy jen jednu odpověď a superpozice přitom zanikne. Stejně tak ji ruší i teplo nebo otřesy, proto supravodivé kvantové čipy pracují kolem 0,01 kelvinu, tedy zhruba při −273 °C. Takhle chlazený je i první český kvantový počítač VLQ v Ostravě s 24 qubity.</p>
         <p class="cc-kv__src">Zdroje: IBM Quantum Learning (Groverův algoritmus); Scott Aaronson, Quanta Magazine (2021); IT4Innovations (VLQ).</p>
@@ -178,7 +178,7 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
 .cc-kv .cc-kv__head{flex:0 0 auto;display:none;}
 .cc-kv.is-intro .cc-kv__head,.cc-kv.is-fitting .cc-kv__head{display:block;}
 .cc-kv .cc-kv__prog{flex:0 0 auto;display:flex;gap:clamp(8px,2.4vw,14px);margin-top:0;}
-.cc-kv.is-intro .cc-kv__prog,.cc-kv.is-fitting .cc-kv__prog{margin-top:calc(12px*var(--sc));}
+.cc-kv.is-intro .cc-kv__prog{display:none;}
 .cc-kv .cc-kv__grp{display:flex;flex-direction:column;gap:6px;min-width:0;}
 .cc-kv .cc-kv__grp[data-g=c]{flex:1.15;} .cc-kv .cc-kv__grp[data-g=q]{flex:2.3;} .cc-kv .cc-kv__grp[data-g=s]{flex:.85;}
 .cc-kv .cc-kv__gl{font:500 max(var(--lbl-min),calc(12.5px*var(--sc)))/1.2 var(--cc-ui);color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .3s;}
@@ -263,10 +263,10 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
   /* ===== TEXTY (redakce je smí měnit bez sahání do kódu) ===== */
   var SC=[
     {h:'Čtvery dveře, jedna hvězda', p:'Nejde o rychlost, ale o způsob hledání. Klikněte na Začít hledat a otevírejte dveře jako klasický počítač.', btn:'Začít hledat'},
-    {h:'Dnešní počítače zkoušejí dveře jedny po druhých', p0:'Klikněte na dveře, za kterými tipujete hvězdu. Číslo v otevřených dveřích ukazuje, kolikátý to byl pokus.',
-      p:'Hvězdu jste našli na 3. pokus. Klasický počítač postupuje stejně, jen miliardkrát rychleji. Přesto by u milionu dveří musel v průměru otevřít polovinu.', btn:'Zkusit kvantový počítač'},
-    {h:'Kvantový počítač pracuje se všemi dveřmi naráz', p:'Dva qubity umějí být ve všech čtyřech kombinacích zároveň, tomu se říká superpozice. Počítač na ně pustí test, který hvězdu pozná. Prozradit ji ale nesmí, to by superpozici zničil. Proto ji jen tiše označí: vlnu správných dveří obrátí.', btn:'Zesílit značku'},
-    {h:'Druhá vlna se potká s tou první', p:'Obrácená vlna je stejně silná jako ostatní, takže by ji pohled nepoznal. Druhá vlna to změní: u špatných dveří se s tou první vyruší, u správných zesílí. Pohled teď superpozici zničí, ale vlna zbude jen u správné možnosti.', btn:'Podívat se'},
+    {h:'Dnešní počítače zkoušejí možnosti po jedné', p0:'Klikněte na dveře, za kterými tipujete hvězdu.',
+      p:'Hvězdu jste našli na 3. pokus. Klasický počítač postupuje stejně, jen miliardkrát rychleji. U milionu dveří by jich musel v průměru otevřít polovinu.', btn:'Zkusit kvantový počítač'},
+    {h:'Kvantový počítač pracuje se všemi možnostmi  naráz', p:'Dva qubity mohou být ve všech čtyřech kombinacích zároveň, v tzv. superpozici. Počítač na nich pustí test, který hvězdu pozná. Prozradit ji ale nesmí, to by superpozici zničilo. Správné dveře tak označuje jen obrácením vlny.', btn:'Zesílit značku'},
+    {h:'Druhá vlna se potká s tou první', p:'Obrácená vlna je stejně silná jako ostatní, takže napohled nelze poznat. To změní druhá vlna. U špatných dveří se s tou první vyruší, u správných zesílí. Pohled teď superpozici zničí, ale vlna u správné možnosti zůstane.', btn:'Podívat se'},
     {h:'Jeden pohled a je to hvězda', p:'Kvantový počítač odpoví napoprvé a u čtyř dveří vždycky správně. Vy jste jako klasický počítač potřebovali 3 pokusy. U milionu dveří by kvantový počítač zopakoval obě vlny zhruba 800krát, klasický by v průměru musel otevřít půl milionu dveří.', btn:'Co když se podívám dřív?'},
     {h:'Podívat se dřív zničí kvantový výpočet', p:'Když se počítač podívá před druhou vlnou, superpozice se zhroutí a otevřou se náhodné dveře. Stejně tak ji rozbije i teplo nebo otřesy. Proto kvantové čipy pracují v naprosté izolaci při −273 °C.', btn:'Shrnutí'},
     {h:'Nehledá rychleji. Hledá jinak.', p:'Qubity drží všechny možnosti naráz. Výpočet pak nastaví jejich vlny tak, aby se špatné odpovědi vyrušily a zůstala jen ta správná. Funguje to jen u některých úloh, třeba u šifer nebo vývoje léků.', btn:'Zpět na začátek'}
