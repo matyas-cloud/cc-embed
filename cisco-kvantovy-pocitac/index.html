@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jak počítá kvantový počítač</title>
 <meta name="robots" content="noindex">
-<!-- Cisco × CzechCrunch – interaktivní prvek „Jak počítá kvantový počítač“ (brány a vlny), verze Tron 3D: vlastní 3D projekce v canvasu, neon, žádné obrázky.
+<!-- Cisco × CzechCrunch – interaktivní prvek „Jak počítá kvantový počítač“ (brány a vlny), verze Tron 3D (v2, texty podle redakce 13. 10. 2026): vlastní 3D projekce v canvasu, neon, žádné obrázky.
      Cíl: redakční článek. Kód pro vložení: wrapper div s aspect-ratio:1/1 a min-height:600px, iframe uvnitř
      (viz cisco-kvantovy-pocitac-vlozeni.html). Prvek vyplní jakýkoli rám, jde vložit i do speciálu přes komponentu Iframe.
      Repo: matyas-cloud/cc-embed, složka cisco-kvantovy-pocitac/ (jen index.html), fonty ve sdílené ../fonts/.
      Vše se kreslí kódem do canvasu (perspektivní kamera, neonové čáry s aditivní září). Vlny jsou skutečné vlnové pakety a jejich součty.
+     Hvězda je vždy za třetími dveřmi, které čtenář v kroku 2 otevře (záměr redakce).
      Obsah: zjednodušená ukázka Groverova algoritmu pro 4 položky (1 kolo = jistota; pro N položek ~π/4·√N kol,
      u milionu ~785; klasicky v průměru (N+1)/2). Teplota supravodivých čipů ~0,01 K.
      Zdroje: IBM Quantum Learning (Grover), S. Aaronson, Quanta Magazine 2021, IT4Innovations (VLQ).
@@ -114,31 +115,35 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
   <p class="cc-sr" data-sr></p>
   <header class="cc-kv__head">
     <h3 class="cc-title cc-kv__title">Jak počítá kvantový počítač</h3>
-    <p class="cc-kv__lede" data-lede>Za jednou ze čtyř bran je hvězda. Najdete ji jako běžný počítač, a pak jako kvantový.</p>
+    <p class="cc-kv__lede" data-lede>Za jedněmi dveřmi se skrývá hvězda. Zkuste ji najít jako klasický počítač. A&nbsp;potom jako kvantový.</p>
   </header>
+  <div class="cc-kv__prog" data-prog aria-hidden="true">
+    <div class="cc-kv__grp" data-g="c"><span class="cc-kv__gl">Klasický<span class="cc-kv__gx"> počítač</span></span><span class="cc-kv__segs"><i data-s="1"></i></span></div>
+    <div class="cc-kv__grp" data-g="q"><span class="cc-kv__gl">Kvantový<span class="cc-kv__gx"> počítač</span></span><span class="cc-kv__segs"><i data-s="2"></i><i data-s="3"></i><i data-s="4"></i><i data-s="5"></i></span></div>
+    <div class="cc-kv__grp" data-g="s"><span class="cc-kv__gl">Shrnutí</span><span class="cc-kv__segs"><i data-s="6"></i></span></div>
+  </div>
   <div class="cc-kv__stage" data-stage>
     <canvas class="cc-kv__cv" data-cv aria-hidden="true"></canvas>
     <div class="cc-kv__hits" data-hits></div>
     <div class="cc-kv__sum" data-sum>
       <table class="cc-kv__table">
-        <thead><tr><th class="l"></th><th>Notebook</th><th class="q">Kvantový počítač</th></tr></thead>
+        <thead><tr><th class="l"></th><th>Klasický počítač</th><th class="q">Kvantový počítač</th></tr></thead>
         <tbody>
-          <tr><td class="l">Drží</td><td>jednu hodnotu</td><td class="q">všechny možnosti, každou s&nbsp;jinou silou</td></tr>
-          <tr><td class="l">Počítá</td><td>krok za krokem</td><td class="q">ladí vlny, špatné odpovědi se vyruší</td></tr>
-          <tr><td class="l">Výsledek</td><td>přečte kdykoli</td><td class="q">podívá se jen jednou</td></tr>
+          <tr><td class="l">Drží</td><td>jednu možnost</td><td class="q">všechny možnosti naráz</td></tr>
+          <tr><td class="l">Počítá</td><td>krok za krokem</td><td class="q">špatné odpovědi vyruší</td></tr>
+          <tr><td class="l">Výsledek</td><td>lze přečíst kdykoli</td><td class="q">lze přečíst jen jednou</td></tr>
           <tr><td class="l">Hodí se</td><td>na všechno</td><td class="q">jen na některé úlohy</td></tr>
-          <tr><td class="l">Žije</td><td>na stole</td><td class="q">v&nbsp;mrazáku při −273&nbsp;°C</td></tr>
+          <tr><td class="l">Pracuje</td><td>kdekoli</td><td class="q">v&nbsp;izolaci při −273&nbsp;°C</td></tr>
         </tbody>
       </table>
     </div>
   </div>
   <div class="cc-kv__copy" data-copy role="status" aria-live="polite">
-    <p class="cc-kv__who" data-who></p>
+    <p class="cc-sr" data-stepsr></p>
     <h4 class="cc-kv__h" data-h></h4>
     <p class="cc-kv__p" data-p></p>
   </div>
   <div class="cc-kv__nav">
-    <span class="cc-kv__step" data-step></span>
     <div class="cc-kv__btns"><button type="button" class="cc-kv__back" data-back>Zpět</button><button type="button" class="cc-kv__btn" data-next></button></div>
   </div>
   <footer class="cc-kv__foot">
@@ -148,11 +153,12 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
   <div class="cc-kv__overlay" data-overlay hidden>
     <div class="cc-kv__panel" role="dialog" aria-modal="true" aria-labelledby="cc-kv-dlg">
       <button type="button" class="cc-kv__close" data-close aria-label="Zavřít">×</button>
-      <h4 class="cc-kv__ptitle" id="cc-kv-dlg">Jak to funguje</h4>
+      <h4 class="cc-kv__ptitle" id="cc-kv-dlg">Jak kvantový výpočet funguje</h4>
       <div class="cc-kv__pbody" data-pbody>
-        <p>Brány jsou čtyři možné odpovědi, hvězda je ta správná. Vlny nad branami představují takzvané amplitudy: čísla, která kvantový počítač nese pro každou možnou odpověď. Na rozdíl od pravděpodobností můžou být záporné, a proto se umějí navzájem vyrušit.</p>
-        <p>Ukázka odpovídá Groverovu vyhledávacímu algoritmu. Pro čtyři položky stačí jedno kolo a výsledek je jistý. Pro N položek je potřeba zhruba π/4 · √N kol, u milionu asi 785. Běžný počítač potřebuje v průměru projít polovinu.</p>
-        <p>Měření vrátí vždy jen jednu odpověď a vlny přitom zaniknou. Stejně je ruší i teplo nebo otřesy, proto supravodivé kvantové čipy pracují kolem 0,01 kelvinu, tedy zhruba při −273 °C. Takhle chlazený je i první český kvantový počítač VLQ v Ostravě s 24 qubity.</p>
+        <p>Čtvery dveře jsou čtyři možné odpovědi, hvězda je ta správná. Kvantový počítač je zapíše do dvou qubitů. Qubit může být nula, jednička, nebo jejich kombinace zároveň, takže dva qubity drží všechny čtyři možnosti 00, 01, 10 a&nbsp;11 najednou.</p>
+        <p>Vlny nad dveřmi představují takzvané amplitudy: čísla, která počítač nese pro každou možnost. Na rozdíl od pravděpodobností můžou být záporné, a proto se umějí navzájem vyrušit. Šanci, že pohled otevře dané dveře, určuje velikost amplitudy, ne její znaménko. Obrácená vlna proto sama nic neprozradí. Teprve druhá vlna, která amplitudy překlopí kolem jejich průměru, správnou zesílí a ostatní vynuluje.</p>
+        <p>Ukázka odpovídá Groverovu vyhledávacímu algoritmu. Jedno kolo jsou obě vlny. U čtyř možností stačí jedno kolo a výsledek je jistý. Pro N možností je potřeba zhruba π/4 · √N kol, u milionu asi 785. Klasický počítač musí v průměru projít polovinu.</p>
+        <p>Měření vrátí vždy jen jednu odpověď a superpozice přitom zanikne. Stejně tak ji ruší i teplo nebo otřesy, proto supravodivé kvantové čipy pracují kolem 0,01 kelvinu, tedy zhruba při −273 °C. Takhle chlazený je i první český kvantový počítač VLQ v Ostravě s 24 qubity.</p>
         <p class="cc-kv__src">Zdroje: IBM Quantum Learning (Groverův algoritmus); Scott Aaronson, Quanta Magazine (2021); IT4Innovations (VLQ).</p>
       </div>
     </div>
@@ -169,7 +175,22 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
   height:100vh;margin:0;padding:calc(var(--pad)*.85) var(--pad) calc(var(--pad)*.55);overflow:hidden;
   background:var(--bg);border:1px solid rgba(0,188,235,.28);border-radius:var(--cc-radius);color:var(--t2);
 }
-.cc-kv .cc-kv__head{flex:0 0 auto;}
+.cc-kv .cc-kv__head{flex:0 0 auto;display:none;}
+.cc-kv.is-intro .cc-kv__head,.cc-kv.is-fitting .cc-kv__head{display:block;}
+.cc-kv .cc-kv__prog{flex:0 0 auto;display:flex;gap:clamp(8px,2.4vw,14px);margin-top:0;}
+.cc-kv.is-intro .cc-kv__prog,.cc-kv.is-fitting .cc-kv__prog{margin-top:calc(12px*var(--sc));}
+.cc-kv .cc-kv__grp{display:flex;flex-direction:column;gap:6px;min-width:0;}
+.cc-kv .cc-kv__grp[data-g=c]{flex:1.15;} .cc-kv .cc-kv__grp[data-g=q]{flex:2.3;} .cc-kv .cc-kv__grp[data-g=s]{flex:.85;}
+.cc-kv .cc-kv__gl{font:500 max(var(--lbl-min),calc(12.5px*var(--sc)))/1.2 var(--cc-ui);color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .3s;}
+.cc-kv .cc-kv__segs{display:flex;gap:4px;}
+.cc-kv .cc-kv__segs i{flex:1;height:3px;border-radius:2px;background:rgba(120,200,235,.16);transition:background .35s,box-shadow .35s;}
+.cc-kv .cc-kv__grp[data-g=c] .cc-kv__segs i.is-done{background:rgba(200,222,240,.42);}
+.cc-kv .cc-kv__grp[data-g=c] .cc-kv__segs i.is-on{background:#e2eef8;box-shadow:0 0 8px rgba(226,238,248,.55);}
+.cc-kv .cc-kv__grp[data-g=c].is-on .cc-kv__gl{color:#e2eef8;}
+.cc-kv .cc-kv__grp[data-g=q] .cc-kv__segs i.is-done,.cc-kv .cc-kv__grp[data-g=s] .cc-kv__segs i.is-done{background:rgba(62,230,255,.38);}
+.cc-kv .cc-kv__grp[data-g=q] .cc-kv__segs i.is-on,.cc-kv .cc-kv__grp[data-g=s] .cc-kv__segs i.is-on{background:var(--neon);box-shadow:0 0 8px rgba(62,230,255,.7);}
+.cc-kv .cc-kv__grp[data-g=q].is-on .cc-kv__gl{color:var(--neon);}
+.cc-kv .cc-kv__grp[data-g=s].is-on .cc-kv__gl{color:var(--t1);}
 .cc-kv .cc-kv__title{margin:0;color:var(--t1);font-size:max(var(--title-min),calc(clamp(19px,4.4vw,24px)*var(--sc)));line-height:1.22;}
 .cc-kv .cc-kv__lede{margin:5px 0 0;color:#9fb6cf;font:400 max(var(--lede-min),calc(16px*var(--sc)))/1.5 var(--cc-serif);}
 .cc-kv.is-nolede .cc-kv__lede{display:none;}
@@ -180,7 +201,8 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
 .cc-kv .cc-kv__hit{position:absolute;pointer-events:auto;background:transparent;border:0;border-radius:8px;cursor:pointer;padding:0;}
 .cc-kv .cc-kv__hit:focus-visible{outline:2px solid var(--neon);outline-offset:4px;}
 .cc-kv .cc-kv__hit[disabled]{cursor:default;}
-.cc-kv .cc-kv__sum{position:absolute;inset:0;z-index:2;display:flex;align-items:center;padding:0 var(--pad);visibility:hidden;opacity:0;transition:opacity .5s .5s;}
+.cc-kv .cc-kv__sum{position:absolute;inset:0;z-index:2;display:flex;align-items:center;padding:0 var(--pad);visibility:hidden;opacity:0;transition:opacity .45s .6s,visibility 0s .6s;}
+.cc-kv:not(.is-sum) .cc-kv__sum{transition:opacity .2s,visibility 0s .2s;}
 .cc-kv.is-sum .cc-kv__sum{visibility:visible;opacity:1;}
 .cc-kv .cc-kv__table{width:100%;border-collapse:collapse;font:400 max(13px,calc(15px*var(--sc)))/1.35 var(--cc-serif);}
 .cc-kv .cc-kv__table th{font:600 max(12px,calc(13px*var(--sc)))/1.2 var(--cc-ui);text-align:left;padding:0 10px 8px;color:var(--t1);text-transform:none;letter-spacing:0;}
@@ -189,21 +211,23 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
 .cc-kv .cc-kv__table .l{font:500 12px/1.6 var(--cc-ui);color:var(--t3);padding-left:0;width:70px;}
 .cc-kv .cc-kv__table td.q{color:#e6fbff;}
 .cc-kv .cc-kv__table tbody tr{opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s cubic-bezier(.2,.7,.2,1);}
-.cc-kv.is-sum .cc-kv__table tbody tr{opacity:1;transform:none;}
+.cc-kv.is-sum .cc-kv__table tbody tr{opacity:1;transform:none;transition-delay:.7s;}
+.cc-kv.is-sum .cc-kv__table tbody tr:nth-child(2){transition-delay:.78s;} .cc-kv.is-sum .cc-kv__table tbody tr:nth-child(3){transition-delay:.86s;}
+.cc-kv.is-sum .cc-kv__table tbody tr:nth-child(4){transition-delay:.94s;} .cc-kv.is-sum .cc-kv__table tbody tr:nth-child(5){transition-delay:1.02s;}
 
 .cc-kv .cc-kv__copy{flex:0 0 auto;overflow:hidden;border-top:1px solid var(--line);padding-top:calc(12px*var(--sc));}
-.cc-kv .cc-kv__who{margin:0 0 3px;font:500 max(var(--lbl-min),calc(12px*var(--sc)))/1.3 var(--cc-ui);color:var(--neon);}
 .cc-kv .cc-kv__h{margin:0 0 5px;font:600 max(16px,calc(19px*var(--sc)))/1.3 var(--cc-display);color:var(--t1);}
 .cc-kv .cc-kv__p{margin:0;font:400 max(var(--txt-min),calc(16.5px*var(--sc)))/1.6 var(--cc-serif);color:var(--t2);}
-.cc-kv .cc-kv__nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:calc(12px*var(--sc));}
-.cc-kv .cc-kv__step{font:500 12px/1 var(--cc-ui);color:var(--t3);font-variant-numeric:tabular-nums;}
+.cc-kv .cc-kv__nav{flex:0 0 auto;display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:calc(12px*var(--sc));min-height:44px;}
 .cc-kv .cc-kv__btns{display:flex;align-items:center;gap:14px;}
 .cc-kv .cc-kv__back{font:500 max(13px,calc(14px*var(--sc)))/1 var(--cc-ui);color:var(--t3);background:none;border:0;padding:10px 4px;cursor:pointer;}
 .cc-kv .cc-kv__back:hover{color:var(--t1);}
 .cc-kv .cc-kv__back[hidden]{display:none;}
-.cc-kv .cc-kv__btn{font:600 max(13px,calc(15px*var(--sc)))/20px var(--cc-ui);color:#e9fbff;background:rgba(0,188,235,.12);border:1px solid var(--neon);border-radius:6px;padding:calc(9px*var(--sc)) 18px;min-height:40px;cursor:pointer;
-  text-shadow:0 0 8px rgba(62,230,255,.6);box-shadow:0 0 12px rgba(0,188,235,.25),inset 0 0 10px rgba(0,188,235,.15);transition:background .2s,box-shadow .2s;}
-.cc-kv .cc-kv__btn:hover{background:rgba(0,188,235,.24);box-shadow:0 0 18px rgba(0,188,235,.45),inset 0 0 12px rgba(0,188,235,.25);}
+.cc-kv .cc-kv__btn{font:600 max(14px,calc(15.5px*var(--sc)))/20px var(--cc-ui);color:#021320;background:linear-gradient(180deg,#7ff3ff,#2fd3f5);border:1px solid #b8f8ff;border-radius:6px;padding:calc(11px*var(--sc)) 22px;min-height:44px;cursor:pointer;
+  box-shadow:0 0 0 1px rgba(62,230,255,.35),0 0 18px rgba(62,230,255,.55),0 0 42px rgba(0,188,235,.28);transition:filter .2s,box-shadow .2s;}
+.cc-kv .cc-kv__btn:hover{filter:brightness(1.08);box-shadow:0 0 0 1px rgba(62,230,255,.5),0 0 24px rgba(62,230,255,.75),0 0 56px rgba(0,188,235,.38);}
+.cc-kv .cc-kv__btn:focus-visible{outline:2px solid #fff;outline-offset:3px;}
+.cc-kv.is-intro .cc-kv__btn,.cc-kv.is-fitting .cc-kv__btn{font-size:max(15px,calc(17px*var(--sc)));padding:calc(13px*var(--sc)) 34px;min-height:50px;}
 .cc-kv .cc-kv__btn.is-wait{display:none;}
 .cc-kv :focus-visible{outline:2px solid var(--neon);outline-offset:2px;}
 .cc-kv .cc-kv__foot{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:calc(10px*var(--sc));}
@@ -221,6 +245,7 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
 .cc-kv .cc-kv__pbody .cc-kv__src{font:400 12px/1.5 var(--cc-ui);color:var(--t3);}
 @media (max-width:480px){
   .cc-kv .cc-kv__btn{flex:1;}
+  .cc-kv .cc-kv__gx{display:none;}
   .cc-kv .cc-kv__btns{flex:1;justify-content:flex-end;}
   .cc-kv .cc-kv__table .l{display:none;}
   .cc-kv .cc-kv__table th:nth-child(2),.cc-kv .cc-kv__table td:nth-child(2){padding-left:0;}
@@ -236,19 +261,19 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
   var reduce=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   /* ===== TEXTY (redakce je smí měnit bez sahání do kódu) ===== */
-  function pokus(n){ return n===1?'pokus':(n>=2&&n<=4?'pokusy':'pokusů'); }
   var SC=[
-    {who:'', h:'Za jednou ze čtyř bran je hvězda', p:'Nejdřív ji budete hledat jako běžný počítač, potom jako kvantový. Nejde o to, kdo je rychlejší, ale jak hledají.', btn:'Začít hledat'},
-    {who:'Notebook', h:'Notebook zkouší brány jednu po druhé', p0:'Klikněte na bránu, za kterou tipujete hvězdu. Číslo v otevřené bráně ukazuje, kolikátý to byl pokus.',
-      p:function(n){return (n===1?'Hvězdu jste našli hned napoprvé, to bylo štěstí. Počítač postupuje stejně, bránu po bráně':'Hvězdu jste našli na '+n+'. pokus. Počítač postupuje stejně')+', jen miliardkrát rychleji. U milionu bran by jich v průměru otevřel půl milionu.';}, btn:'Teď kvantový počítač'},
-    {who:'Kvantový počítač', h:'Kvantový počítač pošle vlnu ke všem branám naráz', p:'Nezkouší brány postupně. Brána s hvězdou vlnu převrátí, z hřbetu udělá důlek. Vy to vidíte, počítač ne: kdyby se podíval teď, padla by kterákoli brána.', btn:'Poslat druhou vlnu'},
-    {who:'Kvantový počítač', h:'Druhá vlna se s první potká', p:'Zezadu přijede druhá vlna, všude stejná: důlek. U prázdných bran se potká s hřbetem a obě zmizí, u hvězdy se sejdou dva důlky a vlna zesílí.', btn:'Podívat se'},
-    {who:'Kvantový počítač', h:'Jeden pohled a je to hvězda', p:function(n){return 'Kvantový počítač se smí podívat jen jednou, a díky vlnám mu to u čtyř bran vyjde vždycky. Vy jste jako notebook potřebovali '+n+' '+pokus(n)+'. U milionu bran by kvantový počítač poslal vlnu zhruba 800krát, notebook by zkoušel v průměru půl milionu bran.';}, btn:'Co když se podívám dřív?'},
-    {who:'Kvantový počítač', h:'Podívat se dřív znamená vlny rozbít', p:'Pohled před druhou vlnou vlny rozpadne a brána padne naslepo. Stejně škodí teplo nebo otřesy, proto kvantové čipy pracují v mrazáku při −273 °C.', btn:'Shrnutí'},
-    {who:'Shrnutí', h:'Nepočítá všechno najednou. Počítá jinak.', p:'Kvantový počítač rozehraje vlny tak, aby se špatné odpovědi vyrušily. Hodí se jen na některé úlohy, třeba na šifry nebo vývoj léků.', btn:'Hrát znovu'}
+    {h:'Čtvery dveře, jedna hvězda', p:'Nejde o rychlost, ale o způsob hledání. Klikněte na Začít hledat a otevírejte dveře jako klasický počítač.', btn:'Začít hledat'},
+    {h:'Dnešní počítače zkoušejí dveře jedny po druhých', p0:'Klikněte na dveře, za kterými tipujete hvězdu. Číslo v otevřených dveřích ukazuje, kolikátý to byl pokus.',
+      p:'Hvězdu jste našli na 3. pokus. Klasický počítač postupuje stejně, jen miliardkrát rychleji. Přesto by u milionu dveří musel v průměru otevřít polovinu.', btn:'Zkusit kvantový počítač'},
+    {h:'Kvantový počítač pracuje se všemi dveřmi naráz', p:'Dva qubity umějí být ve všech čtyřech kombinacích zároveň, tomu se říká superpozice. Počítač na ně pustí test, který hvězdu pozná. Prozradit ji ale nesmí, to by superpozici zničil. Proto ji jen tiše označí: vlnu správných dveří obrátí.', btn:'Zesílit značku'},
+    {h:'Druhá vlna se potká s tou první', p:'Obrácená vlna je stejně silná jako ostatní, takže by ji pohled nepoznal. Druhá vlna to změní: u špatných dveří se s tou první vyruší, u správných zesílí. Pohled teď superpozici zničí, ale vlna zbude jen u správné možnosti.', btn:'Podívat se'},
+    {h:'Jeden pohled a je to hvězda', p:'Kvantový počítač odpoví napoprvé a u čtyř dveří vždycky správně. Vy jste jako klasický počítač potřebovali 3 pokusy. U milionu dveří by kvantový počítač zopakoval obě vlny zhruba 800krát, klasický by v průměru musel otevřít půl milionu dveří.', btn:'Co když se podívám dřív?'},
+    {h:'Podívat se dřív zničí kvantový výpočet', p:'Když se počítač podívá před druhou vlnou, superpozice se zhroutí a otevřou se náhodné dveře. Stejně tak ji rozbije i teplo nebo otřesy. Proto kvantové čipy pracují v naprosté izolaci při −273 °C.', btn:'Shrnutí'},
+    {h:'Nehledá rychleji. Hledá jinak.', p:'Qubity drží všechny možnosti naráz. Výpočet pak nastaví jejich vlny tak, aby se špatné odpovědi vyrušily a zůstala jen ta správná. Funguje to jen u některých úloh, třeba u šifer nebo vývoje léků.', btn:'Zpět na začátek'}
   ];
+  var GROUP=['','Klasický počítač','Kvantový počítač','Kvantový počítač','Kvantový počítač','Kvantový počítač','Shrnutí'];
   var LETTERS=['A','B','C','D'];
-  $('[data-sr]').textContent='Interaktivní ukázka, jak počítá kvantový počítač. Za jednou ze čtyř bran je hvězda. Běžný počítač otevírá brány postupně, u milionu bran by v průměru otevřel půl milionu. Kvantový počítač pošle ke všem branám vlnu; brána s hvězdou ji převrátí, druhá vlna ji u prázdných bran vyruší a u hvězdy zesílí. U čtyř bran pak stačí jeden pohled, u milionu zhruba 800 kol. Pohled příliš brzy vlny rozbije a brána padne naslepo; proto kvantové čipy pracují při −273 °C.';
+  $('[data-sr]').textContent='Interaktivní ukázka, jak počítá kvantový počítač. Za jedněmi ze čtyř dveří je hvězda. Klasický počítač otevírá dveře postupně, u milionu dveří by v průměru otevřel půl milionu. Kvantový počítač drží v qubitech všechny možnosti naráz a každá má svou vlnu. Správné dveře vlnu převrátí, druhá vlna ji u špatných dveří vyruší a u správných zesílí. U čtyř dveří pak stačí jeden pohled, u milionu zhruba 800 kol. Pohled příliš brzy superpozici zničí a otevřou se náhodné dveře, proto kvantové čipy pracují v izolaci při −273 °C.';
 
   /* ===== svět (jednotky scény) ===== */
   var SP=1.65, GW=1.0, GH=1.55, GD=.32, CH=.2, WY=GH+.62, WL=1.38, AMP=.4, ZC=GD/2;
@@ -256,11 +281,11 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
   function gx(i){ return (i-1.5)*SP; }
 
   /* ===== stav ===== */
-  var S={scene:0,prize:2,tries:0,order:[0,0,0,0],found:false,blind:-1,busy:false};
+  var S={scene:0,prize:-1,tries:0,order:[0,0,0,0],found:false,blind:-1,busy:false};
   function gate(){return {pw:1,hi:0,open:0,kind:'',num:0,lbl:'',star:0,rot:0,fade:1};}
   function wv(){return {a:0,draw:0,y1:1,w2:0,w2d:0,mg:0,gh:0};}
   var GT=[gate(),gate(),gate(),gate()], WV=[wv(),wv(),wv(),wv()];
-  var TRL={p:0,a:0,to:-1}, FX={pulse:-1,dim:0}, parts=[];
+  var TRL={p:0,a:0,to:-1}, FX={pulse:-1,dim:0}, parts=[], DIM=1;
   var SHOTS=[ {yaw:-6,pitch:12,d:.84,tx:0,ty:.95},{yaw:0,pitch:10,d:.82,tx:0,ty:.85},{yaw:7,pitch:15,d:1,tx:0,ty:1.55},
               {yaw:-6,pitch:13,d:.98,tx:0,ty:1.6},{yaw:0,pitch:11,d:.8,tx:0,ty:1.35},{yaw:6,pitch:15,d:1,tx:0,ty:1.5},{yaw:0,pitch:44,d:1.3,tx:0,ty:.7} ];
   var CAM={yaw:-6,pitch:12,d:.84,tx:0,ty:.95};
@@ -412,21 +437,25 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
   }
 
   /* ===== UI ===== */
-  var whoEl=$('[data-who]'),hEl=$('[data-h]'),pEl=$('[data-p]'),next=$('[data-next]'),back=$('[data-back]'),step=$('[data-step]'),hits=$('[data-hits]');
+  var hEl=$('[data-h]'),pEl=$('[data-p]'),next=$('[data-next]'),back=$('[data-back]'),stepSr=$('[data-stepsr]'),hits=$('[data-hits]');
+  var SEG=[].slice.call(root.querySelectorAll('[data-s]')),GRP=[].slice.call(root.querySelectorAll('[data-g]'));
   var HB=[];
-  for(var hi=0;hi<4;hi++){(function(i){var b=document.createElement('button');b.type='button';b.className='cc-kv__hit';b.setAttribute('aria-label','Otevřít bránu '+LETTERS[i]);
+  for(var hi=0;hi<4;hi++){(function(i){var b=document.createElement('button');b.type='button';b.className='cc-kv__hit';b.setAttribute('aria-label','Otevřít dveře '+LETTERS[i]);
     b.addEventListener('click',function(){pick(i);});
     b.addEventListener('mouseenter',function(){ if(!b.disabled) to(GT[i],'hi',1,.18,'o'); });
     b.addEventListener('mouseleave',function(){ if(S.scene===1&&!GT[i].open) to(GT[i],'hi',.35,.25,'o'); });
     hits.appendChild(b);HB.push(b);})(hi);}
   function ui(){
     var n=S.scene,sc=SC[n];
-    whoEl.textContent=sc.who; whoEl.style.display=sc.who?'':'none';
+    var wasIntro=root.classList.contains('is-intro'); root.classList.toggle('is-intro',n===0);
     hEl.textContent=sc.h;
-    pEl.textContent=(n===1)?(S.found?sc.p(S.tries):sc.p0):(typeof sc.p==='function'?sc.p(S.tries||1):sc.p);
+    pEl.textContent=(n===1&&!S.found)?sc.p0:sc.p;
     next.textContent=sc.btn; next.classList.toggle('is-wait',n===1&&!S.found);
     back.hidden=(n===0);
-    step.textContent=(n+1)+' / '+SC.length;
+    stepSr.textContent='Krok '+(n+1)+' ze '+SC.length+(GROUP[n]?', '+GROUP[n]:'')+'.';
+    SEG.forEach(function(e){ var k=+e.getAttribute('data-s'); e.classList.toggle('is-on',k===n); e.classList.toggle('is-done',k<n); });
+    var gk=n===1?'c':(n>=2&&n<=5?'q':(n===6?'s':'')); GRP.forEach(function(e){ e.classList.toggle('is-on',e.getAttribute('data-g')===gk); });
+    if(wasIntro!==(n===0)&&g){ copyH(n===0); layout(); }
     root.classList.toggle('is-sum',n===6);
     HB.forEach(function(b,i){var on=(n===1&&!S.found&&!S.order[i]&&!S.busy);b.disabled=!on;b.style.display=(n===1)?'':'none';b.tabIndex=on?0:-1;});
   }
@@ -442,14 +471,14 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
     if(n===2) WV.forEach(function(w,i){ w.a=1;w.draw=1;w.y1=(i===S.prize)?-1:1; });
     if(n===3){ WV.forEach(function(w,i){ w.a=1;w.draw=1;w.y1=(i===S.prize)?-1:1;w.mg=1;w.w2=1;w.w2d=1;w.gh=.32; }); GT[S.prize].hi=1; }
     if(n===4){ WV.forEach(function(w,i){ w.a=(i===S.prize)?1:0;w.draw=1;w.y1=-1;w.mg=1; }); GT.forEach(function(s,i){ if(i===S.prize){s.open=1;s.kind='star';s.star=1;s.rot=.6;} else s.fade=.22; }); }
-    if(n===5){ var r=S.blind<0?0:S.blind; GT.forEach(function(o,j){ if(j!==r) o.fade=.3; }); GT[r].open=1; GT[r].kind=(r===S.prize)?'star':'empty'; if(r===S.prize){GT[r].star=1;GT[r].rot=.6;} else { GT[r].pw=.8; GT[r].lbl='prázdná'; } }
-    if(n===6){ FX.dim=.78; }
+    if(n===5){ var r=S.blind<0?0:S.blind; GT.forEach(function(o,j){ if(j!==r) o.fade=.3; }); GT[r].open=1; GT[r].kind=(r===S.prize)?'star':'empty'; if(r===S.prize){GT[r].star=1;GT[r].rot=.6;} else { GT[r].pw=.8; GT[r].lbl='prázdné'; } }
+    if(n===6){ FX.dim=DIM; }
     draw();
   }
 
   /* ===== přechody ===== */
   function T1(){
-    S.prize=Math.floor(Math.random()*4); S.tries=0; S.order=[0,0,0,0]; S.found=false; S.blind=-1;
+    S.prize=-1; S.tries=0; S.order=[0,0,0,0]; S.found=false; S.blind=-1;
     shot(1,1.4);
     GT.forEach(function(s,i){ to(s,'hi',1,.25,'o',.3+i*.1); to(s,'hi',.35,.5,'io',.6+i*.1); });
   }
@@ -458,7 +487,7 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
     S.busy=true; S.tries++; S.order[i]=S.tries; var s=GT[i]; ui();
     TRL.to=i; TRL.p=0; TRL.a=1; to(TRL,'p',1,.55,'io'); to(TRL,'a',0,.5,'o',.75);
     at(.5,function(){
-      s.num=S.tries; s.kind=(i===S.prize)?'star':'empty'; to(s,'hi',1,.15,'o'); to(s,'open',1,.55,'io');
+      if(S.tries>=3) S.prize=i; s.num=S.tries; s.kind=(i===S.prize)?'star':'empty'; to(s,'hi',1,.15,'o'); to(s,'open',1,.55,'io');
       if(s.kind==='star'){ s.star=0; s.rot=0; to(s,'star',1,.8,'back',.3); to(s,'rot',Math.PI*1.5+.6,1.6,'o',.3); S.found=true; GT.forEach(function(o,j){ if(j!==i) to(o,'hi',0,.4); }); to(s,'hi',0,.6,'o',.6); }
       else { to(s,'pw',.55,.6,'o',.3); to(s,'hi',0,.6,'o',.3); }
       at(.6,function(){ S.busy=false; ui(); if(S.found) next.focus({preventScroll:true}); });
@@ -492,21 +521,23 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
         if(!reduce) for(var k=0;k<46;k++){ var t=Math.random(),top=AMP*w.y1*shape(t),fy=Math.random(); parts.push({x:x0+t*WL,y:WY+top*fy,z:ZC+(Math.random()-.5)*.1,vx:(Math.random()-.5)*.25,vy:(Math.random()*.6)-.1,vz:(Math.random()-.5)*.3,life:.7+Math.random()*.7,max:1.4,s:.035+Math.random()*.03,c:Math.random()<.7?CYAN:ICE}); }
         to(w,'a',0,.18,'o'); });
       kick(); });
-    at(1.9,function(){ S.blind=Math.floor(Math.random()*4); var s=GT[S.blind]; s.kind=(S.blind===S.prize)?'star':'empty'; s.num=0; s.lbl=(s.kind==='empty')?'prázdná':'';
+    at(1.9,function(){ S.blind=Math.floor(Math.random()*4); var s=GT[S.blind]; s.kind=(S.blind===S.prize)?'star':'empty'; s.num=0; s.lbl=(s.kind==='empty')?'prázdné':'';
       GT.forEach(function(o,j){ if(j!==S.blind) to(o,'fade',.3,.5,'o',.2); });
       to(s,'hi',1,.15,'o'); to(s,'open',1,.55,'io'); if(s.kind==='star'){ s.star=0; s.rot=0; to(s,'star',1,.8,'back',.3); to(s,'rot',Math.PI*1.5+.6,1.6,'o',.3); } else to(s,'pw',.8,.5,'o',.3); to(s,'hi',.25,.6,'o',.5); });
   }
-  function T6(){ shot(6,1.6); to(FX,'dim',.78,.9,'io',.4); }
+  function T6(){ shot(6,1.6); to(FX,'dim',DIM,.55,'io'); }
   var TR=[null,T1,T2,T3,T4,T5,T6];
   function go(n,anim){
     if(n<0) return;
-    if(anim&&(n===S.scene+1||(S.scene===6&&n===1))){
+    if(anim&&(n===S.scene+1||(S.scene===6&&n===0))){
       var from=S.scene; stopAll();
-      if(from===6&&n===1){ S.tries=0; S.order=[0,0,0,0]; S.found=false; S.blind=-1; reset(); FX.dim=.78; to(FX,'dim',0,.8,'io'); }
-      S.scene=n; TR[n](); ui(); kick();
-    } else { S.scene=n; if(n===5&&S.blind<0) S.blind=(S.prize+1)%4; rest(n); ui(); }
+      if(from===6&&n===0){ S.prize=-1; S.tries=0; S.order=[0,0,0,0]; S.found=false; S.blind=-1; reset(); FX.dim=DIM; to(FX,'dim',0,.7,'io',.15); }
+      S.scene=n; ui(); if(n===0) shot(0,1.4); else TR[n](); ui(); kick();
+      if(n===0) next.focus({preventScroll:true});
+    } else { S.scene=n; ensurePrize(); if(n===5&&S.blind<0) S.blind=(S.prize+1)%4; ui(); rest(n); }
   }
-  next.addEventListener('click',function(){ if(S.scene===1&&!S.found) return; go(S.scene===6?1:S.scene+1,true); });
+  function ensurePrize(){ if(S.prize<0&&S.scene>=2) S.prize=2; }
+  next.addEventListener('click',function(){ if(S.scene===1&&!S.found) return; go(S.scene===6?0:S.scene+1,true); });
   back.addEventListener('click',function(){ go(S.scene-1,false); });
 
   /* ===== (i) overlay ===== */
@@ -523,23 +554,25 @@ html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;
   var copy=$('[data-copy]'),sum=$('[data-sum]'),meas=document.createElement('div');
   meas.setAttribute('aria-hidden','true'); meas.className='cc-kv__copy'; meas.style.cssText='position:absolute;left:-9999px;top:0;visibility:hidden;height:auto;';
   root.appendChild(meas);
-  function copyH(){
+  function copyH(intro){
     meas.style.width=copy.clientWidth+'px'; var mx=0,texts=[];
-    SC.forEach(function(s,i){ if(i===1){texts.push([s.who,s.h,s.p0]);texts.push([s.who,s.h,s.p(1)]);texts.push([s.who,s.h,s.p(3)]);}
-      else texts.push([s.who,s.h,typeof s.p==='function'?s.p(4):s.p]); });
-    texts.forEach(function(t){ meas.innerHTML='<p class="cc-kv__who"></p><h4 class="cc-kv__h"></h4><p class="cc-kv__p"></p>';
-      meas.children[0].textContent=t[0]; meas.children[0].style.display=t[0]?'':'none'; meas.children[1].textContent=t[1]; meas.children[2].textContent=t[2]; mx=Math.max(mx,meas.offsetHeight); });
+    SC.forEach(function(s,i){ if((i===0)!==intro) return; if(s.p0) texts.push([s.h,s.p0]); texts.push([s.h,s.p]); });
+    texts.forEach(function(t){ meas.innerHTML='<h4 class="cc-kv__h"></h4><p class="cc-kv__p"></p>';
+      meas.children[0].textContent=t[0]; meas.children[1].textContent=t[1]; mx=Math.max(mx,meas.offsetHeight); });
     copy.style.height=Math.ceil(mx)+'px';
   }
   function minStage(){ return Math.max(150,root.clientHeight*.3); }
   function bad(){ return root.scrollHeight>root.clientHeight+1 || stage.clientHeight<minStage() || sum.scrollHeight>stage.clientHeight+1; }
   function fit(){
-    root.classList.remove('is-nolede'); var sc=1; root.style.setProperty('--sc',1); copyH();
-    for(var k=0;k<22&&bad();k++){
-      if(!root.classList.contains('is-nolede')) root.classList.add('is-nolede');
+    // úvod (s nadpisem a perexem) i ostatní kroky (bez nich) musí sedět se stejnou velikostí písma
+    root.classList.remove('is-nolede'); var sc=1; root.style.setProperty('--sc',1);
+    function st(intro){ root.classList.toggle('is-intro',intro); copyH(intro); return bad(); }
+    for(var k=0;k<26;k++){
+      var a=st(true), b=st(false); if(!a&&!b) break;
+      if(!b&&a&&!root.classList.contains('is-nolede')) root.classList.add('is-nolede');
       else { sc*=.94; root.style.setProperty('--sc',sc.toFixed(3)); }
-      copyH();
     }
+    st(S.scene===0);
     layout();
   }
   function layout(){
