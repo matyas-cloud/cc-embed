@@ -22,12 +22,18 @@ html,body{margin:0;padding:0;background:#05090F}
   background:radial-gradient(130% 95% at 52% 38%,#0D1A2C 0%,#070D17 55%,#04080E 100%)}
 .m46__cv{position:absolute;inset:0;width:100%;height:100%;display:block}
 
-.m46__caps{position:absolute;left:clamp(56px,7vw,100px);bottom:clamp(48px,8vh,86px);
-  width:min(620px,70%);height:0;pointer-events:none}
+.m46__caps{position:absolute;left:clamp(56px,7vw,100px);bottom:clamp(44px,7vh,80px);
+  width:min(640px,72%);height:0;pointer-events:none}
 .m46__cap{position:absolute;left:0;bottom:0;margin:0;opacity:0;transform:translateY(10px);
   transition:opacity .16s ease,transform .16s ease;
   font-family:'Poppins',system-ui,sans-serif;font-weight:300;
-  font-size:clamp(18px,2.3vw,32px);line-height:1.42;letter-spacing:-.005em}
+  font-size:clamp(17px,2.05vw,28px);line-height:1.38;letter-spacing:-.005em}
+/* hlavní věta + menší vysvětlivka pod ní */
+.m46__cap .q{display:block}
+.m46__cap .d{display:block;margin-top:.5em;max-width:560px;
+  font-family:'Inter',system-ui,sans-serif;font-weight:400;
+  font-size:clamp(13px,1.15vw,16px);line-height:1.5;letter-spacing:0;color:rgba(233,239,248,.70)}
+.m46__cap .d b,.m46__cap .d em{font-weight:500}
 
 /* ukazatel fází — plnicí osa při levém okraji */
 .m46__axis{position:absolute;left:clamp(20px,3vw,44px);top:14%;bottom:24%;width:12px;
@@ -72,14 +78,14 @@ html,body{margin:0;padding:0;background:#05090F}
     <div class="m46__axis" aria-hidden="true"><i class="tr"></i><i class="fi"></i></div>
 
     <div class="m46__caps">
-      <p class="m46__cap">Ve vzorku plavou desítky milionů buněk.<br>Pod mikroskopem vypadají všechny stejně.</p>
-      <p class="m46__cap">Embryolog dnes vybírá tu nejhezčí.<br>Tvar ale o zdraví buňky neříká nic.</p>
-      <p class="m46__cap">Zdravá drží protein <b>CD46</b> v hlavičce.<br>Poškozená ho má <em>odhalený předčasně</em>.</p>
-      <p class="m46__cap">Zdravá ho vytáhne teprve u vajíčka.<br>Je to <b>klíč</b>, kterým si otevře cestu.</p>
-      <p class="m46__cap">Poškozená ho vyplýtvala dávno předtím.<br>U vajíčka už <em>nemá čím otevřít</em>.</p>
-      <p class="m46__cap">Patentovaná protilátka s magnetickou částicí<br><b>Molecule 46</b> ulpí jen na <em>odhaleném CD46</em>.</p>
-      <p class="m46__cap">Magnet označené buňky odtáhne.<br>Bez odstřeďování, bez mechanického stresu.</p>
-      <p class="m46__cap">Zbude výběr, který by udělalo samo vajíčko.<br>K oplození pak stačí <b>jediná buňka</b>.</p>
+      <p class="m46__cap"><span class="q">Ve vzorku mohou plavat <b>miliony spermií</b>.</span><span class="d">Pod mikroskopem je ale těžké poznat, která je biologicky funkční.</span></p>
+      <p class="m46__cap"><span class="q">Embryolog se snaží vybrat tu nejlepší.</span><span class="d">Tvar a pohyb ale pro výběr nestačí.</span></p>
+      <p class="m46__cap"><span class="q"><b>Zdravá</b> spermie má na hlavičce čepičku a pod ní protein <b>CD46</b>.</span><span class="d"><em>Poškozená</em> spermie čepičku nemá a CD46 je <em>na povrchu</em>.</span></p>
+      <p class="m46__cap"><span class="q">Zdravá spermie musí mít <b>čepičku</b>, aby prošla přes obal vajíčka.</span><span class="d">Jen tak jej může oplodnit.</span></p>
+      <p class="m46__cap"><span class="q"><em>Poškozená</em> spermie se při přirozeném oplození přes obal vajíčka <em>nedostane</em>.</span><span class="d">A proto jej nemůže oplodnit.</span></p>
+      <p class="m46__cap"><span class="q">Patentovaná technologie využívá <b>protilátky na magnetických částicích</b>.</span><span class="d">Ty se navážou na protein CD46 na povrchu <em>poškozených</em> spermií.</span></p>
+      <p class="m46__cap"><span class="q"><b>Magnet</b> označené spermie odtáhne bez mechanického poškození.</span></p>
+      <p class="m46__cap"><span class="q">Zbylé spermie mají zachovanou funkční <b>čepičku</b> a potenciál vajíčko přirozeně oplodnit.</span><span class="d">Stačí pak vybrat jednu, která může zajistit úspěšné oplození.</span></p>
     </div>
 
     <p class="m46__note">Zjednodušená ilustrace procesu</p>
@@ -542,7 +548,7 @@ html,body{margin:0;padding:0;background:#05090F}
     for(var k=0;k<caps.length;k++) caps[k].classList.remove('is-on');
     clearTimeout(capTimer);
     capTimer=setTimeout(function(){ caps[i].classList.add('is-on'); }, had?150:0);
-    sr.textContent=caps[i].textContent;
+    sr.textContent=[].map.call(caps[i].children,function(e){return e.textContent;}).join(' ')||caps[i].textContent;
   }
 
   var SCN=0, playing=false, bacc=0, T=0, rwTo=-1, rwV=0;
