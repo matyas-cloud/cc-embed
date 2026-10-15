@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Největší americké pozice ČNB k 30. 9. 2026</title>
+<meta name="robots" content="noindex">
+<!-- CzechCrunch – infografika „Největší americké pozice ČNB" (mozaika / treemap).
+     Cíl: redakční článek cc.cz, vložení iframem z cnb-americke-pozice-vlozeni.html (rám jako jet-exity).
+     Nasazení: matyas-cloud/cc-embed/cnb-americke-pozice/index.html, fonty ze sdílené složky ../fonts/.
+     Formát: bílý infobox s linkou; nahoře součet podílů, pod ním mozaika (plocha dlaždice = podíl), dole popisek vybrané firmy.
+     Data: box z článku CC (podklad od Matyáše 15. 10. 2026), stav k 30. 9. 2026 – hodnota v USD, přepočet v Kč, podíl v %.
+       Součet 35,72 % (zobrazeno 35,7 %) je dopočet ze sedmi řádků. Data a texty jsou v bloku D ve skriptu.
+     Změny obsahu:
+       2026-10-15  první verze (varianta B „Mozaika" z návrhu cnb-pozice-varianty). -->
+<style>
+@font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+@font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+@font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-500.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+@font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-ext-500.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+@font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+@font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-ext-600.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+@font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-700.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+@font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-ext-700.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+</style>
+<style>
+  html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;}
+  .cc-embed{margin:0!important;}
+</style>
+</head>
+<body>
+<!-- .cc-embed základ (verbatim ze skillu) -->
+<!-- CC sdílený designový základ pro embedy. Vlož jako PRVNI style blok prvku.
+     Pokud web .cc-embed nacita globalne ze sablony, tenhle blok se da vypustit.
+     Nesahej do nej - vlastni styly patri do druheho style bloku, scopovane
+     pod tridu konkretniho prvku (.cc-uv, .cc-calc, ...). -->
+<style>
+.cc-embed{
+  /* --- barvy --- */
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  /* --- shape --- */
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  /* --- font --- */
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}      /* prvek do krajů (fotka, mapa) */
+.cc-embed--bare{background:none;border:0;padding:0;} /* bez rámečku */
+/* --- typo --- */
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{margin:12px 0 0;font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);
+  letter-spacing:.02em;text-transform:uppercase;}
+.cc-embed .cc-num{font-family:var(--cc-display);font-weight:700;
+  font-size:clamp(22px,4vw,32px);color:var(--cc-blue);font-variant-numeric:tabular-nums;}
+.cc-embed a{color:var(--cc-blue);}
+/* --- UI --- */
+.cc-embed .cc-btn{
+  display:inline-block;padding:10px 20px;
+  border:1px solid var(--cc-blue);border-radius:var(--cc-radius);
+  background:var(--cc-blue);color:#fff;text-decoration:none;
+  font:700 18px/26px var(--cc-display);cursor:pointer;
+  transition:background .18s,color .18s;}
+.cc-embed .cc-btn:hover{background:var(--cc-blue-dark);border-color:var(--cc-blue-dark);}
+.cc-embed .cc-btn--ghost{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-btn--ghost:hover{background:var(--cc-blue);color:#fff;}
+.cc-embed .cc-btn--sm{padding:7px 14px;font-size:15px;line-height:22px;}
+.cc-embed .cc-btn[aria-pressed="true"]{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-card{background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);padding:14px 16px;}
+.cc-embed .cc-badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  background:var(--cc-blue);color:#fff;font:700 12px/18px var(--cc-ui);}
+.cc-embed .cc-badge--red{background:var(--cc-red);}
+.cc-embed .cc-badge--soft{background:#eaf3fd;color:var(--cc-blue-dark);}
+.cc-embed input,.cc-embed select,.cc-embed textarea{
+  font:400 16px/24px var(--cc-ui);color:var(--cc-ink);
+  padding:9px 12px;background:#fff;border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);}
+.cc-embed input[type=range]{padding:0;border:0;background:none;accent-color:var(--cc-blue);width:100%;}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed table{width:100%;border-collapse:collapse;font:400 15px/1.4 var(--cc-ui);}
+.cc-embed th{text-align:left;font-weight:700;color:var(--cc-muted);
+  text-transform:uppercase;font-size:12px;letter-spacing:.05em;padding:8px 10px;}
+.cc-embed td{padding:10px;border-top:1px solid var(--cc-line);}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-grid{display:grid;gap:var(--cc-gap);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.cc-embed .cc-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--cc-gap);}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+
+<style>
+.cc-cnbpoz{
+  --ink:#16181c; --ink2:#5b616b; --navy:#03396b; --sc:1;
+  --ease:cubic-bezier(.2,.7,.2,1); --spring:cubic-bezier(.34,1.35,.5,1);
+  box-sizing:border-box;height:100vh;display:flex;flex-direction:column;overflow:hidden;
+  padding:clamp(16px,4.2vw,28px) clamp(16px,4.2vw,30px);
+  background:#fff;border:1px solid #e0e0e0;border-radius:var(--cc-radius);color:var(--ink);
+  font-family:var(--cc-display);
+}
+.cc-cnbpoz .cc-cnbpoz__head{flex:0 0 auto;}
+.cc-cnbpoz .cc-cnbpoz__title{margin:0;color:#000;letter-spacing:-.01em;
+  font-size:max(18px, calc(clamp(20px,4.2vw,27px)*var(--sc)));line-height:1.2;}
+.cc-cnbpoz .cc-cnbpoz__lede{margin:calc(6px*var(--sc)) 0 0;font:400 max(14px, calc(clamp(14px,2.6vw,16px)*var(--sc)))/1.45 var(--cc-serif);color:var(--ink2);text-wrap:pretty;}
+.cc-cnbpoz.is-nolede .cc-cnbpoz__lede{display:none;}
+
+.cc-cnbpoz__sum{flex:0 0 auto;display:flex;align-items:center;gap:calc(14px*var(--sc));margin:calc(clamp(12px,3vw,20px)*var(--sc)) 0 calc(clamp(10px,2.4vw,16px)*var(--sc));}
+.cc-cnbpoz__big{flex:none;white-space:nowrap;color:var(--cc-blue);letter-spacing:-.02em;
+  font:700 max(30px, calc(clamp(34px,7vw,46px)*var(--sc)))/1 var(--cc-display);}
+.cc-cnbpoz__big .pc{transition:opacity .3s;}
+.cc-cnbpoz__big.is-count .pc{opacity:0;}
+.cc-cnbpoz .cc-cnbpoz__sumtxt{margin:0;max-width:30em;text-wrap:balance;color:#3c3c3c;
+  font:500 max(13px, calc(clamp(13px,2.5vw,15px)*var(--sc)))/1.35 var(--cc-display);}
+
+.cc-cnbpoz__map{flex:1 1 auto;min-height:0;position:relative;}
+.cc-cnbpoz__blk{position:absolute;margin:0;border:0;border-radius:10px;text-align:left;cursor:pointer;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:space-between;color:#fff;touch-action:manipulation;
+  padding:var(--bp,12px);font-family:var(--cc-display);
+  transition:transform .7s var(--spring),opacity .5s var(--ease),box-shadow .25s,filter .25s;}
+.cc-cnbpoz__blk.is-light{color:var(--navy);}
+.cc-cnbpoz__blk span{display:block;}
+.cc-cnbpoz__blk .n{font-weight:600;font-size:var(--fs,15px);line-height:1.15;white-space:nowrap;}
+.cc-cnbpoz__blk .p{font-weight:700;font-size:calc(var(--fs,15px)*1.55);line-height:1;letter-spacing:-.01em;white-space:nowrap;}
+.cc-cnbpoz__blk .v{font-weight:400;font-size:calc(var(--fs,15px)*.82);line-height:1.2;opacity:.82;margin-top:3px;white-space:nowrap;}
+.cc-cnbpoz__blk.is-s .v{display:none;}
+.cc-cnbpoz__blk.is-xs .p{font-size:calc(var(--fs,15px)*1.2);}
+.cc-cnbpoz__blk.is-on{box-shadow:inset 0 0 0 3px rgba(255,255,255,.95),0 10px 22px -10px rgba(3,57,107,.6);}
+.cc-cnbpoz__blk.is-light.is-on{box-shadow:inset 0 0 0 3px var(--navy),0 10px 22px -10px rgba(3,57,107,.5);}
+.cc-cnbpoz__blk:focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+@media (hover:hover){.cc-cnbpoz__blk:hover{filter:brightness(1.12);}}
+.cc-cnbpoz.is-pre .cc-cnbpoz__blk{transform:scale(.55);opacity:0;}
+
+.cc-cnbpoz .cc-cnbpoz__cap{flex:0 0 auto;box-sizing:border-box;height:var(--caph,3.2em);margin:calc(12px*var(--sc)) 0 0;padding-top:calc(10px*var(--sc));
+  border-top:1px solid #ececec;color:#3c3c3c;transition:opacity .2s;
+  font:400 max(13px, calc(clamp(13px,2.5vw,15px)*var(--sc)))/1.45 var(--cc-display);}
+.cc-cnbpoz .cc-cnbpoz__cap b{font-weight:700;color:#000;}
+.cc-cnbpoz .cc-cnbpoz__cap.is-swap{opacity:0;}
+@media (prefers-reduced-motion:reduce){.cc-cnbpoz *{transition:none!important;}}
+</style>
+
+<div class="cc-embed cc-cnbpoz" data-cc-cnbpoz>
+  <p class="cc-sr">Infografika: největší americké pozice České národní banky k 30. 9. 2026.
+    Nvidia 1,59 miliardy dolarů (34 miliard korun), 8,38 procenta amerických akcií ČNB.
+    Apple 1,40 miliardy dolarů (30 miliard korun), 7,37 procenta.
+    Microsoft 1,09 miliardy dolarů (24 miliard korun), 5,78 procenta.
+    Alphabet 1,05 miliardy dolarů (23 miliard korun), 5,52 procenta.
+    Amazon 703 milionů dolarů (15 miliard korun), 3,71 procenta.
+    Broadcom 480 milionů dolarů (10 miliard korun), 2,53 procenta.
+    Meta 459 milionů dolarů (9,9 miliardy korun), 2,43 procenta.
+    Dohromady těchto sedm firem tvoří 35,7 procenta amerických akcií ČNB.</p>
+
+  <header class="cc-cnbpoz__head">
+    <h3 class="cc-title cc-cnbpoz__title">Největší americké pozice&nbsp;ČNB</h3>
+    <p class="cc-cnbpoz__lede">Stav k&nbsp;30. 9. 2026. Plocha odpovídá podílu, klepněte na firmu.</p>
+  </header>
+
+  <div class="cc-cnbpoz__sum" aria-hidden="true">
+    <div class="cc-cnbpoz__big is-count"><span data-count>0,0</span><span class="pc">&nbsp;%</span></div>
+    <p class="cc-cnbpoz__sumtxt">amerických akcií ČNB připadá na těchto sedm firem</p>
+  </div>
+
+  <div class="cc-cnbpoz__map" data-map role="group" aria-label="Firmy"></div>
+
+  <p class="cc-cnbpoz__cap" data-cap aria-live="polite"></p>
+</div>
+
+<script>
+(function(){
+  var root = document.querySelector('[data-cc-cnbpoz]');
+  if(!root || root.dataset.ccInit) return;
+  root.dataset.ccInit = '1';
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canIO = 'IntersectionObserver' in window;
+  var STATIC = /[?&]static\b/.test(location.search);           // náhledy bez animace
+  if(!reduce && canIO && !STATIC) root.classList.add('is-pre');   // skrytý výchozí stav hned, žádné probliknutí
+
+  /* ===== data ===== */
+  var D = [
+    {n:'Nvidia',    us:'1,59 mld. $', ul:'1,59 miliardy dolarů', cl:'34 miliard korun',   p:8.38},
+    {n:'Apple',     us:'1,40 mld. $', ul:'1,40 miliardy dolarů', cl:'30 miliard korun',   p:7.37},
+    {n:'Microsoft', us:'1,09 mld. $', ul:'1,09 miliardy dolarů', cl:'24 miliard korun',   p:5.78},
+    {n:'Alphabet',  us:'1,05 mld. $', ul:'1,05 miliardy dolarů', cl:'23 miliard korun',   p:5.52},
+    {n:'Amazon',    us:'703 mil. $',  ul:'703 milionů dolarů',   cl:'15 miliard korun',   p:3.71},
+    {n:'Broadcom',  us:'480 mil. $',  ul:'480 milionů dolarů',   cl:'10 miliard korun',   p:2.53},
+    {n:'Meta',      us:'459 mil. $',  ul:'459 milionů dolarů',   cl:'9,9 miliardy korun', p:2.43}
+  ];
+  var COL = ['#03396b','#074a8c','#0a5aa8','#0b6cc9','#087eeb','#5aa9f2','#8cc3f6'];   // od největší po nejmenší
+  var SUM = D.reduce(function(s,d){ return s+d.p; }, 0);
+  var fmtP = function(x){ return x.toFixed(2).replace('.', ',') + ' %'; };
+  var fmt1 = function(x){ return x.toFixed(1).replace('.', ','); };
+  var capText = function(d){ return '<b>'+d.n+'</b> '+d.ul+' ('+d.cl+'), '+fmtP(d.p)+' amerických akcií ČNB'; };
+
+  var map = root.querySelector('[data-map]'), cap = root.querySelector('[data-cap]');
+  var cnt = root.querySelector('[data-count]'), big = root.querySelector('.cc-cnbpoz__big');
+  var sel = 0;
+
+  /* ===== klepnutí: pointerdown kvůli mobilu, click jen pro čtečky, klávesy zvlášť ===== */
+  function bindTap(el, fn){
+    var last = 0;
+    el.addEventListener('pointerdown', function(e){ if(e.button > 0) return; e.preventDefault(); last = Date.now(); fn(); });
+    el.addEventListener('click', function(e){ e.preventDefault(); if(Date.now() - last > 600) fn(); });
+    el.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); last = Date.now(); fn(); } });
+  }
+
+  var blks = D.map(function(d, i){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'cc-cnbpoz__blk' + (i >= 5 ? ' is-light' : '');
+    b.style.background = COL[i];
+    b.style.transitionDelay = (i*90) + 'ms';
+    b.setAttribute('aria-label', d.n + ', ' + d.ul + ', ' + d.cl + ', ' + fmtP(d.p));
+    b.innerHTML = '<span class="n" aria-hidden="true">'+d.n+'</span><span aria-hidden="true"><span class="p">'+fmtP(d.p)+'</span><span class="v">'+d.us+'</span></span>';
+    bindTap(b, function(){ select(i); });
+    map.appendChild(b);
+    return b;
+  });
+
+  function mark(){ blks.forEach(function(b, i){ b.classList.toggle('is-on', i === sel); b.setAttribute('aria-pressed', i === sel ? 'true' : 'false'); }); }
+  var swapT;
+  function select(i){
+    if(i === sel) return;
+    sel = i; mark();
+    clearTimeout(swapT);
+    if(reduce){ cap.innerHTML = capText(D[i]); return; }
+    cap.classList.add('is-swap');
+    swapT = setTimeout(function(){ cap.innerHTML = capText(D[i]); cap.classList.remove('is-swap'); }, 160);
+  }
+
+  /* ===== mozaika (squarified treemap) ===== */
+  function squarify(vals, x, y, w, h){
+    var tot = vals.reduce(function(s,v){ return s+v; }, 0), k = w*h/tot, out = [], row = [], i = 0;
+    var A = vals.map(function(v){ return v*k; });
+    function worst(r, s){ var sum=0, mx=0, mn=Infinity; r.forEach(function(a){ sum+=a; mx=Math.max(mx,a); mn=Math.min(mn,a); });
+      return Math.max(s*s*mx/(sum*sum), sum*sum/(s*s*mn)); }
+    function place(r){ var sum = r.reduce(function(s,a){ return s+a; }, 0);
+      if(w >= h){ var cw = sum/h, yy = y; r.forEach(function(a){ out.push([x, yy, cw, a/cw]); yy += a/cw; }); x += cw; w -= cw; }
+      else { var rh = sum/w, xx = x; r.forEach(function(a){ out.push([xx, y, a/rh, rh]); xx += a/rh; }); y += rh; h -= rh; } }
+    while(i < A.length){ var s = Math.min(w, h), a = A[i];
+      if(!row.length || worst(row.concat(a), s) <= worst(row, s)){ row.push(a); i++; } else { place(row); row = []; } }
+    if(row.length) place(row);
+    return out;
+  }
+  function layout(){
+    var W = map.clientWidth, H = map.clientHeight; if(W < 10 || H < 10) return;
+    var g = W < 420 ? 4 : 5;
+    var R = squarify(D.map(function(d){ return d.p; }), 0, 0, W, H);
+    var prev = 99;
+    R.forEach(function(r, i){
+      var b = blks[i], w = r[2]-g, h = r[3]-g, bp = Math.round(Math.max(7, Math.min(12, Math.min(w, h)*.09)));
+      b.style.left = (r[0]+g/2)+'px'; b.style.top = (r[1]+g/2)+'px'; b.style.width = w+'px'; b.style.height = h+'px';
+      b.style.setProperty('--bp', bp+'px');
+      var iw = w - 2*bp;
+      var fs = Math.max(11, Math.min(17, Math.sqrt(w*h)/6.5, iw/(D[i].n.length*.64), iw/(6.4*.62*1.55)));
+      fs = Math.min(fs, prev);   // menší firma nikdy nemá větší písmo než větší
+      var set = function(){
+        b.style.setProperty('--fs', fs.toFixed(1)+'px');
+        b.classList.toggle('is-s', fs < 13 || h < fs*5.2 || w < fs*6.6);   // částka v dolarech by klesla pod 11 px nebo se nevejde
+        b.classList.toggle('is-xs', h < fs*3.7);
+      };
+      set();
+      // pojistka: název a procenta se nesmí dotknout ani vylézt z dlaždice
+      var n = b.querySelector('.n'), p = b.querySelector('.p');
+      for(var k=0; k<10 && fs > 10 && (n.offsetTop + n.offsetHeight > p.parentNode.offsetTop - 2 || b.scrollWidth > b.clientWidth || b.scrollHeight > b.clientHeight); k++){
+        fs *= .92; set();
+      }
+      prev = fs;
+    });
+  }
+
+  /* ===== vyplnění rámu ===== */
+  function sizeCap(){   // výška popisku podle nejdelší firmy, aby se při klepání nic nehýbalo
+    var keep = cap.innerHTML, mx = 0;
+    cap.style.height = 'auto';
+    D.forEach(function(d){ cap.innerHTML = capText(d); mx = Math.max(mx, cap.offsetHeight); });
+    cap.innerHTML = keep; cap.style.height = '';
+    root.style.setProperty('--caph', Math.ceil(mx)+'px');
+  }
+  function bad(minMap){
+    return root.scrollHeight > root.clientHeight + 1 || map.clientHeight < minMap;
+  }
+  function fit(){
+    var h = root.clientHeight;
+    root.classList.remove('is-nolede');
+    var sc = 1; root.style.setProperty('--sc', 1); sizeCap();
+    var minMap = Math.max(170, h*.48);
+    for(var k=0; k<24 && bad(minMap); k++){
+      if(!root.classList.contains('is-nolede')) root.classList.add('is-nolede');
+      else if(sc > .75){ sc *= .95; root.style.setProperty('--sc', sc.toFixed(3)); sizeCap(); }
+      else if(minMap > 140){ minMap *= .92; }
+      else break;
+    }
+    if(big.classList.contains('is-count')) lockBig(); else big.style.minWidth = '';
+    layout();
+  }
+  // šířka čísla po dopočítání = pevná šířka během počítání (Poppins nemá tabulární číslice)
+  function lockBig(){ var keep = cnt.textContent; cnt.textContent = fmt1(SUM); big.classList.remove('is-count');
+    var w = big.offsetWidth; big.classList.add('is-count'); cnt.textContent = keep; big.style.minWidth = w + 'px'; }
+
+  mark(); cap.innerHTML = capText(D[0]);
+  var rt;
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  if(window.ResizeObserver) new ResizeObserver(function(){ clearTimeout(rt); rt = setTimeout(fit, 90); }).observe(root);
+  fit();
+
+  /* ===== nástup: dlaždice postupně naskočí, součet se napočítá ===== */
+  function finish(){ root.classList.remove('is-pre'); cnt.textContent = fmt1(SUM); big.classList.remove('is-count'); }
+  function play(){
+    lockBig();
+    cnt.textContent = '0,0';
+    root.classList.remove('is-pre');
+    var t0 = performance.now(), dur = 1300;
+    (function tick(t){
+      var k = Math.min(1, (t - t0)/dur), e = 1 - Math.pow(1-k, 3);
+      cnt.textContent = fmt1(SUM*e);
+      if(k < 1) requestAnimationFrame(tick); else big.classList.remove('is-count');
+    })(t0);
+  }
+  if(reduce || !canIO || STATIC){ finish(); }
+  else {
+    var started = false, go = function(){ if(started) return; started = true; io.disconnect(); requestAnimationFrame(play); };
+    var io = new IntersectionObserver(function(en){ if(en.some(function(x){ return x.isIntersecting; })) go(); }, {threshold:.25});
+    io.observe(root);
+    setTimeout(go, 6000);   // záloha, aby prvek nikdy nezůstal prázdný
+  }
+})();
+</script>
+</body>
+</html>
