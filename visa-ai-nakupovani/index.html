@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jak Češi nakupují s AI</title>
+<meta name="robots" content="noindex">
+<!-- CzechCrunch × Visa – infografika „Jak Češi nakupují s AI“ místo textového infoboxu.
+     Cíl: premium článek cc.cz (partner Visa) „Umělá inteligence za nás umí i nakoupit…“.
+     Vložení: visa-ai-nakupovani-vlozeni.html, obalový div s výškou podle šířky okna (vzorec a ověřené šířky jsou ve vložení).
+     Nasazení: matyas-cloud/cc-embed/visa-ai-nakupovani/index.html, Poppins ze sdílené složky ../fonts/.
+     Formát: bílý infobox s linkou jako ostatní článkové prvky. Nahoře titulek a tlačítko (i) se zdrojem a vysvětlivkami.
+       Kapitoly odshora dolů, každá s jedním popiskem a vlastním grafem:
+       1 kdo (lidičky, 1 = 10 %; druhá vrstva Podle generací – přepínač nebo klik na řadu lidiček),
+       2 co lidé AI svěří (sloupce, čip „AI“ přeskáče sloupce a spadne k placení),
+       3 co by s ní nakoupili (předměty se plní jako nádoba), 4 na čem záleží při placení (pruhy), 5 6 z 10 karet.
+       Na desktopu kapitoly 3 a 4 vedle sebe, na mobilu pod sebou.
+     Čísla: jeden styl hodnoty (Poppins 600, jednotka 0,7 em, mezera 0,2 em jednotky) a jeden styl velkého čísla (64 %, 6 z 10).
+     Nástup: každá kapitola se rozehraje, až na ni čtenář doscrolluje (IntersectionObserver uvnitř iframu vidí viewport stránky).
+       Bez IO, s omezeným pohybem nebo s ?static rovnou konečný stav. ?gen otevře rovnou druhou vrstvu, ?info panel (i) – jen pro náhledy.
+     Data: infobox z článku (průzkum Response Now pro Visa, srpen 2026, 1 010 respondentů 18–70 let).
+       Úkoly v kapitole 2 jsou odpovědi na jednu otázku („Co byste svěřili AI při nakupování na internetu?“, slide Visa na fotce v článku).
+       Generace Z = lidé do 29 let (citace Petra Poláka v článku). Texty a čísla jsou v bloku D, z něj se skládá i shrnutí pro čtečky.
+     Změny obsahu:
+       2026-10-19  v1 rozhýbaný infobox (řádky + linky), zamítnut jako moc jednoduchý.
+       2026-10-19  v2 infografika ve čtyřech kapitolách s pointou a podnadpisem.
+       2026-10-19  v3 jeden popisek na kapitolu, sjednocená čísla, generace do druhé vrstvy, zdroj a vysvětlivky do (i).
+                   Schváleno k nasazení. -->
+<style>
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-500.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-ext-500.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-ext-600.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-700.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-ext-700.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;}
+  .cc-embed{margin:0!important;}
+</style>
+</head>
+<body>
+<!-- .cc-embed základ (verbatim ze skillu) -->
+<!-- CC sdílený designový základ pro embedy. Vlož jako PRVNI style blok prvku.
+     Pokud web .cc-embed nacita globalne ze sablony, tenhle blok se da vypustit.
+     Nesahej do nej - vlastni styly patri do druheho style bloku, scopovane
+     pod tridu konkretniho prvku (.cc-uv, .cc-calc, ...). -->
+<style>
+.cc-embed{
+  /* --- barvy --- */
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  /* --- shape --- */
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  /* --- font --- */
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}      /* prvek do krajů (fotka, mapa) */
+.cc-embed--bare{background:none;border:0;padding:0;} /* bez rámečku */
+/* --- typo --- */
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{margin:12px 0 0;font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);
+  letter-spacing:.02em;text-transform:uppercase;}
+.cc-embed .cc-num{font-family:var(--cc-display);font-weight:700;
+  font-size:clamp(22px,4vw,32px);color:var(--cc-blue);font-variant-numeric:tabular-nums;}
+.cc-embed a{color:var(--cc-blue);}
+/* --- UI --- */
+.cc-embed .cc-btn{
+  display:inline-block;padding:10px 20px;
+  border:1px solid var(--cc-blue);border-radius:var(--cc-radius);
+  background:var(--cc-blue);color:#fff;text-decoration:none;
+  font:700 18px/26px var(--cc-display);cursor:pointer;
+  transition:background .18s,color .18s;}
+.cc-embed .cc-btn:hover{background:var(--cc-blue-dark);border-color:var(--cc-blue-dark);}
+.cc-embed .cc-btn--ghost{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-btn--ghost:hover{background:var(--cc-blue);color:#fff;}
+.cc-embed .cc-btn--sm{padding:7px 14px;font-size:15px;line-height:22px;}
+.cc-embed .cc-btn[aria-pressed="true"]{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-card{background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);padding:14px 16px;}
+.cc-embed .cc-badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  background:var(--cc-blue);color:#fff;font:700 12px/18px var(--cc-ui);}
+.cc-embed .cc-badge--red{background:var(--cc-red);}
+.cc-embed .cc-badge--soft{background:#eaf3fd;color:var(--cc-blue-dark);}
+.cc-embed input,.cc-embed select,.cc-embed textarea{
+  font:400 16px/24px var(--cc-ui);color:var(--cc-ink);
+  padding:9px 12px;background:#fff;border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);}
+.cc-embed input[type=range]{padding:0;border:0;background:none;accent-color:var(--cc-blue);width:100%;}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed table{width:100%;border-collapse:collapse;font:400 15px/1.4 var(--cc-ui);}
+.cc-embed th{text-align:left;font-weight:700;color:var(--cc-muted);
+  text-transform:uppercase;font-size:12px;letter-spacing:.05em;padding:8px 10px;}
+.cc-embed td{padding:10px;border-top:1px solid var(--cc-line);}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-grid{display:grid;gap:var(--cc-gap);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.cc-embed .cc-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--cc-gap);}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+
+<style>
+.cc-visaai{
+  --ink:#16181c; --ink2:#5b616b; --line:#ececec;
+  --visa:#1434cb; --visa2:#93a3e6; --track:#eceef4; --tint:#e3e8f8; --gold:#fcc015;
+  --sc:1; --ease:cubic-bezier(.2,.7,.2,1);
+  --vf:max(14px, calc(clamp(15px,3vw,18px)*var(--sc)));        /* hodnota v grafu */
+  --hf:max(26px, calc(clamp(30px,6.4vw,40px)*var(--sc)));      /* velké číslo */
+  --lf:max(14px, calc(clamp(14px,2.5vw,15px)*var(--sc)));      /* popisek kapitoly */
+  --tf:max(12px, calc(clamp(12px,2.3vw,13px)*var(--sc)));      /* popisky v grafu */
+  --gap:calc(clamp(8px,1.8vw,12px)*var(--sc));                 /* popisek kapitoly → graf, všude stejně */
+  box-sizing:border-box;height:100vh;display:flex;flex-direction:column;overflow:hidden;position:relative;
+  padding:clamp(16px,4.2vw,28px) clamp(16px,4.2vw,30px) clamp(16px,3.6vw,24px);
+  background:#fff;border:1px solid #e0e0e0;border-radius:var(--cc-radius);color:var(--ink);
+  font-family:var(--cc-display);
+}
+.cc-visaai *{box-sizing:border-box;}
+.cc-visaai button{font:inherit;color:inherit;margin:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+
+/* záhlaví */
+.cc-visaai__hd{flex:0 0 auto;display:flex;align-items:flex-start;gap:12px;}
+.cc-visaai .cc-visaai__title{margin:0;color:#000;letter-spacing:-.01em;font-size:max(17px, calc(clamp(19px,4.4vw,24px)*var(--sc)));line-height:1.2;}
+.cc-visaai .info{margin-left:auto;flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid #b4bac4;background:#fff;color:var(--ink2);
+  cursor:pointer;display:grid;place-items:center;font:600 13px/1 var(--cc-display);transition:border-color .15s,color .15s;}
+.cc-visaai .info:hover{border-color:var(--ink);color:var(--ink);}
+
+/* jednotný styl čísel */
+.val{display:inline-block;white-space:nowrap;color:var(--ink);font:600 var(--vf)/1 var(--cc-display);letter-spacing:-.01em;transition:opacity .3s;}
+.val.hero{font-size:var(--hf);letter-spacing:-.02em;}
+.val [data-c]{display:inline-block;}
+.val .u{display:inline-block;font-size:.7em;margin-left:.2em;letter-spacing:0;transition:opacity .3s;}
+.is-count .u{opacity:0;}
+
+/* mřížka kapitol */
+.cc-visaai__grid{flex:1 1 auto;min-height:0;display:grid;margin-top:calc(clamp(4px,1.2vw,8px)*var(--sc));
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"kdo kdo" "sveri sveri" "nakup platba" "karta karta";
+  align-content:space-between;column-gap:clamp(18px,4vw,30px);}
+.vs{min-width:0;padding-top:calc(clamp(12px,2.6vw,16px)*var(--sc));border-top:1px solid var(--line);}
+.vs--kdo{grid-area:kdo;border-top:0;padding-top:calc(6px*var(--sc));}
+.vs--sveri{grid-area:sveri;} .vs--nakup{grid-area:nakup;} .vs--platba{grid-area:platba;} .vs--karta{grid-area:karta;}
+.vs__hd{display:flex;align-items:center;justify-content:space-between;gap:10px 14px;flex-wrap:wrap;}
+.cc-visaai .vs__h{margin:0;color:var(--ink);font:600 var(--lf)/1.3 var(--cc-display);letter-spacing:-.005em;text-wrap:balance;}
+.vs__viz{margin-top:var(--gap);position:relative;}
+.vs--karta{padding-bottom:4px;}   /* rezerva pro přesah písma velkého čísla, jinak falešné přetečení */
+
+/* přepínač vrstev – černý pill jako tlačítka na cc.cz */
+.seg{display:inline-flex;gap:4px;flex:none;}
+.seg button{padding:5px 12px;border:0;border-radius:32px;cursor:pointer;background:transparent;color:var(--ink2);
+  box-shadow:inset 0 0 0 1px #dcdfe5;font:500 12px/1.35 var(--cc-display);transition:background .16s,color .16s,box-shadow .16s;}
+.seg button[aria-pressed="true"]{background:#000;color:#fff;box-shadow:none;}
+@media (hover:hover){.seg button[aria-pressed="false"]:hover{color:var(--ink);box-shadow:inset 0 0 0 1px #adadad;}}
+
+/* 1 kdo – lidičky ve dvou vrstvách, obě v jedné buňce mřížky */
+.lays{display:grid;}
+.lay{grid-area:1/1;align-self:center;min-width:0;transition:opacity .35s var(--ease),transform .35s var(--ease),visibility 0s;}
+.lay:not(.is-act){opacity:0;visibility:hidden;transform:translateY(6px);transition:opacity .2s,transform .2s,visibility 0s .2s;}
+.big{display:flex;align-items:center;gap:clamp(14px,3vw,22px);cursor:pointer;}
+.big .iso__ppl{flex:1 1 auto;--pw:var(--pwb);}
+@media (hover:hover){.big:hover .pp__on{fill:#0f28a4;}}
+.iso{display:flex;flex-direction:column;gap:calc(5px*var(--sc));}
+.iso__row{display:grid;grid-template-columns:clamp(84px,17vw,112px) minmax(0,1fr) clamp(52px,10vw,64px);align-items:center;column-gap:12px;}
+.iso__lab{font:500 var(--tf)/1.2 var(--cc-display);color:var(--ink);}
+.iso__row.is-ref .iso__lab{color:var(--ink2);}
+.iso__row .val{justify-self:end;}
+.iso__ppl{display:flex;justify-content:space-between;align-items:flex-end;gap:2px;}
+.pp{position:relative;flex:0 0 auto;width:var(--pw);height:calc(var(--pw)*1.333);}
+.pp svg{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.pp__off{fill:var(--track);}
+.pp__on{fill:var(--visa);clip-path:inset(0 var(--cut,100%) 0 0);transition:clip-path .28s linear,fill .15s;transition-delay:var(--d,0ms),0ms;}
+.iso__row.is-ref .pp__on{fill:var(--visa2);}
+.cc-visaai.is-pre .vs:not(.is-on) .pp__on,.lay:not(.is-act) .pp__on{clip-path:inset(0 100% 0 0);transition:none;}
+.cc-visaai{--pw:calc(clamp(18px,3.4vw,22px)*var(--sc));--pwb:calc(clamp(24px,5vw,32px)*var(--sc));}
+
+/* 2 svěří – sloupce */
+.col__plot{position:relative;height:var(--plot);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:end;border-bottom:1px solid #dfe2ea;}
+.cc-visaai{--plot:calc(clamp(112px,20vw,128px)*var(--sc));}
+.col__c{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
+.col__c .val{margin-bottom:6px;}
+.col__bar{width:clamp(30px,8vw,46px);height:calc(var(--v)*var(--k));border-radius:6px 6px 0 0;background:var(--visa);transition:height .6s var(--ease);transition-delay:var(--d,0ms);}
+.col__c.is-pay .col__bar{background:var(--gold);}
+.cc-visaai.is-pre .vs:not(.is-on) .col__bar{height:0;}
+.cc-visaai.is-pre .col__c:not(.is-shown) .val{opacity:0;}
+.col__labs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:calc(7px*var(--sc));}
+.col__labs span{padding:0 4px;text-align:center;color:var(--ink2);text-wrap:balance;font:400 var(--tf)/1.3 var(--cc-display);}
+.col__labs span.is-pay{color:var(--ink);font-weight:500;}
+.chip{position:absolute;left:0;bottom:0;z-index:2;transform:translateX(-50%);pointer-events:none;
+  padding:3px 9px 4px;border-radius:99px;background:var(--ink);color:#fff;font:600 11px/1.2 var(--cc-display);letter-spacing:.02em;opacity:0;transition:opacity .2s;}
+.chip::after{content:"";position:absolute;left:50%;bottom:-4px;margin-left:-4px;border:4px solid transparent;border-bottom:0;border-top-color:var(--ink);}
+.chip.is-vis{opacity:1;}
+
+/* 3 nákup – nádoby */
+.jar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));}
+.jar__i{display:flex;flex-direction:column;align-items:center;text-align:center;}
+.jar__i svg{display:block;width:auto;height:var(--ih);overflow:visible;}
+.cc-visaai{--ih:calc(clamp(56px,11vw,70px)*var(--sc));}
+.jar__bg{fill:var(--tint);}
+.jar__liq{fill:var(--visa);}
+.jar__i .val{margin-top:calc(8px*var(--sc));}
+.jar__lab{margin-top:4px;color:var(--ink2);white-space:nowrap;letter-spacing:-.01em;font:400 var(--tf)/1.25 var(--cc-display);}
+@media (min-width:600px){.jar__lab{font-size:12px;}}
+
+/* 4 placení – pruhy */
+.pb{display:flex;flex-direction:column;gap:calc(8px*var(--sc));}
+.pb__top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+.pb__lab{color:var(--ink);font:400 var(--tf)/1.25 var(--cc-display);}
+.pb__i.is-top .pb__lab{font-weight:600;}
+.pb__tr{margin-top:calc(5px*var(--sc));height:max(6px, calc(8px*var(--sc)));border-radius:99px;background:var(--track);overflow:hidden;}
+.pb__f{display:block;height:100%;width:calc(var(--v)*100%);border-radius:99px;background:var(--visa2);transition:width .8s var(--ease);transition-delay:var(--d,0ms);}
+.pb__i.is-top .pb__f{background:var(--visa);}
+.cc-visaai.is-pre .vs:not(.is-on) .pb__f{width:0;}
+
+/* 5 karty */
+.vs--karta .vs__viz{margin-top:0;display:flex;align-items:center;gap:clamp(12px,3vw,22px);}
+.kt__txt{flex:1 1 auto;min-width:0;margin:0;color:var(--ink);font:600 var(--lf)/1.3 var(--cc-display);text-wrap:balance;}
+.kt__cards{flex:none;display:flex;gap:calc(5px*var(--sc));}
+.cd{position:relative;width:calc(clamp(20px,3.4vw,22px)*var(--sc));aspect-ratio:1.586;border-radius:3px;background:var(--track);
+  transition:background .3s,transform .4s var(--ease);transition-delay:var(--d,0ms);}
+.cd.on{background:var(--visa);}
+.cd.on::after{content:"";position:absolute;left:16%;top:30%;width:22%;height:26%;border-radius:1.5px;background:var(--gold);transition:opacity .3s;transition-delay:var(--d,0ms);}
+.cc-visaai.is-pre .vs:not(.is-on) .cd{transform:translateY(5px) scale(.85);}
+.cc-visaai.is-pre .vs:not(.is-on) .cd.on{background:var(--track);}
+.cc-visaai.is-pre .vs:not(.is-on) .cd.on::after{opacity:0;}
+
+/* hodnoty se ukážou, až se kapitola rozehraje */
+.cc-visaai.is-pre .vs:not(.is-on) .val{opacity:0;}
+
+/* panel (i) */
+.panel{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vw,24px);
+  background:rgba(255,255,255,.86);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);border-radius:var(--cc-radius);}
+.panel[hidden]{display:none;}
+.panel__box{position:relative;width:100%;max-width:470px;max-height:100%;display:flex;flex-direction:column;background:#fff;border:1px solid #e0e0e0;
+  border-radius:14px;box-shadow:0 18px 40px -18px rgba(20,24,40,.35);padding:clamp(16px,3.6vw,22px) clamp(16px,3.6vw,24px);}
+.panel__hd{display:flex;align-items:flex-start;gap:12px;}
+.cc-visaai .panel__t{margin:0;font:600 15px/1.3 var(--cc-display);color:var(--ink);}
+.cc-visaai .panel__x{margin-left:auto;flex:none;width:28px;height:28px;border:0;border-radius:50%;background:#f1f2f5;cursor:pointer;font:400 18px/1 var(--cc-display);color:var(--ink);}
+.panel__body{margin-top:10px;overflow-y:auto;min-height:0;}
+.cc-visaai .panel__body p{margin:0 0 9px;font:400 13px/1.5 var(--cc-display);color:#3c3c3c;}
+.cc-visaai .panel__body p:last-child{margin-bottom:0;}
+
+/* užší než 600 px: kapitoly pod sebou, lidičky pod popiskem, karty pod textem */
+@media (max-width:599px){
+  .cc-visaai__grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"kdo" "sveri" "nakup" "platba" "karta";}
+  .big{flex-wrap:wrap;row-gap:8px;}
+  .big .iso__ppl{flex:1 0 100%;}
+  /* generace na mobilu v jednom řádku: popisek | lidičky podle zbylé šířky | hodnota, aby obě vrstvy měly stejnou výšku */
+  .iso{gap:calc(7px*var(--sc));}
+  .iso__row{grid-template-columns:calc(var(--tf)*7.5) minmax(0,1fr) calc(var(--vf)*2.5);column-gap:8px;}
+  .iso__lab{white-space:nowrap;}
+  .iso__row .pp{flex:1 1 0;width:auto;max-width:var(--pw);height:auto;aspect-ratio:.75;}
+  .cc-visaai{--pw:calc(clamp(16px,5.4vw,22px)*var(--sc));--pwb:calc(min(30px, (100vw - 76px)/10)*var(--sc));}
+  .vs--karta .vs__viz{flex-wrap:wrap;row-gap:10px;}
+  .kt__txt{flex:1 1 0;}
+  .kt__cards{flex:1 0 100%;justify-content:space-between;}
+  .cd{width:auto;flex:1 1 0;max-width:30px;}
+}
+/* nejužší telefony: lidičky by v řádku byly moc malé, jdou pod popisek */
+@media (max-width:339px){
+  .iso__row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"lab val" "ppl ppl";row-gap:3px;}
+  .iso__lab{grid-area:lab;} .iso__row .val{grid-area:val;} .iso__row .iso__ppl{grid-area:ppl;}
+  .iso__row .pp{max-width:18px;}
+}
+@media (prefers-reduced-motion:reduce){.cc-visaai *,.cc-visaai *::after{transition:none!important;}}
+.cc-visaai.is-static *,.cc-visaai.is-static *::after{transition:none!important;}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="vs-person" viewBox="0 0 24 32"><circle cx="12" cy="7" r="5.6"/><path d="M2.5 31v-7.5a9.5 9.5 0 0 1 19 0V31z"/></symbol>
+  </defs>
+</svg>
+
+<div class="cc-embed cc-visaai" data-cc-visaai>
+  <p class="cc-sr" data-sr></p>
+  <div class="cc-visaai__hd">
+    <h3 class="cc-title cc-visaai__title">Jak Češi nakupují s&nbsp;AI</h3>
+    <button type="button" class="info" data-info aria-label="Zdroj a vysvětlivky" aria-expanded="false" aria-controls="vs-panel">i</button>
+  </div>
+  <div class="cc-visaai__grid" data-grid></div>
+  <div class="panel" id="vs-panel" role="dialog" aria-modal="true" aria-labelledby="vs-panel-t" data-panel hidden>
+    <div class="panel__box">
+      <div class="panel__hd"><p class="panel__t" id="vs-panel-t">Zdroj a vysvětlivky</p><button type="button" class="panel__x" data-close aria-label="Zavřít">×</button></div>
+      <div class="panel__body" data-pbody></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var root = document.querySelector('[data-cc-visaai]');
+  if(!root || root.dataset.ccInit) return;
+  root.dataset.ccInit = '1';
+  var Q = location.search;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canIO = 'IntersectionObserver' in window;
+  var STATIC = /[?&]static\b/.test(Q);                             // náhledy bez animace
+  var ANIM = !reduce && canIO && !STATIC;
+  if(ANIM) root.classList.add('is-pre');                            // skrytý výchozí stav hned, žádné probliknutí
+  if(STATIC) root.classList.add('is-static');
+
+  /* ===== D: popisky kapitol, data a texty panelu (i) ===== */
+  var D = {
+    kdo:   {h:'Využívá AI při rozhodování o online nákupu', all:['Češi celkem',64],
+            gen:[['Generace Z',84],['Baby boomers',47]], tabs:['Celkem','Podle generací']},
+    sveri: {h:'Co by lidé svěřili AI při nakupování',
+            cols:[['Vyhledání produktu',54],['Hledání nejlepší ceny',57],['Porovnání nabídek',57],['Dokončení nákupu včetně platby',15]]},
+    nakup: {h:'Co by lidé nechali AI nakoupit',
+            items:[['Drogerie',35,'bottle'],['Potraviny',30,'carton'],['Elektronika',21,'phone'],['Oblečení',20,'shirt']]},
+    platba:{h:'Co je klíčové při placení online',
+            bars:[['Bezpečnost',68],['Jednoduchost',49],['Výběr platební metody',42],['Rychlost',41]]},
+    karta: {n:6, of:10, t:'Čechů platí na internetu nejraději kartou'},
+    info:  ['Průzkum Response Now pro společnost Visa, srpen 2026, 1 010 respondentů ve věku 18–70 let.',
+            'Jedna postavička odpovídá 10 % lidí. Generace Z jsou lidé do 29 let.',
+            'Úkoly ve druhém grafu jsou odpovědi na otázku „Co byste svěřili AI při nakupování na internetu?“ Sloupce jdou v pořadí, v jakém nákup probíhá, od vyhledání produktu po placení.',
+            'Lidé mohli zvolit víc odpovědí, proto se procenta v jednotlivých grafech nesčítají do 100.']
+  };
+
+  /* ===== tvary předmětů (viewBox 0 0 60 80, y0/y1 = horní a dolní hrana kvůli hladině) ===== */
+  var SHAPE = {
+    bottle:{d:'M27 2h8v6h-8zM35 3h8.5a1.5 1.5 0 0 1 0 3H35zM26 8h10v8H26zM14 24a8 8 0 0 1 8-8h18a8 8 0 0 1 8 8v46a8 8 0 0 1-8 8H22a8 8 0 0 1-8-8z', y0:2, y1:78},
+    carton:{d:'M22 4h16v8H22zM14 26l8-14h16l8 14v52H14z', y0:4, y1:78},
+    phone: {d:'M17 2h26a7 7 0 0 1 7 7v62a7 7 0 0 1-7 7H17a7 7 0 0 1-7-7V9a7 7 0 0 1 7-7zM25 7.5a1.25 1.25 0 0 0 0 2.5h10a1.25 1.25 0 0 0 0-2.5z', y0:2, y1:78},
+    shirt: {d:'M21 10L8 17 2 33l10 4 2-6v47h32V31l2 6 10-4-6-16-13-7c-2 6-5 8-9 8s-7-2-9-8z', y0:10, y1:78}
+  };
+
+  var NB = ' ';
+  var val = function(n, unit, cls, cd){ return '<span class="val'+(cls?' '+cls:'')+'"'+(cd!=null?' data-cd="'+cd+'"':'')+'><span data-c="'+n+'">'+n+'</span><span class="u">'+(unit||'%')+'</span></span>'; };
+  var grid = root.querySelector('[data-grid]');
+  var pct = function(r){ return r[0].toLowerCase()+' '+r[1]+' procent'; };
+
+  /* shrnutí pro čtečky (vizuální části mají aria-hidden) */
+  root.querySelector('[data-sr]').textContent = [
+    D.kdo.h+' – '+pct(D.kdo.all)+', '+D.kdo.gen.map(pct).join(', ')+'.',
+    D.sveri.h+' – '+D.sveri.cols.map(pct).join(', ')+'.',
+    D.nakup.h+' – '+D.nakup.items.map(pct).join(', ')+'.',
+    D.platba.h+' – '+D.platba.bars.map(pct).join(', ')+'.',
+    D.karta.n+' z '+D.karta.of+' '+D.karta.t+'.',
+    'Zdroj: '+D.info[0]
+  ].join(' ');
+  root.querySelector('[data-pbody]').innerHTML = D.info.map(function(t){ return '<p>'+t.replace(/ (\d) (\d{3})/g, ' $1'+NB+'$2').replace(/ ([zvsaokui]) /gi, ' $1'+NB).replace(/(\d) (let|%)/g, '$1'+NB+'$2')+'</p>'; }).join('');
+
+  function sec(key, head, inner){
+    var s = document.createElement('section');
+    s.className = 'vs vs--'+key; s.dataset.sec = key;
+    s.innerHTML = head + '<div class="vs__viz" aria-hidden="true">'+inner+'</div>';
+    grid.appendChild(s); return s;
+  }
+  var label = function(t){ return '<h4 class="vs__h" aria-hidden="true">'+t+'</h4>'; };
+  function people(v, d0, step){
+    var h = '';
+    for(var k=0; k<10; k++){
+      var f = Math.max(0, Math.min(1, v/10 - k));                     // 64 % = 6 celých a 0,4 sedmého
+      h += '<span class="pp"><svg class="pp__off"><use href="#vs-person"/></svg><svg class="pp__on" style="--cut:'+((1-f)*100).toFixed(1)+'%;--d:'+(d0 + k*step)+'ms"><use href="#vs-person"/></svg></span>';
+    }
+    return '<span class="iso__ppl">'+h+'</span>';
+  }
+
+  /* 1 kdo – vrstva 1 celkem, vrstva 2 podle generací */
+  var lay2 = [[D.kdo.all[0], D.kdo.all[1], true]].concat(D.kdo.gen.map(function(r){ return [r[0], r[1], false]; }));
+  var sKdo = sec('kdo',
+    '<div class="vs__hd">'+label(D.kdo.h)+'<div class="seg" role="group" aria-label="Zobrazení">'
+      + D.kdo.tabs.map(function(t, i){ return '<button type="button" data-view="'+(i+1)+'" aria-pressed="'+(i===0)+'">'+t+'</button>'; }).join('') + '</div></div>',
+    '<div class="lays">'
+      + '<div class="lay is-act" data-lay="1"><div class="big" data-big>'+val(D.kdo.all[1], '%', 'hero')+people(D.kdo.all[1], 0, 55)+'</div></div>'
+      + '<div class="lay" data-lay="2"><div class="iso">' + lay2.map(function(r, i){
+          return '<div class="iso__row'+(r[2]?' is-ref':'')+'"><span class="iso__lab">'+r[0]+'</span>'+people(r[1], i*300, 40)+val(r[1], '%', '', i*300)+'</div>';
+        }).join('') + '</div></div>'
+    + '</div>');
+
+  /* 2 svěří */
+  var HOP = 430;
+  sec('sveri', label(D.sveri.h), '<div class="col__plot" data-plot>' + D.sveri.cols.map(function(r, i){
+      return '<div class="col__c'+(i===3?' is-pay':'')+'" style="--v:'+r[1]+';--d:'+(i*HOP)+'ms">'+val(r[1])+'<span class="col__bar"></span></div>';
+    }).join('') + '<span class="chip" data-chip>AI</span></div><div class="col__labs">' + D.sveri.cols.map(function(r, i){
+      return '<span'+(i===3?' class="is-pay"':'')+'>'+r[0]+'</span>';
+    }).join('') + '</div>');
+
+  /* 3 nákup */
+  var WAVE = (function(){ var p = 'M-60 0', up = true; for(var x=-60; x<120; x+=15){ p += ' q7.5 '+(up?-3:3)+' 15 0'; up = !up; } return p + ' V120 H-60 Z'; })();
+  sec('nakup', label(D.nakup.h), '<div class="jar">' + D.nakup.items.map(function(r, i){
+    var s = SHAPE[r[2]], id = 'vs-cl-'+i;
+    return '<div class="jar__i"><svg viewBox="0 0 60 80"><defs><clipPath id="'+id+'"><path fill-rule="evenodd" d="'+s.d+'"/></clipPath></defs>'
+      + '<path class="jar__bg" fill-rule="evenodd" d="'+s.d+'"/><g clip-path="url(#'+id+')"><path class="jar__liq" data-liq="'+i+'" d="'+WAVE+'"/></g></svg>'
+      + val(r[1], '%', '', i*180) + '<span class="jar__lab">'+r[0]+'</span></div>';
+  }).join('') + '</div>');
+
+  /* 4 placení */
+  sec('platba', label(D.platba.h), '<div class="pb">' + D.platba.bars.map(function(r, i){
+    return '<div class="pb__i'+(i===0?' is-top':'')+'"><div class="pb__top"><span class="pb__lab">'+r[0]+'</span>'+val(r[1], '%', '', i*160)+'</div>'
+      + '<div class="pb__tr"><span class="pb__f" style="--v:'+(r[1]/100)+';--d:'+(i*160)+'ms"></span></div></div>';
+  }).join('') + '</div>');
+
+  /* 5 karty */
+  var cards = '';
+  for(var c=0; c<D.karta.of; c++) cards += '<span class="cd'+(c < D.karta.n ? ' on' : '')+'" style="--d:'+(c*80)+'ms"></span>';
+  sec('karta', '', val(D.karta.n, 'z'+NB+D.karta.of, 'hero') + '<p class="kt__txt">'+D.karta.t+'</p><span class="kt__cards">'+cards+'</span>');
+
+  /* ===== pomocníci ===== */
+  var secs = [].slice.call(grid.children);
+  var ease = function(k){ return 1 - Math.pow(1-k, 3); };
+  function tween(dur, delay, fn, done){
+    var t0 = performance.now() + delay;
+    (function f(t){ var k = (t - t0)/dur; if(k < 0){ requestAnimationFrame(f); return; } k = Math.min(1, k); fn(k); if(k < 1) requestAnimationFrame(f); else if(done) done(); })(performance.now());
+  }
+  function counts(scope, play){
+    [].forEach.call(scope.querySelectorAll('[data-c]'), function(el){
+      var n = +el.dataset.c, host = el.parentNode, delay = +(host.dataset.cd || 0);
+      if(!play){ el.textContent = n; host.classList.remove('is-count'); return; }
+      host.classList.add('is-count'); el.textContent = '0';
+      tween(900, delay + 150, function(k){ el.textContent = Math.round(n*ease(k)); }, function(){ host.classList.remove('is-count'); });
+    });
+  }
+  function bindTap(el, fn){   // pointerdown kvůli mobilu, click jen pro čtečky, klávesy zvlášť
+    var last = 0;
+    el.addEventListener('pointerdown', function(e){ if(e.button > 0) return; e.preventDefault(); last = Date.now(); fn(e); });
+    el.addEventListener('click', function(e){ e.preventDefault(); if(Date.now() - last > 600) fn(e); });
+    el.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); last = Date.now(); fn(e); } });
+  }
+
+  /* ===== vrstvy u generací ===== */
+  var segBtns = [].slice.call(sKdo.querySelectorAll('[data-view]')), lays = [].slice.call(sKdo.querySelectorAll('[data-lay]'));
+  var view = 1;
+  function setView(v, anim){
+    if(v === view) return;
+    view = v;
+    segBtns.forEach(function(b){ b.setAttribute('aria-pressed', +b.dataset.view === v ? 'true' : 'false'); });
+    lays.forEach(function(l){ l.classList.toggle('is-act', +l.dataset.lay === v); });
+    var act = lays[v-1];
+    if(sKdo.classList.contains('is-on')) counts(act, anim && !reduce);
+  }
+  segBtns.forEach(function(b){ bindTap(b, function(){ setView(+b.dataset.view, true); }); });
+  var big = sKdo.querySelector('[data-big]');
+  big.addEventListener('click', function(){ setView(2, true); });   // klik na kategorii otevře druhou vrstvu
+
+  /* ===== panel (i) ===== */
+  var info = root.querySelector('[data-info]'), panel = root.querySelector('[data-panel]'), closeBtn = root.querySelector('[data-close]');
+  function openP(){ panel.hidden = false; info.setAttribute('aria-expanded', 'true'); closeBtn.focus({preventScroll:true}); }
+  function closeP(){ if(panel.hidden) return; panel.hidden = true; info.setAttribute('aria-expanded', 'false'); info.focus({preventScroll:true}); }
+  bindTap(info, function(){ panel.hidden ? openP() : closeP(); });
+  bindTap(closeBtn, closeP);
+  panel.addEventListener('pointerdown', function(e){ if(e.target === panel) closeP(); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeP();
+    if(e.key === 'Tab' && !panel.hidden){ e.preventDefault(); closeBtn.focus(); }   // v otevřeném panelu je jediný ovládací prvek
+  });
+
+  /* ===== hladina v nádobách ===== */
+  var liqs = [].slice.call(root.querySelectorAll('[data-liq]'));
+  function setLiq(i, k, w){
+    var r = D.nakup.items[i], s = SHAPE[r[2]];
+    var y = s.y1 - (s.y1 - s.y0) * (r[1]/100) * k;
+    liqs[i].setAttribute('transform', 'translate('+(-30*w).toFixed(2)+' '+y.toFixed(2)+')');
+  }
+
+  /* ===== čip AI: při skákání sedí na místě popisku hodnoty, popisek se ukáže, až čip odskočí ===== */
+  var plot = root.querySelector('[data-plot]'), chip = root.querySelector('[data-chip]');
+  var colsEl = [].slice.call(plot.querySelectorAll('.col__c'));
+  function kpx(){ return parseFloat(getComputedStyle(root).getPropertyValue('--kpx')) || 1; }
+  function chipPos(i, rest){
+    var c = colsEl[i], v = c.querySelector('.val');
+    var bar = D.sveri.cols[i][1]*kpx();
+    return {x: c.offsetLeft + c.offsetWidth/2, y: bar + 6 + (rest ? v.offsetHeight + 8 : 0)};
+  }
+  function placeChip(x, y){ chip.style.left = x.toFixed(1)+'px'; chip.style.bottom = y.toFixed(1)+'px'; }
+  var chipBusy = false;
+  function chipFinal(){ var p = chipPos(3, true); placeChip(p.x, p.y); chip.classList.add('is-vis'); colsEl.forEach(function(c){ c.classList.add('is-shown'); }); }
+  function chipRun(){
+    chipBusy = true;
+    tween(1, 430, function(){ var p = chipPos(0); placeChip(p.x, p.y); chip.classList.add('is-vis'); });
+    [1,2,3].forEach(function(i){
+      var last = i === 3;
+      tween(last ? 520 : 330, i*HOP + 120, function(k){
+        if(k > .15) colsEl[i-1].classList.add('is-shown');           // čip odskočil, popisek může naskočit
+        var a = chipPos(i-1), b = chipPos(i);
+        var arc = last ? 20*Math.sin(Math.PI*Math.min(1, k*1.6))*(1-k) : 16*Math.sin(Math.PI*k);
+        var y = last ? a.y + (b.y - a.y)*k*k + arc : a.y + (b.y - a.y)*ease(k) + arc;
+        placeChip(a.x + (b.x - a.x)*ease(k), Math.max(Math.min(a.y, b.y), y));
+      }, last ? function(){
+        tween(380, 120, function(k){   // dopad, pak čip povyskočí nad popisek
+          var b = chipPos(3), r = chipPos(3, true);
+          placeChip(b.x, b.y + (r.y - b.y)*ease(k));
+          if(k > .3) colsEl[3].classList.add('is-shown');
+        }, function(){ chipBusy = false; });
+      } : null);
+    });
+  }
+
+  /* ===== vyplnění rámu ===== */
+  function layoutK(){   // měřítko sloupců: nejvyšší hodnota + popisek se vejdou do plochy
+    var ph = plot.clientHeight, mx = Math.max.apply(null, D.sveri.cols.map(function(r){ return r[1]; }));
+    var head = Math.max(colsEl[0].querySelector('.val').offsetHeight, chip.offsetHeight) + 6 + 4;
+    var k = Math.max(0.5, (ph - head) / mx);
+    root.style.setProperty('--k', k.toFixed(3)+'px'); root.style.setProperty('--kpx', k.toFixed(3));
+  }
+  // měří se rozložení kapitol, ne scrollHeight (skrytá vrstva a čip by hlásily falešné přetečení)
+  function over(){
+    var gb = grid.getBoundingClientRect().bottom, mx = 0;
+    secs.forEach(function(s){ mx = Math.max(mx, s.getBoundingClientRect().bottom); });
+    return mx > gb + 1;
+  }
+  function fit(){
+    var sc = 1; root.style.setProperty('--sc', 1); layoutK();
+    for(var k=0; k<18 && over() && sc > .66; k++){ sc *= .95; root.style.setProperty('--sc', sc.toFixed(3)); layoutK(); }
+    if(!chipBusy && chip.classList.contains('is-vis')) chipFinal();
+  }
+  var rt;
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  if(window.ResizeObserver) new ResizeObserver(function(){ clearTimeout(rt); rt = setTimeout(fit, 90); }).observe(root);
+  fit();
+
+  /* ===== nástup po kapitolách ===== */
+  function play(s, anim){
+    if(s.classList.contains('is-on')) return;
+    s.classList.add('is-on');
+    var key = s.dataset.sec;
+    counts(key === 'kdo' ? lays[view-1] : s, anim);
+    if(key === 'sveri'){ if(anim) chipRun(); else chipFinal(); }
+    if(key === 'nakup'){
+      liqs.forEach(function(_, i){
+        if(!anim){ setLiq(i, 1, 0); return; }
+        tween(1300, i*180, function(k){ setLiq(i, ease(k), k); });
+      });
+    }
+  }
+  liqs.forEach(function(_, i){ setLiq(i, 0, 0); });
+  if(/[?&]gen\b/.test(Q)) setView(2, false);
+  if(!ANIM){ secs.forEach(function(s){ play(s, false); }); }
+  else {
+    var alive = false;
+    var io = new IntersectionObserver(function(en){
+      alive = true;
+      en.forEach(function(x){ if(x.isIntersecting){ io.unobserve(x.target); play(x.target, true); } });
+    }, {threshold:.45});
+    secs.forEach(function(s){ io.observe(s); });
+    setTimeout(function(){ if(!alive) secs.forEach(function(s){ play(s, false); }); }, 6000);   // záloha pro nefunkční IO
+  }
+  if(/[?&]info\b/.test(Q)) openP();
+})();
+</script>
+</body>
+</html>
