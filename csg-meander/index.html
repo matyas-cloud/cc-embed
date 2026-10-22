@@ -1,1 +1,413 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meander v číslech</title>
+<meta name="robots" content="noindex">
+<!-- CzechCrunch – infografika „Meander v číslech“ místo textového infoboxu.
+     Cíl: článek cc.cz „CSG × FFF 2026“ (obojživelník Meander, Excalibur Army / CSG, Future Forces Forum 2026).
+     Vložení: csg-meander-vlozeni.html, obalový div s výškou podle šířky okna (vzorec a ověřené šířky jsou ve vložení).
+     Nasazení: matyas-cloud/cc-embed/csg-meander/index.html + meander-reka.jpg + meander-zepredu.jpg, Poppins ze sdílené složky ../fonts/.
+     Formát: tmavá karta, nahoře fotka z terénu s čísly vepsanými k vozidlu (11,2 m, 22 m², 12 km/h na vodě, 440 kW),
+       pod ní dva moduly. Uveze = tři půdorysy nákladového prostoru shora (70 vojáků, 12 nosítek, Tatra 810) a 13 t nosnosti.
+       Rychlost a dojezd = tři oblouky (silnice, terén, voda) poměřené k 50 km/h, pod nimi dojezd.
+       Rám užší než 540 px: fotka zepředu, moduly pod sebou, délka 11,2 m dole na fotce.
+     Nástup: fotka se jemně přiblíží, linky se dokreslí a čísla napočítají, až je fotka vidět. Moduly se rozehrají, až na ně čtenář doscrolluje
+       (tečky po řadách od rampy, nosítka a Tatra zajedou dovnitř, oblouky se roztočí). Žádný pohyb naprázdno.
+       Bez IO, s omezeným pohybem nebo s ?static rovnou konečný stav. ?info otevře panel (i) – jen pro náhledy.
+     Data: infobox „Meander v číslech“ z článku a výstavní tabule Excalibur Army na FFF 2026 (70 stojících vojáků, 12 nosítek
+       nebo středně velký vojenský náklaďák; nákladový prostor 2,8 × 7,9 m = 22 m², podle toho poměr půdorysu).
+       Tatra 810 podle textu článku („aby se do něj vešla Tatra 810“). Rozmístění nákladu v půdorysu je ilustrativní (uvedeno v (i)).
+       Dojezd na vodě podklady neuvádějí.
+     Fotografie: tiskové materiály CSG / Excalibur Army k Meandru.
+     Změny obsahu:
+       2026-10-21  v1 produkční verze podle schváleného náhledu A (csg-meander-A-nahled.png). -->
+<style>
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-500.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-ext-500.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-ext-600.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;}
+  .cc-embed{margin:0!important;}
+</style>
+</head>
+<body>
+<!-- .cc-embed základ (verbatim ze skillu) -->
+<style>
+.cc-embed{
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}
+.cc-embed--bare{background:none;border:0;padding:0;}
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:700 12px/1.2 var(--cc-ui);letter-spacing:.06em;
+  text-transform:uppercase;color:var(--cc-muted);}
+.cc-embed .cc-num{font:800 clamp(28px,5vw,40px)/1 var(--cc-display);color:var(--cc-ink);}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
 
+<style>
+.cc-embed.cc-meander{
+  --bg:#0b0e10; --w:#fff; --w2:rgba(255,255,255,.62); --w3:rgba(255,255,255,.4); --hair:rgba(255,255,255,.12); --cream:#e6dca8;
+  --sc:1; --ease:cubic-bezier(.2,.7,.2,1);
+  box-sizing:border-box;position:relative;display:flex;flex-direction:column;
+  height:100vh;margin:0;padding:0;overflow:hidden;
+  background:var(--bg);border:0;border-radius:16px;color:var(--w);
+  font-family:var(--cc-display);
+}
+.cc-meander .mt-stage{position:relative;flex:0 0 auto;overflow:hidden}
+.cc-meander .mt-ph{display:block;width:100%;height:auto}
+.cc-meander .mt-ph--n{display:none}
+.cc-meander .mt-img{transform-box:fill-box;transform-origin:50% 55%;transition:transform 2.2s var(--ease)}
+.cc-meander .mt-ln{transition:stroke-dashoffset .9s var(--ease)}
+.cc-meander .mt-lb{transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.cc-meander .mt-pt{transition:opacity .4s var(--ease)}
+.cc-meander .mt-hd{position:absolute;left:22px;right:22px;top:20px;z-index:3;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.cc-meander .mt-title{margin:0;color:#fff;font:600 22px/1.15 var(--cc-display);letter-spacing:-.01em;text-shadow:0 1px 14px rgba(0,0,0,.55)}
+.cc-meander .mt-info{flex:0 0 28px;width:28px;height:28px;padding:0;border:1px solid rgba(255,255,255,.4);border-radius:50%;background:rgba(11,14,16,.25);
+  color:#fff;font:500 13px/1 var(--cc-display);cursor:pointer;touch-action:manipulation;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.cc-meander .mt-info:hover{background:rgba(255,255,255,.16)}
+.cc-meander .mt-pw{position:absolute;right:22px;top:60px;z-index:2;text-align:right;text-shadow:0 1px 12px rgba(0,0,0,.65)}
+.cc-meander .mt-len{display:none}
+
+/* čísla */
+.cc-meander .n{font:600 calc(22px*var(--sc))/1 var(--cc-display);letter-spacing:-.025em;white-space:nowrap;display:inline-block}
+.cc-meander .n small{font-size:.45em;font-weight:500;letter-spacing:0;margin-left:.18em;color:var(--w2)}
+.cc-meander .lb{font:400 max(12px,calc(12px*var(--sc)))/1.35 var(--cc-display);color:var(--w2);margin-top:4px}
+.cc-meander .mi{font:500 10.5px/1 var(--cc-display);letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+
+/* moduly */
+.cc-meander .mt-mods{position:relative;flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:0 22px 20px;margin-top:-6px}
+.cc-meander .mod{display:flex;flex-direction:column;align-self:stretch;justify-content:center}
+.cc-meander .mod--load{padding-right:20px}
+.cc-meander .mod--spd{padding-left:20px;border-left:1px solid var(--hair)}
+.cc-meander .mh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:calc(14px*var(--sc));min-height:22px}
+.cc-meander .mh .lbi{font:400 12px/1 var(--cc-display);color:var(--w2);margin-left:6px}
+.cc-meander .plans{display:flex;align-items:flex-end;justify-content:space-between}
+.cc-meander .pl{display:flex;flex-direction:column;align-items:center;gap:calc(9px*var(--sc))}
+.cc-meander .pl svg{display:block;width:calc(46px*var(--sc));height:auto;overflow:visible}
+.cc-meander .pl .c{font:400 max(12px,calc(12px*var(--sc)))/1.25 var(--cc-display);color:var(--w2);text-align:center;white-space:nowrap}
+.cc-meander .pl .c b{display:block;font:600 calc(19px*var(--sc))/1.05 var(--cc-display);color:#fff;letter-spacing:-.02em;margin-bottom:2px}
+.cc-meander .nebo{font:400 11px/1 var(--cc-display);color:var(--w3);align-self:center;margin:0 4px calc(46px*var(--sc))}
+.cc-meander .gs{display:flex;justify-content:space-between;align-items:center}
+.cc-meander .g{display:flex;flex-direction:column;align-items:center;width:31%}
+.cc-meander .ring{position:relative;width:100%;max-width:calc(88px*var(--sc))}
+.cc-meander .ring svg{display:block;width:100%;height:auto}
+.cc-meander .val{position:absolute;left:0;right:0;top:57%;transform:translateY(-50%);text-align:center}
+.cc-meander .val b{display:block;font:600 calc(22px*var(--sc))/1 var(--cc-display);letter-spacing:-.03em}
+.cc-meander .val small{font:500 10px/1 var(--cc-display);color:var(--w2)}
+.cc-meander .gl{font:500 max(12px,calc(12.5px*var(--sc)))/1.2 var(--cc-display);margin-top:2px}
+.cc-meander .gd{font:500 max(11.5px,calc(12px*var(--sc)))/1.3 var(--cc-display);color:rgba(255,255,255,.85);margin-top:4px;min-height:2.6em;text-align:center;white-space:nowrap}
+.cc-meander .gdl{display:block;font-weight:400;font-size:.92em;color:var(--w3)}
+.cc-meander .arc{transition:stroke-dashoffset 1.3s var(--ease)}
+.cc-meander .tip{transition:opacity .3s var(--ease)}
+.cc-meander .dt{transition:opacity .35s var(--ease),transform .45s var(--ease);transform-box:fill-box;transform-origin:center}
+.cc-meander .st{transition:opacity .45s var(--ease),transform .7s var(--ease)}
+.cc-meander .tk{transition:transform 1.5s cubic-bezier(.3,.6,.2,1)}
+
+/* skrytý výchozí stav (jen když se bude animovat) */
+.cc-meander.is-pre .mt-stage:not(.is-on) .mt-img{transform:scale(1.06)}
+.cc-meander.is-pre .mt-stage:not(.is-on) .mt-ln{stroke-dashoffset:1}
+.cc-meander.is-pre .mt-stage:not(.is-on) .mt-lb{opacity:0;transform:translateY(6px)}
+.cc-meander.is-pre .mt-stage:not(.is-on) .mt-pt{opacity:0}
+.cc-meander.is-pre .mod:not(.is-on) .dt{opacity:0;transform:scale(.3)}
+.cc-meander.is-pre .mod:not(.is-on) .st{opacity:0;transform:translateY(60px)}
+.cc-meander.is-pre .mod:not(.is-on) .tk{transform:translateY(830px)}
+.cc-meander.is-pre .mod:not(.is-on) .arc{stroke-dashoffset:1}
+.cc-meander.is-pre .mod:not(.is-on) .tip{opacity:0}
+.cc-meander.is-static *{transition:none!important}
+
+/* panel (i) */
+.cc-meander .panel{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vw,24px);
+  background:rgba(11,14,16,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-radius:inherit}
+.cc-meander .panel[hidden]{display:none}
+.cc-meander .panel__box{position:relative;width:100%;max-width:460px;max-height:100%;display:flex;flex-direction:column;background:#fff;
+  border-radius:14px;box-shadow:0 18px 40px -18px rgba(0,0,0,.6);padding:clamp(16px,3.6vw,22px) clamp(16px,3.6vw,24px);color:#16181c}
+.cc-meander .panel__hd{display:flex;align-items:flex-start;gap:12px}
+.cc-meander .panel__t{margin:0;font:600 15px/1.3 var(--cc-display);color:#16181c}
+.cc-meander .panel__x{margin-left:auto;flex:none;width:28px;height:28px;padding:0;border:0;border-radius:50%;background:#f1f2f5;cursor:pointer;font:400 18px/1 var(--cc-display);color:#16181c;touch-action:manipulation}
+.cc-meander .panel__body{margin-top:10px;overflow-y:auto;min-height:0}
+.cc-meander .panel__body p{margin:0 0 9px;font:400 13px/1.5 var(--cc-display);color:#3c3c3c}
+.cc-meander .panel__body p:last-child{margin-bottom:0}
+
+/* úzký rám: fotka zepředu, moduly pod sebou */
+@media (max-width:539px){
+  .cc-meander .mt-ph--w{display:none}
+  .cc-meander .mt-ph--n{display:block}
+  .cc-meander .mt-hd{left:16px;right:16px;top:16px}
+  .cc-meander .mt-title{font-size:19px}
+  .cc-meander .mt-pw{display:none}
+  .cc-meander .mt-len{display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:2;padding:2px 16px 0;margin-top:0}
+  .cc-meander .mt-mods{grid-template-columns:1fr;align-content:space-evenly;padding:0 16px 16px;margin-top:0}
+  .cc-meander .mod--load{padding-right:0}
+  .cc-meander .mod--spd{padding-left:0;border-left:0;border-top:1px solid var(--hair);padding-top:calc(16px*var(--sc));margin-top:calc(16px*var(--sc))}
+  .cc-meander .pl svg{width:calc(50px*var(--sc))}
+  .cc-meander .ring{max-width:calc(92px*var(--sc))}
+}
+@media (max-width:339px){
+  .cc-meander .nebo{font-size:10px}
+  .cc-meander .pl .c b{font-size:calc(17px*var(--sc))}
+}
+@media (prefers-reduced-motion:reduce){.cc-meander *{transition:none!important}}
+</style>
+
+<div class="cc-embed cc-meander" data-cc-meander>
+  <p class="cc-sr" data-sr></p>
+  <div class="mt-stage" data-stage aria-hidden="true">
+    <svg class="mt-ph mt-ph--w" viewBox="340 40 940 600" data-ph="w"></svg>
+    <svg class="mt-ph mt-ph--n" viewBox="300 0 680 737" data-ph="n"></svg>
+    <div class="mt-pw mt-lb"><div class="n" style="font-size:calc(22px*var(--sc))"><span data-cnt="440">440</span><small>kW</small></div><div class="lb" style="margin-top:3px">motor Tatra V12</div></div>
+  </div>
+  <div class="mt-hd">
+    <h3 class="cc-title mt-title">Meander v číslech</h3>
+    <button type="button" class="mt-info" data-info aria-label="Zdroj a vysvětlivky" aria-expanded="false" aria-controls="mt-panel">i</button>
+  </div>
+  <div class="mt-len" aria-hidden="true"><div><div class="n" style="font-size:calc(23px*var(--sc))"><span data-cnt="11.2">11,2</span><small>m</small></div><div class="lb">délka</div></div><div style="text-align:right"><div class="n" style="font-size:calc(23px*var(--sc))"><span data-cnt="440">440</span><small>kW</small></div><div class="lb">motor Tatra V12</div></div></div>
+  <div class="mt-mods" data-mods aria-hidden="true"></div>
+  <div class="panel" id="mt-panel" role="dialog" aria-modal="true" aria-labelledby="mt-panel-t" data-panel hidden>
+    <div class="panel__box">
+      <div class="panel__hd"><p class="panel__t" id="mt-panel-t">Zdroj a vysvětlivky</p><button type="button" class="panel__x" data-close aria-label="Zavřít">×</button></div>
+      <div class="panel__body" data-pbody></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var root = document.querySelector('[data-cc-meander]');
+  if(!root || root.dataset.ccInit) return;
+  root.dataset.ccInit = '1';
+  var Q = location.search;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canIO = 'IntersectionObserver' in window;
+  var STATIC = /[?&]static\b/.test(Q);
+  var ANIM = !reduce && canIO && !STATIC;
+  if(ANIM) root.classList.add('is-pre');                 // skrytý výchozí stav hned, žádné probliknutí
+  if(STATIC) root.classList.add('is-static');
+
+  /* ===== texty a data ===== */
+  var T = {
+    sr: 'Meander v číslech. Obojživelné pásové vozidlo je dlouhé 11,2 metru a má nákladový prostor o ploše 22 metrů čtverečních s nosností 13 tun. ' +
+        'Uveze 70 vojáků, 12 nosítek, nebo vojenský nákladní vůz Tatra 810. Pohání ho motor Tatra V12 o výkonu 440 kW. ' +
+        'Po silnici jede až 50 km/h s dojezdem 380 km, v terénu až 35 km/h s dojezdem 300 km a na vodě až 12 km/h.',
+    panel: [
+      'Technické údaje uvádí výrobce, Excalibur Army ze skupiny CSG. Fotografie pocházejí z jeho tiskových materiálů.',
+      'Půdorysy ukazují nákladový prostor shora ve skutečném poměru stran. Rozmístění vojáků, nosítek a vozu Tatra 810 je ilustrativní. Výrobce uvádí 70 stojících vojáků, 12 nosítek, nebo středně velký vojenský náklaďák.',
+      'Oblouky ukazují rychlost v poměru k nejvyšší rychlosti na silnici, tedy 50 km/h. Dojezd na vodě výrobce neuvádí.'
+    ],
+    gauges: [[50,'Silnice','380 km'],[35,'Terén','300 km'],[12,'Voda','']]
+  };
+  root.querySelector('[data-sr]').textContent = T.sr;
+  root.querySelector('[data-pbody]').innerHTML = T.panel.map(function(p){ return '<p>'+p+'</p>'; }).join('');
+
+  var NS = 'vector-effect="non-scaling-stroke"';
+  function line(d, w){ return '<path class="mt-ln" pathLength="1" stroke-dasharray="1" d="'+d+'" fill="none" stroke="#fff" stroke-width="'+(w||1.5)+'" '+NS+'/>'; }
+  function point(x, y){ return '<g class="mt-pt"><circle cx="'+x+'" cy="'+y+'" r="5" fill="none" stroke="#fff" stroke-width="1.5" '+NS+'/><circle cx="'+x+'" cy="'+y+'" r="2" fill="#fff"/></g>'; }
+  function num(x, y, cnt, txt, unit, fs, anchor, dec){
+    return '<text class="mt-lb" x="'+x+'" y="'+y+'"'+(anchor?' text-anchor="'+anchor+'"':'')+' font-size="'+fs+'" font-weight="600" letter-spacing="-1">'
+      + '<tspan data-cnt="'+cnt+'"'+(dec?' data-dec="1"':'')+'>'+txt+'</tspan><tspan font-size="'+(fs*.48)+'" font-weight="500" dx="4" fill-opacity=".8">'+unit+'</tspan></text>';
+  }
+  function cap(x, y, t, fs, anchor){ return '<text class="mt-lb" x="'+x+'" y="'+y+'"'+(anchor?' text-anchor="'+anchor+'"':'')+' font-size="'+fs+'" fill-opacity=".78">'+t+'</text>'; }
+  function grads(id, h){
+    return '<defs><linearGradient id="'+id+'a" x1="0" y1="0" x2="0" y2="1"><stop offset=".5" stop-color="#0b0e10" stop-opacity="0"/><stop offset="1" stop-color="#0b0e10"/></linearGradient>'
+      + '<linearGradient id="'+id+'t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b0e10" stop-opacity=".55"/><stop offset=".3" stop-color="#0b0e10" stop-opacity="0"/></linearGradient>'
+      + '<filter id="'+id+'s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="1" stdDeviation="3" flood-color="#000" flood-opacity=".6"/></filter></defs>';
+  }
+  /* fotka z řeky (souřadnice = pixely fotky v šířce 1600 px, výřez 340–1280 × 40–640) */
+  var W = grads('mw') + '<image class="mt-img" href="meander-reka.jpg" x="340" y="40" width="940" height="600" preserveAspectRatio="xMidYMid slice"/>'
+    + '<rect x="340" y="40" width="940" height="600" fill="url(#mwt)"/><rect x="340" y="40" width="940" height="600" fill="url(#mwa)"/>'
+    + '<g filter="url(#mws)" font-family="Poppins,sans-serif" fill="#fff">'
+    + line('M412 262 V250 H842 V262') + '<circle class="mt-pt" cx="627" cy="250" r="3" fill="#fff"/>'
+    + num(412, 236, 22, '22', 'm²', 35) + cap(500, 234, 'nákladový prostor', 20)
+    + line('M392 596 V614 M392 605 H1238 M1238 596 V614') + num(815, 591, 11.2, '11,2', 'm', 29, 'middle', 1)
+    + point(1182, 470) + line('M1186 465 L1204 448 H1250', 1.2) + num(1250, 404, 12, '12', 'km/h', 29, 'end') + cap(1250, 434, 'na vodě', 20, 'end')
+    + '</g>';
+  /* fotka zepředu pro úzký rám (pixely fotky 1280 × 737, výřez 300–980) */
+  var N = grads('mn') + '<image class="mt-img" href="meander-zepredu.jpg" x="300" y="0" width="680" height="737"/>'
+    + '<rect x="300" y="0" width="680" height="737" fill="url(#mnt)"/><rect x="300" y="0" width="680" height="737" fill="url(#mna)"/>'
+    + '<g filter="url(#mns)" font-family="Poppins,sans-serif" fill="#fff">'
+    + point(420, 330) + line('M416 323 L392 196 H332', 1.2) + num(332, 148, 22, '22', 'm²', 44) + cap(332, 188, 'nákladový prostor', 30)
+    + point(900, 560) + line('M904 567 L930 610 H952', 1.2) + num(952, 658, 12, '12', 'km/h', 44, 'end') + cap(952, 696, 'na vodě', 30, 'end')
+    + '</g>';
+  root.querySelector('[data-ph="w"]').innerHTML = W;
+  root.querySelector('[data-ph="n"]').innerHTML = N;
+
+  /* ===== moduly ===== */
+  var ST = 'stroke="#fff" stroke-width="1.3" '+NS;
+  function bay(id, inner){
+    return '<svg viewBox="-12 -12 304 840"><defs><clipPath id="'+id+'"><rect x="0" y="0" width="280" height="790" rx="16"/></clipPath></defs>'
+      + '<rect x="0" y="0" width="280" height="790" rx="16" fill="rgba(255,255,255,.035)" stroke="rgba(255,255,255,.55)" stroke-width="1.3" '+NS+'/>'
+      + '<path d="M30 812 H250" stroke="rgba(255,255,255,.35)" stroke-width="1.3" '+NS+'/>'
+      + '<g clip-path="url(#'+id+')">'+inner+'</g></svg>';
+  }
+  function troops(){   // řady od rampy (dole) k přídi
+    var s = '';
+    for(var r = 0; r < 14; r++) for(var c = 0; c < 5; c++)
+      s += '<circle class="dt" style="transition-delay:'+((13-r)*55 + c*12)+'ms" cx="'+(28+c*56)+'" cy="'+(30+r*55.4)+'" r="17" fill="#fff" fill-opacity=".92"/>';
+    return s;
+  }
+  function stretch(){
+    var s = '', k = 0;
+    [538,285,32].forEach(function(y){ [12,79,146,213].forEach(function(x){
+      s += '<g class="st" style="transition-delay:'+(k++*70)+'ms"><rect x="'+x+'" y="'+y+'" width="55" height="220" rx="10" fill="rgba(255,255,255,.14)" '+ST+' stroke-opacity=".85"/>'
+        + '<path d="M'+(x+27.5)+' '+(y+26)+' v26 M'+(x+14.5)+' '+(y+39)+' h26" stroke="#e6dca8" stroke-width="1.6" '+NS+'/></g>';
+    }); });
+    return s;
+  }
+  function truck(){
+    return '<g class="tk"><rect x="12" y="22" width="256" height="200" rx="34" fill="rgba(255,255,255,.22)" '+ST+'/>'
+      + '<path d="M36 70 Q140 46 244 70" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.2" '+NS+'/>'
+      + '<rect x="12" y="234" width="256" height="538" rx="8" fill="rgba(255,255,255,.10)" '+ST+'/>'
+      + [320,420,520,620,720].map(function(y){ return '<path d="M24 '+y+' H256" stroke="#fff" stroke-opacity=".18" stroke-width="1" '+NS+'/>'; }).join('') + '</g>';
+  }
+  function ring(v, max){
+    var cx = 50, cy = 50, r = 40, a0 = 150, sw = 240, f = v/max;
+    function pt(a){ a = a*Math.PI/180; return [(cx + r*Math.cos(a)).toFixed(2), (cy + r*Math.sin(a)).toFixed(2)]; }
+    function arc(a1, a2){ var p = pt(a1), q = pt(a2); return 'M'+p[0]+' '+p[1]+' A'+r+' '+r+' 0 '+((a2-a1) > 180 ? 1 : 0)+' 1 '+q[0]+' '+q[1]; }
+    var e = pt(a0 + sw*f);
+    return '<svg viewBox="0 0 100 86"><path d="'+arc(a0, a0+sw)+'" fill="none" stroke="rgba(255,255,255,.13)" stroke-width="5" stroke-linecap="round"/>'
+      + '<path class="arc" pathLength="1" stroke-dasharray="1" d="'+arc(a0, a0+sw*f)+'" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>'
+      + '<circle class="tip" cx="'+e[0]+'" cy="'+e[1]+'" r="4.2" fill="#e6dca8"/></svg>';
+  }
+  var M = '<div class="mod mod--load" data-mod><div class="mh"><span class="mi">Uveze</span><span><span class="n"><span data-cnt="13">13</span><small>t</small></span><span class="lbi">nosnost</span></span></div>'
+    + '<div class="plans">'
+    + '<div class="pl">'+bay('mt-c1', troops())+'<div class="c"><b data-cnt="70">70</b>vojáků</div></div><div class="nebo">nebo</div>'
+    + '<div class="pl">'+bay('mt-c2', stretch())+'<div class="c"><b data-cnt="12">12</b>nosítek</div></div><div class="nebo">nebo</div>'
+    + '<div class="pl">'+bay('mt-c3', truck())+'<div class="c"><b>Tatra 810</b>náklaďák</div></div>'
+    + '</div></div>'
+    + '<div class="mod mod--spd" data-mod><div class="mh"><span class="mi">Rychlost a dojezd</span></div><div class="gs">'
+    + T.gauges.map(function(g){
+        return '<div class="g"><div class="ring">'+ring(g[0], 50)+'<div class="val"><b data-cnt="'+g[0]+'">'+g[0]+'</b><small>km/h</small></div></div><div class="gl">'+g[1]+'</div><div class="gd">'+(g[2] ? '<span class="gdl">dojezd</span>'+g[2] : '')+'</div></div>';
+      }).join('')
+    + '</div></div>';
+  var mods = root.querySelector('[data-mods]');
+  mods.innerHTML = M;
+  var stage = root.querySelector('[data-stage]');
+  var modEls = [].slice.call(mods.querySelectorAll('[data-mod]'));
+
+  /* ===== počítání čísel (šířka zamčená na konečnou, aby se nic necukalo) ===== */
+  function ease(k){ return 1 - Math.pow(1 - k, 3); }
+  function fmt(v, dec){ return dec ? v.toFixed(1).replace('.', ',') : String(Math.round(v)); }
+  function count(scope, delay){
+    [].slice.call(scope.querySelectorAll('[data-cnt]')).forEach(function(el){
+      var n = parseFloat(el.dataset.cnt), dec = !!el.dataset.dec || n % 1 !== 0, t0 = null;
+      if(el.tagName !== 'tspan'){ if(getComputedStyle(el).display === 'inline') el.style.display = 'inline-block'; el.style.minWidth = el.offsetWidth ? el.offsetWidth + 'px' : ''; }
+      el.textContent = fmt(0, dec);
+      setTimeout(function(){
+        function step(t){ if(t0 === null) t0 = t; var k = Math.min(1, (t - t0)/1100); el.textContent = fmt(n*ease(k), dec); if(k < 1) requestAnimationFrame(step); else el.style.minWidth = ''; }
+        requestAnimationFrame(step);
+      }, delay || 0);
+    });
+  }
+
+  /* ===== panel (i) ===== */
+  function bindTap(el, fn){
+    var last = 0;
+    el.addEventListener('pointerdown', function(e){ if(e.button > 0) return; e.preventDefault(); last = Date.now(); fn(e); });
+    el.addEventListener('click', function(e){ e.preventDefault(); if(Date.now() - last > 600) fn(e); });
+    el.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); last = Date.now(); fn(e); } });
+  }
+  var info = root.querySelector('[data-info]'), panel = root.querySelector('[data-panel]'), closeBtn = root.querySelector('[data-close]');
+  function openP(){ panel.hidden = false; info.setAttribute('aria-expanded', 'true'); closeBtn.focus({preventScroll:true}); }
+  function closeP(){ if(panel.hidden) return; panel.hidden = true; info.setAttribute('aria-expanded', 'false'); info.focus({preventScroll:true}); }
+  bindTap(info, function(){ panel.hidden ? openP() : closeP(); });
+  bindTap(closeBtn, closeP);
+  panel.addEventListener('pointerdown', function(e){ if(e.target === panel) closeP(); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeP();
+    if(e.key === 'Tab' && !panel.hidden){ e.preventDefault(); closeBtn.focus(); }
+  });
+
+  /* ===== vyplnění rámu: moduly se zmenší, když se nevejdou ===== */
+  function over(){
+    var rb = root.getBoundingClientRect().bottom - 8, mx = 0;
+    modEls.forEach(function(m){ mx = Math.max(mx, m.getBoundingClientRect().bottom); });
+    return mx > rb;
+  }
+  function fit(){
+    var sc = 1; root.style.setProperty('--sc', 1);
+    for(var k = 0; k < 16 && over() && sc > .68; k++){ sc *= .95; root.style.setProperty('--sc', sc.toFixed(3)); }
+  }
+  var rt;
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  if(window.ResizeObserver) new ResizeObserver(function(){ clearTimeout(rt); rt = setTimeout(fit, 90); }).observe(root);
+  fit();
+
+  /* ===== nástup ===== */
+  function playStage(anim){
+    if(stage.classList.contains('is-on')) return;
+    stage.classList.add('is-on');
+    if(!anim) return;
+    var lines = [].slice.call(stage.querySelectorAll('.mt-ln')), lbs = [].slice.call(stage.querySelectorAll('.mt-lb')), pts = [].slice.call(stage.querySelectorAll('.mt-pt'));
+    lines.forEach(function(l, i){ l.style.transitionDelay = (350 + i*160)+'ms'; });
+    pts.forEach(function(p, i){ p.style.transitionDelay = (300 + i*160)+'ms'; });
+    lbs.forEach(function(l, i){ l.style.transitionDelay = (650 + i*90)+'ms'; });
+    count(stage, 650);
+    count(root.querySelector('.mt-len'), 900);
+  }
+  function playMod(m, anim){
+    if(m.classList.contains('is-on')) return;
+    m.classList.add('is-on');
+    if(!anim) return;
+    [].slice.call(m.querySelectorAll('.arc')).forEach(function(a, i){ a.style.transitionDelay = (i*150)+'ms'; });
+    [].slice.call(m.querySelectorAll('.tip')).forEach(function(a, i){ a.style.transitionDelay = (i*150 + 1150)+'ms'; });
+    count(m, 100);
+  }
+  if(!ANIM){ playStage(false); modEls.forEach(function(m){ playMod(m, false); }); }
+  else {
+    var alive = false;
+    var io = new IntersectionObserver(function(en){
+      alive = true;
+      en.forEach(function(x){
+        if(!x.isIntersecting) return;
+        io.unobserve(x.target);
+        if(x.target === stage) playStage(true); else playMod(x.target, true);
+      });
+    }, {threshold:.4});
+    io.observe(stage); modEls.forEach(function(m){ io.observe(m); });
+    setTimeout(function(){ if(!alive){ playStage(false); modEls.forEach(function(m){ playMod(m, false); }); } }, 6000);   // záloha pro nefunkční IO
+  }
+  if(/[?&]info\b/.test(Q)) openP();
+})();
+</script>
+</body>
+</html>
