@@ -15,6 +15,7 @@
   Pět scén: jeden člověk → vrstva, kde lék funguje → sto lidí → barva (jak rychle kdo lék odbourává) → pět skupin a test.
   Data: skupiny 2 / 26 / 40 / 27 / 5 ze 100 podle CPIC (gen CYP2C19, Evropané). Výšky světélek jsou zjednodušený model.
   Log: 23. 10. 2026 – první verze k nasazení (po scénáři v3.1).
+       23. 10. 2026 – texty v2 (Matt), ocásky jako jeden hladký tah s gradientem, zkracují se s rychlostí.
        23. 10. 2026 – zvýraznění klíčových slov v popiscích, ocásky zkracované podle rychlosti (po dosednutí zmizí), paprsky rozmazané přes malé plátno.
        23. 10. 2026 – texty podle Mattovy revize (titul, scény 1–5, popisky vrstvy a skupin, DEN).
        23. 10. 2026 – ocásky z historie poloh (ne ze vzorkování času), kreslené po úsecích bez korálků; po zastavení scény vyhasnou, u jednoho člověka zůstane cik-cak; rozlišení plátna 2–3× DPR.
@@ -229,14 +230,19 @@ function draw(P,t){
     if(moving&&(Pp.hT==null||t-Pp.hT>=1/31)){hs.push(p);Pp.hT=t;}
     if(Pp.hero){if(hs.length>hl)hs.splice(0,Math.min(3,hs.length-hl));}else while(hs.length>hl)hs.shift();
     var trA=heroTr?1:(1-sm(still/.8))*(Pp.hero?1-sm(seg(P,2.05,2.4))+sm(seg(P,2.5,2.9)):1);
-    if(!heroTr&&hs.length>3){var hA=hs[hs.length-1],hB=hs[hs.length-4];trA*=cl(Math.hypot(hA[0]-hB[0],hA[1]-hB[1],hA[2]-hB[2])/.03);}
-    if(hs.length>2&&trA>.01){ctx.globalCompositeOperation='source-over';ctx.lineCap='butt';ctx.lineJoin='round';
-      var n=hs.length,CH=Pp.hero?8:4,pts=[q],ok=true;
+    if(!heroTr&&hs.length>3){var hA=hs[hs.length-1],hB=hs[hs.length-4],spd=Math.hypot(hA[0]-hB[0],hA[1]-hB[1],hA[2]-hB[2])/.07,gt=cl(spd*spd);trA*=Pp.hero?lerp(1,gt,sm(seg(P,2.05,2.4))):gt;}
+    if(hs.length>2&&trA>.01){
+      var n=hs.length,pts=[q],ok=true;
       for(var k=n-1;k>=0;k--){var hp=hs[k],q2=cam.pr(hp[0],hp[1],hp[2]);if(q2.z<.2){ok=false;break;}pts.push(q2);}
-      if(ok)for(var a0=0;a0<pts.length-1;a0+=CH){var f=1-(a0+CH/2)/pts.length;
-        ctx.strokeStyle=rgb(c,(Pp.hero?.55:.42)*f*al*trA*(1-.5*blur));ctx.lineWidth=Math.max(.8,(Pp.hero?.018:.013)*q.s*(.3+.7*f));
-        ctx.beginPath();ctx.moveTo(pts[a0].x,pts[a0].y);for(var b0=a0+1;b0<=Math.min(pts.length-1,a0+CH);b0++)ctx.lineTo(pts[b0].x,pts[b0].y);ctx.stroke();}
-      ctx.globalCompositeOperation='lighter';}
+      if(ok){var tail=pts[pts.length-1],gr=ctx.createLinearGradient(q.x,q.y,tail.x,tail.y),aw=(Pp.hero?.6:.5)*al*trA*(1-.5*blur);
+        gr.addColorStop(0,rgb(c,aw));gr.addColorStop(.55,rgb(c,aw*.35));gr.addColorStop(1,rgb(c,0));
+        ctx.globalCompositeOperation='source-over';ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle=gr;
+        ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+        for(var b0=1;b0<pts.length-1;b0++){var mx=(pts[b0].x+pts[b0+1].x)/2,my=(pts[b0].y+pts[b0+1].y)/2;ctx.quadraticCurveTo(pts[b0].x,pts[b0].y,mx,my);}
+        ctx.lineTo(tail.x,tail.y);
+        ctx.lineWidth=Math.max(1,(Pp.hero?.016:.012)*q.s);ctx.stroke();
+        ctx.lineWidth=Math.max(.6,(Pp.hero?.007:.005)*q.s);ctx.globalAlpha=.6;ctx.stroke();ctx.globalAlpha=1;
+        ctx.globalCompositeOperation='lighter';}}
     var sw=0;
     if(Pp.hero&&P<2.05){var dd=heroDay(P),fr=dd-Math.floor(dd);sw=Math.pow(Math.sin(Math.PI*cl(fr/.6)),2)*.8;}
     sw=Math.max(sw,wave(2.28,2.75,p[0])*.55);
