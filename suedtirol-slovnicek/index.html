@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tyrolský slovníček</title>
+<meta name="robots" content="noindex">
+<!-- CzechCrunch × IDM Südtirol – „Tyrolský slovníček“ místo tabulky v textu.
+     Cíl: nativní článek cc.cz „Do Jižního Tyrolska se bude létat z Prahy. Na sjezdovkách, kde získali Češi medaile, si zalyžujete i vy“,
+       na místo mezihlavičky „Tyrolský slovníček“ a tabulky Německy / Italsky.
+     Vložení: suedtirol-slovnicek-vlozeni.html, obalový div s výškou podle šířky okna (vzorec a ověřené šířky jsou ve vložení).
+     Nasazení: matyas-cloud/cc-embed/suedtirol-slovnicek/index.html, Poppins ze sdílené složky ../fonts/.
+     Formát: bílý infobox s linkou jako ostatní článkové prvky. Titulek, perex a 14 dvojjazyčných cedulí,
+       nahoře německý název, pod ním italský. Celý region (Südtirol / Alto Adige) je cedule v barvě partnera.
+       Desktop 3 sloupce (region přes dva), rám užší než 480 px 2 sloupce (region normální velikosti, 7 řad).
+       Statický prvek, bez interakce a bez animace.
+     Barva partnera: #50742F, tmavě zelená z loga Südtirol (suedtirol.info, logo-v2), jen jako plocha cedule.
+     Data: tabulka „Tyrolský slovníček“ z draftu článku. Pořadí podle tabulky. Ladinská jména zatím ne.
+       Texty a dvojice jsou v bloku D, z něj se skládá i shrnutí pro čtečky.
+     Změny obsahu:
+       2026-10-23  v1 podle schváleného náhledu varianty 1 Cedule (jizni-tyrolsko-slovnicek-2-varianty.png),
+                   oproti tabulce v draftu doplněno Graun / Curon (Mattův pokyn). -->
+<style>
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-ext-600.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;}
+  .cc-embed{margin:0!important;}
+</style>
+</head>
+<body>
+<!-- .cc-embed základ (verbatim ze skillu) -->
+<style>
+.cc-embed{
+  /* --- barvy --- */
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  /* --- shape --- */
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  /* --- font --- */
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}      /* prvek do krajů (fotka, mapa) */
+.cc-embed--bare{background:none;border:0;padding:0;} /* bez rámečku */
+/* --- typo --- */
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{margin:12px 0 0;font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);
+  letter-spacing:.02em;text-transform:uppercase;}
+.cc-embed .cc-num{font-family:var(--cc-display);font-weight:700;
+  font-size:clamp(22px,4vw,32px);color:var(--cc-blue);font-variant-numeric:tabular-nums;}
+.cc-embed a{color:var(--cc-blue);}
+/* --- UI --- */
+.cc-embed .cc-btn{
+  display:inline-block;padding:10px 20px;
+  border:1px solid var(--cc-blue);border-radius:var(--cc-radius);
+  background:var(--cc-blue);color:#fff;text-decoration:none;
+  font:700 18px/26px var(--cc-display);cursor:pointer;
+  transition:background .18s,color .18s;}
+.cc-embed .cc-btn:hover{background:var(--cc-blue-dark);border-color:var(--cc-blue-dark);}
+.cc-embed .cc-btn--ghost{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-btn--ghost:hover{background:var(--cc-blue);color:#fff;}
+.cc-embed .cc-btn--sm{padding:7px 14px;font-size:15px;line-height:22px;}
+.cc-embed .cc-btn[aria-pressed="true"]{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-card{background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);padding:14px 16px;}
+.cc-embed .cc-badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  background:var(--cc-blue);color:#fff;font:700 12px/18px var(--cc-ui);}
+.cc-embed .cc-badge--red{background:var(--cc-red);}
+.cc-embed .cc-badge--soft{background:#eaf3fd;color:var(--cc-blue-dark);}
+.cc-embed input,.cc-embed select,.cc-embed textarea{
+  font:400 16px/24px var(--cc-ui);color:var(--cc-ink);
+  padding:9px 12px;background:#fff;border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);}
+.cc-embed input[type=range]{padding:0;border:0;background:none;accent-color:var(--cc-blue);width:100%;}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed table{width:100%;border-collapse:collapse;font:400 15px/1.4 var(--cc-ui);}
+.cc-embed th{text-align:left;font-weight:700;color:var(--cc-muted);
+  text-transform:uppercase;font-size:12px;letter-spacing:.05em;padding:8px 10px;}
+.cc-embed td{padding:10px;border-top:1px solid var(--cc-line);}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-grid{display:grid;gap:var(--cc-gap);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.cc-embed .cc-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--cc-gap);}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+
+<style>
+.cc-tsl{
+  --ink:#1d1d1f; --ink2:#4a4d52; --st:#50742F;
+  --sc:1; --hs:1;
+  /* velikosti na desktopu, úzký rám je přepíše níž (jen proměnné, ať fit() funguje všude) */
+  --pad:26px 26px 28px; --t:22px; --l:14.5px; --b:16px; --s:15px; --rb:18px; --rs:17px; --mh:68px; --gap:10px;
+  box-sizing:border-box;height:100vh;display:flex;flex-direction:column;overflow:hidden;position:relative;
+  padding:var(--pad);
+  background:#fff;border:1px solid #e0e0e0;border-radius:var(--cc-radius);color:var(--ink);
+  font-family:var(--cc-display);
+}
+.cc-tsl *{box-sizing:border-box;}
+
+.cc-tsl .cc-tsl__t{flex:0 0 auto;margin:0;color:var(--ink);font:600 max(17px, calc(var(--t)*var(--sc)))/1.25 var(--cc-display);letter-spacing:-.01em;}
+.cc-tsl .cc-tsl__l{flex:0 0 auto;margin:calc(6px*var(--sc)) 0 0;max-width:56ch;color:var(--ink2);font:400 max(14px, calc(var(--l)*var(--sc)))/1.55 var(--cc-display);}
+.cc-tsl.is-nolede .cc-tsl__l{display:none;}
+
+/* cedule: plocha s linkou kousek od okraje, jako tabule u silnice (ne tlačítko) */
+.cc-tsl__g{flex:1 1 auto;min-height:0;display:grid;margin:calc(20px*var(--sc)) 0 0;padding:0;list-style:none;
+  grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:minmax(min-content,1fr);gap:calc(var(--gap)*var(--sc));}
+.cc-tsl.is-nolede .cc-tsl__g{margin-top:calc(12px*var(--sc));}
+.cc-tsl__c{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1px;min-width:0;min-height:calc(var(--mh)*var(--sc));margin:0;
+  padding:calc(12px*var(--sc)) 12px;border:1px solid #d6d6d6;border-radius:7px;background:#fff;text-align:center;
+  box-shadow:inset 0 0 0 3.5px #fff,inset 0 0 0 5.5px var(--ink);}
+.cc-tsl__c b{display:block;max-width:100%;font:600 max(13px, calc(var(--b)*var(--sc)*var(--hs)))/1.25 var(--cc-display);letter-spacing:-.005em;}
+.cc-tsl__c span{display:block;max-width:100%;font:400 max(13px, calc(var(--s)*var(--sc)*var(--hs)))/1.25 var(--cc-display);}
+.cc-tsl__c--reg{grid-column:span 2;border-color:var(--st);background:var(--st);color:#fff;
+  box-shadow:inset 0 0 0 3.5px var(--st),inset 0 0 0 5.5px rgba(255,255,255,.92);}
+.cc-tsl__c--reg b{font-size:max(14px, calc(var(--rb)*var(--sc)*var(--hs)));}
+.cc-tsl__c--reg span{font-size:max(13px, calc(var(--rs)*var(--sc)*var(--hs)));}
+
+/* úzký rám: 2 sloupce, region jako ostatní cedule → 14 cedulí = 7 řad */
+@media (max-width:479px){
+  .cc-tsl{--pad:18px 16px; --t:20px; --l:14px; --b:15px; --s:14px; --rb:15px; --rs:14px; --mh:60px; --gap:8px;}
+  .cc-tsl .cc-tsl__l{margin-top:calc(5px*var(--sc));}
+  .cc-tsl__g{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:calc(16px*var(--sc));}
+  .cc-tsl__c{padding:calc(12px*var(--sc)) 12px;}
+  .cc-tsl__c--reg{grid-column:auto;}
+}
+</style>
+
+<div class="cc-embed cc-tsl" data-cc-tsl>
+  <h3 class="cc-title cc-tsl__t" data-t></h3>
+  <p class="cc-tsl__l" data-l></p>
+  <p class="cc-sr" data-sr></p>
+  <ul class="cc-tsl__g" data-g aria-hidden="true"></ul>
+</div>
+
+<script>
+(function(){
+  var root = document.querySelector('[data-cc-tsl]');
+  if(!root || root.dataset.ccInit) return;
+  root.dataset.ccInit = '1';
+
+  /* ===== D: texty a dvojice (německy, italsky), první je celý region ===== */
+  var D = {
+    title: 'Tyrolský slovníček',
+    lede:  'Většina míst v Jižním Tyrolsku má dva oficiální názvy, německý a italský, a v ladinských údolích mnohdy i třetí.',
+    sr:    'Německé a italské názvy míst v Jižním Tyrolsku.',
+    pairs: [
+      ['Südtirol','Alto Adige'],
+      ['Bozen','Bolzano'],
+      ['Brixen','Bressanone'],
+      ['Gröden','Val Gardena'],
+      ['Wolkenstein','Selva'],
+      ['Seiser Alm','Alpe di Siusi'],
+      ['Hochabtei','Alta Badia'],
+      ['Kronplatz','Plan de Corones'],
+      ['Antholz','Anterselva'],
+      ['Drei Zinnen','Tre Cime'],
+      ['Vinschgau','Val Venosta'],
+      ['Sulden','Solda'],
+      ['Schnalstal','Val Senales'],
+      ['Graun','Curon']
+    ]
+  };
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  var grid = root.querySelector('[data-g]');
+  root.querySelector('[data-t]').textContent = D.title;
+  root.querySelector('[data-l]').textContent = D.lede;
+  grid.innerHTML = D.pairs.map(function(p, i){
+    return '<li class="cc-tsl__c' + (i === 0 ? ' cc-tsl__c--reg' : '') + '"><b lang="de">' + esc(p[0]) + '</b><span lang="it">' + esc(p[1]) + '</span></li>';
+  }).join('');
+  root.querySelector('[data-sr]').innerHTML = esc(D.sr) + ' ' + D.pairs.map(function(p){
+    return '<span lang="de">' + esc(p[0]) + '</span>, italsky <span lang="it">' + esc(p[1]) + '</span>.';
+  }).join(' ');
+
+  /* ===== vyplnění rámu: řady se roztáhnou, při nedostatku místa nejdřív zmizí perex, pak se zmenšuje písmo k podlahám ===== */
+  // název na cedulích má být na jednom řádku: když se zalomí (Plan de Corones), písmo všech cedulí se o kousek zmenší,
+  // nejvýš o 10 %; když ani to nestačí, zůstane plná velikost a cedule s dvouřádkovým názvem se zvýší
+  function lines(e){
+    var rg = document.createRange(), tops = {};
+    rg.selectNodeContents(e);
+    Array.prototype.forEach.call(rg.getClientRects(), function(r){ tops[Math.round(r.top)] = 1; });
+    return Object.keys(tops).length;
+  }
+  function wraps(){
+    var bad = false;
+    grid.querySelectorAll('b,span').forEach(function(e){ if(e.scrollWidth > e.clientWidth + 0.5 || lines(e) > 1) bad = true; });
+    return bad;
+  }
+  function over(){
+    var last = grid.lastElementChild;
+    if(!last) return false;
+    var gb = grid.getBoundingClientRect().bottom;
+    var mx = 0;
+    Array.prototype.forEach.call(grid.children, function(c){
+      mx = Math.max(mx, c.getBoundingClientRect().bottom);
+      if(c.scrollHeight > c.clientHeight + 1) mx = Infinity;      // text přetéká z cedule
+    });
+    return mx > gb + 1;
+  }
+  function fit(){
+    var sc = 1;
+    root.classList.remove('is-nolede');
+    root.style.setProperty('--sc', 1);
+    var hs = 1; root.style.setProperty('--hs', 1);
+    for(var j = 0; j < 4 && wraps(); j++){ hs *= .975; root.style.setProperty('--hs', hs.toFixed(3)); }
+    if(wraps()){ hs = 1; root.style.setProperty('--hs', 1); }
+    if(over()) root.classList.add('is-nolede');
+    for(var k = 0; k < 14 && over() && sc > .7; k++){ sc *= .95; root.style.setProperty('--sc', sc.toFixed(3)); }
+  }
+  var rt;
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  if(window.ResizeObserver) new ResizeObserver(function(){ clearTimeout(rt); rt = setTimeout(fit, 90); }).observe(root);
+  fit();
+})();
+</script>
+</body>
+</html>
