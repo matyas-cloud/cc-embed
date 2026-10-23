@@ -7,7 +7,7 @@
 <!--
   CC × SIC · speciál „Každý byznys potřebuje pit-stop…“ · prvek „Jízda tratí“
   Místo: speciál, komponenta Scrollytelling (URL + Popisek + dráha 800 vh, šířka Široký).
-  Formát: scrollytelling pixel po pixelu. Progres posílá rodič (cc-scrolly), prvek ho dohání kriticky tlumenou pružinou (ω 12).
+  Formát: scrollytelling pixel po pixelu. Progres posílá rodič (cc-scrolly), prvek ho dohání kriticky tlumenou pružinou (ω 8).
   Bez rodiče (samostatně otevřený) si dělá vlastní scroll; když rodič mlčí 2,5 s, odemkne scroll uvnitř rámu.
   Data: infografika sic-podnikatelska-cesta.png, text speciálu, startupnow.cz a s-ic.cz (22. 10. 2026).
   Barvy: tyrkysová speciálu #00B2C3.
@@ -16,6 +16,9 @@
   22. 10. 2026 – v2: mlhoviny místo tečkové mřížky, tmavé pozadí pod texty, jen dva pruhy trati, ohon a protažené hvězdy podle rychlosti,
                   světlo nikdy nestojí (u zastávek a v pit-stopu jen zpomalí), dav 2 × 15 mechaniků, v cíli názvy webů místo domén,
                   text nejde označit, štítky na hover bliknou.
+  23. 10. 2026 – v3: bez startovních světel, mlhoviny a záře z předrozmazaných spritů (zmizel rastr přechodů),
+                  pit-stop bez oddělovacích teček, štítek „SIC hradí až 75 % mentoringu“, v cíli Startup Now / Pro firmy / Pro výzkum,
+                  kratší dojezd (pin se pustí hned po cíli), měkčí pružina ω 8, hvězdy a prach kreslené dávkově, DPR 1,5 u velkých rámů.
 -->
 <style>
 @font-face{font-family:Poppins;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2'),url(../cc-embed-fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+2190-21FF;}
@@ -36,9 +39,9 @@ html.is-own,html.is-own body{overflow:auto;height:auto}
 .sic__pin{position:relative;height:100%;overflow:hidden;background:#020607}
 .is-own .sic__pin{position:sticky;top:0;height:100vh;height:100svh}
 .sic__cv{position:absolute;inset:0;width:100%;height:100%;display:block}
-.sic__shade{position:absolute;left:0;right:0;bottom:0;height:62%;pointer-events:none;opacity:0;background:linear-gradient(180deg,rgba(2,6,7,0) 0%,rgba(2,6,7,.88) 30%,rgba(2,6,7,.97) 100%)}
+.sic__shade{position:absolute;left:-24px;right:-24px;bottom:-24px;height:calc(62% + 24px);filter:blur(8px);pointer-events:none;opacity:0;background:linear-gradient(180deg,rgba(2,6,7,0) 0%,rgba(2,6,7,.88) 30%,rgba(2,6,7,.97) 100%)}
 .sic__ov{position:absolute;opacity:0;visibility:hidden;will-change:opacity,transform;isolation:isolate}
-.sic:not(.is-m) .sic__ov[data-ov^=st]::before,.sic:not(.is-m) .sic__ov[data-ov=fin]::before,.sic__ov[data-ov=title]::before{content:"";position:absolute;inset:-70px -90px;z-index:-1;pointer-events:none;background:radial-gradient(closest-side,rgba(2,6,7,.82),rgba(2,6,7,.55) 55%,rgba(2,6,7,0))}
+.sic:not(.is-m) .sic__ov[data-ov^=st]::before,.sic:not(.is-m) .sic__ov[data-ov=fin]::before,.sic__ov[data-ov=title]::before{content:"";position:absolute;inset:-70px -90px;z-index:-1;pointer-events:none;background:radial-gradient(closest-side,rgba(2,6,7,.82),rgba(2,6,7,.55) 55%,rgba(2,6,7,0));filter:blur(8px)}
 .sic__ov.is-on{visibility:visible}
 .sic__title{margin:0;font:600 var(--fs-title,42px)/1.12 Poppins,sans-serif;letter-spacing:-.02em;text-wrap:balance}
 .sic__h{margin:0;font:600 var(--fs-h,46px)/1.08 Poppins,sans-serif;letter-spacing:-.022em}
@@ -99,18 +102,18 @@ html.is-own,html.is-own body{overflow:auto;height:auto}
    <section class="sic__ov" data-ov="st4">
     <h3 class="sic__h" aria-hidden="true">Rozvíjím nebo transformuji firmu</h3>
     <p class="sic__p" aria-hidden="true">Zavedeným firmám pomůže SIC najít další směr růstu.</p>
-    <ul class="sic__tags" aria-hidden="true"><li>Expanze</li><li>Strategie</li><li>Až 75&nbsp;% hradí SIC</li></ul>
+    <ul class="sic__tags" aria-hidden="true"><li>Expanze</li><li>Strategie</li><li>SIC hradí až 75&nbsp;% mentoringu</li></ul>
     <a class="sic__btn" href="https://s-ic.cz/sluzby/strategicky-rozvoj/" target="_blank" rel="noopener">Rozvoj podnikání<i class="sic__ar"></i></a>
    </section>
 
-   <a class="sic__plate" data-team="0" href="https://s-ic.cz/inovacni-komunita/" target="_blank" rel="noopener"><b>Innoforum</b><span>Komunita · Networking · Kontakty<i class="sic__ar"></i></span></a>
-   <a class="sic__plate" data-team="1" href="https://s-ic.cz/sluzby-pro-vyzkumne-organizace/" target="_blank" rel="noopener"><b>Věda a výzkum</b><span>Nové objevy · Nové startupy · Inovativní produkty<i class="sic__ar"></i></span></a>
+   <a class="sic__plate" data-team="0" href="https://s-ic.cz/inovacni-komunita/" target="_blank" rel="noopener"><b>Innoforum</b><span>Přes 500 podnikatelů, investorů a expertů<i class="sic__ar"></i></span></a>
+   <a class="sic__plate" data-team="1" href="https://s-ic.cz/sluzby-pro-vyzkumne-organizace/" target="_blank" rel="noopener"><b>Věda a výzkum</b><span>Objevy z laboratoře až na trh<i class="sic__ar"></i></span></a>
 
    <section class="sic__ov" data-ov="fin">
     <h3 class="sic__h" style="--fs-h:var(--fs-fin,40px);margin-bottom:24px" aria-hidden="true">Kde zastavíte vy?</h3>
     <a class="sic__door" href="https://www.startupnow.cz/" target="_blank" rel="noopener">Startupy<em>Startup Now<i class="sic__ar"></i></em></a>
-    <a class="sic__door" href="https://s-ic.cz/sluzby-pro-firmy/" target="_blank" rel="noopener">Zavedené firmy<em>SIC · Služby pro firmy<i class="sic__ar"></i></em></a>
-    <a class="sic__door" href="https://s-ic.cz/sluzby-pro-vyzkumne-organizace/" target="_blank" rel="noopener">Věda a výzkum<em>SIC · Služby pro výzkum<i class="sic__ar"></i></em></a>
+    <a class="sic__door" href="https://s-ic.cz/sluzby-pro-firmy/" target="_blank" rel="noopener">Zavedené firmy<em>Pro firmy<i class="sic__ar"></i></em></a>
+    <a class="sic__door" href="https://s-ic.cz/sluzby-pro-vyzkumne-organizace/" target="_blank" rel="noopener">Věda a výzkum<em>Pro výzkum<i class="sic__ar"></i></em></a>
    </section>
 
    <p class="cc-sr">Podnikatelská cesta má čtyři zastávky. Mám nápad, program SIC Start s 15 hodinami mentora zdarma. Rozjíždím startup, SIC Akcelerátor bez podílu ve firmě. Rostu a nestíhám, mentoring k digitalizaci, financování a udržitelnosti. Rozvíjím nebo transformuji firmu, Rozvoj podnikání, u kterého SIC hradí až 75 % nákladů na mentoring. Cestou je pit-stop s komunitou Innoforum a službami pro vědu a výzkum.</p>
@@ -129,19 +132,19 @@ var PLATES=[].slice.call(root.querySelectorAll('.sic__plate'));
 var Q=new URLSearchParams(location.search);
 var demo=(window.parent===window)||Q.has('demo');
 var reduce=false;try{reduce=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
-var OMEGA=Q.get('smooth')==='0'?0:+(Q.get('omega')||12);   // tuhost pružiny (kriticky tlumená: náběh i doběh, bez přestřelu)
+var OMEGA=Q.get('smooth')==='0'?0:+(Q.get('omega')||8);   // tuhost pružiny (kriticky tlumená: náběh i doběh, bez přestřelu)
 
 /* ================= CFG: časová osa (podíl dráhy) ================= */
 // okna, kdy u místa stojí kamera a je vidět text; světlo jede dál, jen zpomalí
-var STAY=[[0,.06],[.14,.22],[.30,.38],[.46,.54],[.60,.66],[.72,.79],[.86,1]];
+var STAY=[[0,.045],[.14,.225],[.315,.40],[.49,.575],[.65,.715],[.79,.865],[.97,1]];
 var KIND=['start','st1','st2','st3','pit','st4','fin'];
 var SIDE={st1:'R',st2:'L',st3:'R',st4:'L'};
 var CREEP=[0,11,11,11,7,11,0];                    // o kolik vzorků se světlo posune během okna (pit-stop zpomalí víc)
-var LIGHTS_ON=[.008,.018,.028,.038,.048],LAUNCH=.06;
+var LAUNCH=0,TITLE_END=STAY[0][1];
 
 /* ================= svět (x doprava, z dolů) ================= */
 var TRACK=[[0,0],[58,110],[-58,220],[58,330],[-58,440],[0,548]];
-var FIN={z:548,w:120,rows:3,q:8},GATE={z:-17,xs:[-32,-16,0,16,32]};
+var FIN={z:548,w:120,rows:3,q:8};
 function sampleTrack(){var P=TRACK,out=[],k=1.12;
   for(var i=0;i<P.length-1;i++){var p0=P[i-1]||[P[0][0],P[0][1]-60],p1=P[i],p2=P[i+1],p3=P[i+2]||[p2[0],p2[1]+60];
     var c1=[p1[0]+(p2[0]-p0[0])/6*k,p1[1]+(p2[1]-p0[1])/6*k],c2=[p2[0]-(p3[0]-p1[0])/6*k,p2[1]-(p3[1]-p1[1])/6*k];
@@ -158,7 +161,7 @@ function headAt(fi){var i=Math.max(0,Math.min(NT-1,fi)),a=Math.floor(i),b=Math.m
 
 /* světlo nikdy nestojí: monotónní hladká funkce progres → poloha na trati (Fritsch–Carlson) */
 var HX=[LAUNCH],HY=[0];
-for(var k0=1;k0<STAY.length;k0++){var c=CREEP[k0];if(k0===STAY.length-1){HX.push(STAY[k0][0]);HY.push(NT-1-8);HX.push(1);HY.push(NT-1)}else{HX.push(STAY[k0][0]);HY.push(IDX[k0]-c);HX.push(STAY[k0][1]);HY.push(IDX[k0]+c)}}
+for(var k0=1;k0<STAY.length;k0++){var c=CREEP[k0];if(k0===STAY.length-1){HX.push(STAY[k0][0]);HY.push(NT-1-6);HX.push(1);HY.push(NT-1)}else{HX.push(STAY[k0][0]);HY.push(IDX[k0]-c);HX.push(STAY[k0][1]);HY.push(IDX[k0]+c)}}
 var HM=(function(){var n=HX.length,d=[],m=[],i;for(i=0;i<n-1;i++)d.push((HY[i+1]-HY[i])/(HX[i+1]-HX[i]));m[0]=d[0];m[n-1]=d[n-2];
   for(i=1;i<n-1;i++)m[i]=d[i-1]*d[i]<=0?0:3*(HX[i+1]-HX[i-1])/((2*HX[i+1]-HX[i]-HX[i-1])/d[i-1]+(HX[i+1]+HX[i]-2*HX[i-1])/d[i]);return m})();
 function headIdx(p){if(p<LAUNCH)return -1;if(p>=1)return NT-1;var i=0;while(i<HX.length-2&&p>HX[i+1])i++;var h=HX[i+1]-HX[i],t=(p-HX[i])/h,t2=t*t,t3=t2*t;
@@ -177,23 +180,32 @@ var TEAMS=[{side:-1,crew:crowd(11,15)},{side:1,crew:crowd(23,15)}];
 
 /* ================= vesmír ================= */
 var R=rng(7),i;
-var STARS=[];for(i=0;i<1600;i++)STARS.push({x:(R()-.5)*2600,z:-900+R()*3000,r:.35+R()*R()*1.2,a:.25+R()*.6,c:R()<.25?'176,230,236':'225,240,244'});
+var STARS=[];for(i=0;i<1600;i++){var sa=R();STARS.push({x:(R()-.5)*2600,z:-900+R()*3000,r:.35+R()*R()*1.2,b:Math.min(3,Math.floor(sa*4))})}
 var GLINT=[];for(i=0;i<60;i++)GLINT.push({x:(R()-.5)*1800,z:-600+R()*2200,r:.9+R()*1.3,a:.5+R()*.4});
-var DUST=[];for(i=0;i<240;i++)DUST.push({x:(R()-.5)*1500,z:-500+R()*1800,r:.7+R()*1.1,a:.14+R()*.3});
+var DUST=[];for(i=0;i<240;i++)DUST.push({x:(R()-.5)*1500,z:-500+R()*1800,r:.7+R()*1.1,b:Math.min(2,Math.floor(R()*3))});
 var BOKEH=[];for(i=0;i<26;i++)BOKEH.push({x:(R()-.5)*900,z:-300+R()*1300,r:6+R()*16,a:.08+R()*.12});
 var TL='0,178,195',TLd='0,124,138',TLh='150,226,232',TLc='214,246,248';
 function rgba(c,a){return'rgba('+c+','+(a<0?0:a>1?1:a).toFixed(3)+')'}
 function sprite(w,h,fn){var c=document.createElement('canvas');c.width=w;c.height=h;fn(c.getContext('2d'),w,h);return c}
-var SPR_GLINT=sprite(64,64,function(g,s){var r=g.createRadialGradient(32,32,0,32,32,32);r.addColorStop(0,'rgba('+TLc+',1)');r.addColorStop(.22,'rgba('+TL+',.3)');r.addColorStop(1,'rgba('+TL+',0)');g.fillStyle=r;g.fillRect(0,0,64,64)});
+// rozmazání spritu smaže rastr, kterým prohlížeč tónuje jemné přechody (byl vidět jako mřížka)
+function blurred(c,px){var o=document.createElement('canvas');o.width=c.width;o.height=c.height;var g=o.getContext('2d');g.filter='blur('+px+'px)';g.drawImage(c,0,0);g.filter='none';return o}
+function radial(stops){return blurred(sprite(128,128,function(g){var r=g.createRadialGradient(64,64,0,64,64,62);stops.forEach(function(s){r.addColorStop(s[0],s[1])});g.fillStyle=r;g.fillRect(0,0,128,128)}),2)}
+var SPR_GLOW,SPR_SOFT,SPR_BOKEH;var SPR_GLINT=sprite(64,64,function(g,s){var r=g.createRadialGradient(32,32,0,32,32,32);r.addColorStop(0,'rgba('+TLc+',1)');r.addColorStop(.22,'rgba('+TL+',.3)');r.addColorStop(1,'rgba('+TL+',0)');g.fillStyle=r;g.fillRect(0,0,64,64)});
 // mlhoviny: z desítek měkkých oblaků, s tmavými prachovými pruhy a světlými uzly
-function nebula(seed,cols){var r=rng(seed);return sprite(512,512,function(g){
+// sprite se kreslí NK× sytější a při vykreslení se ztlumí – víc úrovní průhlednosti, žádné schody mezi texely
+var NK=3;
+function nebula(seed,cols){var r=rng(seed);return blurred(sprite(512,512,function(g){
   var ang=r()*Math.PI,ca=Math.cos(ang),sa=Math.sin(ang);g.globalCompositeOperation='lighter';
-  for(var j=0;j<60;j++){var u=(r()+r()+r()-1.5)*150,v=(r()+r()+r()-1.5)*62,x=256+u*ca-v*sa,y=256+u*sa+v*ca,rad=40+r()*120,c=cols[Math.floor(r()*cols.length)],a=.014+r()*.024;
+  for(var j=0;j<60;j++){var u=(r()+r()+r()-1.5)*150,v=(r()+r()+r()-1.5)*62,x=256+u*ca-v*sa,y=256+u*sa+v*ca,rad=40+r()*120,c=cols[Math.floor(r()*cols.length)],a=(.014+r()*.024)*NK;
     var gr=g.createRadialGradient(x,y,0,x,y,rad);gr.addColorStop(0,'rgba('+c+','+a.toFixed(3)+')');gr.addColorStop(1,'rgba('+c+',0)');g.fillStyle=gr;g.fillRect(x-rad,y-rad,2*rad,2*rad)}
   g.globalCompositeOperation='destination-out';
   for(j=0;j<16;j++){u=(r()-.5)*260;v=(r()-.5)*90;x=256+u*ca-v*sa;y=256+u*sa+v*ca;rad=16+r()*50;gr=g.createRadialGradient(x,y,0,x,y,rad);gr.addColorStop(0,'rgba(0,0,0,.45)');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.fillRect(x-rad,y-rad,2*rad,2*rad)}
   g.globalCompositeOperation='lighter';
-  for(j=0;j<4;j++){u=(r()+r()-1)*120;v=(r()+r()-1)*40;x=256+u*ca-v*sa;y=256+u*sa+v*ca;rad=8+r()*14;gr=g.createRadialGradient(x,y,0,x,y,rad);gr.addColorStop(0,'rgba('+TLc+',.14)');gr.addColorStop(.4,'rgba('+TL+',.06)');gr.addColorStop(1,'rgba('+TL+',0)');g.fillStyle=gr;g.fillRect(x-rad,y-rad,2*rad,2*rad)}})}
+  for(j=0;j<4;j++){u=(r()+r()-1)*120;v=(r()+r()-1)*40;x=256+u*ca-v*sa;y=256+u*sa+v*ca;rad=8+r()*14;gr=g.createRadialGradient(x,y,0,x,y,rad);gr.addColorStop(0,'rgba('+TLc+','+(.14*NK)+')');gr.addColorStop(.4,'rgba('+TL+','+(.06*NK)+')');gr.addColorStop(1,'rgba('+TL+',0)');g.fillStyle=gr;g.fillRect(x-rad,y-rad,2*rad,2*rad)}}),3)}
+SPR_GLOW=radial([[0,'rgba('+TLc+',1)'],[.18,'rgba('+TL+',.5)'],[1,'rgba('+TL+',0)']]);
+SPR_SOFT=radial([[0,'rgba('+TL+',1)'],[1,'rgba('+TL+',0)']]);
+SPR_BOKEH=radial([[0,'rgba('+TL+',1)'],[.5,'rgba('+TL+',.5)'],[1,'rgba('+TL+',0)']]);
+SPR_GLINT=blurred(SPR_GLINT,1);
 var NC=['0,178,195','0,124,138','0,92,112','0,146,164'];
 var NEB=[ // [x, z, šířka ve světě, hloubka f, sprite]
   [-520,140,1400,.15,nebula(3,NC)],[560,600,1600,.15,nebula(5,NC)],[-480,980,1400,.15,nebula(9,NC)],
@@ -204,7 +216,7 @@ var W=0,H=0,DPR=1,M=false,L={};
 function sstep(t){t=t<0?0:t>1?1:t;return t*t*(3-2*t)}
 function layout(){
   W=pin.clientWidth;H=pin.clientHeight;if(!W||!H)return;
-  DPR=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
+  DPR=Math.min(window.devicePixelRatio||1,W*H>520000?1.5:2);cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
   M=W<620;root.classList.toggle('is-m',M);
   var pad=M?22:Math.max(28,Math.min(72,W*.06)),pw=Math.min(440,W*.44);
   root.style.setProperty('--fs-title',(M?Math.max(24,Math.min(30,W*.075)):Math.max(30,Math.min(44,W*.04)))+'px');
@@ -243,7 +255,6 @@ function camAt(p){var b=base(p),hi=headIdx(p),wf;
   wf=.5;if(b.to===6)wf=.5*(1-b.e);if(b.k===6)wf=0;if(b.to===1)wf=.5*b.e;if(b.k===0)wf=0;
   b.x+=(h.x-b.x)*wf;b.z+=(h.z-b.z)*wf;return b}
 function state(p){var st={p:p},b=camAt(p);st.cam=b;st.at=b.k;st.head=headIdx(p);st.launched=p>=LAUNCH;
-  st.lights=0;if(!st.launched)for(var i2=0;i2<5;i2++)if(p>=LIGHTS_ON[i2])st.lights=i2+1;
   // rychlost (vzorků trati za sekundu) a pohyb kamery v obraze – pro stopu za světlem a protažení hvězd
   var e=.002,pa=Math.max(0,p-e),pb=Math.min(1,p+e),dp=pb-pa,v=vel;
   if(st.launched&&pa>=LAUNCH)st.speed=Math.abs((headIdx(pb)-headIdx(pa))/dp*v);else st.speed=0;
@@ -264,14 +275,16 @@ function drawSpace(st){
   var c0=cam,q,r,g;cam={x:c0.x,z:c0.z,ax:c0.ax,ay:c0.ay,Z:Math.max(c0.Z,1.25)};var Z=cam.Z;   // vzdálené vrstvy se při oddálení nezhušťují
   ctx.fillStyle='#020607';ctx.fillRect(0,0,W,H);
   ctx.globalCompositeOperation='lighter';
-  NEB.forEach(function(n){q=P(n[0],n[1],n[3]);var w=n[2]*Z*n[3]*1.4;if(!onScr(q,w/2))return;ctx.globalAlpha=n[3]<.2?.9:.7;ctx.drawImage(n[4],q.x-w/2,q.y-w/2,w,w)});ctx.globalAlpha=1;
-  // hvězdy: při rychlém pohybu kamery se protáhnou ve směru jízdy
-  var vx=st.cv.x,vy=st.cv.y,sp=Math.hypot(vx,vy);
-  STARS.forEach(function(s){q=P(s.x,s.z,.28);if(!onScr(q,2))return;var L2=Math.min(46,sp*.28*.016)*(.5+s.r);
-    if(L2>1.6){ctx.strokeStyle=rgba(s.c,s.a*.75);ctx.lineWidth=s.r*1.4;ctx.beginPath();ctx.moveTo(q.x,q.y);ctx.lineTo(q.x-vx/sp*L2,q.y-vy/sp*L2);ctx.stroke()}
-    else{ctx.fillStyle=rgba(s.c,s.a*.8);var d=s.r*2;ctx.fillRect(q.x-s.r,q.y-s.r,d,d)}});
+  NEB.forEach(function(n){q=P(n[0],n[1],n[3]);var w=n[2]*Z*n[3]*1.4;if(!onScr(q,w/2))return;ctx.globalAlpha=(n[3]<.2?.9:.7)/NK;ctx.drawImage(n[4],q.x-w/2,q.y-w/2,w,w)});ctx.globalAlpha=1;
+  // hvězdy (dávkově po jasu): při rychlém pohybu kamery se protáhnou ve směru jízdy
+  var vx=st.cv.x,vy=st.cv.y,sp=Math.hypot(vx,vy),streak=Math.min(46,sp*.28*.016),b,s;
+  for(b=0;b<4;b++){ctx.beginPath();var any=false;
+    for(var j=0;j<STARS.length;j++){s=STARS[j];if(s.b!==b)continue;q=P(s.x,s.z,.28);if(!onScr(q,2))continue;any=true;
+      if(streak>1.6){var L2=streak*(.5+s.r);ctx.moveTo(q.x,q.y);ctx.lineTo(q.x-vx/sp*L2,q.y-vy/sp*L2)}else ctx.rect(q.x-s.r,q.y-s.r,s.r*2,s.r*2)}
+    if(!any)continue;var al=(.3+.55*(b+.5)/4)*.8;
+    if(streak>1.6){ctx.strokeStyle=rgba('222,240,245',al);ctx.lineWidth=1.1;ctx.stroke()}else{ctx.fillStyle=rgba('222,240,245',al);ctx.fill()}}
   GLINT.forEach(function(s){q=P(s.x,s.z,.42);r=s.r*5;if(!onScr(q,r))return;ctx.globalAlpha=s.a;ctx.drawImage(SPR_GLINT,q.x-r,q.y-r,2*r,2*r)});ctx.globalAlpha=1;
-  DUST.forEach(function(s){q=P(s.x,s.z,.62);if(!onScr(q,3))return;ctx.fillStyle=rgba(TL,s.a);ctx.beginPath();ctx.arc(q.x,q.y,s.r,0,7);ctx.fill()});
+  for(b=0;b<3;b++){ctx.beginPath();DUST.forEach(function(s){if(s.b!==b)return;q=P(s.x,s.z,.62);if(!onScr(q,3))return;ctx.moveTo(q.x+s.r,q.y);ctx.arc(q.x,q.y,s.r,0,7)});ctx.fillStyle=rgba(TL,.18+.3*(b+.5)/3);ctx.fill()}
   ctx.globalCompositeOperation='source-over';cam=c0}
 function drawTrack(litI,vr){
   var Z=cam.Z,a0=vr[0],a1=vr[1],li=Math.max(a0,Math.min(litI,a1));
@@ -284,23 +297,13 @@ function drawTrack(litI,vr){
     ctx.strokeStyle=rgba(TLc,.8*k);ctx.lineWidth=Math.max(.6,.55*Z);ctx.stroke()})}
 function drawFinish(on){var z=FIN.z,w=FIN.w,rows=FIN.rows,q=FIN.q,cols=Math.round(w/q),D=rows*q,Z=cam.Z;
   var c=P(0,z+D/2);if(!onScr(c,w*Z))return;
-  ctx.globalCompositeOperation='lighter';var r=w*.75*Z,g=ctx.createRadialGradient(0,0,0,0,0,r);g.addColorStop(0,rgba(TL,on?.2:.06));g.addColorStop(1,rgba(TL,0));
-  ctx.save();ctx.translate(c.x,c.y);ctx.scale(1,.42);ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,0,r,0,7);ctx.fill();ctx.restore();ctx.globalCompositeOperation='source-over';
+  var r=w*.75*Z;ctx.globalCompositeOperation='lighter';ctx.save();ctx.translate(c.x,c.y);ctx.scale(1,.42);ctx.globalAlpha=on?.22:.07;ctx.drawImage(SPR_SOFT,-r,-r,2*r,2*r);ctx.restore();ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
   for(var ro=0;ro<rows;ro++)for(var k=0;k<cols;k++){var x0=-w/2+k*q,z0=z+ro*q,a=P(x0+.5,z0+.5),b=P(x0+q-.5,z0+q-.5),xm=x0+q/2;
     var edge=Math.max(0,1-Math.pow(Math.abs(xm/(w/2)),2.4)),spot=.6+.4*Math.exp(-(xm*xm)/1800),A=edge*(on?1:.45);
-    if((ro+k)%2===0){g=ctx.createLinearGradient(a.x,a.y,b.x,b.y);g.addColorStop(0,rgba(TLh,.95*A*spot));g.addColorStop(.5,rgba(TL,.95*A*spot));g.addColorStop(1,rgba(TLd,.9*A));ctx.fillStyle=g;ctx.fillRect(a.x,a.y,b.x-a.x,b.y-a.y);
+    if((ro+k)%2===0){ctx.fillStyle=rgba(TL,.92*A*spot);ctx.fillRect(a.x,a.y,b.x-a.x,b.y-a.y);
       ctx.strokeStyle=rgba(TLc,.7*A*spot);ctx.lineWidth=Math.max(.5,.18*Z);ctx.beginPath();ctx.moveTo(a.x,b.y);ctx.lineTo(a.x,a.y);ctx.lineTo(b.x,a.y);ctx.stroke()}
     else{ctx.fillStyle='rgba(4,20,23,'+(.92*edge).toFixed(3)+')';ctx.fillRect(a.x,a.y,b.x-a.x,b.y-a.y)}}
   [z-.6,z+D+.6].forEach(function(zz){var a=P(-w/2,zz),b=P(w/2,zz),g2=ctx.createLinearGradient(a.x,0,b.x,0);g2.addColorStop(0,rgba(TL,0));g2.addColorStop(.5,rgba(TLh,on?.9:.3));g2.addColorStop(1,rgba(TL,0));ctx.strokeStyle=g2;ctx.lineWidth=Math.max(.7,.32*Z);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()})}
-function drawGate(n){var Z=cam.Z,a=P(-58,GATE.z),b=P(58,GATE.z);if(!onScr(a,200)&&!onScr(b,200))return;
-  var g=ctx.createLinearGradient(a.x,0,b.x,0);g.addColorStop(0,rgba(TL,0));g.addColorStop(.18,rgba(TL,.55));g.addColorStop(.82,rgba(TL,.55));g.addColorStop(1,rgba(TL,0));
-  ctx.strokeStyle=g;ctx.lineWidth=Math.max(1,.35*Z);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
-  var r=Math.max(6.5,3.3*Z);
-  GATE.xs.forEach(function(x,i){var q=P(x,GATE.z),on=i<n;
-    if(on){ctx.globalCompositeOperation='lighter';var h=ctx.createRadialGradient(q.x,q.y,0,q.x,q.y,r*2.8);h.addColorStop(0,rgba(TL,.5));h.addColorStop(1,rgba(TL,0));ctx.fillStyle=h;ctx.beginPath();ctx.arc(q.x,q.y,r*2.8,0,7);ctx.fill();ctx.globalCompositeOperation='source-over';
-      var c=ctx.createRadialGradient(q.x-r*.25,q.y-r*.25,0,q.x,q.y,r);c.addColorStop(0,rgba(TLc,1));c.addColorStop(.45,rgba(TL,1));c.addColorStop(1,rgba(TLd,1));ctx.fillStyle=c}
-    else ctx.fillStyle='#061518';
-    ctx.beginPath();ctx.arc(q.x,q.y,r,0,7);ctx.fill();ctx.strokeStyle=on?rgba(TLh,.9):rgba(TL,.5);ctx.lineWidth=1.2;ctx.stroke()})}
 function person(x,y,s,lit,kind,dim){
   ctx.save();ctx.translate(x,y);var L2=lit*dim;
   ctx.fillStyle=L2>.45?rgba(TL,.35+.6*L2):rgba(TLd,.5+.3*dim);ctx.strokeStyle=rgba(TLc,.3+.6*L2);ctx.lineWidth=Math.max(.7,s*.09);
@@ -310,37 +313,40 @@ function person(x,y,s,lit,kind,dim){
   if(kind==='tire'){ctx.save();ctx.strokeStyle=rgba(TLc,.35+.5*L2);ctx.lineWidth=Math.max(1.2,s*.2);ctx.beginPath();ctx.arc(x+s*1.25,y+s*.55,s*.45,0,7);ctx.stroke();ctx.restore()}}
 var teamBox=[{},{}];
 function drawPit(on){var Z=cam.Z,c=P(PIT.x,PIT.zz);if(!onScr(c,90*Z+140))return false;var tx=PIT.t[0],tz=PIT.t[1],lx=PIT.left[0],lz=PIT.left[1],k=.45+.55*on;
-  ctx.save();ctx.translate(c.x,c.y);ctx.rotate(Math.atan2(tz,tx));ctx.globalCompositeOperation='lighter';var g=ctx.createRadialGradient(0,0,0,0,0,62*Z);g.addColorStop(0,rgba(TL,.18*k));g.addColorStop(1,rgba(TL,0));ctx.scale(1,.8);ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,0,62*Z,0,7);ctx.fill();ctx.restore();
+  var r=62*Z;ctx.save();ctx.translate(c.x,c.y);ctx.rotate(Math.atan2(tz,tx));ctx.scale(1,.8);ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.18*k;ctx.drawImage(SPR_SOFT,-r,-r,2*r,2*r);ctx.restore();ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
   var s0=Math.max(3.6,4.1*Z);
   TEAMS.forEach(function(T,ti){var pts=T.crew.map(function(m){var px=PIT.x+tx*m[0]+(T.side<0?lx:-lx)*m[1],pz=PIT.zz+tz*m[0]+(T.side<0?lz:-lz)*m[1],q=P(px,pz);return{q:q,m:m}});
     pts.sort(function(a,b){return a.q.y-b.q.y});var mx=0,my=0,x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;
     pts.forEach(function(o){var m=o.m;person(o.q.x,o.q.y,s0*m[2],on,m[3],m[4]);mx+=o.q.x;my+=o.q.y;x0=Math.min(x0,o.q.x-s0);x1=Math.max(x1,o.q.x+s0*(m[3]==='tire'?1.8:.8));y0=Math.min(y0,o.q.y-s0);y1=Math.max(y1,o.q.y+s0)});
     teamBox[ti]={x:mx/pts.length,y:my/pts.length,x0:x0,x1:x1,y0:y0,y1:y1,s:s0}});
   return true}
+function glow(spr,x,y,r,a){if(a<=0)return;ctx.globalAlpha=Math.min(1,a);ctx.drawImage(spr,x-r,y-r,2*r,2*r);ctx.globalAlpha=1}
 function drawStops(st){[1,2,3,5].forEach(function(k){var T=L.st[k].aim,q=P(T[0],T[1]),Z=cam.Z;if(!onScr(q,60*Z))return;var lit=IDX[k]<=st.head,near=st.at===k?1:0;
-  var rr=(9+3*near)*Z;ctx.globalCompositeOperation='lighter';var g=ctx.createRadialGradient(q.x,q.y,0,q.x,q.y,rr*2.4);g.addColorStop(0,rgba(TL,near?.4:lit?.24:.1));g.addColorStop(1,rgba(TL,0));ctx.fillStyle=g;ctx.beginPath();ctx.arc(q.x,q.y,rr*2.4,0,7);ctx.fill();ctx.globalCompositeOperation='source-over';
+  var rr=(9+3*near)*Z;ctx.globalCompositeOperation='lighter';glow(SPR_SOFT,q.x,q.y,rr*2.4,near?.4:lit?.24:.1);ctx.globalCompositeOperation='source-over';
   ctx.strokeStyle=rgba(TLh,near?.9:lit?.5:.22);ctx.lineWidth=near?1.6:1.1;ctx.beginPath();ctx.arc(q.x,q.y,rr,0,7);ctx.stroke();
   ctx.fillStyle=rgba(TLc,lit?.9:.4);ctx.beginPath();ctx.arc(q.x,q.y,Math.max(1.8,1.1*Z),0,7);ctx.fill()})}
-function drawStar(){var q=P(0,0),Z=cam.Z;if(!onScr(q,200))return;var r=Math.max(26,30*Z);ctx.globalCompositeOperation='lighter';var g=ctx.createRadialGradient(q.x,q.y,0,q.x,q.y,r);g.addColorStop(0,rgba(TLc,.85));g.addColorStop(.25,rgba(TL,.35));g.addColorStop(1,rgba(TL,0));ctx.fillStyle=g;ctx.beginPath();ctx.arc(q.x,q.y,r,0,7);ctx.fill();ctx.globalCompositeOperation='source-over'}
+function drawStar(){var q=P(0,0),Z=cam.Z;if(!onScr(q,200))return;ctx.globalCompositeOperation='lighter';glow(SPR_GLOW,q.x,q.y,Math.max(26,30*Z),.85);ctx.globalCompositeOperation='source-over'}
 function drawHead(st){if(st.head<0)return;var hi=st.head,h=headAt(hi),q=P(h.x,h.z),Z=cam.Z;
   // ohon: délka podle rychlosti, zužuje se a slábne
-  var len=Math.min(110,st.speed*.16+(st.p<.12?40*(1-sstep((st.p-LAUNCH)/.06)):0));
+  var len=Math.min(110,st.speed*.16);
   ctx.globalCompositeOperation='lighter';ctx.lineCap='round';
   if(len>2){var n=Math.ceil(len/2),prev=q;for(var j=1;j<=n;j++){var t=headAt(hi-j*2),pq=P(t.x,t.z),f=1-j/(n+1);
     ctx.strokeStyle=rgba(TLc,.55*f*f);ctx.lineWidth=Math.max(1,(1.6+3.2*f)*Z*.55);ctx.beginPath();ctx.moveTo(prev.x,prev.y);ctx.lineTo(pq.x,pq.y);ctx.stroke();
     ctx.strokeStyle=rgba(TL,.22*f);ctx.lineWidth=Math.max(2,(6+8*f)*Z*.55);ctx.stroke();prev=pq}}
-  var boost=Math.min(1,st.speed/260),r=Math.min(150,(24+10*boost)*Z),g=ctx.createRadialGradient(q.x,q.y,0,q.x,q.y,r);g.addColorStop(0,rgba(TLc,.95));g.addColorStop(.18,rgba(TL,.5));g.addColorStop(1,rgba(TL,0));ctx.fillStyle=g;ctx.beginPath();ctx.arc(q.x,q.y,r,0,7);ctx.fill();
+  var boost=Math.min(1,st.speed/260);glow(SPR_GLOW,q.x,q.y,Math.min(150,(24+10*boost)*Z),.95);
   ctx.globalCompositeOperation='source-over';ctx.fillStyle='#effcfd';ctx.beginPath();ctx.arc(q.x,q.y,Math.max(2.6,1.4*Z),0,7);ctx.fill()}
-function drawBokeh(){ctx.globalCompositeOperation='lighter';BOKEH.forEach(function(b){var q=P(b.x,b.z,1.7),r=b.r*Math.max(1,cam.Z*.9)*1.6;if(!onScr(q,r))return;var g=ctx.createRadialGradient(q.x,q.y,0,q.x,q.y,r);g.addColorStop(0,rgba(TL,b.a));g.addColorStop(.5,rgba(TL,b.a*.5));g.addColorStop(1,rgba(TL,0));ctx.fillStyle=g;ctx.beginPath();ctx.arc(q.x,q.y,r,0,7);ctx.fill()});ctx.globalCompositeOperation='source-over'}
+function drawBokeh(){ctx.globalCompositeOperation='lighter';BOKEH.forEach(function(b){var q=P(b.x,b.z,1.7),r=b.r*Math.max(1,cam.Z*.9)*1.6;if(!onScr(q,r))return;glow(SPR_BOKEH,q.x,q.y,r,b.a*2)});ctx.globalCompositeOperation='source-over'}
 var VIG=null,VW=0,VH=0;
-function drawVignette(){if(!VIG||VW!==W||VH!==H){VIG=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*.32,W/2,H/2,Math.max(W,H)*.75);VIG.addColorStop(0,'rgba(0,0,0,0)');VIG.addColorStop(1,'rgba(0,0,0,.55)');VW=W;VH=H}ctx.fillStyle=VIG;ctx.fillRect(0,0,W,H)}
+function drawVignette(){if(!VIG||VW!==W||VH!==H){var w=Math.max(8,Math.round(W/4)),h=Math.max(8,Math.round(H/4));
+    VIG=blurred(sprite(w,h,function(g){var v=g.createRadialGradient(w/2,h/2,Math.min(w,h)*.32,w/2,h/2,Math.max(w,h)*.75);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(0,0,0,.55)');g.fillStyle=v;g.fillRect(0,0,w,h)}),2);VW=W;VH=H}
+  ctx.drawImage(VIG,0,0,W,H)}
 
 /* ================= překryvy (texty, štítky) ================= */
 function showOv(el,v,dy){var on=v>.01;el.classList.toggle('is-on',on);el.style.opacity=v.toFixed(3);
   var ty=el.style.top==='50%'?'translateY(-50%) ':'';el.style.transform=ty+'translateY('+((1-v)*(dy||14)).toFixed(1)+'px)';
   el.querySelectorAll('a').forEach(function(a){a.tabIndex=v>.5?0:-1})}
 function overlays(st,pitDrawn){var p=st.p;
-  showOv(OV.title,p<LAUNCH?1:1-sstep((p-LAUNCH)/.025),-10);
+  showOv(OV.title,p<TITLE_END?1:1-sstep((p-TITLE_END)/.03),-10);
   var m=0;[['st1',1],['st2',2],['st3',3],['st4',5],['fin',6]].forEach(function(o){var v=vis(o[1],p);showOv(OV[o[0]],v);m=Math.max(m,v)});
   shade.style.opacity=M?m.toFixed(3):'0';
   var pv=vis(4,p);
@@ -363,7 +369,6 @@ function draw(force){
   var pd=drawPit(pitOn);
   drawFinish(st.head>=NT-3);
   drawStops(st);drawStar();
-  drawGate(st.launched?0:st.lights);
   drawHead(st);drawBokeh();drawVignette();
   overlays(st,pd);frames++;
 }
