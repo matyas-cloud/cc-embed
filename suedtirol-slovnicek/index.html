@@ -11,15 +11,19 @@
      Vložení: suedtirol-slovnicek-vlozeni.html, obalový div s výškou podle šířky okna (vzorec a ověřené šířky jsou ve vložení).
      Nasazení: matyas-cloud/cc-embed/suedtirol-slovnicek/index.html, Poppins ze sdílené složky ../fonts/.
      Formát: bílý infobox s linkou jako ostatní článkové prvky. Titulek, perex a 14 dvojjazyčných cedulí,
-       nahoře německý název, pod ním italský. Celý region (Südtirol / Alto Adige) je cedule v barvě partnera.
-       Desktop 3 sloupce (region přes dva), rám užší než 480 px 2 sloupce (region normální velikosti, 7 řad).
-       Statický prvek, bez interakce a bez animace.
+       nahoře německý název, pod ním italský. Celý region (Südtirol / Alto Adige) je velká cedule přes celou šířku
+       v barvě partnera, s vlaječkami u názvů – slouží jako klíč k ostatním cedulím.
+       Desktop 3 cedule v řadě, rám užší než 490 px 2 v řadě; poslední osamělá cedule je uprostřed.
+       Cedule mají lehký stín, na hover (jen zařízení s myší) se mírně zvednou a zvětší, barva se nemění. Jinak bez animace.
      Barva partnera: #50742F, tmavě zelená z loga Südtirol (suedtirol.info, logo-v2), jen jako plocha cedule.
      Data: tabulka „Tyrolský slovníček“ z draftu článku. Pořadí podle tabulky. Ladinská jména zatím ne.
        Texty a dvojice jsou v bloku D, z něj se skládá i shrnutí pro čtečky.
      Změny obsahu:
        2026-10-23  v1 podle schváleného náhledu varianty 1 Cedule (jizni-tyrolsko-slovnicek-2-varianty.png),
-                   oproti tabulce v draftu doplněno Graun / Curon (Mattův pokyn). -->
+                   oproti tabulce v draftu doplněno Graun / Curon (Mattův pokyn).
+       2026-10-23  v2 větší cedule regionu přes celou šířku s vlaječkami DE / IT, stín cedulí a zvednutí na hover.
+       2026-10-23  v3 perex podle Matta („…německý a italský. V ladinských údolích mnohdy i třetí, čistě místní.“),
+                   vlaječky ve společném sloupci, názvy zarovnané za nimi. -->
 <style>
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
@@ -117,9 +121,9 @@
 <style>
 .cc-tsl{
   --ink:#1d1d1f; --ink2:#4a4d52; --st:#50742F;
-  --sc:1; --hs:1;
+  --sc:1; --hs:1; --ease:cubic-bezier(.2,.7,.2,1);
   /* velikosti na desktopu, úzký rám je přepíše níž (jen proměnné, ať fit() funguje všude) */
-  --pad:26px 26px 28px; --t:22px; --l:14.5px; --b:16px; --s:15px; --rb:18px; --rs:17px; --mh:68px; --gap:10px;
+  --pad:26px 26px 28px; --t:22px; --l:14.5px; --b:16px; --s:15px; --rb:22px; --rs:20px; --mh:64px; --rmh:88px; --fw:26px; --gap:10px;
   box-sizing:border-box;height:100vh;display:flex;flex-direction:column;overflow:hidden;position:relative;
   padding:var(--pad);
   background:#fff;border:1px solid #e0e0e0;border-radius:var(--cc-radius);color:var(--ink);
@@ -131,27 +135,52 @@
 .cc-tsl .cc-tsl__l{flex:0 0 auto;margin:calc(6px*var(--sc)) 0 0;max-width:56ch;color:var(--ink2);font:400 max(14px, calc(var(--l)*var(--sc)))/1.55 var(--cc-display);}
 .cc-tsl.is-nolede .cc-tsl__l{display:none;}
 
-/* cedule: plocha s linkou kousek od okraje, jako tabule u silnice (ne tlačítko) */
-.cc-tsl__g{flex:1 1 auto;min-height:0;display:grid;margin:calc(20px*var(--sc)) 0 0;padding:0;list-style:none;
-  grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:minmax(min-content,1fr);gap:calc(var(--gap)*var(--sc));}
+/* mřížka: 6 stop, cedule přes dvě (3 v řadě), region přes celou šířku, poslední osamělá cedule doprostřed */
+.cc-tsl__g{position:relative;flex:1 1 auto;min-height:0;display:grid;margin:calc(20px*var(--sc)) 0 0;padding:0;list-style:none;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  grid-template-rows:minmax(min-content,1.3fr);grid-auto-rows:minmax(min-content,1fr);gap:calc(var(--gap)*var(--sc));}
 .cc-tsl.is-nolede .cc-tsl__g{margin-top:calc(12px*var(--sc));}
-.cc-tsl__c{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1px;min-width:0;min-height:calc(var(--mh)*var(--sc));margin:0;
-  padding:calc(12px*var(--sc)) 12px;border:1px solid #d6d6d6;border-radius:7px;background:#fff;text-align:center;
-  box-shadow:inset 0 0 0 3.5px #fff,inset 0 0 0 5.5px var(--ink);}
+
+/* cedule: plocha s linkou kousek od okraje, jako tabule u silnice; lehký stín, na hover se mírně zvedne */
+.cc-tsl__c{
+  --in:inset 0 0 0 3.5px #fff,inset 0 0 0 5.5px var(--ink);
+  --sh:0 1px 2px rgba(0,0,0,.06),0 5px 12px -7px rgba(0,0,0,.22);
+  --up:scale(1.04);
+  position:relative;grid-column:span 2;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1px;
+  min-width:0;min-height:calc(var(--mh)*var(--sc));margin:0;
+  padding:calc(12px*var(--sc)) 12px;border:1px solid #dedede;border-radius:7px;background:#fff;text-align:center;
+  box-shadow:var(--in),var(--sh);
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease);}
 .cc-tsl__c b{display:block;max-width:100%;font:600 max(13px, calc(var(--b)*var(--sc)*var(--hs)))/1.25 var(--cc-display);letter-spacing:-.005em;}
 .cc-tsl__c span{display:block;max-width:100%;font:400 max(13px, calc(var(--s)*var(--sc)*var(--hs)))/1.25 var(--cc-display);}
-.cc-tsl__c--reg{grid-column:span 2;border-color:var(--st);background:var(--st);color:#fff;
-  box-shadow:inset 0 0 0 3.5px var(--st),inset 0 0 0 5.5px rgba(255,255,255,.92);}
-.cc-tsl__c--reg b{font-size:max(14px, calc(var(--rb)*var(--sc)*var(--hs)));}
-.cc-tsl__c--reg span{font-size:max(13px, calc(var(--rs)*var(--sc)*var(--hs)));}
+.cc-tsl__c:last-child:nth-child(3n+2){grid-column:3 / span 2;}
 
-/* úzký rám: 2 sloupce, region jako ostatní cedule → 14 cedulí = 7 řad */
-@media (max-width:479px){
-  .cc-tsl{--pad:18px 16px; --t:20px; --l:14px; --b:15px; --s:14px; --rb:15px; --rs:14px; --mh:60px; --gap:8px;}
+/* region: velká zelená cedule s vlaječkami, slouží zároveň jako klíč (nahoře německy, dole italsky) */
+.cc-tsl__c--reg{
+  --in:inset 0 0 0 4px var(--st),inset 0 0 0 6px rgba(255,255,255,.92);
+  --up:scale(1.015);
+  grid-column:1 / -1;min-height:calc(var(--rmh)*var(--sc));gap:calc(3px*var(--sc));border-color:var(--st);background:var(--st);color:#fff;}
+.cc-tsl__k{display:grid;grid-template-columns:auto auto;justify-content:center;align-items:center;
+  column-gap:calc(10px*var(--sc));row-gap:calc(3px*var(--sc));}
+.cc-tsl__c--reg b,.cc-tsl__c--reg span{text-align:left;}
+.cc-tsl__c--reg b{font-size:max(15px, calc(var(--rb)*var(--sc)*var(--hs)));}
+.cc-tsl__c--reg span{font-size:max(14px, calc(var(--rs)*var(--sc)*var(--hs)));}
+.cc-tsl__f{display:block;width:calc(var(--fw)*var(--sc));height:calc(var(--fw)*var(--sc)*2/3);border-radius:2px;overflow:hidden;
+  box-shadow:0 0 0 1.5px rgba(255,255,255,.95);}
+.cc-tsl__f svg{display:block;width:100%;height:100%;}
+
+@media (hover:hover){
+  .cc-tsl__c:hover{z-index:1;transform:translateY(-2px) var(--up);
+    --sh:0 2px 4px rgba(0,0,0,.06),0 16px 26px -12px rgba(0,0,0,.32);}
+}
+
+/* úzký rám: 4 stopy, cedule po dvou, region přes celou šířku, poslední osamělá cedule doprostřed */
+@media (max-width:489px){
+  .cc-tsl{--pad:18px 16px; --t:20px; --l:14px; --b:15px; --s:14px; --rb:18px; --rs:16px; --mh:60px; --rmh:76px; --fw:21px; --gap:8px;}
   .cc-tsl .cc-tsl__l{margin-top:calc(5px*var(--sc));}
-  .cc-tsl__g{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:calc(16px*var(--sc));}
-  .cc-tsl__c{padding:calc(12px*var(--sc)) 12px;}
-  .cc-tsl__c--reg{grid-column:auto;}
+  .cc-tsl__g{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:calc(16px*var(--sc));}
+  .cc-tsl__c:last-child:nth-child(3n+2){grid-column:span 2;}
+  .cc-tsl__c:last-child:nth-child(2n){grid-column:2 / span 2;}
 }
 </style>
 
@@ -171,7 +200,7 @@
   /* ===== D: texty a dvojice (německy, italsky), první je celý region ===== */
   var D = {
     title: 'Tyrolský slovníček',
-    lede:  'Většina míst v Jižním Tyrolsku má dva oficiální názvy, německý a italský, a v ladinských údolích mnohdy i třetí.',
+    lede:  'Většina míst v Jižním Tyrolsku má dva oficiální názvy, německý a italský. V ladinských údolích mnohdy i třetí, čistě místní.',
     sr:    'Německé a italské názvy míst v Jižním Tyrolsku.',
     pairs: [
       ['Südtirol','Alto Adige'],
@@ -195,8 +224,15 @@
   var grid = root.querySelector('[data-g]');
   root.querySelector('[data-t]').textContent = D.title;
   root.querySelector('[data-l]').textContent = D.lede;
+  // vlaječky jen na velké ceduli regionu (klíč k ostatním), kreslené v SVG, protože emoji vlajky Windows nevykreslí
+  var FLAG = {
+    de: '<i class="cc-tsl__f"><svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="3" height=".667" fill="#000"/><rect y=".667" width="3" height=".667" fill="#dd0000"/><rect y="1.333" width="3" height=".667" fill="#ffce00"/></svg></i>',
+    it: '<i class="cc-tsl__f"><svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="1" height="2" fill="#009246"/><rect x="1" width="1" height="2" fill="#fff"/><rect x="2" width="1" height="2" fill="#ce2b37"/></svg></i>'
+  };
   grid.innerHTML = D.pairs.map(function(p, i){
-    return '<li class="cc-tsl__c' + (i === 0 ? ' cc-tsl__c--reg' : '') + '"><b lang="de">' + esc(p[0]) + '</b><span lang="it">' + esc(p[1]) + '</span></li>';
+    var reg = i === 0;
+    if(reg) return '<li class="cc-tsl__c cc-tsl__c--reg"><div class="cc-tsl__k">' + FLAG.de + '<b lang="de">' + esc(p[0]) + '</b>' + FLAG.it + '<span lang="it">' + esc(p[1]) + '</span></div></li>';
+    return '<li class="cc-tsl__c"><b lang="de">' + esc(p[0]) + '</b><span lang="it">' + esc(p[1]) + '</span></li>';
   }).join('');
   root.querySelector('[data-sr]').innerHTML = esc(D.sr) + ' ' + D.pairs.map(function(p){
     return '<span lang="de">' + esc(p[0]) + '</span>, italsky <span lang="it">' + esc(p[1]) + '</span>.';
@@ -216,16 +252,14 @@
     grid.querySelectorAll('b,span').forEach(function(e){ if(e.scrollWidth > e.clientWidth + 0.5 || lines(e) > 1) bad = true; });
     return bad;
   }
+  // měří se rozložení (offset), ne getBoundingClientRect: zvednutá cedule pod myší by hlásila falešné přetečení
   function over(){
-    var last = grid.lastElementChild;
-    if(!last) return false;
-    var gb = grid.getBoundingClientRect().bottom;
     var mx = 0;
     Array.prototype.forEach.call(grid.children, function(c){
-      mx = Math.max(mx, c.getBoundingClientRect().bottom);
+      mx = Math.max(mx, c.offsetTop + c.offsetHeight);
       if(c.scrollHeight > c.clientHeight + 1) mx = Infinity;      // text přetéká z cedule
     });
-    return mx > gb + 1;
+    return mx > grid.clientHeight + 1;
   }
   function fit(){
     var sc = 1;
