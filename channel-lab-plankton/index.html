@@ -15,6 +15,7 @@
   Pět scén: jeden člověk → vrstva, kde lék funguje → sto lidí → barva (jak rychle kdo lék odbourává) → pět skupin a test.
   Data: skupiny 2 / 26 / 40 / 27 / 5 ze 100 podle CPIC (gen CYP2C19, Evropané). Výšky světélek jsou zjednodušený model.
   Log: 23. 10. 2026 – první verze k nasazení (po scénáři v3.1).
+       23. 10. 2026 – ocásky z historie poloh (ne ze vzorkování času), kreslené po úsecích bez korálků; po zastavení scény vyhasnou, u jednoho člověka zůstane cik-cak; rozlišení plátna 2–3× DPR.
 -->
 <style>
 @font-face{font-family:Poppins;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+2190-21FF;}
@@ -158,7 +159,7 @@ function resize(){
   var W=stage.clientWidth,H=stage.clientHeight; if(!W||!H) return;
   var m=W<620; fm.W=W;fm.H=H;fm.m=m;
   fm.foc=m?H*.84:Math.min(H*1.19,W*1.02); fm.cx=m?W/2:W*.725; fm.cy=m?H*.39:H*.5;
-  fm.dpr=Math.min(2,window.devicePixelRatio||1);
+  fm.dpr=Math.min(3,Math.max(2,window.devicePixelRatio||1));
   cv.width=Math.round(W*fm.dpr);cv.height=Math.round(H*fm.dpr);
   root.classList.toggle('is-m',m);
   root.style.setProperty('--fs',(m?cl(W*.044,15,17):cl(H*.027,18,24))+'px');
@@ -166,8 +167,13 @@ function resize(){
   root.style.setProperty('--ls',(m?15:cl(H*.02,15,18))+'px');
 }
 
+var lastP=-1,stillSince=0;
 function draw(P,t){
   var W=fm.W,H=fm.H,cam=camera(P,fm),i,g;
+  // historie poloh pro ocásky: plní se jen, když se scéna hýbe; při skoku se maže
+  var jump=lastP>=0&&Math.abs(P-lastP)>.2, moving=lastP<0?false:Math.abs(P-lastP)>1e-6;
+  if(jump){for(i=0;i<PEOPLE.length;i++)PEOPLE[i].hst=null;}
+  if(moving)stillSince=t; var still=t-stillSince; lastP=P;
   ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cv.width,cv.height);ctx.setTransform(fm.dpr,0,0,fm.dpr,0,0);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
   // paprsky shora
   ctx.save();ctx.globalCompositeOperation='lighter';
@@ -207,18 +213,22 @@ function draw(P,t){
   ctx.globalCompositeOperation='lighter';
   var wave=function(a,b,xw){if(P<a||P>b)return 0;var ph=seg(P,a,b)*1.5-.25,d=((xw+1.9)/3.8-ph)/.16;return Math.exp(-d*d);};
   var hl4=sm(seg(P,3.3,3.8))*(1-sm(seg(P,4,4.3)));
-  var mv=cl(Math.sin(Math.PI*(P%1))*1.6);
   for(i=0;i<items.length;i++){var it=items[i],Pp=it.Pp,p=it.p,q=it.q,v=it.v;
     if(q.z<.2)continue;
     var cm=colorMix(Pp,P),c=mix3(NEU3,COL33[Pp.g],cm);
     var inb=Pp.U2>=BAND[0]&&Pp.U2<=BAND[1];
     var dm=inb?1-.55*hl4:1,blur=cl(Math.abs(q.z-focus)/2.4,0,1),al=v*dm*(Pp.g===2?1-.12*cm:1);
-    var long=Pp.hero&&P<2.3,K=long?64:10,dp=long?.018:.0055*mv,dt=long?0:.12;
-    if(dp>0){var prev=q;
-      for(var k=1;k<=K;k++){var pp=P-k*dp;if(pp<0)break;
-        var p2=posOf(Pp,pp,t-k*dt),q2=cam.pr(p2[0],p2[1],p2[2]),f=1-k/(K+1);
-        ctx.strokeStyle=rgb(c,(long?.5:.3)*f*al*(1-.5*blur));ctx.lineWidth=Math.max(.7,(long?.016:.011)*q.s*f);
-        ctx.beginPath();ctx.moveTo(prev.x,prev.y);ctx.lineTo(q2.x,q2.y);ctx.stroke();prev=q2;}}
+    var heroTr=Pp.hero&&P<2.05,hl=heroTr?110:14,hs=Pp.hst||(Pp.hst=[]);
+    if(moving&&(Pp.hT==null||t-Pp.hT>=1/31)){hs.push(p);Pp.hT=t;}
+    while(hs.length>hl)hs.shift();
+    var trA=heroTr?1:(1-sm(still/.8))*(Pp.hero?1-sm(seg(P,2.05,2.4))+sm(seg(P,2.5,2.9)):1);
+    if(hs.length>2&&trA>.01){ctx.globalCompositeOperation='source-over';ctx.lineCap='butt';ctx.lineJoin='round';
+      var n=hs.length,CH=Pp.hero?8:4,pts=[q],ok=true;
+      for(var k=n-1;k>=0;k--){var hp=hs[k],q2=cam.pr(hp[0],hp[1],hp[2]);if(q2.z<.2){ok=false;break;}pts.push(q2);}
+      if(ok)for(var a0=0;a0<pts.length-1;a0+=CH){var f=1-(a0+CH/2)/pts.length;
+        ctx.strokeStyle=rgb(c,(Pp.hero?.55:.42)*f*al*trA*(1-.5*blur));ctx.lineWidth=Math.max(.8,(Pp.hero?.018:.013)*q.s*(.3+.7*f));
+        ctx.beginPath();ctx.moveTo(pts[a0].x,pts[a0].y);for(var b0=a0+1;b0<=Math.min(pts.length-1,a0+CH);b0++)ctx.lineTo(pts[b0].x,pts[b0].y);ctx.stroke();}
+      ctx.globalCompositeOperation='lighter';}
     var sw=0;
     if(Pp.hero&&P<2.05){var dd=heroDay(P),fr=dd-Math.floor(dd);sw=Math.pow(Math.sin(Math.PI*cl(fr/.6)),2)*.8;}
     sw=Math.max(sw,wave(2.28,2.75,p[0])*.55);
