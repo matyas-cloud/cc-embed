@@ -99,11 +99,11 @@ var KA=.22;
 function Ch(d){var h=Math.max(0,d)*24,s=0;for(var n=0;n*24<=h;n++){var q=h-n*24;s+=KA/(KA-KE0)*(Math.exp(-KE0*q)-Math.exp(-KA*q));}return s*KE0*24;}
 
 var SCN=[
- 'Každé světélko je <em>jeden člověk</em>, který začal brát antidepresivum. Čím je výš, tím <em>víc léku má v krvi</em>. Každá dávka ho vynese nahoru, tělo ale účinnou látku neustále odbourává.',
+ 'Světelná tečka je <em>člověk</em>, který začal brát antidepresivum. Čím je výš, tím <em>víc léku má v krvi</em>. Každá dávka ho vynese nahoru, tělo ale účinnou látku neustále odbourává.',
  'Po pár dnech se hladina v krvi vyrovnává na určité úrovni. Lék zabírá jen ve <em>středním pásmu</em>. Pod ním nefunguje, nad ním přibývá nežádoucích účinků.',
  'Teď stejnou dávku dostane <em>100 lidí</em>. Během dvou týdnů se každý ustálí na <em>jiném množství</em> léku v krvi, přestože všichni berou totéž.',
- 'Nad světlou vrstvou hrozí nevolnost, úzkost nebo nespavost. Pod ní lék nezabere. Kdo kde skončí, je <em>dané geneticky</em>: podle toho, jak rychle jeho tělo lék odbourává.',
- 'Běžnou rychlostí odbourává lék jen <em>40 lidí ze 100</em>. <em>Genetický test</em> to umí říct dopředu a stačí ho udělat jednou. Channel Lab ho připravuje v laboratoři Genome X, výsledek srozumitelně vysvětlí aplikace Molecula a lékař dostane odborný report.'];
+ 'Nad světlou vrstvou hrozí nevolnost, úzkost nebo nespavost. Pod ní lék nezabere. Kdo kde skončí, je <em>dané geneticky</em> – podle toho, jak rychle tělo lék odbourává.',
+ 'Běžnou rychlostí odbourává lék jen <em>40 lidí ze 100</em>. <em>Genetický test</em> to umí říct dopředu a stačí ho udělat jednou. Channel Lab ho dělá v laboratoři Genome X a lékaři připravuje odborný report.'];
 var DUR=[3.0,2.6,5.0,1.4,4.2];
 var caps=SCN.map(function(t){var c=document.createElement('div');c.className='cc-plk__c';c.innerHTML='<p>'+t+'</p>';capsEl.appendChild(c);return c;});
 
