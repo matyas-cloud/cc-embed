@@ -3,12 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
 <title>Podnikatelská cesta – SIC</title>
 <!--
   CC × SIC · speciál „Každý byznys potřebuje pit-stop…“ · prvek „Jízda tratí“
   Místo: speciál, komponenta Scrollytelling (URL + Popisek + dráha 800 vh, šířka Široký).
-  Formát: scrollytelling pixel po pixelu. Progres posílá rodič (cc-scrolly), prvek ho dohání kriticky tlumenou pružinou (ω 8).
-  Bez rodiče (samostatně otevřený) si dělá vlastní scroll; když rodič mlčí 2,5 s, odemkne scroll uvnitř rámu.
+  Formát: scrollytelling pixel po pixelu. Progres posílá rodič (cc-scrolly), prvek ho dohání kriticky tlumenou pružinou
+    (ω 8, na dotyk 14, u cíle až 3× tužší, ať dosedne dřív, než rodič pustí pin).
+  Bez rodiče (samostatně otevřený) si dělá vlastní scroll. Uvnitř rámu nikdy (v článku by to byla past na scroll):
+    ready se opakuje ~12 s, když rodič mlčí i potom, ukáže cíl s odkazy.
+  Parametry: ?debug=1 window.__sic / __sicSet / __sicDrive, &fakeraf=1 snímky z časovače (test ve skrytém okně),
+    &blur=down záložní rozmazání bez ctx.filter (jako starší Safari), ?omega=, ?omegaTouch=, ?smooth=0.
   Data: infografika sic-podnikatelska-cesta.png, text speciálu, startupnow.cz a s-ic.cz (22. 10. 2026).
   Barvy: tyrkysová speciálu #00B2C3.
   Log:
@@ -19,6 +24,13 @@
   23. 10. 2026 – v3: bez startovních světel, mlhoviny a záře z předrozmazaných spritů (zmizel rastr přechodů),
                   pit-stop bez oddělovacích teček, štítek „SIC hradí až 75 % mentoringu“, v cíli Startup Now / Pro firmy / Pro výzkum,
                   kratší dojezd (pin se pustí hned po cíli), měkčí pružina ω 8, hvězdy a prach kreslené dávkově, DPR 1,5 u velkých rámů.
+  24. 10. 2026 – v4 (revize pohybu a nasazení): cíl dosedne i při rychlém scrollu (tužší pružina u konce, přesný krok pružiny),
+                  světlo už nestojí na zastávkách (zdvojený vzorek trati) a jede rovnoměrně (trať převzorkovaná podle délky),
+                  mimo obraz se stav srovná na scroll, odkazy pro čtečky v cc-sr navigaci; zastávky, cíl a mechanici bez skoků,
+                  zážeh kroužku u zastávky, hvězdy bez přepínání tečka/čárka, ohon bez korálků, do cíle nejdřív zoom a pak posun,
+                  kamera smootherstep, texty nastupují postupně; mlhoviny se pečou v nečinnosti, rozmazání i bez ctx.filter,
+                  rozlišení se při pomalých snímcích sníží, vinětace a stín pod textem na vlastních plátnech, noindex, záloha bez JS,
+                  při omezeném pohybu stojí pozadí; nezlomitelné mezery (V programu, 15 hodin, z praxe, 500 podnikatelů, a expertů, z laboratoře).
 -->
 <style>
 @font-face{font-family:Poppins;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2'),url(../cc-embed-fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+2190-21FF;}
@@ -38,9 +50,11 @@ html.is-own,html.is-own body{overflow:auto;height:auto}
 .is-own .sic__track{height:800vh}
 .sic__pin{position:relative;height:100%;overflow:hidden;background:#020607}
 .is-own .sic__pin{position:sticky;top:0;height:100vh;height:100svh}
-.sic__cv{position:absolute;inset:0;width:100%;height:100%;display:block}
-.sic__shade{position:absolute;left:-24px;right:-24px;bottom:-24px;height:calc(62% + 24px);filter:blur(8px);pointer-events:none;opacity:0;background:linear-gradient(180deg,rgba(2,6,7,0) 0%,rgba(2,6,7,.88) 30%,rgba(2,6,7,.97) 100%)}
+.sic__cv,.sic__vg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.sic__vg{pointer-events:none}
+.sic__shade{position:absolute;left:0;bottom:0;width:100%;height:62%;display:block;pointer-events:none;opacity:0;will-change:opacity}
 .sic__ov{position:absolute;opacity:0;visibility:hidden;will-change:opacity,transform;isolation:isolate}
+.sic__ov.is-on>*{will-change:opacity,transform}
 .sic:not(.is-m) .sic__ov[data-ov^=st]::before,.sic:not(.is-m) .sic__ov[data-ov=fin]::before,.sic__ov[data-ov=title]::before{content:"";position:absolute;inset:-70px -90px;z-index:-1;pointer-events:none;background:radial-gradient(closest-side,rgba(2,6,7,.82),rgba(2,6,7,.55) 55%,rgba(2,6,7,0));filter:blur(8px)}
 .sic__ov.is-on{visibility:visible}
 .sic__title{margin:0;font:600 var(--fs-title,42px)/1.12 Poppins,sans-serif;letter-spacing:-.02em;text-wrap:balance}
@@ -71,19 +85,21 @@ html.is-own,html.is-own body{overflow:auto;height:auto}
 .is-m .sic__btn{display:flex;width:100%}
 .cc-sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 </style>
+<noscript><style>.sic__ov[data-ov=fin]{opacity:1;visibility:visible;left:22px;right:22px;max-width:440px;top:50%;transform:translateY(-50%)}</style></noscript>
 </head>
 <body>
 <div class="sic" data-cc-sic>
  <div class="sic__track">
   <div class="sic__pin">
    <canvas class="sic__cv" aria-hidden="true"></canvas>
-   <div class="sic__shade"></div>
+   <canvas class="sic__vg" aria-hidden="true"></canvas>
+   <canvas class="sic__shade" aria-hidden="true"></canvas>
 
    <div class="sic__ov" data-ov="title"><h2 class="sic__title" aria-hidden="true">Podnikatelská cesta je závod na náročné trati</h2></div>
 
    <section class="sic__ov" data-ov="st1">
     <h3 class="sic__h" aria-hidden="true">Mám nápad</h3>
-    <p class="sic__p" aria-hidden="true">V programu SIC Start dostanete 15 hodin se zkušeným mentorem zdarma.</p>
+    <p class="sic__p" aria-hidden="true">V&nbsp;programu SIC Start dostanete 15&nbsp;hodin se zkušeným mentorem zdarma.</p>
     <ul class="sic__tags" aria-hidden="true"><li>Validace nápadu</li><li>Byznys model</li><li>Pitch deck</li></ul>
     <a class="sic__btn" href="https://www.startupnow.cz/programy/sic-start/" target="_blank" rel="noopener">Přihláška do SIC Start<i class="sic__ar"></i></a>
    </section>
@@ -95,7 +111,7 @@ html.is-own,html.is-own body{overflow:auto;height:auto}
    </section>
    <section class="sic__ov" data-ov="st3">
     <h3 class="sic__h" aria-hidden="true">Rostu a nestíhám</h3>
-    <p class="sic__p" aria-hidden="true">Když firma roste rychleji, než stíháte, pomůže mentor z praxe.</p>
+    <p class="sic__p" aria-hidden="true">Když firma roste rychleji, než stíháte, pomůže mentor z&nbsp;praxe.</p>
     <ul class="sic__tags" aria-hidden="true"><li>Digitalizace</li><li>Financování</li><li>Udržitelnost</li></ul>
     <a class="sic__btn" href="https://s-ic.cz/sluzby-pro-firmy/" target="_blank" rel="noopener">Služby pro firmy<i class="sic__ar"></i></a>
    </section>
@@ -106,8 +122,8 @@ html.is-own,html.is-own body{overflow:auto;height:auto}
     <a class="sic__btn" href="https://s-ic.cz/sluzby/strategicky-rozvoj/" target="_blank" rel="noopener">Rozvoj podnikání<i class="sic__ar"></i></a>
    </section>
 
-   <a class="sic__plate" data-team="0" href="https://s-ic.cz/inovacni-komunita/" target="_blank" rel="noopener"><b>Innoforum</b><span>Přes 500 podnikatelů, investorů a expertů<i class="sic__ar"></i></span></a>
-   <a class="sic__plate" data-team="1" href="https://s-ic.cz/sluzby-pro-vyzkumne-organizace/" target="_blank" rel="noopener"><b>Věda a výzkum</b><span>Objevy z laboratoře až na trh<i class="sic__ar"></i></span></a>
+   <a class="sic__plate" data-team="0" href="https://s-ic.cz/inovacni-komunita/" target="_blank" rel="noopener"><b>Innoforum</b><span>Přes 500&nbsp;podnikatelů, investorů a&nbsp;expertů<i class="sic__ar"></i></span></a>
+   <a class="sic__plate" data-team="1" href="https://s-ic.cz/sluzby-pro-vyzkumne-organizace/" target="_blank" rel="noopener"><b>Věda a výzkum</b><span>Objevy z&nbsp;laboratoře až na trh<i class="sic__ar"></i></span></a>
 
    <section class="sic__ov" data-ov="fin">
     <h3 class="sic__h" style="--fs-h:var(--fs-fin,40px);margin-bottom:24px" aria-hidden="true">Kde zastavíte vy?</h3>
@@ -117,6 +133,16 @@ html.is-own,html.is-own body{overflow:auto;height:auto}
    </section>
 
    <p class="cc-sr">Podnikatelská cesta má čtyři zastávky. Mám nápad, program SIC Start s 15 hodinami mentora zdarma. Rozjíždím startup, SIC Akcelerátor bez podílu ve firmě. Rostu a nestíhám, mentoring k digitalizaci, financování a udržitelnosti. Rozvíjím nebo transformuji firmu, Rozvoj podnikání, u kterého SIC hradí až 75 % nákladů na mentoring. Cestou je pit-stop s komunitou Innoforum a službami pro vědu a výzkum.</p>
+   <!-- odkazy pro čtečky: vizuální odkazy existují jen u právě viditelné zastávky; tabindex -1, ať klávesnice neskáče na neviditelné -->
+   <nav class="cc-sr" aria-label="Programy SIC">
+    <a href="https://www.startupnow.cz/programy/sic-start/" target="_blank" rel="noopener" tabindex="-1">Přihláška do SIC Start</a>
+    <a href="https://www.startupnow.cz/programy/sic-akcelerator/" target="_blank" rel="noopener" tabindex="-1">Chci do Akcelerátoru</a>
+    <a href="https://s-ic.cz/sluzby-pro-firmy/" target="_blank" rel="noopener" tabindex="-1">Služby pro firmy</a>
+    <a href="https://s-ic.cz/sluzby/strategicky-rozvoj/" target="_blank" rel="noopener" tabindex="-1">Rozvoj podnikání</a>
+    <a href="https://s-ic.cz/inovacni-komunita/" target="_blank" rel="noopener" tabindex="-1">Innoforum</a>
+    <a href="https://s-ic.cz/sluzby-pro-vyzkumne-organizace/" target="_blank" rel="noopener" tabindex="-1">Věda a výzkum</a>
+    <a href="https://www.startupnow.cz/" target="_blank" rel="noopener" tabindex="-1">Startup Now</a>
+   </nav>
   </div>
  </div>
 </div>
@@ -124,15 +150,18 @@ html.is-own,html.is-own body{overflow:auto;height:auto}
 <script>
 (function(){
 'use strict';
+var T0=performance.now(),INIT=0;
 var root=document.querySelector('[data-cc-sic]');
 if(!root||root.dataset.ccInit)return;root.dataset.ccInit='1';
-var pin=root.querySelector('.sic__pin'),cv=root.querySelector('.sic__cv'),ctx=cv.getContext('2d'),shade=root.querySelector('.sic__shade');
+var pin=root.querySelector('.sic__pin'),cv=root.querySelector('.sic__cv'),ctx=cv.getContext('2d'),shade=root.querySelector('.sic__shade'),shx=shade.getContext('2d');
+var vg=root.querySelector('.sic__vg'),vgx=vg.getContext('2d');
 var OV={};root.querySelectorAll('[data-ov]').forEach(function(e){OV[e.dataset.ov]=e});
 var PLATES=[].slice.call(root.querySelectorAll('.sic__plate'));
-var Q=new URLSearchParams(location.search);
+var Q=new URLSearchParams(location.search),DEBUG=Q.has('debug');
 var demo=(window.parent===window)||Q.has('demo');
-var reduce=false;try{reduce=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
+var reduce=false,mqR=null;try{mqR=matchMedia('(prefers-reduced-motion: reduce)');reduce=mqR.matches}catch(e){}
 var OMEGA=Q.get('smooth')==='0'?0:+(Q.get('omega')||8);   // tuhost pružiny (kriticky tlumená: náběh i doběh, bez přestřelu)
+var OM_TOUCH=OMEGA?Math.max(OMEGA,+(Q.get('omegaTouch')||14)):0,touch=false;   // na dotyk se obsah drží prstu víc (zpoždění 2/ω)
 
 /* ================= CFG: časová osa (podíl dráhy) ================= */
 // okna, kdy u místa stojí kamera a je vidět text; světlo jede dál, jen zpomalí
@@ -145,11 +174,17 @@ var LAUNCH=0,TITLE_END=STAY[0][1];
 /* ================= svět (x doprava, z dolů) ================= */
 var TRACK=[[0,0],[58,110],[-58,220],[58,330],[-58,440],[0,548]];
 var FIN={z:548,w:120,rows:3,q:8};
-function sampleTrack(){var P=TRACK,out=[],k=1.12;
+// rovnoměrně podle délky oblouku: rychlost světla pak určuje jen HX/HY, ne parametrizace Bézierů (ta kolísala 2×)
+function byLength(pts,n){var acc=[0],i,j=1,out=[];for(i=1;i<pts.length;i++)acc.push(acc[i-1]+Math.hypot(pts[i].x-pts[i-1].x,pts[i].z-pts[i-1].z));
+  var len=acc[acc.length-1];for(i=0;i<n;i++){var s=len*i/(n-1);while(j<pts.length-1&&acc[j]<s)j++;var a=pts[j-1],b=pts[j],t=(s-acc[j-1])/((acc[j]-acc[j-1])||1);out.push({x:a.x+(b.x-a.x)*t,z:a.z+(b.z-a.z)*t})}
+  return out}
+function sampleTrack(){var P=TRACK,out=[],k=1.12,N=480;
   for(var i=0;i<P.length-1;i++){var p0=P[i-1]||[P[0][0],P[0][1]-60],p1=P[i],p2=P[i+1],p3=P[i+2]||[p2[0],p2[1]+60];
     var c1=[p1[0]+(p2[0]-p0[0])/6*k,p1[1]+(p2[1]-p0[1])/6*k],c2=[p2[0]-(p3[0]-p1[0])/6*k,p2[1]-(p3[1]-p1[1])/6*k];
-    for(var t=0;t<1;t+=1/140){var u=1-t;out.push({x:u*u*u*p1[0]+3*u*u*t*c1[0]+3*u*t*t*c2[0]+t*t*t*p2[0],z:u*u*u*p1[1]+3*u*u*t*c1[1]+3*u*t*t*c2[1]+t*t*t*p2[1]})}}
+    // celočíselná smyčka: sčítání t+=1/140 dávalo 141. vzorek = zdvojený bod na každé zastávce (světlo tam stálo)
+    for(var si=0;si<N;si++){var t=si/N,u=1-t;out.push({x:u*u*u*p1[0]+3*u*u*t*c1[0]+3*u*t*t*c2[0]+t*t*t*p2[0],z:u*u*u*p1[1]+3*u*u*t*c1[1]+3*u*t*t*c2[1]+t*t*t*p2[1]})}}
   out.push({x:P[P.length-1][0],z:P[P.length-1][1]});
+  out=byLength(out,701);
   for(var j=0;j<out.length;j++){var a=out[Math.max(0,j-1)],b=out[Math.min(out.length-1,j+1)],tx=b.x-a.x,tz=b.z-a.z,l=Math.hypot(tx,tz)||1;out[j].tx=tx/l;out[j].tz=tz/l;out[j].nx=-tz/l;out[j].nz=tx/l}
   return out}
 var TS=sampleTrack(),NT=TS.length;
@@ -181,6 +216,8 @@ var TEAMS=[{side:-1,crew:crowd(11,15)},{side:1,crew:crowd(23,15)}];
 /* ================= vesmír ================= */
 var R=rng(7),i;
 var STARS=[];for(i=0;i<1600;i++){var sa=R();STARS.push({x:(R()-.5)*2600,z:-900+R()*3000,r:.35+R()*R()*1.2,b:Math.min(3,Math.floor(sa*4))})}
+// dávky hvězd: jas × velikost (tři tloušťky čárky), ať se každá dávka kreslí jedním tahem
+var STW=[1.1,1.8,2.7],SB=[];for(i=0;i<12;i++)SB.push([]);STARS.forEach(function(s){SB[s.b*3+(s.r<.6?0:s.r<1?1:2)].push(s)});
 var GLINT=[];for(i=0;i<60;i++)GLINT.push({x:(R()-.5)*1800,z:-600+R()*2200,r:.9+R()*1.3,a:.5+R()*.4});
 var DUST=[];for(i=0;i<240;i++)DUST.push({x:(R()-.5)*1500,z:-500+R()*1800,r:.7+R()*1.1,b:Math.min(2,Math.floor(R()*3))});
 var BOKEH=[];for(i=0;i<26;i++)BOKEH.push({x:(R()-.5)*900,z:-300+R()*1300,r:6+R()*16,a:.08+R()*.12});
@@ -188,7 +225,17 @@ var TL='0,178,195',TLd='0,124,138',TLh='150,226,232',TLc='214,246,248';
 function rgba(c,a){return'rgba('+c+','+(a<0?0:a>1?1:a).toFixed(3)+')'}
 function sprite(w,h,fn){var c=document.createElement('canvas');c.width=w;c.height=h;fn(c.getContext('2d'),w,h);return c}
 // rozmazání spritu smaže rastr, kterým prohlížeč tónuje jemné přechody (byl vidět jako mřížka)
-function blurred(c,px){var o=document.createElement('canvas');o.width=c.width;o.height=c.height;var g=o.getContext('2d');g.filter='blur('+px+'px)';g.drawImage(c,0,0);g.filter='none';return o}
+// ctx.filter starší Safari tiše ignoruje – pak zmenšit a zvětšit (dolní propust smaže rastr stejně)
+// (zkušební plátno softwarové – willReadFrequently –, ať čtení pixelu nečeká na frontu GPU)
+var CF=Q.get('blur')!=='down'&&(function(){try{var c=document.createElement('canvas');c.width=c.height=9;var g=c.getContext('2d',{willReadFrequently:true});g.filter='blur(2px)';g.fillStyle='#fff';g.fillRect(4,4,1,1);return g.getImageData(2,4,1,1).data[3]>0}catch(e){return false}})();
+function blurred(c,px){var o=document.createElement('canvas');o.width=c.width;o.height=c.height;var g=o.getContext('2d');
+  if(CF){g.filter='blur('+px+'px)';g.drawImage(c,0,0);g.filter='none';return o}
+  // po polovinách dolů a zase nahoru: hladší než jeden velký skok (ten nechával schody)
+  var n=Math.max(1,Math.round(Math.log(px*1.6)/Math.LN2))+(c.width>=256?1:0),s=c,w=c.width,h=c.height,i,sz=[];
+  function half(W2,H2){var t=document.createElement('canvas');t.width=W2;t.height=H2;var tg=t.getContext('2d');tg.imageSmoothingQuality='high';tg.drawImage(s,0,0,W2,H2);s=t}
+  for(i=0;i<n;i++){sz.push([w,h]);w=Math.max(1,w>>1);h=Math.max(1,h>>1);half(w,h)}
+  for(i=n-1;i>0;i--)half(sz[i][0],sz[i][1]);
+  g.imageSmoothingQuality='high';g.drawImage(s,0,0,o.width,o.height);return o}
 function radial(stops){return blurred(sprite(128,128,function(g){var r=g.createRadialGradient(64,64,0,64,64,62);stops.forEach(function(s){r.addColorStop(s[0],s[1])});g.fillStyle=r;g.fillRect(0,0,128,128)}),2)}
 var SPR_GLOW,SPR_SOFT,SPR_BOKEH;var SPR_GLINT=sprite(64,64,function(g,s){var r=g.createRadialGradient(32,32,0,32,32,32);r.addColorStop(0,'rgba('+TLc+',1)');r.addColorStop(.22,'rgba('+TL+',.3)');r.addColorStop(1,'rgba('+TL+',0)');g.fillStyle=r;g.fillRect(0,0,64,64)});
 // mlhoviny: z desítek měkkých oblaků, s tmavými prachovými pruhy a světlými uzly
@@ -207,16 +254,32 @@ SPR_SOFT=radial([[0,'rgba('+TL+',1)'],[1,'rgba('+TL+',0)']]);
 SPR_BOKEH=radial([[0,'rgba('+TL+',1)'],[.5,'rgba('+TL+',.5)'],[1,'rgba('+TL+',0)']]);
 SPR_GLINT=blurred(SPR_GLINT,1);
 var NC=['0,178,195','0,124,138','0,92,112','0,146,164'];
-var NEB=[ // [x, z, šířka ve světě, hloubka f, sprite]
-  [-520,140,1400,.15,nebula(3,NC)],[560,600,1600,.15,nebula(5,NC)],[-480,980,1400,.15,nebula(9,NC)],
-  [420,-40,760,.34,nebula(13,NC)],[-400,460,820,.34,nebula(17,NC)],[400,820,760,.34,nebula(21,NC)]];
+var NEB=[ // [x, z, šířka ve světě, hloubka f, seed, sprite, čas upečení]
+  [-520,140,1400,.15,3],[560,600,1600,.15,5],[-480,980,1400,.15,9],
+  [420,-40,760,.34,13],[-400,460,820,.34,17],[400,820,760,.34,21]];
+// mlhoviny se pečou po jedné v nečinnosti: start prvku nezdrží stránku (na Androidu iframe často sdílí hlavní vlákno s cc.cz)
+function idle(fn){if(window.requestIdleCallback)requestIdleCallback(fn,{timeout:400});else setTimeout(fn,40)}
+function bakeNext(){for(var j=0;j<NEB.length;j++)if(!NEB[j][5]){NEB[j][5]=nebula(NEB[j][4],NC);NEB[j][6]=performance.now();break}
+  if(j<NEB.length-1)idle(bakeNext);draw(true)}
+function nebFade(n,now){return reduce?1:Math.min(1,(now-n[6])/600)}   // dopečená mlhovina se jednou prolne, neskočí
+function nebFading(now){for(var j=0;j<NEB.length;j++)if(NEB[j][5]&&nebFade(NEB[j],now)<1)return true;return false}
+idle(bakeNext);
 
 /* ================= rozložení podle rámu ================= */
 var W=0,H=0,DPR=1,M=false,L={};
+var QL=[2,1.5,1.25,1],qi=0,slow=0,warm=0;   // strop rozlišení plátna; při pomalých snímcích se sníží o stupeň
 function sstep(t){t=t<0?0:t>1?1:t;return t*t*(3-2*t)}
+function sstep2(t){t=t<0?0:t>1?1:t;return t*t*t*(t*(t*6-15)+10)}   // kamera: spojité i zrychlení, bez cuknutí na začátku a konci přesunu
+// vinětace a stín pod textem: statická plátna ve čtvrtinovém rozlišení, roztáhne je prohlížeč (žádné kreslení za snímek, žádný CSS filtr)
+function paintLayers(){var w=Math.max(8,Math.round(W/4)),h=Math.max(8,Math.round(H/4));
+  var v=blurred(sprite(w,h,function(g){var r=g.createRadialGradient(w/2,h/2,Math.min(w,h)*.32,w/2,h/2,Math.max(w,h)*.75);r.addColorStop(0,'rgba(0,0,0,0)');r.addColorStop(1,'rgba(0,0,0,.55)');g.fillStyle=r;g.fillRect(0,0,w,h)}),2);
+  vg.width=w;vg.height=h;vgx.drawImage(v,0,0);
+  var sh=Math.max(8,Math.round(H*.62/4)),gr;shade.width=4;shade.height=sh;gr=shx.createLinearGradient(0,0,0,sh);
+  gr.addColorStop(0,'rgba(2,6,7,0)');gr.addColorStop(.3,'rgba(2,6,7,.88)');gr.addColorStop(1,'rgba(2,6,7,.97)');shx.fillStyle=gr;shx.fillRect(0,0,4,sh)}
 function layout(){
   W=pin.clientWidth;H=pin.clientHeight;if(!W||!H)return;
-  DPR=Math.min(window.devicePixelRatio||1,W*H>520000?1.5:2);cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
+  DPR=Math.min(window.devicePixelRatio||1,W*H>520000?1.5:2,QL[qi]);cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
+  paintLayers();for(var ok in OV)if(OV[ok].__c)OV[ok].__c.v=-1;
   M=W<620;root.classList.toggle('is-m',M);
   var pad=M?22:Math.max(28,Math.min(72,W*.06)),pw=Math.min(440,W*.44);
   root.style.setProperty('--fs-title',(M?Math.max(24,Math.min(30,W*.075)):Math.max(30,Math.min(44,W*.04)))+'px');
@@ -246,9 +309,10 @@ function layout(){
 function base(p){ // kotva, zoom a „základní“ cíl kamery: stojí v oknech, mezi nimi se plynule přesouvá
   var k,S=L.st;for(k=0;k<STAY.length;k++)if(p<=STAY[k][1])break;if(k>=STAY.length)k=STAY.length-1;
   if(p>=STAY[k][0])return{x:S[k].aim[0],z:S[k].aim[1],ax:S[k].an[0],ay:S[k].an[1],Z:S[k].z,k:k,e:1,from:k};
-  var a=k-1,e=sstep((p-STAY[a][1])/(STAY[k][0]-STAY[a][1]));
+  var a=k-1,u=(p-STAY[a][1])/(STAY[k][0]-STAY[a][1]),e=sstep2(u),ez=e;
+  if(k===6){ez=sstep2(u*1.4);e=sstep2((u-.15)/.85)}   // do cíle: nejdřív odjezd (zoom vede), pak dosednutí (posun dobíhá)
   return{x:S[a].aim[0]+(S[k].aim[0]-S[a].aim[0])*e,z:S[a].aim[1]+(S[k].aim[1]-S[a].aim[1])*e,ax:S[a].an[0]+(S[k].an[0]-S[a].an[0])*e,ay:S[a].an[1]+(S[k].an[1]-S[a].an[1])*e,
-    Z:Math.exp(Math.log(S[a].z)+(Math.log(S[k].z)-Math.log(S[a].z))*e),k:-1,e:e,from:a,to:k}}
+    Z:Math.exp(Math.log(S[a].z)+(Math.log(S[k].z)-Math.log(S[a].z))*ez),k:-1,e:e,from:a,to:k}}
 function camAt(p){var b=base(p),hi=headIdx(p),wf;
   if(hi<0)return b;var h=headAt(hi);
   // kamera jde zpola za světlem; v cíli se pustí a ukáže celou trať
@@ -272,17 +336,21 @@ function onScr(q,m){return q.x>-m&&q.x<W+m&&q.y>-m&&q.y<H+m}
 function path(a0,a1,o){ctx.beginPath();var first=true;for(var i=a0;i<=a1;i++){var s=TS[i],q=P(s.x+s.nx*o,s.z+s.nz*o);if(first){ctx.moveTo(q.x,q.y);first=false}else ctx.lineTo(q.x,q.y)}}
 function visRange(){var lo=NT,hi=-1,m=40*cam.Z+40;for(var i=0;i<NT;i+=4){var q=P(TS[i].x,TS[i].z);if(onScr(q,m)){if(i<lo)lo=i;if(i>hi)hi=i}}return lo>hi?null:[Math.max(0,lo-6),Math.min(NT-1,hi+6)]}
 function drawSpace(st){
-  var c0=cam,q,r,g;cam={x:c0.x,z:c0.z,ax:c0.ax,ay:c0.ay,Z:Math.max(c0.Z,1.25)};var Z=cam.Z;   // vzdálené vrstvy se při oddálení nezhušťují
+  var c0=cam,q,r,g,now=performance.now(),S0=L.st[0];
+  // vzdálené vrstvy se při oddálení nezhušťují; při omezeném pohybu stojí pozadí na úvodním záběru
+  cam=reduce?{x:0,z:0,ax:S0.an[0],ay:S0.an[1],Z:Math.max(S0.z,1.25)}:{x:c0.x,z:c0.z,ax:c0.ax,ay:c0.ay,Z:Math.max(c0.Z,1.25)};var Z=cam.Z;
   ctx.fillStyle='#020607';ctx.fillRect(0,0,W,H);
   ctx.globalCompositeOperation='lighter';
-  NEB.forEach(function(n){q=P(n[0],n[1],n[3]);var w=n[2]*Z*n[3]*1.4;if(!onScr(q,w/2))return;ctx.globalAlpha=(n[3]<.2?.9:.7)/NK;ctx.drawImage(n[4],q.x-w/2,q.y-w/2,w,w)});ctx.globalAlpha=1;
-  // hvězdy (dávkově po jasu): při rychlém pohybu kamery se protáhnou ve směru jízdy
-  var vx=st.cv.x,vy=st.cv.y,sp=Math.hypot(vx,vy),streak=Math.min(46,sp*.28*.016),b,s;
-  for(b=0;b<4;b++){ctx.beginPath();var any=false;
-    for(var j=0;j<STARS.length;j++){s=STARS[j];if(s.b!==b)continue;q=P(s.x,s.z,.28);if(!onScr(q,2))continue;any=true;
-      if(streak>1.6){var L2=streak*(.5+s.r);ctx.moveTo(q.x,q.y);ctx.lineTo(q.x-vx/sp*L2,q.y-vy/sp*L2)}else ctx.rect(q.x-s.r,q.y-s.r,s.r*2,s.r*2)}
-    if(!any)continue;var al=(.3+.55*(b+.5)/4)*.8;
-    if(streak>1.6){ctx.strokeStyle=rgba('222,240,245',al);ctx.lineWidth=1.1;ctx.stroke()}else{ctx.fillStyle=rgba('222,240,245',al);ctx.fill()}}
+  NEB.forEach(function(n){if(!n[5])return;q=P(n[0],n[1],n[3]);var w=n[2]*Z*n[3]*1.4;if(!onScr(q,w/2))return;ctx.globalAlpha=(n[3]<.2?.9:.7)/NK*nebFade(n,now);ctx.drawImage(n[5],q.x-w/2,q.y-w/2,w,w)});ctx.globalAlpha=1;
+  // hvězdy: vždy krátká čárka ve směru jízdy (v klidu tečka), takže se nepřepíná tečka ↔ čárka;
+  // delší stopa = slabší (napůl zachovaný jas), jinak se při rychlém pohybu rozsvítí celé nebe
+  var vx=reduce?0:st.cv.x,vy=reduce?0:st.cv.y,sp=Math.hypot(vx,vy),streak=Math.min(46,sp*.28*.016),ux=sp>1e-3?vx/sp:0,uy=sp>1e-3?vy/sp:1,b,s;
+  ctx.lineCap='round';
+  for(b=0;b<12;b++){var B=SB[b];if(!B.length)continue;ctx.beginPath();var any=false,lw=STW[b%3];
+    for(var j=0;j<B.length;j++){s=B[j];q=P(s.x,s.z,.28);if(!onScr(q,3+streak))continue;any=true;
+      var L2=.2+streak*(.5+s.r);ctx.moveTo(q.x,q.y);ctx.lineTo(q.x-ux*L2,q.y-uy*L2)}
+    if(!any)continue;var al=(.3+.55*((b/3|0)+.5)/4)*.8*Math.sqrt(lw/(lw+streak*1.1));
+    ctx.strokeStyle=rgba('222,240,245',al);ctx.lineWidth=lw;ctx.stroke()}
   GLINT.forEach(function(s){q=P(s.x,s.z,.42);r=s.r*5;if(!onScr(q,r))return;ctx.globalAlpha=s.a;ctx.drawImage(SPR_GLINT,q.x-r,q.y-r,2*r,2*r)});ctx.globalAlpha=1;
   for(b=0;b<3;b++){ctx.beginPath();DUST.forEach(function(s){if(s.b!==b)return;q=P(s.x,s.z,.62);if(!onScr(q,3))return;ctx.moveTo(q.x+s.r,q.y);ctx.arc(q.x,q.y,s.r,0,7)});ctx.fillStyle=rgba(TL,.18+.3*(b+.5)/3);ctx.fill()}
   ctx.globalCompositeOperation='source-over';cam=c0}
@@ -295,18 +363,19 @@ function drawTrack(litI,vr){
     strands.forEach(function(S){path(b0,b1,S[0]);ctx.strokeStyle=rgba(TL,S[2]*k);ctx.lineWidth=Math.max(.5,S[1]*Z);ctx.stroke()});
     path(b0,b1,0);ctx.strokeStyle=rgba(TL,k);ctx.lineWidth=Math.max(1,2.1*Z);ctx.stroke();
     ctx.strokeStyle=rgba(TLc,.8*k);ctx.lineWidth=Math.max(.6,.55*Z);ctx.stroke()})}
-function drawFinish(on){var z=FIN.z,w=FIN.w,rows=FIN.rows,q=FIN.q,cols=Math.round(w/q),D=rows*q,Z=cam.Z;
+function drawFinish(on){var z=FIN.z,w=FIN.w,rows=FIN.rows,q=FIN.q,cols=Math.round(w/q),D=rows*q,Z=cam.Z;   // on 0–1: cíl se rozsvěcuje, jak se blíží světlo
   var c=P(0,z+D/2);if(!onScr(c,w*Z))return;
-  var r=w*.75*Z;ctx.globalCompositeOperation='lighter';ctx.save();ctx.translate(c.x,c.y);ctx.scale(1,.42);ctx.globalAlpha=on?.22:.07;ctx.drawImage(SPR_SOFT,-r,-r,2*r,2*r);ctx.restore();ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+  var r=w*.75*Z;ctx.globalCompositeOperation='lighter';ctx.save();ctx.translate(c.x,c.y);ctx.scale(1,.42);ctx.globalAlpha=.07+.15*on;ctx.drawImage(SPR_SOFT,-r,-r,2*r,2*r);ctx.restore();ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
   for(var ro=0;ro<rows;ro++)for(var k=0;k<cols;k++){var x0=-w/2+k*q,z0=z+ro*q,a=P(x0+.5,z0+.5),b=P(x0+q-.5,z0+q-.5),xm=x0+q/2;
-    var edge=Math.max(0,1-Math.pow(Math.abs(xm/(w/2)),2.4)),spot=.6+.4*Math.exp(-(xm*xm)/1800),A=edge*(on?1:.45);
+    var edge=Math.max(0,1-Math.pow(Math.abs(xm/(w/2)),2.4)),spot=.6+.4*Math.exp(-(xm*xm)/1800),A=edge*(.45+.55*on);
     if((ro+k)%2===0){ctx.fillStyle=rgba(TL,.92*A*spot);ctx.fillRect(a.x,a.y,b.x-a.x,b.y-a.y);
       ctx.strokeStyle=rgba(TLc,.7*A*spot);ctx.lineWidth=Math.max(.5,.18*Z);ctx.beginPath();ctx.moveTo(a.x,b.y);ctx.lineTo(a.x,a.y);ctx.lineTo(b.x,a.y);ctx.stroke()}
     else{ctx.fillStyle='rgba(4,20,23,'+(.92*edge).toFixed(3)+')';ctx.fillRect(a.x,a.y,b.x-a.x,b.y-a.y)}}
-  [z-.6,z+D+.6].forEach(function(zz){var a=P(-w/2,zz),b=P(w/2,zz),g2=ctx.createLinearGradient(a.x,0,b.x,0);g2.addColorStop(0,rgba(TL,0));g2.addColorStop(.5,rgba(TLh,on?.9:.3));g2.addColorStop(1,rgba(TL,0));ctx.strokeStyle=g2;ctx.lineWidth=Math.max(.7,.32*Z);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()})}
+  [z-.6,z+D+.6].forEach(function(zz){var a=P(-w/2,zz),b=P(w/2,zz),g2=ctx.createLinearGradient(a.x,0,b.x,0);g2.addColorStop(0,rgba(TL,0));g2.addColorStop(.5,rgba(TLh,.3+.6*on));g2.addColorStop(1,rgba(TL,0));ctx.strokeStyle=g2;ctx.lineWidth=Math.max(.7,.32*Z);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()})}
 function person(x,y,s,lit,kind,dim){
   ctx.save();ctx.translate(x,y);var L2=lit*dim;
-  ctx.fillStyle=L2>.45?rgba(TL,.35+.6*L2):rgba(TLd,.5+.3*dim);ctx.strokeStyle=rgba(TLc,.3+.6*L2);ctx.lineWidth=Math.max(.7,s*.09);
+  var kk=sstep((L2-.3)/.3);   // tmavá → rozsvícená barva prolnutím (dřív skok na L2 .45)
+  ctx.fillStyle=rgba('0,'+Math.round(124+54*kk)+','+Math.round(138+57*kk),(.5+.3*dim)*(1-kk)+(.35+.6*L2)*kk);ctx.strokeStyle=rgba(TLc,.3+.6*L2);ctx.lineWidth=Math.max(.7,s*.09);
   var bh=kind==='kneel'?.5:.95;if(kind==='kneel')ctx.translate(0,s*.42);
   ctx.beginPath();ctx.moveTo(-s*.62,s*bh);ctx.lineTo(-s*.62,s*.05);ctx.quadraticCurveTo(-s*.62,-s*.32,-s*.2,-s*.32);ctx.lineTo(s*.2,-s*.32);ctx.quadraticCurveTo(s*.62,-s*.32,s*.62,s*.05);ctx.lineTo(s*.62,s*bh);ctx.closePath();ctx.fill();ctx.stroke();
   ctx.beginPath();ctx.arc(0,-s*.68,s*.3,0,7);ctx.fill();ctx.stroke();ctx.restore();
@@ -321,45 +390,51 @@ function drawPit(on){var Z=cam.Z,c=P(PIT.x,PIT.zz);if(!onScr(c,90*Z+140))return 
     teamBox[ti]={x:mx/pts.length,y:my/pts.length,x0:x0,x1:x1,y0:y0,y1:y1,s:s0}});
   return true}
 function glow(spr,x,y,r,a){if(a<=0)return;ctx.globalAlpha=Math.min(1,a);ctx.drawImage(spr,x-r,y-r,2*r,2*r);ctx.globalAlpha=1}
-function drawStops(st){[1,2,3,5].forEach(function(k){var T=L.st[k].aim,q=P(T[0],T[1]),Z=cam.Z;if(!onScr(q,60*Z))return;var lit=IDX[k]<=st.head,near=st.at===k?1:0;
-  var rr=(9+3*near)*Z;ctx.globalCompositeOperation='lighter';glow(SPR_SOFT,q.x,q.y,rr*2.4,near?.4:lit?.24:.1);ctx.globalCompositeOperation='source-over';
-  ctx.strokeStyle=rgba(TLh,near?.9:lit?.5:.22);ctx.lineWidth=near?1.6:1.1;ctx.beginPath();ctx.arc(q.x,q.y,rr,0,7);ctx.stroke();
-  ctx.fillStyle=rgba(TLc,lit?.9:.4);ctx.beginPath();ctx.arc(q.x,q.y,Math.max(1.8,1.1*Z),0,7);ctx.fill()})}
+function drawStops(st){[1,2,3,5].forEach(function(k){var T=L.st[k].aim,q=P(T[0],T[1]),Z=cam.Z;if(!onScr(q,60*Z))return;
+  // vše spojitě: blízkost podle okna zastávky, rozsvícení podle vzdálenosti světla (dřív skok v jednom snímku)
+  var ig=st.head-IDX[k],lit=ig<=-2?0:ig>=2?1:(ig+2)/4,near=vis(k,st.p),ga=.1+.14*lit,ra=.22+.28*lit;ga+=(.4-ga)*near;ra+=(.9-ra)*near;
+  var rr=(9+3*near)*Z;ctx.globalCompositeOperation='lighter';glow(SPR_SOFT,q.x,q.y,rr*2.4,ga);
+  // zážeh: když světlo projede zastávkou, rozběhne se od ní kroužek (podle polohy světla, takže i pozpátku)
+  if(ig>0&&ig<12){var f=ig/12;ctx.strokeStyle=rgba(TLc,.6*(1-f)*(1-f));ctx.lineWidth=1.3;ctx.beginPath();ctx.arc(q.x,q.y,rr*(1+1.6*sstep(f)),0,7);ctx.stroke()}
+  ctx.globalCompositeOperation='source-over';
+  ctx.strokeStyle=rgba(TLh,ra);ctx.lineWidth=1.1+.5*near;ctx.beginPath();ctx.arc(q.x,q.y,rr,0,7);ctx.stroke();
+  ctx.fillStyle=rgba(TLc,.4+.5*lit);ctx.beginPath();ctx.arc(q.x,q.y,Math.max(1.8,1.1*Z),0,7);ctx.fill()})}
 function drawStar(){var q=P(0,0),Z=cam.Z;if(!onScr(q,200))return;ctx.globalCompositeOperation='lighter';glow(SPR_GLOW,q.x,q.y,Math.max(26,30*Z),.85);ctx.globalCompositeOperation='source-over'}
 function drawHead(st){if(st.head<0)return;var hi=st.head,h=headAt(hi),q=P(h.x,h.z),Z=cam.Z;
-  // ohon: délka podle rychlosti, zužuje se a slábne
+  // ohon: délka podle rychlosti; jeden tah na vrstvu (kulaté konce úseků se ve sčítání nepřekrývají → žádné korálky),
+  // slábne přechodem k ocasu, zužuje se vrstvením (široká záře, jádro, krátké horké jádro)
   var len=Math.min(110,st.speed*.16);
-  ctx.globalCompositeOperation='lighter';ctx.lineCap='round';
-  if(len>2){var n=Math.ceil(len/2),prev=q;for(var j=1;j<=n;j++){var t=headAt(hi-j*2),pq=P(t.x,t.z),f=1-j/(n+1);
-    ctx.strokeStyle=rgba(TLc,.55*f*f);ctx.lineWidth=Math.max(1,(1.6+3.2*f)*Z*.55);ctx.beginPath();ctx.moveTo(prev.x,prev.y);ctx.lineTo(pq.x,pq.y);ctx.stroke();
-    ctx.strokeStyle=rgba(TL,.22*f);ctx.lineWidth=Math.max(2,(6+8*f)*Z*.55);ctx.stroke();prev=pq}}
+  ctx.globalCompositeOperation='lighter';ctx.lineCap='round';ctx.lineJoin='round';
+  if(len>2){var n=Math.ceil(len/2),pts=[q];for(var j=1;j<=n;j++){var t=headAt(hi-j*2);pts.push(P(t.x,t.z))}
+    [[1,TL,.22,Math.max(2,10*Z*.55)],[1,TLc,.4,Math.max(1,3.2*Z*.55)],[.45,TLc,.5,Math.max(1.2,4.8*Z*.55)]].forEach(function(T){
+      var m=Math.max(1,Math.round(n*T[0])),e=pts[m],g=ctx.createLinearGradient(q.x,q.y,e.x,e.y);
+      g.addColorStop(0,rgba(T[1],T[2]));g.addColorStop(.5,rgba(T[1],T[2]*.3));g.addColorStop(1,rgba(T[1],0));
+      ctx.strokeStyle=g;ctx.lineWidth=T[3];ctx.beginPath();ctx.moveTo(q.x,q.y);for(var i=1;i<=m;i++)ctx.lineTo(pts[i].x,pts[i].y);ctx.stroke()})}
   var boost=Math.min(1,st.speed/260);glow(SPR_GLOW,q.x,q.y,Math.min(150,(24+10*boost)*Z),.95);
   ctx.globalCompositeOperation='source-over';ctx.fillStyle='#effcfd';ctx.beginPath();ctx.arc(q.x,q.y,Math.max(2.6,1.4*Z),0,7);ctx.fill()}
 function drawBokeh(){ctx.globalCompositeOperation='lighter';BOKEH.forEach(function(b){var q=P(b.x,b.z,1.7),r=b.r*Math.max(1,cam.Z*.9)*1.6;if(!onScr(q,r))return;glow(SPR_BOKEH,q.x,q.y,r,b.a*2)});ctx.globalCompositeOperation='source-over'}
-var VIG=null,VW=0,VH=0;
-function drawVignette(){if(!VIG||VW!==W||VH!==H){var w=Math.max(8,Math.round(W/4)),h=Math.max(8,Math.round(H/4));
-    VIG=blurred(sprite(w,h,function(g){var v=g.createRadialGradient(w/2,h/2,Math.min(w,h)*.32,w/2,h/2,Math.max(w,h)*.75);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(0,0,0,.55)');g.fillStyle=v;g.fillRect(0,0,w,h)}),2);VW=W;VH=H}
-  ctx.drawImage(VIG,0,0,W,H)}
-
 /* ================= překryvy (texty, štítky) ================= */
-function showOv(el,v,dy){var on=v>.01;el.classList.toggle('is-on',on);el.style.opacity=v.toFixed(3);
+function showOv(el,v,dy){var c=el.__c||(el.__c={a:[].slice.call(el.querySelectorAll('a')),k:[].slice.call(el.children),v:-1});
+  if(Math.abs(v-c.v)<5e-4)return;c.v=v;var on=v>.01;el.classList.toggle('is-on',on);el.style.opacity=v.toFixed(3);
   var ty=el.style.top==='50%'?'translateY(-50%) ':'';el.style.transform=ty+'translateY('+((1-v)*(dy||14)).toFixed(1)+'px)';
-  el.querySelectorAll('a').forEach(function(a){a.tabIndex=v>.5?0:-1})}
+  // děti nastupují postupně (nadpis → text → štítky → tlačítko) a odcházejí v opačném pořadí; jen podle progresu, takže i pozpátku
+  var n=c.k.length,g=.12;if(n>1)c.k.forEach(function(k,i){var vi=Math.max(0,Math.min(1,v*(1+g*(n-1))-g*i));k.style.opacity=vi.toFixed(3);k.style.transform='translateY('+((1-vi)*8).toFixed(1)+'px)'});
+  var ti=v>.5?0:-1;c.a.forEach(function(a){if(a.tabIndex!==ti)a.tabIndex=ti})}
 function overlays(st,pitDrawn){var p=st.p;
   showOv(OV.title,p<TITLE_END?1:1-sstep((p-TITLE_END)/.03),-10);
   var m=0;[['st1',1],['st2',2],['st3',3],['st4',5],['fin',6]].forEach(function(o){var v=vis(o[1],p);showOv(OV[o[0]],v);m=Math.max(m,v)});
   shade.style.opacity=M?m.toFixed(3):'0';
   var pv=vis(4,p);
-  PLATES.forEach(function(el,ti){var B=teamBox[ti],on=pitDrawn&&pv>.01;el.classList.toggle('is-on',on);el.style.opacity=pv.toFixed(3);el.tabIndex=pv>.5?0:-1;if(!on)return;
+  PLATES.forEach(function(el,ti){var B=teamBox[ti],on=pitDrawn&&pv>.01,tix=pv>.5?0:-1;el.classList.toggle('is-on',on);el.style.opacity=pv.toFixed(3);if(el.tabIndex!==tix)el.tabIndex=tix;if(!on)return;
     var w=el.offsetWidth,h=el.offsetHeight,x,y,gap=14;
     if(M){x=ti===0?L.pad:W-L.pad-w;y=ti===0?B.y0-gap-h:B.y1+gap}
     else{x=ti===0?B.x0-gap-w:B.x1+gap;y=B.y-h/2}
     x=Math.max(10,Math.min(W-w-10,x));y=Math.max(10,Math.min(H-h-10,y));el.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px)'})}
 
 /* ================= snímek ================= */
-var raw=0,cur=0,vel=0,drawn=-1,drawnV=0,frames=0,driven=false,own=false,visible=true,parentOrigin=null,lastCam=null;
+var raw=0,cur=0,vel=0,drawn=-1,drawnV=0,frames=0,driven=false,own=false,visible=true,lastCam=null;
 function draw(force){
-  if(!W||!H)return;if(!force&&Math.abs(cur-drawn)<1e-6&&Math.abs(vel-drawnV)<1e-5)return;drawn=cur;drawnV=vel;
+  if(!W||!H)return false;if(!force&&Math.abs(cur-drawn)<1e-6&&Math.abs(vel-drawnV)<1e-5)return false;drawn=cur;drawnV=vel;
   var st=state(cur);cam=st.cam;lastCam={x:cam.x,z:cam.z,ax:cam.ax,ay:cam.ay,Z:cam.Z,p:cur,head:st.head};
   ctx.setTransform(DPR,0,0,DPR,0,0);
   drawSpace(st);
@@ -367,10 +442,10 @@ function draw(force){
   if(vr)drawTrack(litI,vr);
   var pitOn=vis(4,cur);
   var pd=drawPit(pitOn);
-  drawFinish(st.head>=NT-3);
+  drawFinish(Math.max(0,Math.min(1,(st.head-(NT-41))/40)));
   drawStops(st);drawStar();
-  drawHead(st);drawBokeh();drawVignette();
-  overlays(st,pd);frames++;
+  drawHead(st);if(!reduce)drawBokeh();
+  overlays(st,pd);frames++;return true;
 }
 
 /* ================= progres: rodič / vlastní scroll ================= */
@@ -379,29 +454,48 @@ function ownProgress(){var r=track.getBoundingClientRect(),span=r.height-pin.off
 function setOwn(on){own=on;document.documentElement.classList.toggle('is-own',on);layout();if(on)ownProgress()}
 window.addEventListener('message',function(e){
   if(e.source!==window.parent)return;var d=e.data;if(!d||d.source!=='cc-scrolly'||d.type!=='progress')return;
-  if(!parentOrigin&&e.origin&&e.origin!=='null')parentOrigin=e.origin;
   var first=!driven;driven=true;if(own)setOwn(false);
   raw=Math.min(1,Math.max(0,+d.value||0));if(first){cur=raw;vel=0}
 },false);
-var hellos=0;(function hello(){if(driven||demo)return;try{window.parent.postMessage({source:'cc-scrolly',type:'ready'},'*')}catch(err){}if(++hellos<6)setTimeout(hello,300)})();
-setTimeout(function(){if(!driven&&!demo)setOwn(true)},2500);
+// ready s původem rodiče (z referreru, kontrakt cc-scrolly), opakovaně ~12 s – šablona může mít skripty odložené (WP Rocket)
+var refOrigin='*';try{if(document.referrer)refOrigin=new URL(document.referrer).origin}catch(err){}
+var HELLO=[300,300,300,600,600,1200,1200,2400,2400,3000],hellos=0;
+(function hello(){if(driven||demo)return;try{window.parent.postMessage({source:'cc-scrolly',type:'ready'},refOrigin)}catch(err){}
+  if(hellos<HELLO.length)setTimeout(hello,HELLO[hellos++]);else fallback()})();
+// rodič mlčí i potom: scroll uvnitř rámu neodemykat (v článku past), ukázat cíl s odkazy; první progres to srovná
+function fallback(){if(driven||demo)return;raw=cur=1;vel=0;draw(true)}
 window.addEventListener('scroll',function(){if(own)ownProgress()},{passive:true});
+// dotyk: tužší pružina, obsah se drží prstu; kolečko (zuby) zas měkčí
+window.addEventListener('touchstart',function(){touch=true},{passive:true});
+window.addEventListener('wheel',function(){touch=false},{passive:true});
 
 /* ================= smyčka ================= */
-var tPrev=performance.now();
-function loop(now){requestAnimationFrame(loop);var dt=Math.min(.05,(now-tPrev)/1000);tPrev=now;
-  if(document.hidden||!visible)return;
-  if(reduce||!OMEGA){cur=raw;vel=0}else{var d=raw-cur;if(Math.abs(d)<1e-5&&Math.abs(vel)<1e-4){cur=raw;vel=0}else{vel+=(OMEGA*OMEGA*d-2*OMEGA*vel)*dt;cur+=vel*dt}}
-  draw(false)}
+var raf=DEBUG&&Q.get('fakeraf')==='1'?function(cb){setTimeout(function(){cb(performance.now())},16)}:function(cb){requestAnimationFrame(cb)};
+var tPrev=performance.now(),tDraw=0;
+function step(dt){
+  if(reduce||!OMEGA){cur=raw;vel=0;return}var x=cur-raw;if(Math.abs(x)<1e-5&&Math.abs(vel)<1e-4){cur=raw;vel=0;return}
+  // přesný krok kriticky tlumené pružiny (stabilní pro každé dt i ω); u cíle až 3× tužší, ať dosedne dřív, než rodič pustí pin
+  var w=(touch?OM_TOUCH:OMEGA)*(1+2*sstep((raw-.9)/.1)),e=Math.exp(-w*dt),t=(vel+w*x)*dt;cur=raw+(x+t)*e;vel=(vel-w*t)*e}
+function loop(now){raf(loop);var dt=Math.min(.1,(now-tPrev)/1000);tPrev=now;
+  // mimo obraz (nebo skrytá karta) se stav jen srovná na scroll, ať po návratu nedojíždí pohyb, který čtenář nezpůsobil
+  if(document.hidden||!visible){cur=raw;vel=0;return}
+  step(dt);
+  if(draw(nebFading(now))){var gap=now-tDraw;tDraw=now;
+    // pomalé snímky při pohybu → o stupeň nižší rozlišení plátna; zpátky už ne, ať obraz neposkakuje
+    if(gap<200&&++warm>30){if(gap>24)slow++;else slow=Math.max(0,slow-2);if(slow>45&&qi<QL.length-1){qi++;slow=warm=0;layout()}}}}
 try{new ResizeObserver(function(){layout()}).observe(pin)}catch(err){window.addEventListener('resize',layout)}
-try{new IntersectionObserver(function(es){visible=es[es.length-1].isIntersecting;if(visible)draw(true)},{threshold:0}).observe(pin)}catch(err){visible=true}
+try{new IntersectionObserver(function(es){visible=es[es.length-1].isIntersecting;if(visible){cur=raw;vel=0;draw(true)}},{threshold:0}).observe(pin)}catch(err){visible=true}
+if(mqR){var onR=function(e){reduce=e.matches;draw(true)};try{mqR.addEventListener('change',onR)}catch(err){try{mqR.addListener(onR)}catch(er2){}}}
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){layout()});
 if(demo)setOwn(true);else layout();
-requestAnimationFrame(loop);
-window.__sic=function(){return{frames:frames,visible:visible,demo:demo,driven:driven,own:own,raw:+raw.toFixed(4),cur:+cur.toFixed(4),vel:+vel.toFixed(4),cam:lastCam,W:W,H:H,mobile:M,omega:OMEGA}};
-window.__sicSet=function(p){raw=cur=p;vel=0;draw(true)};       // skok bez pohybu (snímky)
-window.__sicDrive=function(p){raw=p};                             // jako scroll rodiče (videa, testy)
-window.__sicHead=headIdx;
+raf(loop);INIT=performance.now()-T0;
+if(DEBUG){
+  window.__sic=function(){return{initMs:+INIT.toFixed(1),frames:frames,visible:visible,demo:demo,driven:driven,own:own,raw:+raw.toFixed(4),cur:+cur.toFixed(4),vel:+vel.toFixed(4),cam:lastCam,W:W,H:H,mobile:M,omega:OMEGA,touch:touch,dpr:DPR,qi:qi,ctxFilter:CF,nebulae:NEB.filter(function(n){return n[5]}).length}};
+  window.__sicSet=function(p){raw=cur=p;vel=0;draw(true)};       // skok bez pohybu (snímky)
+  window.__sicDrive=function(p){raw=p};                             // jako scroll rodiče (videa, testy)
+  window.__sicTick=function(dt){step(dt||1/60);return draw(nebFading(performance.now()))};   // jeden snímek s pevným dt (testy bez rAF)
+  window.__sicHead=headIdx;window.__sicTrack=function(){return{TS:TS,IDX:IDX}};
+}
 })();
 </script>
 </body>
