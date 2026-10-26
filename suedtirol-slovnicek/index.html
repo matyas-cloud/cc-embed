@@ -10,12 +10,13 @@
        na místo mezihlavičky „Tyrolský slovníček“ a tabulky Německy / Italsky.
      Vložení: suedtirol-slovnicek-vlozeni.html, obalový div s výškou podle šířky okna (vzorec a ověřené šířky jsou ve vložení).
      Nasazení: matyas-cloud/cc-embed/suedtirol-slovnicek/index.html, Poppins ze sdílené složky ../fonts/.
-     Formát: bílý infobox s linkou jako ostatní článkové prvky. Titulek, perex a 14 dvojjazyčných cedulí,
-       nahoře německý název, pod ním italský. Celý region (Südtirol / Alto Adige) je velká cedule přes celou šířku
-       v barvě partnera, s vlaječkami u názvů – slouží jako klíč k ostatním cedulím.
-       Desktop 3 cedule v řadě, rám užší než 490 px 2 v řadě; poslední osamělá cedule je uprostřed.
-       Cedule mají lehký stín, na hover (jen zařízení s myší) se mírně zvednou a zvětší, barva se nemění. Jinak bez animace.
-     Barva partnera: #50742F, tmavě zelená z loga Südtirol (suedtirol.info, logo-v2), jen jako plocha cedule.
+     Formát: směr D „Sklo nad sněhem“ (suedtirol-slovnicek-5-smeru.png). Podklad je přechod od nebe do sněhu
+       s obrysem hřebene, výška horizontu se dopočítá podle dlaždice regionu. Titulek, perex a 14 dvojjazyčných dlaždic
+       z matného skla, nahoře německý název, pod ním italský. Celý region (Südtirol / Alto Adige) je velká dlaždice
+       přes celou šířku s vlaječkami u názvů – slouží jako klíč k ostatním.
+       Desktop 3 dlaždice v řadě, rám užší než 490 px 2 v řadě; poslední osamělá dlaždice je uprostřed.
+       Dlaždice mají vrstvené stíny do modra, na hover (jen zařízení s myší) se mírně zvednou a zvětší, barva se nemění.
+     Barvy: odečtené z fotek v náhledu článku (nebe #2f66ad → #b9d7f1, sníh #e4eef8 → #eef4fa). Zelená z loga Südtirol vypadla.
      Data: tabulka „Tyrolský slovníček“ z draftu článku. Pořadí podle tabulky. Ladinská jména zatím ne.
        Texty a dvojice jsou v bloku D, z něj se skládá i shrnutí pro čtečky.
      Změny obsahu:
@@ -23,7 +24,9 @@
                    oproti tabulce v draftu doplněno Graun / Curon (Mattův pokyn).
        2026-10-23  v2 větší cedule regionu přes celou šířku s vlaječkami DE / IT, stín cedulí a zvednutí na hover.
        2026-10-23  v3 perex podle Matta („…německý a italský. V ladinských údolích mnohdy i třetí, čistě místní.“),
-                   vlaječky ve společném sloupci, názvy zarovnané za nimi. -->
+                   vlaječky ve společném sloupci, názvy zarovnané za nimi.
+       2026-10-26  v4 vzhled podle směru D „Sklo nad sněhem“ (feedback: zelená v článku bije do očí, sladit s modrým nebem
+                   na fotkách, plastičtější). Obsah, rozložení a výška beze změny, kód pro vložení platí dál. -->
 <style>
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
@@ -120,63 +123,73 @@
 
 <style>
 .cc-tsl{
-  --ink:#1d1d1f; --ink2:#4a4d52; --st:#50742F;
-  --sc:1; --hs:1; --ease:cubic-bezier(.2,.7,.2,1);
+  --ink:#13253d; --ink2:#4f6f92; --sc:1; --hs:1; --ease:cubic-bezier(.2,.7,.2,1);
+  --rt:190px; --rh:110px;   /* rt = horizont (výška hřebene od horního okraje), dopočítá ho JS podle cedule regionu */
   /* velikosti na desktopu, úzký rám je přepíše níž (jen proměnné, ať fit() funguje všude) */
   --pad:26px 26px 28px; --t:22px; --l:14.5px; --b:16px; --s:15px; --rb:22px; --rs:20px; --mh:64px; --rmh:88px; --fw:26px; --gap:10px;
   box-sizing:border-box;height:100vh;display:flex;flex-direction:column;overflow:hidden;position:relative;
   padding:var(--pad);
-  background:#fff;border:1px solid #e0e0e0;border-radius:var(--cc-radius);color:var(--ink);
-  font-family:var(--cc-display);
+  border:0;border-radius:var(--cc-radius);color:var(--ink);font-family:var(--cc-display);
+  /* nebe z fotek článku, nahoře tmavší kvůli kontrastu bílého titulku a perexu */
+  background:linear-gradient(180deg,#2f66ad 0px,#4580c6 calc(var(--rt)*.62),#8fbde6 calc(var(--rt)*1.25),#b9d7f1 calc(var(--rt)*1.7));
+  box-shadow:inset 0 0 0 1px rgba(19,45,85,.06);
 }
 .cc-tsl *{box-sizing:border-box;}
 
-.cc-tsl .cc-tsl__t{flex:0 0 auto;margin:0;color:var(--ink);font:600 max(17px, calc(var(--t)*var(--sc)))/1.25 var(--cc-display);letter-spacing:-.01em;}
-.cc-tsl .cc-tsl__l{flex:0 0 auto;margin:calc(6px*var(--sc)) 0 0;max-width:56ch;color:var(--ink2);font:400 max(14px, calc(var(--l)*var(--sc)))/1.55 var(--cc-display);}
+/* hřeben a sníh za mřížkou */
+.cc-tsl__ridge{position:absolute;left:0;right:0;top:var(--rt);bottom:0;pointer-events:none;}
+.cc-tsl__ridge svg{display:block;width:100%;height:var(--rh);}
+.cc-tsl__ridge i{position:absolute;left:0;right:0;top:calc(var(--rh) - 1px);bottom:0;background:linear-gradient(180deg,#e4eef8 0%,#eef4fa 100%);}
+
+.cc-tsl .cc-tsl__t{position:relative;flex:0 0 auto;margin:0;color:#fff;font:600 max(17px, calc(var(--t)*var(--sc)))/1.25 var(--cc-display);letter-spacing:-.01em;}
+.cc-tsl .cc-tsl__l{position:relative;flex:0 0 auto;margin:calc(6px*var(--sc)) 0 0;max-width:56ch;color:rgba(255,255,255,.93);font:400 max(14px, calc(var(--l)*var(--sc)))/1.55 var(--cc-display);}
 .cc-tsl.is-nolede .cc-tsl__l{display:none;}
 
-/* mřížka: 6 stop, cedule přes dvě (3 v řadě), region přes celou šířku, poslední osamělá cedule doprostřed */
+/* mřížka: 6 stop, dlaždice přes dvě (3 v řadě), region přes celou šířku, poslední osamělá dlaždice doprostřed */
 .cc-tsl__g{position:relative;flex:1 1 auto;min-height:0;display:grid;margin:calc(20px*var(--sc)) 0 0;padding:0;list-style:none;
   grid-template-columns:repeat(6,minmax(0,1fr));
   grid-template-rows:minmax(min-content,1.3fr);grid-auto-rows:minmax(min-content,1fr);gap:calc(var(--gap)*var(--sc));}
 .cc-tsl.is-nolede .cc-tsl__g{margin-top:calc(12px*var(--sc));}
 
-/* cedule: plocha s linkou kousek od okraje, jako tabule u silnice; lehký stín, na hover se mírně zvedne */
+/* dlaždice z matného skla: průsvitná bílá s rozmazaným pozadím, horní odlesk a vrstvené stíny do modra; na hover se zvedne */
 .cc-tsl__c{
-  --in:inset 0 0 0 3.5px #fff,inset 0 0 0 5.5px var(--ink);
-  --sh:0 1px 2px rgba(0,0,0,.06),0 5px 12px -7px rgba(0,0,0,.22);
+  --sh:0 1px 2px rgba(20,50,90,.08),0 10px 24px -12px rgba(20,60,120,.35);
   --up:scale(1.04);
   position:relative;grid-column:span 2;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1px;
   min-width:0;min-height:calc(var(--mh)*var(--sc));margin:0;
-  padding:calc(12px*var(--sc)) 12px;border:1px solid #dedede;border-radius:7px;background:#fff;text-align:center;
-  box-shadow:var(--in),var(--sh);
+  padding:calc(12px*var(--sc)) 12px;border-radius:14px;text-align:center;color:var(--ink);
+  background:rgba(255,255,255,.62);
+  -webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 0 0 1px rgba(255,255,255,.55),var(--sh);
   transition:transform .3s var(--ease),box-shadow .3s var(--ease);}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){ .cc-tsl__c{background:rgba(255,255,255,.82);} }
 .cc-tsl__c b{display:block;max-width:100%;font:600 max(13px, calc(var(--b)*var(--sc)*var(--hs)))/1.25 var(--cc-display);letter-spacing:-.005em;}
-.cc-tsl__c span{display:block;max-width:100%;font:400 max(13px, calc(var(--s)*var(--sc)*var(--hs)))/1.25 var(--cc-display);}
+.cc-tsl__c span{display:block;max-width:100%;color:var(--ink2);font:400 max(13px, calc(var(--s)*var(--sc)*var(--hs)))/1.25 var(--cc-display);}
 .cc-tsl__c:last-child:nth-child(3n+2){grid-column:3 / span 2;}
 
-/* region: velká zelená cedule s vlaječkami, slouží zároveň jako klíč (nahoře německy, dole italsky) */
+/* region: velká, méně průsvitná dlaždice s vlaječkami, slouží zároveň jako klíč (nahoře německy, dole italsky) */
 .cc-tsl__c--reg{
-  --in:inset 0 0 0 4px var(--st),inset 0 0 0 6px rgba(255,255,255,.92);
+  --sh:0 2px 4px rgba(20,50,90,.08),0 18px 34px -16px rgba(20,60,120,.45);
   --up:scale(1.015);
-  grid-column:1 / -1;min-height:calc(var(--rmh)*var(--sc));gap:calc(3px*var(--sc));border-color:var(--st);background:var(--st);color:#fff;}
+  grid-column:1 / -1;min-height:calc(var(--rmh)*var(--sc));gap:calc(3px*var(--sc));background:rgba(255,255,255,.82);
+  box-shadow:inset 0 1px 0 #fff,inset 0 0 0 1px rgba(255,255,255,.7),var(--sh);}
 .cc-tsl__k{display:grid;grid-template-columns:auto auto;justify-content:center;align-items:center;
   column-gap:calc(10px*var(--sc));row-gap:calc(3px*var(--sc));}
 .cc-tsl__c--reg b,.cc-tsl__c--reg span{text-align:left;}
 .cc-tsl__c--reg b{font-size:max(15px, calc(var(--rb)*var(--sc)*var(--hs)));}
-.cc-tsl__c--reg span{font-size:max(14px, calc(var(--rs)*var(--sc)*var(--hs)));}
-.cc-tsl__f{display:block;width:calc(var(--fw)*var(--sc));height:calc(var(--fw)*var(--sc)*2/3);border-radius:2px;overflow:hidden;
-  box-shadow:0 0 0 1.5px rgba(255,255,255,.95);}
+.cc-tsl__c--reg span{color:#3d5f86;font-size:max(14px, calc(var(--rs)*var(--sc)*var(--hs)));}
+.cc-tsl__f{display:block;width:calc(var(--fw)*var(--sc));height:calc(var(--fw)*var(--sc)*2/3);border-radius:3px;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(19,37,61,.12);}
 .cc-tsl__f svg{display:block;width:100%;height:100%;}
 
 @media (hover:hover){
   .cc-tsl__c:hover{z-index:1;transform:translateY(-2px) var(--up);
-    --sh:0 2px 4px rgba(0,0,0,.06),0 16px 26px -12px rgba(0,0,0,.32);}
+    --sh:0 2px 4px rgba(20,50,90,.08),0 18px 30px -14px rgba(20,60,120,.48);}
 }
 
-/* úzký rám: 4 stopy, cedule po dvou, region přes celou šířku, poslední osamělá cedule doprostřed */
+/* úzký rám: 4 stopy, dlaždice po dvou, region přes celou šířku, poslední osamělá dlaždice doprostřed */
 @media (max-width:489px){
-  .cc-tsl{--pad:18px 16px; --t:20px; --l:14px; --b:15px; --s:14px; --rb:18px; --rs:16px; --mh:60px; --rmh:76px; --fw:21px; --gap:8px;}
+  .cc-tsl{--rt:230px; --rh:80px; --pad:18px 16px; --t:20px; --l:14px; --b:15px; --s:14px; --rb:18px; --rs:16px; --mh:60px; --rmh:76px; --fw:21px; --gap:8px;}
   .cc-tsl .cc-tsl__l{margin-top:calc(5px*var(--sc));}
   .cc-tsl__g{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:calc(16px*var(--sc));}
   .cc-tsl__c:last-child:nth-child(3n+2){grid-column:span 2;}
@@ -185,6 +198,7 @@
 </style>
 
 <div class="cc-embed cc-tsl" data-cc-tsl>
+  <div class="cc-tsl__ridge" aria-hidden="true"><svg viewBox="0 0 650 110" preserveAspectRatio="none"><path d="M0 70 L55 46 L90 58 L140 22 L178 44 L222 30 L262 4 L300 34 L338 20 L382 52 L425 34 L468 10 L506 40 L548 28 L592 58 L650 40 L650 110 L0 110Z" fill="rgba(240,246,252,.55)"/><path d="M0 92 L60 70 L112 82 L170 58 L232 76 L292 54 L352 78 L414 60 L482 82 L552 64 L650 80 L650 110 L0 110Z" fill="#e4eef8"/></svg><i></i></div>
   <h3 class="cc-title cc-tsl__t" data-t></h3>
   <p class="cc-tsl__l" data-l></p>
   <p class="cc-sr" data-sr></p>
@@ -261,6 +275,12 @@
     });
     return mx > grid.clientHeight + 1;
   }
+  // horizont: hřeben začíná kousek pod polovinou dlaždice regionu, nebe nad ním se podle toho natáhne
+  function horizon(){
+    var reg = grid.firstElementChild;
+    if(!reg) return;
+    root.style.setProperty('--rt', Math.round(grid.offsetTop + reg.offsetTop + reg.offsetHeight * .62) + 'px');
+  }
   function fit(){
     var sc = 1;
     root.classList.remove('is-nolede');
@@ -270,6 +290,7 @@
     if(wraps()){ hs = 1; root.style.setProperty('--hs', 1); }
     if(over()) root.classList.add('is-nolede');
     for(var k = 0; k < 14 && over() && sc > .7; k++){ sc *= .95; root.style.setProperty('--sc', sc.toFixed(3)); }
+    horizon();
   }
   var rt;
   window.addEventListener('resize', fit);
