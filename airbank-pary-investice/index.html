@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kdo v páru rozhoduje o penězích</title>
+<meta name="robots" content="noindex">
+<!-- CzechCrunch × Air Bank – infografika „Kdo v páru rozhoduje o penězích“.
+     Cíl: nativní článek cc.cz (partner Air Bank) „Velké nákupy řešíme spolu, o investicích rozhoduje on…“, za odstavec o příjmech.
+     Vložení: airbank-pary-investice-vlozeni.html, obalový div s výškou podle šířky okna (stejný vzorec jako visa-ai-nakupovani).
+       Ověřeno pro okna 320–682 px: element se vejde bez zmenšení (--sc 1), bez vodorovného přetečení.
+     Nasazení: matyas-cloud/cc-embed/airbank-pary-investice/index.html, Poppins ze sdílené složky ../fonts/.
+     Formát: bílý infobox s linkou jako ostatní článkové prvky, sourozenec visa-ai-nakupovani. Barvy: muži tmavá, ženy limetková Air Bank.
+       Kapitoly: 1 kdo rozhoduje o investicích sám (lidičky, 1 = 10 %), 2 podle příjmu (pruhy), 3 velké výdaje společně (košíky),
+       4 tajná rezerva (prasátka se plní), 5 komu by vadily tajné úspory (pruhy), 6 podíl žen mezi investory Air Bank (lidičky).
+     Data: průzkum Ipsos pro Air Bank, září 2026, N = 1 050, báze lidé ve vztahu N = 856, nevážené (kontrola na surových datech 1. 10. 2026);
+       podíl žen 18 % u akcií a ETF uvádí Air Bank (Petr Žabža). ?static = konečný stav, ?info = panel (i).
+     Změny obsahu:
+       2026-10-27  v1 náhled k odsouhlasení.
+       2026-10-27  zlom na mobilní rozložení posunut na 539 px, aby seděl se vzorcem výšky ve vložení (od 540 px dva sloupce). Schváleno k nasazení. -->
+<style>
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-500.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-ext-500.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-ext-600.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-700.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-ext-700.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;}
+  .cc-embed{margin:0!important;}
+</style>
+</head>
+<body>
+<!-- .cc-embed základ (verbatim ze skillu) -->
+<!-- CC sdílený designový základ pro embedy. Vlož jako PRVNI style blok prvku.
+     Pokud web .cc-embed nacita globalne ze sablony, tenhle blok se da vypustit.
+     Nesahej do nej - vlastni styly patri do druheho style bloku, scopovane
+     pod tridu konkretniho prvku (.cc-uv, .cc-calc, ...). -->
+<style>
+.cc-embed{
+  /* --- barvy --- */
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  /* --- shape --- */
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  /* --- font --- */
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}      /* prvek do krajů (fotka, mapa) */
+.cc-embed--bare{background:none;border:0;padding:0;} /* bez rámečku */
+/* --- typo --- */
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{margin:12px 0 0;font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);
+  letter-spacing:.02em;text-transform:uppercase;}
+.cc-embed .cc-num{font-family:var(--cc-display);font-weight:700;
+  font-size:clamp(22px,4vw,32px);color:var(--cc-blue);font-variant-numeric:tabular-nums;}
+.cc-embed a{color:var(--cc-blue);}
+/* --- UI --- */
+.cc-embed .cc-btn{
+  display:inline-block;padding:10px 20px;
+  border:1px solid var(--cc-blue);border-radius:var(--cc-radius);
+  background:var(--cc-blue);color:#fff;text-decoration:none;
+  font:700 18px/26px var(--cc-display);cursor:pointer;
+  transition:background .18s,color .18s;}
+.cc-embed .cc-btn:hover{background:var(--cc-blue-dark);border-color:var(--cc-blue-dark);}
+.cc-embed .cc-btn--ghost{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-btn--ghost:hover{background:var(--cc-blue);color:#fff;}
+.cc-embed .cc-btn--sm{padding:7px 14px;font-size:15px;line-height:22px;}
+.cc-embed .cc-btn[aria-pressed="true"]{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-card{background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);padding:14px 16px;}
+.cc-embed .cc-badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  background:var(--cc-blue);color:#fff;font:700 12px/18px var(--cc-ui);}
+.cc-embed .cc-badge--red{background:var(--cc-red);}
+.cc-embed .cc-badge--soft{background:#eaf3fd;color:var(--cc-blue-dark);}
+.cc-embed input,.cc-embed select,.cc-embed textarea{
+  font:400 16px/24px var(--cc-ui);color:var(--cc-ink);
+  padding:9px 12px;background:#fff;border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);}
+.cc-embed input[type=range]{padding:0;border:0;background:none;accent-color:var(--cc-blue);width:100%;}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed table{width:100%;border-collapse:collapse;font:400 15px/1.4 var(--cc-ui);}
+.cc-embed th{text-align:left;font-weight:700;color:var(--cc-muted);
+  text-transform:uppercase;font-size:12px;letter-spacing:.05em;padding:8px 10px;}
+.cc-embed td{padding:10px;border-top:1px solid var(--cc-line);}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-grid{display:grid;gap:var(--cc-gap);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.cc-embed .cc-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--cc-gap);}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+<style>
+.cc-abpar{
+  --ink:#16181c; --ink2:#5b616b; --line:#ececec;
+  --man:#23262b; --wom:#b4d335; --track:#eef0ea;
+  --sc:1; --ease:cubic-bezier(.2,.7,.2,1);
+  --vf:max(14px, calc(clamp(15px,3vw,18px)*var(--sc)));
+  --hf:max(24px, calc(clamp(28px,6vw,38px)*var(--sc)));
+  --lf:max(14px, calc(clamp(14px,2.5vw,15px)*var(--sc)));
+  --tf:max(12px, calc(clamp(12px,2.3vw,13px)*var(--sc)));
+  --gap:calc(clamp(8px,1.8vw,12px)*var(--sc));
+  --pw:calc(clamp(20px,4vw,27px)*var(--sc));
+  --ih:calc(clamp(38px,7.4vw,48px)*var(--sc));
+  box-sizing:border-box;height:100vh;display:flex;flex-direction:column;overflow:hidden;position:relative;
+  padding:clamp(16px,4.2vw,28px) clamp(16px,4.2vw,30px) clamp(16px,3.6vw,24px);
+  background:#fff;border:1px solid #e0e0e0;border-radius:var(--cc-radius);color:var(--ink);
+  font-family:var(--cc-display);
+}
+.cc-abpar *{box-sizing:border-box;}
+.cc-abpar button{font:inherit;color:inherit;margin:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.cc-abpar__hd{flex:0 0 auto;display:flex;align-items:flex-start;gap:12px;}
+.cc-abpar .cc-abpar__title{margin:0;color:#000;letter-spacing:-.01em;font-size:max(17px, calc(clamp(19px,4.4vw,24px)*var(--sc)));line-height:1.2;}
+.cc-abpar .info{margin-left:auto;flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid #b4bac4;background:#fff;color:var(--ink2);
+  cursor:pointer;display:grid;place-items:center;font:600 13px/1 var(--cc-display);transition:border-color .15s,color .15s;}
+.cc-abpar .info:hover{border-color:var(--ink);color:var(--ink);}
+
+.val{display:inline-block;white-space:nowrap;color:var(--ink);font:600 var(--vf)/1 var(--cc-display);letter-spacing:-.01em;transition:opacity .3s;}
+.val.hero{font-size:var(--hf);letter-spacing:-.02em;}
+.val [data-c]{display:inline-block;}
+.val .u{display:inline-block;font-size:.7em;margin-left:.2em;letter-spacing:0;transition:opacity .3s;}
+.val .pre{font-size:.42em;font-weight:500;margin-right:.35em;letter-spacing:0;color:var(--ink2);vertical-align:.35em;}
+.is-count .u{opacity:0;}
+
+.cc-abpar__grid{flex:1 1 auto;min-height:0;display:grid;margin-top:calc(clamp(4px,1.2vw,8px)*var(--sc));
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"kdo kdo" "prijem nakupy" "rezerva vadi" "zeny zeny";
+  align-content:space-between;column-gap:clamp(18px,4vw,30px);}
+.vs{min-width:0;padding-top:calc(clamp(12px,2.6vw,16px)*var(--sc));border-top:1px solid var(--line);}
+.vs--kdo{grid-area:kdo;border-top:0;padding-top:calc(6px*var(--sc));}
+.vs--prijem{grid-area:prijem;} .vs--nakupy{grid-area:nakupy;} .vs--rezerva{grid-area:rezerva;} .vs--vadi{grid-area:vadi;} .vs--zeny{grid-area:zeny;padding-bottom:4px;}
+.cc-abpar .vs__h{margin:0;color:var(--ink);font:600 var(--lf)/1.3 var(--cc-display);letter-spacing:-.005em;text-wrap:balance;}
+.vs__viz{margin-top:var(--gap);position:relative;}
+
+/* 1 lidičky */
+.iso{display:flex;flex-direction:column;gap:calc(8px*var(--sc));}
+.iso__row{display:grid;grid-template-columns:clamp(54px,11vw,72px) minmax(0,1fr) clamp(70px,15vw,98px);align-items:center;column-gap:clamp(10px,2.4vw,18px);}
+.iso__lab{font:500 var(--tf)/1.2 var(--cc-display);color:var(--ink);}
+.iso__row .val{justify-self:end;}
+.iso__ppl{display:flex;justify-content:space-between;align-items:flex-end;gap:2px;}
+.pp{position:relative;flex:0 0 auto;width:var(--pw);height:calc(var(--pw)*1.333);}
+.pp svg{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.pp__off{fill:var(--track);}
+.pp__on{clip-path:inset(0 var(--cut,100%) 0 0);transition:clip-path .28s linear;transition-delay:var(--d,0ms);}
+.is-m .pp__on{fill:var(--man);} .is-w .pp__on{fill:var(--wom);}
+.cc-abpar.is-pre .vs:not(.is-on) .pp__on{clip-path:inset(0 100% 0 0);transition:none;}
+
+/* pruhy */
+.pb{display:flex;flex-direction:column;gap:calc(9px*var(--sc));}
+.pb__top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+.pb__lab{color:var(--ink);font:400 var(--tf)/1.25 var(--cc-display);}
+.pb__tr{margin-top:calc(5px*var(--sc));height:max(7px, calc(10px*var(--sc)));border-radius:99px;background:var(--track);overflow:hidden;}
+.pb__f{display:block;height:100%;width:calc(var(--v)*100%);border-radius:99px;transition:width .8s var(--ease);transition-delay:var(--d,0ms);}
+.is-m .pb__f{background:var(--man);} .is-w .pb__f{background:var(--wom);}
+.cc-abpar.is-pre .vs:not(.is-on) .pb__f{width:0;}
+
+/* ikony, které se plní (košíky, prasátka) */
+.ic{position:relative;display:inline-block;flex:none;width:calc(var(--ih)*var(--ar,1));height:var(--ih);}
+.ic svg{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible;}
+.ic__off{fill:var(--track);}
+.ic__on{clip-path:inset(0 var(--cut,100%) 0 0);transition:clip-path .45s var(--ease);transition-delay:var(--d,0ms);}
+.ic--up .ic__on{clip-path:inset(var(--cut,100%) 0 0 0);transition:clip-path 1s var(--ease);transition-delay:var(--d,0ms);}
+.cc-abpar.is-pre .vs:not(.is-on) .ic__on{clip-path:inset(0 100% 0 0);transition:none;}
+.cc-abpar.is-pre .vs:not(.is-on) .ic--up .ic__on{clip-path:inset(100% 0 0 0);}
+.is-m .ic__on{fill:var(--man);} .is-w .ic__on,.is-pair .ic__on{fill:var(--wom);}
+
+.carts{display:flex;align-items:center;gap:clamp(12px,3vw,18px);}
+.carts .val{flex:none;}
+.carts__ic{flex:1 1 auto;min-width:0;display:flex;justify-content:space-between;gap:calc(4px*var(--sc));}
+.carts__ic .ic{flex:0 1 auto;width:auto;max-width:calc(var(--ih)*var(--ar));height:auto;aspect-ratio:var(--ar);flex-basis:calc(var(--ih)*var(--ar));}
+.pigs{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.pig{display:flex;align-items:center;gap:calc(10px*var(--sc));}
+.pig__t{display:flex;flex-direction:column;gap:3px;}
+.pig__lab{color:var(--ink2);font:400 var(--tf)/1.2 var(--cc-display);}
+
+/* pruh Air Bank */
+.vs--zeny .vs__viz{margin-top:0;display:flex;align-items:center;gap:clamp(12px,3vw,22px);}
+.zn__txt{flex:1 1 auto;min-width:0;margin:0;color:var(--ink);font:600 var(--lf)/1.3 var(--cc-display);text-wrap:balance;}
+.zn__ppl{flex:none;display:flex;gap:calc(3px*var(--sc));}
+.zn__ppl .pp{width:calc(clamp(13px,2.4vw,16px)*var(--sc));height:calc(clamp(13px,2.4vw,16px)*var(--sc)*1.333);}
+.zn__ppl .pp__off{fill:var(--man);opacity:.9;}
+.zn__ppl .pp__on{fill:var(--wom);}
+
+.cc-abpar.is-pre .vs:not(.is-on) .val{opacity:0;}
+
+/* panel (i) */
+.panel{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vw,24px);
+  background:rgba(255,255,255,.86);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);border-radius:var(--cc-radius);}
+.panel[hidden]{display:none;}
+.panel__box{position:relative;width:100%;max-width:470px;max-height:100%;display:flex;flex-direction:column;background:#fff;border:1px solid #e0e0e0;
+  border-radius:14px;box-shadow:0 18px 40px -18px rgba(20,24,40,.35);padding:clamp(16px,3.6vw,22px) clamp(16px,3.6vw,24px);}
+.panel__hd{display:flex;align-items:flex-start;gap:12px;}
+.cc-abpar .panel__t{margin:0;font:600 15px/1.3 var(--cc-display);color:var(--ink);}
+.cc-abpar .panel__x{margin-left:auto;flex:none;width:28px;height:28px;border:0;border-radius:50%;background:#f1f2f5;cursor:pointer;font:400 18px/1 var(--cc-display);color:var(--ink);}
+.panel__body{margin-top:10px;overflow-y:auto;min-height:0;}
+.cc-abpar .panel__body p{margin:0 0 9px;font:400 13px/1.5 var(--cc-display);color:#3c3c3c;}
+.cc-abpar .panel__body p:last-child{margin-bottom:0;}
+
+@media (max-width:539px){
+  .cc-abpar__grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"kdo" "prijem" "nakupy" "rezerva" "vadi" "zeny";}
+  .iso__row{grid-template-columns:calc(var(--tf)*3.6) minmax(0,1fr) calc(var(--vf)*3.1);column-gap:8px;}
+  .iso__row .pp{flex:1 1 0;width:auto;max-width:var(--pw);height:auto;aspect-ratio:.75;}
+  .cc-abpar{--pw:calc(clamp(16px,5.4vw,24px)*var(--sc));--ih:calc(clamp(30px,8.4vw,38px)*var(--sc));}
+  .vs--zeny .vs__viz{flex-wrap:wrap;row-gap:8px;}
+  .zn__txt{flex:1 1 0;}
+  .zn__ppl{flex:1 0 100%;justify-content:space-between;}
+}
+@media (prefers-reduced-motion:reduce){.cc-abpar *,.cc-abpar *::after{transition:none!important;}}
+.cc-abpar.is-static *{transition:none!important;}
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="ab-man" viewBox="0 0 24 32"><circle cx="12" cy="6.6" r="5.4"/><path d="M3 31v-8.2A8.8 8.8 0 0 1 11.8 14h.4A8.8 8.8 0 0 1 21 22.8V31z"/></symbol>
+    <symbol id="ab-per" viewBox="0 0 24 32"><circle cx="12" cy="7" r="5.6"/><path d="M2.5 31v-7.5a9.5 9.5 0 0 1 19 0V31z"/></symbol>
+    <symbol id="ab-wom" viewBox="0 0 24 32"><circle cx="12" cy="6.6" r="5.4"/><path d="M7.6 14h8.8l5.6 17H2z"/></symbol>
+    <symbol id="ab-cart" viewBox="0 0 48 44"><path d="M2 4.5A2.5 2.5 0 0 1 4.5 2h4.3a3 3 0 0 1 2.9 2.2L12.6 8H44a2 2 0 0 1 1.9 2.6l-5 16A3 3 0 0 1 38 28.7H17.4l.9 3.3H40a2.5 2.5 0 0 1 0 5H16.4a3 3 0 0 1-2.9-2.2L7.1 7H4.5A2.5 2.5 0 0 1 2 4.5zM18 41.5a3.5 3.5 0 1 1 7 0a3.5 3.5 0 1 1-7 0zM33 41.5a3.5 3.5 0 1 1 7 0a3.5 3.5 0 1 1-7 0z"/></symbol>
+    <symbol id="ab-pig" viewBox="0 0 64 48"><path d="M30 6c9.6 0 17.6 4.7 20.6 11.3H54a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3h-3.4a19.6 19.6 0 0 1-6.6 7.9V44a2 2 0 0 1-2 2h-5a2 2 0 0 1-2-2v-2.1a28 28 0 0 1-9 0V44a2 2 0 0 1-2 2h-5a2 2 0 0 1-2-2v-5.6C11.3 35 8 29.6 8 24v-.4a5 5 0 0 1-6-4.9 1.5 1.5 0 0 1 3 0 2 2 0 0 0 3.4 1.4C10.3 11.5 19.3 6 30 6zM15 2.5l7.2 4.6a26 26 0 0 0-7.7 4.2z"/></symbol>
+  </defs>
+</svg>
+
+<div class="cc-embed cc-abpar" data-cc-abpar>
+  <p class="cc-sr" data-sr></p>
+  <div class="cc-abpar__hd">
+    <h3 class="cc-title cc-abpar__title">Kdo v&nbsp;páru rozhoduje o&nbsp;penězích</h3>
+    <button type="button" class="info" data-info aria-label="Zdroj a vysvětlivky" aria-expanded="false" aria-controls="ab-panel">i</button>
+  </div>
+  <div class="cc-abpar__grid" data-grid></div>
+  <div class="panel" id="ab-panel" role="dialog" aria-modal="true" aria-labelledby="ab-panel-t" data-panel hidden>
+    <div class="panel__box">
+      <div class="panel__hd"><p class="panel__t" id="ab-panel-t">Zdroj a vysvětlivky</p><button type="button" class="panel__x" data-close aria-label="Zavřít">×</button></div>
+      <div class="panel__body" data-pbody></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var root = document.querySelector('[data-cc-abpar]');
+  if(!root || root.dataset.ccInit) return;
+  root.dataset.ccInit = '1';
+  var Q = location.search;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canIO = 'IntersectionObserver' in window;
+  var STATIC = /[?&]static\b/.test(Q);
+  var ANIM = !reduce && canIO && !STATIC;
+  if(ANIM) root.classList.add('is-pre');
+  if(STATIC) root.classList.add('is-static');
+
+  /* ===== D: popisky, data a texty panelu (i) ===== */
+  var D = {
+    kdo:    {h:'O investicích rozhoduje sám', rows:[['Muži',45,'m'],['Ženy',22,'w']]},
+    prijem: {h:'Rozhoduje sám, když vydělává víc', bars:[['Muž',53,'m'],['Žena',45,'w']]},
+    nakupy: {h:'Výdaje nad 15 tisíc řeší společně', pre:'téměř', n:3, of:4, fill:73, t:'párů'},
+    rezerva:{h:'Má tajnou rezervu', pigs:[['mužů',27,'m'],['žen',25,'w']]},
+    vadi:   {h:'Tajné úspory partnera by vadily', bars:[['Ženám',46,'w'],['Mužům',31,'m']]},
+    zeny:   {n:18, t:'investorů do akcií a\u00a0ETF v\u00a0Air Bank jsou ženy'},
+    info:   ['Průzkum agentury Ipsos pro Air Bank, září 2026, 1 050 respondentů ve věku 18–65 let. Data nejsou vážená.',
+             'Procenta jsou z lidí ve vztahu (856 respondentů). Jedna postavička odpovídá 10 % lidí.',
+             'Rozhodování podle příjmu porovnává lidi, kteří v páru vydělávají víc. Žen s vyšším příjmem je v průzkumu 80, číslo je proto orientační.',
+             'Výdaje nad 15 tisíc korun řeší společně 72–74 % lidí ve vztahu, muži i ženy odpovídají podobně.',
+             'Podíl žen mezi investory do akcií a ETF uvádí Air Bank.']
+  };
+
+  var NB = ' ';
+  var val = function(n, unit, cls, cd, pre){ return '<span class="val'+(cls?' '+cls:'')+'"'+(cd!=null?' data-cd="'+cd+'"':'')+'>'+(pre?'<span class="pre">'+pre+'</span>':'')+'<span data-c="'+n+'">'+n+'</span><span class="u">'+(unit||'%')+'</span></span>'; };
+  var grid = root.querySelector('[data-grid]');
+  var g = function(k){ return k==='m' ? 'is-m' : 'is-w'; };
+
+  root.querySelector('[data-sr]').textContent = [
+    D.kdo.h+': '+D.kdo.rows.map(function(r){ return r[0].toLowerCase()+' '+r[1]+' procent'; }).join(', ')+'.',
+    D.prijem.h+': '+D.prijem.bars.map(function(r){ return r[0].toLowerCase()+' '+r[1]+' procent'; }).join(', ')+'.',
+    D.nakupy.h+': '+D.nakupy.pre+' tři ze čtyř párů.',
+    D.rezerva.h+': '+D.rezerva.pigs.map(function(r){ return r[1]+' procent '+r[0]; }).join(', ')+'.',
+    D.vadi.h+': '+D.vadi.bars.map(function(r){ return r[0].toLowerCase()+' '+r[1]+' procent'; }).join(', ')+'.',
+    D.zeny.n+' procent '+D.zeny.t.replace(/\u00a0/g,' ')+'.',
+    'Zdroj: '+D.info[0]
+  ].join(' ');
+  root.querySelector('[data-pbody]').innerHTML = D.info.map(function(t){ return '<p>'+t.replace(/ (\d) (\d{3})/g, ' $1'+NB+'$2').replace(/ ([zvsaokui]) /gi, ' $1'+NB).replace(/(\d) (let|%|respondentů)/g, '$1'+NB+'$2')+'</p>'; }).join('');
+
+  function sec(key, head, inner){
+    var s = document.createElement('section');
+    s.className = 'vs vs--'+key; s.dataset.sec = key;
+    s.innerHTML = head + '<div class="vs__viz" aria-hidden="true">'+inner+'</div>';
+    grid.appendChild(s); return s;
+  }
+  var label = function(t){ return '<h4 class="vs__h" aria-hidden="true">'+t+'</h4>'; };
+  function people(v, sym, d0, step){
+    var h = '';
+    for(var k=0; k<10; k++){
+      var f = Math.max(0, Math.min(1, v/10 - k));
+      h += '<span class="pp"><svg class="pp__off"><use href="#'+sym+'"/></svg><svg class="pp__on" style="--cut:'+((1-f)*100).toFixed(1)+'%;--d:'+(d0 + k*step)+'ms"><use href="#'+sym+'"/></svg></span>';
+    }
+    return '<span class="iso__ppl">'+h+'</span>';
+  }
+  function icon(sym, ar, f, d, up){
+    var cut = ((1-f)*100).toFixed(1)+'%';
+    return '<span class="ic'+(up?' ic--up':'')+'" style="--ar:'+ar+'"><svg class="ic__off"><use href="#'+sym+'"/></svg><svg class="ic__on" style="--cut:'+cut+';--d:'+d+'ms"><use href="#'+sym+'"/></svg></span>';
+  }
+  function bars(list){
+    return '<div class="pb">' + list.map(function(r, i){
+      return '<div class="pb__i '+g(r[2])+'"><div class="pb__top"><span class="pb__lab">'+r[0]+'</span>'+val(r[1], '%', '', i*160)+'</div>'
+        + '<div class="pb__tr"><span class="pb__f" style="--v:'+(r[1]/100)+';--d:'+(i*160)+'ms"></span></div></div>';
+    }).join('') + '</div>';
+  }
+
+  /* 1 kdo */
+  sec('kdo', label(D.kdo.h), '<div class="iso">' + D.kdo.rows.map(function(r, i){
+    return '<div class="iso__row '+g(r[2])+'"><span class="iso__lab">'+r[0]+'</span>'+people(r[1], r[2]==='m'?'ab-man':'ab-wom', i*500, 60)+val(r[1], '%', 'hero', i*500)+'</div>';
+  }).join('') + '</div>');
+  /* 2 příjem */
+  sec('prijem', label(D.prijem.h), bars(D.prijem.bars));
+  /* 3 nákupy */
+  var ci = ''; for(var c=0; c<D.nakupy.of; c++){ var f = Math.max(0, Math.min(1, D.nakupy.fill/100*D.nakupy.of - c)); ci += icon('ab-cart', 48/44, f, c*220); }
+  sec('nakupy', label(D.nakupy.h), '<div class="carts is-pair">'+val(D.nakupy.n, 'ze'+NB+D.nakupy.of, 'hero', 0, D.nakupy.pre)+'<span class="carts__ic">'+ci+'</span></div>');
+  /* 4 rezerva */
+  sec('rezerva', label(D.rezerva.h), '<div class="pigs">' + D.rezerva.pigs.map(function(r, i){
+    return '<div class="pig '+g(r[2])+'">'+icon('ab-pig', 64/48, 1, i*250)+'<span class="pig__t">'+val(r[1], '%', '', i*250)+'<span class="pig__lab">'+r[0]+'</span></span></div>';
+  }).join('') + '</div>');
+  /* 5 vadí */
+  sec('vadi', label(D.vadi.h), bars(D.vadi.bars));
+  /* 6 ženy v Air Bank */
+  var zp = ''; for(var z=0; z<10; z++){ var fz = Math.max(0, Math.min(1, D.zeny.n/10 - z)); zp += '<span class="pp"><svg class="pp__off"><use href="#ab-per"/></svg><svg class="pp__on" style="--cut:'+((1-fz)*100).toFixed(1)+'%;--d:'+(z*70)+'ms"><use href="#ab-per"/></svg></span>'; }
+  sec('zeny', '', val(D.zeny.n, '%', 'hero') + '<p class="zn__txt">'+D.zeny.t+'</p><span class="zn__ppl">'+zp+'</span>');
+
+  /* ===== pomocníci ===== */
+  var secs = [].slice.call(grid.children);
+  var ease = function(k){ return 1 - Math.pow(1-k, 3); };
+  function tween(dur, delay, fn, done){
+    var t0 = performance.now() + delay;
+    (function f(t){ var k = (t - t0)/dur; if(k < 0){ requestAnimationFrame(f); return; } k = Math.min(1, k); fn(k); if(k < 1) requestAnimationFrame(f); else if(done) done(); })(performance.now());
+  }
+  function counts(scope, play){
+    [].forEach.call(scope.querySelectorAll('[data-c]'), function(el){
+      var n = +el.dataset.c, host = el.parentNode, delay = +(host.dataset.cd || 0);
+      if(!play){ el.textContent = n; host.classList.remove('is-count'); return; }
+      host.classList.add('is-count'); el.textContent = '0';
+      tween(900, delay + 150, function(k){ el.textContent = Math.round(n*ease(k)); }, function(){ host.classList.remove('is-count'); });
+    });
+  }
+  function bindTap(el, fn){
+    var last = 0;
+    el.addEventListener('pointerdown', function(e){ if(e.button > 0) return; e.preventDefault(); last = Date.now(); fn(e); });
+    el.addEventListener('click', function(e){ e.preventDefault(); if(Date.now() - last > 600) fn(e); });
+    el.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); last = Date.now(); fn(e); } });
+  }
+
+  /* ===== panel (i) ===== */
+  var info = root.querySelector('[data-info]'), panel = root.querySelector('[data-panel]'), closeBtn = root.querySelector('[data-close]');
+  function openP(){ panel.hidden = false; info.setAttribute('aria-expanded', 'true'); closeBtn.focus({preventScroll:true}); }
+  function closeP(){ if(panel.hidden) return; panel.hidden = true; info.setAttribute('aria-expanded', 'false'); info.focus({preventScroll:true}); }
+  bindTap(info, function(){ panel.hidden ? openP() : closeP(); });
+  bindTap(closeBtn, closeP);
+  panel.addEventListener('pointerdown', function(e){ if(e.target === panel) closeP(); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeP();
+    if(e.key === 'Tab' && !panel.hidden){ e.preventDefault(); closeBtn.focus(); }
+  });
+
+  /* ===== vyplnění rámu ===== */
+  function over(){
+    var gb = grid.getBoundingClientRect().bottom, mx = 0;
+    secs.forEach(function(s){ mx = Math.max(mx, s.getBoundingClientRect().bottom); });
+    return mx > gb + 1;
+  }
+  function fit(){
+    var sc = 1; root.style.setProperty('--sc', 1);
+    for(var k=0; k<18 && over() && sc > .66; k++){ sc *= .95; root.style.setProperty('--sc', sc.toFixed(3)); }
+  }
+  var rt;
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  if(window.ResizeObserver) new ResizeObserver(function(){ clearTimeout(rt); rt = setTimeout(fit, 90); }).observe(root);
+  fit();
+
+  /* ===== nástup po kapitolách ===== */
+  function play(s, anim){
+    if(s.classList.contains('is-on')) return;
+    s.classList.add('is-on');
+    counts(s, anim);
+  }
+  if(!ANIM){ secs.forEach(function(s){ play(s, false); }); }
+  else {
+    var alive = false;
+    var io = new IntersectionObserver(function(en){
+      alive = true;
+      en.forEach(function(x){ if(x.isIntersecting){ io.unobserve(x.target); play(x.target, true); } });
+    }, {threshold:.45});
+    secs.forEach(function(s){ io.observe(s); });
+    setTimeout(function(){ if(!alive) secs.forEach(function(s){ play(s, false); }); }, 6000);
+  }
+  if(/[?&]info\b/.test(Q)) openP();
+})();
+</script>
+</body>
+</html>
