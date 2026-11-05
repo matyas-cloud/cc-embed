@@ -111,7 +111,7 @@
   <p class="cc-sr">Graf vývoje indexu S&amp;P 500 v roce 2026 podle denních zavíracích hodnot od 2. ledna do 13. října. 27. ledna index uzavřel na rekordu 6 979 bodů. Do 30. března, v době války v Íránu, klesl na dno roku 6 344 bodů, o 9,1 % pod lednový rekord, a hned další den vzrostl o 2,9 %. 15. dubna uzavřel na novém rekordu 7 023 bodů a 13. října na 7 805 bodech, o 23,0 % výš než 30. března. Kdo prodal 30. března, prodal v nejhorší den roku. O dva a půl týdne později byl index na rekordu. Data S&amp;P Dow Jones Indices.</p>
   <header class="cc-sp__hd" aria-hidden="true">
     <h3 class="cc-sp__title">S&amp;P 500 v roce 2026</h3>
-    <p class="cc-sp__lede">Kdo prodal 30.&nbsp;března, prodal v&nbsp;nejhorší den roku. O&nbsp;dva a&nbsp;půl týdne později byl index na rekordu.</p>
+    <p class="cc-sp__lede">Kdo prodal 30.&nbsp;března, prodal na letošním dně. O&nbsp;dva a&nbsp;půl týdne později byl index na rekordu.</p>
   </header>
   <div class="cc-sp__stage" data-stage aria-hidden="true"><canvas data-cv></canvas></div>
   <p class="cc-sp__src" aria-hidden="true">Denní zavírací hodnoty S&amp;P Dow Jones Indices.</p>
@@ -152,15 +152,20 @@
   /* změny jako poznámky fixem: −9,1 % od 27. 1. ke dnu 30. 3. (válka v Íránu od 28. 2.), +2,9 % hned 31. 3., +23,0 % od 30. 3. do 13. 10. */
   var REC = 16, LOW = 59, NEXT = 60, NOTES = [['−9,1 %','válka v Íránu'], ['+2,9 %','hned další den'], ['+23,0 %','od 30. 3.']];
   var GRID = [6400, 6800, 7200, 7600];
+  /* časová osa vstupu v ms */
+  var REK = 70, T = {dno:1300, odraz:1850, rekord:2350, konec:3250, vse:3750, a0:1300, a1:1800, b0:1900, b1:2300, c0:3250, c1:3750};
 
   var root = document.querySelector('[data-cc-airbank-sp500-2026]');
   if(!root || root.dataset.ccInit) return; root.dataset.ccInit = '1';
   var stage = root.querySelector('[data-stage]'), cv = root.querySelector('[data-cv]'), ctx = cv.getContext('2d');
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W = 0, H = 0, dpr = 1, prog = 0, started = false, raf = 0;
+  var W = 0, H = 0, dpr = 1, prog = 0, clk = 0, started = false, raf = 0;
   var vmin = Infinity, vmax = -Infinity; V.forEach(function(x){ if(x<vmin) vmin = x; if(x>vmax) vmax = x; });
 
   function send(o){ if(window.parent===window) return; try{ o.source='cc-embed'; o.embed_id=EMBED_ID; window.parent.postMessage(o,'*'); }catch(e){} }
+  function seg(a, b){ return Math.max(0, Math.min(1, (clk - a)/(b - a))); }
+  function eio(k){ return k<.5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2)/2; }
+  function eout(k){ return 1 - Math.pow(1 - k, 3); }
   function nb(n){ return Math.round(n).toLocaleString('cs-CZ').replace(/\s/g,' '); }
 
   /* geometrie: vlevo popisky osy, nahoře místo na popisek konce, dole na popisek dna a měsíce */
@@ -224,27 +229,34 @@
       ctx.translate(x, y); ctx.font = '600 ' + big + "px 'Shantell Sans', sans-serif"; ctx.fillText(t[0], 0, 0); ctx.font = '600 ' + sm + "px 'Shantell Sans', sans-serif"; ctx.fillStyle = '#c3ccc6'; ctx.fillText(t[1], 0, sm + 4); ctx.restore(); }
     var xr = X(REC), yr = Y(V[REC]), xd = X(LOW), yd = Y(V[LOW]), xn = X(NEXT), yn = Y(V[NEXT]);
     /* −9,1 %: šipka od lednového vrcholu ke dnu, pod křivkou, poznámka vlevo pod ní */
-    var fA = Math.max(0, Math.min(1, (to - LOW)/14));
+    var fA = seg(T.a0, T.a1);
     if(fA>0){ var P0 = [xr + 1, yr + 13], P2 = [xd - 7, yd + 1], dx = P2[0]-P0[0], dy = P2[1]-P0[1], L = Math.hypot(dx,dy), bow = s ? 20 : 34;
       var P1 = [(P0[0]+P2[0])/2 - dy/L*bow, (P0[1]+P2[1])/2 + dx/L*bow], mid = sketch(P0, P1, P2, fA);
       ctx.font = '600 ' + NS() + "px 'Shantell Sans', sans-serif"; var wN = ctx.measureText(NOTES[0][1]).width;
       /* na mobilu vlevo od šipky není místo, poznámka jde pod její hrot vlevo od popisku dna */
       if(s) note(NOTES[0], xd - 24, yd + 20, 'right', fA); else note(NOTES[0], Math.max(padL() + 4 + wN, mid[0] - 10), mid[1] + 20, 'right', fA); }
     /* +2,9 %: krátký háček z poznámky vpravo ode dna k bodu 31. 3. */
-    var fB = Math.max(0, Math.min(1, (to - NEXT - 6)/12));
+    var fB = seg(T.b0, T.b1);
     if(fB>0){ var tx = xd + (s ? 22 : 30), ty = (yd + yn)/2 + 6;
       sketch([tx - 5, ty - 6], [xn + 11, ty - 6], [xn + 6, yn + 3], fB); note(NOTES[1], tx, ty, 'left', fB); }
     /* +23,0 %: svislá šipka u pravého okraje z úrovně dna ke 13. 10., poznámka vlevo od ní */
-    var fC = Math.max(0, Math.min(1, (to - (N - 14))/13));
+    var fC = seg(T.c0, T.c1);
     if(fC>0){ var xe = X(N-1), ye = Y(V[N-1]), ax = xe - (s ? 5 : 7);
       sketch([ax, yd - 1], [ax - (s ? 5 : 8), (yd + ye)/2], [ax + 1, ye + 13], fC); note(NOTES[2], ax - (s ? 11 : 15), (yd + ye)/2 + 4, 'right', fC); }
     MK.forEach(function(m){ if(to < m.i - .01) return; if(m.d) lab(m); dot(m.i); });
   }
 
-  /* vstup bez probliknutí: křivka se nakreslí zleva, když je graf vidět */
-  function run(){ if(started) return; started = true; if(reduce){ prog = 1; draw(); return; }
-    var t0 = performance.now(), D = 1900;
-    (function tick(now){ var k = Math.min(1, (now - t0)/D); prog = k<.5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2)/2; draw(); if(k<1) raf = requestAnimationFrame(tick); })(t0); }
+  /* vstup po etapách: propad, zastavení na dně, odraz, růst k říjnu; poznámky dojíždějí podle času */
+  function play(now, t0){ clk = now - t0; var to;
+    if(clk < T.dno) to = LOW*eio(clk/T.dno);
+    else if(clk < T.odraz) to = LOW;
+    else if(clk < T.rekord) to = LOW + (REK - LOW)*eout((clk - T.odraz)/(T.rekord - T.odraz));
+    else if(clk < T.konec) to = REK + (N - 1 - REK)*eio((clk - T.rekord)/(T.konec - T.rekord));
+    else to = N - 1;
+    prog = to/(N - 1); draw(); return clk < T.vse; }
+  function run(){ if(started) return; started = true; if(reduce){ clk = T.vse; prog = 1; draw(); return; }
+    var t0 = performance.now();
+    (function tick(now){ if(play(now, t0)) raf = requestAnimationFrame(tick); else { clk = T.vse; prog = 1; draw(); } })(t0); }
 
   /* vyplnění rámu: při nedostatku místa se zmenší písmo, popisek zůstává */
   function overflows(){ return root.scrollHeight > root.clientHeight + 1 || stage.clientHeight < 150; }
@@ -259,9 +271,8 @@
   var viewSent = false;
   if('IntersectionObserver' in window && !reduce){
     new IntersectionObserver(function(es){ var e = es[0];
-      if(e.isIntersecting && e.intersectionRatio >= .3){ run(); if(!viewSent){ viewSent = true; send({event:'cc_embed_view'}); } } }, {threshold:[0,.3]}).observe(root);
-    setTimeout(run, 6000);
-  } else { prog = 1; started = true; draw(); send({event:'cc_embed_view'}); viewSent = true; }
+      if(e.isIntersecting && e.intersectionRatio >= .5){ run(); if(!viewSent){ viewSent = true; send({event:'cc_embed_view'}); } } }, {threshold:[0,.5]}).observe(root);
+  } else { clk = T.vse; prog = 1; started = true; draw(); send({event:'cc_embed_view'}); viewSent = true; }
 })();
 </script>
 </body>
