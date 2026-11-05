@@ -129,7 +129,7 @@
 .cc-airbank-sp500-2026 .cc-sp__lede{margin:5px 0 0;max-width:62ch;color:#b9c3bd;font:400 max(13px,calc(14.4px*var(--sc)))/1.45 var(--cc-display)}
 .cc-airbank-sp500-2026 .cc-sp__stage{position:relative;flex:1 1 auto;min-height:0;overflow:hidden;border-radius:14px;
   background:radial-gradient(90% 70% at 70% 10%,#14211f 0%,#0c1211 70%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),0 18px 34px -20px rgba(0,0,0,.9)}
-.cc-airbank-sp500-2026 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.cc-airbank-sp500-2026 canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:pan-y}
 .cc-airbank-sp500-2026 .cc-sp__src{flex:0 0 auto;margin:0;color:#7f8a84;font:400 max(12px,calc(12px*var(--sc)))/1.4 var(--cc-display)}
 @media (max-width:619px){
   .cc-embed.cc-airbank-sp500-2026{padding:14px 12px 12px;gap:calc(10px*var(--sc))}
@@ -153,13 +153,16 @@
   var REC = 16, LOW = 59, NEXT = 60, NOTES = [['−9,1 %','válka v Íránu'], ['+2,9 %','hned další den'], ['+23,0 %','od 30. 3.']];
   var GRID = [6400, 6800, 7200, 7600];
   /* časová osa vstupu v ms */
+  /* obchodní dny 2026 bez víkendů a svátků NYSE: index řady → datum */
+  var HOL = ['1-1','1-19','2-16','4-3','5-25','6-19','7-3','9-7'], DAYS = [];
+  (function(){ var d = new Date(2026, 0, 2); while(DAYS.length < N){ var w = d.getDay(); if(w && w < 6 && HOL.indexOf((d.getMonth()+1) + '-' + d.getDate()) < 0) DAYS.push(d.getDate() + '. ' + (d.getMonth()+1) + '.'); d.setDate(d.getDate() + 1); } })();
   var REK = 70, T = {dno:1300, odraz:1850, rekord:2350, konec:3250, vse:3750, a0:1300, a1:1800, b0:1900, b1:2300, c0:3250, c1:3750};
 
   var root = document.querySelector('[data-cc-airbank-sp500-2026]');
   if(!root || root.dataset.ccInit) return; root.dataset.ccInit = '1';
   var stage = root.querySelector('[data-stage]'), cv = root.querySelector('[data-cv]'), ctx = cv.getContext('2d');
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W = 0, H = 0, dpr = 1, prog = 0, clk = 0, started = false, raf = 0;
+  var W = 0, H = 0, dpr = 1, prog = 0, clk = 0, started = false, raf = 0, hov = -1, hA = 0, hOn = false, hF = 0;
   var vmin = Infinity, vmax = -Infinity; V.forEach(function(x){ if(x<vmin) vmin = x; if(x>vmax) vmax = x; });
 
   function send(o){ if(window.parent===window) return; try{ o.source='cc-embed'; o.embed_id=EMBED_ID; window.parent.postMessage(o,'*'); }catch(e){} }
@@ -244,7 +247,30 @@
     if(fC>0){ var xe = X(N-1), ye = Y(V[N-1]), ax = xe - (s ? 5 : 7);
       sketch([ax, yd - 1], [ax - (s ? 5 : 8), (yd + ye)/2], [ax + 1, ye + 13], fC); note(NOTES[2], ax - (s ? 11 : 15), (yd + ye)/2 + 4, 'right', fC); }
     MK.forEach(function(m){ if(to < m.i - .01) return; if(m.d) lab(m); dot(m.i); });
+    /* hover: tenká svislice, tečka a štítek s datem, hodnotou a denní změnou; zbytek roku vpravo ustoupí */
+    if(hA>0 && hov>=0){ var hx = X(hov), hy = Y(V[hov]), lx = Math.round(hx) + .5, dv = hov ? (V[hov]/V[hov-1] - 1)*100 : null,
+        dt = dv===null ? '' : Math.abs(dv).toFixed(1).replace('.', ','), ds = dv===null ? '' : (dt==='0,0' ? '' : dv<0 ? '−' : '+') + dt + ' %', pw, ph = 42, px, py;
+      ctx.save(); ctx.globalAlpha = hA;
+      ctx.fillStyle = 'rgba(12,18,17,.5)'; ctx.fillRect(lx, 0, W - lx, b + 6);
+      ctx.strokeStyle = 'rgba(232,237,232,.35)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(lx, 0); ctx.lineTo(lx, b + 6); ctx.stroke();
+      ctx.fillStyle = LIME; ctx.strokeStyle = '#0c1211'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(hx, hy, s ? 4.4 : 5, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      ctx.font = '500 11px Poppins, sans-serif'; pw = ctx.measureText(DAYS[hov]).width; ctx.font = '600 14px Poppins, sans-serif'; pw = Math.max(pw, ctx.measureText(nb(V[hov])).width + (ds ? ctx.measureText(ds).width*.86 + 10 : 0)) + 20;
+      px = hx + 12 + pw > W - 6 ? hx - 12 - pw : hx + 12; py = hy - ph - 10 < 6 ? hy + 12 : hy - ph - 10;
+      ctx.fillStyle = 'rgba(14,21,20,.94)'; ctx.strokeStyle = 'rgba(255,255,255,.14)'; ctx.lineWidth = 1; ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(px, py, pw, ph, 8); else ctx.rect(px, py, pw, ph); ctx.fill(); ctx.stroke();
+      ctx.textAlign = 'left'; ctx.font = '500 11px Poppins, sans-serif'; ctx.fillStyle = '#8d9892'; ctx.fillText(DAYS[hov], px + 10, py + 16);
+      ctx.font = '600 14px Poppins, sans-serif'; ctx.fillStyle = '#f1f5f1'; ctx.fillText(nb(V[hov]), px + 10, py + 33);
+      if(ds){ ctx.textAlign = 'right'; ctx.font = '600 12px Poppins, sans-serif'; ctx.fillStyle = dv<0 ? '#c3ccc6' : LIME; ctx.fillText(ds, px + pw - 10, py + 33); }
+      ctx.restore(); }
   }
+
+  /* hover až po dojezdu vstupu; na dotyk jde o tažení prstem do stran */
+  function pick(e){ var r = stage.getBoundingClientRect(), i = Math.round((e.clientX - r.left - padL())/(W - padL() - padR())*(N - 1)); return Math.max(0, Math.min(N - 1, i)); }
+  function fade(to){ cancelAnimationFrame(hF); var from = hA, t0 = performance.now(), D = reduce ? 0 : 160;
+    (function st(now){ var k = D ? Math.min(1, (now - t0)/D) : 1; hA = from + (to - from)*k; if(k>=1 && !to) hov = -1; draw(); if(k<1) hF = requestAnimationFrame(st); })(t0); }
+  function hoverOn(e){ if(clk < T.vse) return; hov = pick(e); if(hOn) draw(); else { hOn = true; fade(1); } }
+  function hoverOff(){ if(hOn){ hOn = false; fade(0); } }
+  stage.addEventListener('pointermove', hoverOn); stage.addEventListener('pointerdown', hoverOn);
+  stage.addEventListener('pointerleave', hoverOff); stage.addEventListener('pointercancel', hoverOff);
 
   /* vstup po etapách: propad, zastavení na dně, odraz, růst k říjnu; poznámky dojíždějí podle času */
   function play(now, t0){ clk = now - t0; var to;
