@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trefíte dno? – Peníze pod kontrolou, 2. díl</title>
+<meta name="robots" content="noindex">
+<style>
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-500.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-ext-500.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-ext-600.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-700.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-ext-700.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  html,body{margin:0;padding:0;background:#0b0f0e;height:100%;overflow:hidden;}
+  .cc-embed{margin:0!important;}
+</style>
+</head>
+<body>
+
+<style>
+.cc-embed{
+  /* --- barvy --- */
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  /* --- shape --- */
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  /* --- font --- */
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}      /* prvek do krajů (fotka, mapa) */
+.cc-embed--bare{background:none;border:0;padding:0;} /* bez rámečku */
+/* --- typo --- */
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{margin:12px 0 0;font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);
+  letter-spacing:.02em;text-transform:uppercase;}
+.cc-embed .cc-num{font-family:var(--cc-display);font-weight:700;
+  font-size:clamp(22px,4vw,32px);color:var(--cc-blue);font-variant-numeric:tabular-nums;}
+.cc-embed a{color:var(--cc-blue);}
+/* --- UI --- */
+.cc-embed .cc-btn{
+  display:inline-block;padding:10px 20px;
+  border:1px solid var(--cc-blue);border-radius:var(--cc-radius);
+  background:var(--cc-blue);color:#fff;text-decoration:none;
+  font:700 18px/26px var(--cc-display);cursor:pointer;
+  transition:background .18s,color .18s;}
+.cc-embed .cc-btn:hover{background:var(--cc-blue-dark);border-color:var(--cc-blue-dark);}
+.cc-embed .cc-btn--ghost{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-btn--ghost:hover{background:var(--cc-blue);color:#fff;}
+.cc-embed .cc-btn--sm{padding:7px 14px;font-size:15px;line-height:22px;}
+.cc-embed .cc-btn[aria-pressed="true"]{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-card{background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);padding:14px 16px;}
+.cc-embed .cc-badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  background:var(--cc-blue);color:#fff;font:700 12px/18px var(--cc-ui);}
+.cc-embed .cc-badge--red{background:var(--cc-red);}
+.cc-embed .cc-badge--soft{background:#eaf3fd;color:var(--cc-blue-dark);}
+.cc-embed input,.cc-embed select,.cc-embed textarea{
+  font:400 16px/24px var(--cc-ui);color:var(--cc-ink);
+  padding:9px 12px;background:#fff;border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);}
+.cc-embed input[type=range]{padding:0;border:0;background:none;accent-color:var(--cc-blue);width:100%;}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed table{width:100%;border-collapse:collapse;font:400 15px/1.4 var(--cc-ui);}
+.cc-embed th{text-align:left;font-weight:700;color:var(--cc-muted);
+  text-transform:uppercase;font-size:12px;letter-spacing:.05em;padding:8px 10px;}
+.cc-embed td{padding:10px;border-top:1px solid var(--cc-line);}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-grid{display:grid;gap:var(--cc-gap);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.cc-embed .cc-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--cc-gap);}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+
+
+<div class="cc-embed cc-airbank-trefte-dno" data-cc-airbank-trefte-dno>
+  <p class="cc-sr" data-sr aria-live="polite"></p>
+  <header class="cc-td__hd">
+    <div class="cc-td__hdt">
+      <h3 class="cc-td__title">Trefíte dno?</h3>
+      <p class="cc-td__lede" data-lede>Máte 100 000 Kč a před vámi je 5 let skutečného vývoje amerických akcií. Investujte všechno najednou ve chvíli, kdy myslíte, že jsou trhy na samém dnu. Jen to neprošvihněte, jako u skutečného investování ani tady čas zpět nevezmete.</p>
+    </div>
+    <button type="button" class="cc-td__info" data-open aria-expanded="false" aria-label="Zdroje a metodika">i</button>
+  </header>
+  <div class="cc-td__stage" data-stage tabindex="0" aria-label="Graf. Šipkou doprava posunete čas o týden, se Shiftem o měsíc. Investovat můžete tlačítkem na hraně rolety.">
+    <canvas data-cv aria-hidden="true"></canvas>
+    <div class="cc-td__sh" data-sh>
+      <button type="button" class="cc-td__sb cc-td__sb--buy" data-buy>Investovat teď</button>
+      <button type="button" class="cc-td__sb" data-hold aria-pressed="false">Posunout o měsíc<i aria-hidden="true">→</i></button>
+    </div>
+    <div class="cc-td__ov" data-ov aria-hidden="true"><div class="cc-td__dt" data-dt></div><div class="cc-td__tt" data-tt></div></div>
+  </div>
+  <div class="cc-td__res" data-res>
+    <div class="cc-td__nums" aria-hidden="true">
+      <div class="cc-td__num cc-td__num--me"><div class="cc-td__lb"><em>VAŠE INVESTICE</em><span data-me-d></span></div><b data-me-v></b></div>
+      <div class="cc-td__num cc-td__num--dca"><div class="cc-td__lb"><em>PRAVIDELNÝ NÁKUP</em><span>4 167 Kč / měs</span></div><b data-dca-v></b></div>
+    </div>
+    <p class="cc-td__msg" data-msg aria-hidden="true"></p>
+    <div class="cc-td__foot"><button type="button" class="cc-td__btn" data-again>Vyzkoušet jiné období</button></div>
+  </div>
+  <div class="cc-td__overlay" data-overlay hidden>
+    <div class="cc-td__panel" role="dialog" aria-modal="true" aria-labelledby="cc-td-dlg-t">
+      <button type="button" class="cc-td__close" data-close aria-label="Zavřít">×</button>
+      <h4 class="cc-td__ptitle" id="cc-td-dlg-t">Zdroje a metodika</h4>
+      <div class="cc-td__pbody">
+        <p>Graf ukazuje skutečný denní vývoj amerického indexu S&amp;P 500 včetně dividend, přepočtený na koruny podle denního kurzu dolaru. Pravidelný nákup (strategie DCA) investuje v prvních dvou letech částku 100 000 Kč po 4 167 Kč měsíčně.</p>
+        <p>Peníze čekající na nákup neúročíme a poplatky ani daně nepočítáme. Data pro S&amp;P 500 pochází z Yahoo Finance, inflace podle ČSÚ. Jde o ilustraci na historických datech, ne o investiční doporučení.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.cc-embed.cc-airbank-trefte-dno{
+  --lime:#b4d335; --ice:#7cc8ff; --bg:#0b0f0e; --tx:#e8ede8; --tx2:#8d9892;
+  --sc:1; --title-min:17px; --lede-min:12.5px; --txt-min:12.5px;
+  box-sizing:border-box;position:relative;display:flex;flex-direction:column;gap:calc(12px*var(--sc));
+  height:100vh;margin:0;overflow:hidden;padding:18px 18px 16px;border:0;border-radius:0;
+  background:linear-gradient(180deg,#0e1413,#0a0e0d);color:var(--tx);font-family:var(--cc-display);
+}
+.cc-airbank-trefte-dno .cc-td__hd{flex:0 0 auto;display:flex;gap:12px;align-items:flex-start}
+.cc-airbank-trefte-dno .cc-td__hdt{flex:1 1 auto;min-width:0}
+.cc-airbank-trefte-dno .cc-td__title{margin:0;color:#f4f7f3;letter-spacing:-.01em;font-weight:700;line-height:1.15;
+  font-size:max(var(--title-min),calc(21px*var(--sc)))}
+.cc-airbank-trefte-dno .cc-td__lede{margin:4px 0 0;color:var(--tx2);font:400 max(var(--lede-min),calc(13.8px*var(--sc)))/1.45 var(--cc-display)}
+.cc-airbank-trefte-dno.is-nolede .cc-td__lede,.cc-airbank-trefte-dno.is-done .cc-td__lede{display:none}
+.cc-airbank-trefte-dno .cc-td__info{flex:0 0 auto;width:28px;height:28px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.03);
+  color:var(--tx2);font:italic 600 14px/1 Georgia,serif;cursor:pointer;touch-action:manipulation}
+.cc-airbank-trefte-dno .cc-td__stage{position:relative;flex:1 1 auto;min-height:0;overflow:hidden;border-radius:14px;outline:none;
+  background:radial-gradient(90% 70% at 70% 10%,#14211f 0%,#0c1211 70%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),0 18px 34px -20px rgba(0,0,0,.9)}
+.cc-airbank-trefte-dno .cc-td__stage:focus-visible{box-shadow:inset 0 0 0 2px var(--lime)}
+.cc-airbank-trefte-dno canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y;cursor:ew-resize}
+.cc-airbank-trefte-dno.is-done canvas{cursor:default}
+.cc-airbank-trefte-dno .cc-td__ov{position:absolute;left:14px;top:12px;right:14px;display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap;pointer-events:none;
+  opacity:0;visibility:hidden;transition:opacity .5s}
+.cc-airbank-trefte-dno.is-done .cc-td__ov{opacity:1;visibility:visible}
+.cc-airbank-trefte-dno .cc-td__dt{font:600 11.5px/1 var(--cc-display);letter-spacing:.05em;color:#0b0f0e;background:#e8ede8;border-radius:999px;padding:5px 10px 4px}
+.cc-airbank-trefte-dno .cc-td__tt{font:600 15px/1.25 var(--cc-display);color:#f1f5f1}
+.cc-airbank-trefte-dno .cc-td__btn{min-height:44px;padding:0 20px;border-radius:999px;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+  font:600 max(13px,calc(14.4px*var(--sc)))/1 var(--cc-display);white-space:nowrap;color:var(--tx);border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.03)}
+/* ovládání na roletě: nákup a posun o měsíc vedle úchytu, jedou s hranou */
+.cc-airbank-trefte-dno .cc-td__sh{position:absolute;left:0;top:0;z-index:2;display:flex;flex-direction:column;align-items:stretch;gap:8px;pointer-events:none;transition:opacity .3s}
+.cc-airbank-trefte-dno .cc-td__sh.is-gone{opacity:0}
+.cc-airbank-trefte-dno .cc-td__sh>button{pointer-events:auto}
+.cc-airbank-trefte-dno .cc-td__sh.is-gone>button{pointer-events:none}
+.cc-airbank-trefte-dno .cc-td__sb{min-height:38px;padding:0 16px;border-radius:999px;white-space:nowrap;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+  font:600 13.5px/1 var(--cc-display);color:var(--tx);border:1px solid rgba(255,255,255,.22);background:rgba(18,25,23,.94);box-shadow:0 10px 22px -10px rgba(0,0,0,.95)}
+.cc-airbank-trefte-dno .cc-td__sb--buy{min-height:42px;color:#0b0f0e;border:0;background:linear-gradient(180deg,#c9e65c,#a5c427);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 10px 24px -8px rgba(180,211,53,.55)}
+.cc-airbank-trefte-dno .cc-td__sb[aria-pressed="true"]{background:rgba(180,211,53,.18);border-color:rgba(180,211,53,.65)}
+.cc-airbank-trefte-dno .cc-td__sb:disabled{cursor:default}
+.cc-airbank-trefte-dno .cc-td__sb i{font-style:normal;margin-left:6px}
+.cc-airbank-trefte-dno .cc-td__btn:disabled{opacity:.4;cursor:default}
+.cc-airbank-trefte-dno :focus-visible{outline:3px solid var(--lime);outline-offset:2px}
+.cc-airbank-trefte-dno .cc-td__res{flex:0 0 auto;display:none;flex-direction:column;gap:calc(10px*var(--sc))}
+.cc-airbank-trefte-dno.is-done .cc-td__res{display:flex;animation:cc-td-in .45s ease-out both}
+@keyframes cc-td-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.cc-airbank-trefte-dno .cc-td__nums{display:flex;gap:10px}
+.cc-airbank-trefte-dno .cc-td__num{position:relative;flex:1 1 0;min-width:0;padding:calc(12px*var(--sc)) 14px calc(11px*var(--sc));border-radius:14px;
+  background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
+.cc-airbank-trefte-dno .cc-td__num::before{content:"";position:absolute;left:12px;right:12px;top:0;height:3px;border-radius:0 0 3px 3px}
+.cc-airbank-trefte-dno .cc-td__num--me::before{background:var(--lime);box-shadow:0 0 14px var(--lime)}
+.cc-airbank-trefte-dno .cc-td__num--dca::before{background:var(--ice);box-shadow:0 0 14px var(--ice)}
+.cc-airbank-trefte-dno .cc-td__lb{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px}
+.cc-airbank-trefte-dno .cc-td__lb em{font:700 10.5px/1.3 var(--cc-display);font-style:normal;letter-spacing:.12em}
+.cc-airbank-trefte-dno .cc-td__num--me em{color:#c6e55a}
+.cc-airbank-trefte-dno .cc-td__num--dca em{color:#9ad6ff}
+.cc-airbank-trefte-dno .cc-td__lb span{font:500 12px/1.3 var(--cc-display);color:#a7b2ac}
+.cc-airbank-trefte-dno .cc-td__num b{display:block;margin-top:2px;font:700 max(17px,calc(25px*var(--sc)))/1.15 var(--cc-display);letter-spacing:-.02em;white-space:nowrap}
+.cc-airbank-trefte-dno .cc-td__num--me b{color:#c6e55a}
+.cc-airbank-trefte-dno .cc-td__num--dca b{color:#9ad6ff}
+.cc-airbank-trefte-dno .cc-td__msg{margin:0;color:#cdd6d0;font:400 max(var(--txt-min),calc(13.6px*var(--sc)))/1.45 var(--cc-display)}
+.cc-airbank-trefte-dno .cc-td__foot{display:flex;justify-content:flex-end}
+/* (i) */
+.cc-airbank-trefte-dno .cc-td__overlay{position:absolute;inset:0;z-index:5;display:flex;padding:10px;background:rgba(5,8,7,.6)}
+.cc-airbank-trefte-dno .cc-td__overlay[hidden]{display:none}
+.cc-airbank-trefte-dno .cc-td__panel{position:relative;flex:1;display:flex;flex-direction:column;min-height:0;padding:18px 18px 14px;border-radius:14px;
+  background:#121a18;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 20px 40px rgba(0,0,0,.5)}
+.cc-airbank-trefte-dno .cc-td__close{position:absolute;top:8px;right:8px;width:34px;height:34px;border:0;border-radius:50%;background:rgba(255,255,255,.07);color:var(--tx);
+  font:400 22px/1 var(--cc-display);cursor:pointer;touch-action:manipulation}
+.cc-airbank-trefte-dno .cc-td__ptitle{margin:0 40px 10px 0;color:#f4f7f3;font-size:17px}
+.cc-airbank-trefte-dno .cc-td__pbody{flex:1 1 auto;min-height:0;overflow-y:auto;color:#b9c3bd;font:400 14px/1.6 var(--cc-display)}
+.cc-airbank-trefte-dno .cc-td__pbody p{margin:0 0 10px}
+@media (max-width:619px){
+  .cc-embed.cc-airbank-trefte-dno{padding:14px 12px 12px;gap:calc(9px*var(--sc))}
+  .cc-airbank-trefte-dno .cc-td__title{font-size:max(var(--title-min),calc(18.5px*var(--sc)))}
+  .cc-airbank-trefte-dno .cc-td__lede{font-size:max(var(--lede-min),calc(13px*var(--sc)))}
+  .cc-airbank-trefte-dno .cc-td__sb{font-size:12.5px;padding:0 13px;min-height:36px}
+  .cc-airbank-trefte-dno .cc-td__sb--buy{min-height:40px}
+  .cc-airbank-trefte-dno .cc-td__tt{font-size:13px;flex-basis:100%}
+  .cc-airbank-trefte-dno .cc-td__nums{gap:6px}
+  .cc-airbank-trefte-dno .cc-td__num{padding:calc(9px*var(--sc)) 10px calc(8px*var(--sc));border-radius:12px}
+  .cc-airbank-trefte-dno .cc-td__lb{flex-direction:column;align-items:flex-start;gap:1px}
+  .cc-airbank-trefte-dno .cc-td__lb em{font-size:9.5px}
+  .cc-airbank-trefte-dno .cc-td__lb span{font-size:11px}
+  .cc-airbank-trefte-dno .cc-td__num b{font-size:max(15px,calc(18.5px*var(--sc)))}
+  .cc-airbank-trefte-dno .cc-td__msg{font-size:max(var(--txt-min),calc(12.8px*var(--sc)))}
+}
+@media (prefers-reduced-motion:reduce){.cc-airbank-trefte-dno .cc-td__sh,.cc-airbank-trefte-dno .cc-td__ov{transition:none}.cc-airbank-trefte-dno.is-done .cc-td__res{animation:none}}
+</style>
+
+<script>
+(function(){
+  /* ===== data a texty ===== */
+  var RAW = {"1":{"d":[-69,154,-618,-145,453,-65,201,58,-187,149,-252,-80,-473,137,63,79,-150,466,-120,-208,345,283,-344,-125,21,-180,282,46,-211,202,-10,12,13,73,-216,-13,-220,27,144,-371,-258,-80,-41,-91,230,86,65,-28,154,-145,3,-260,50,132,-205,168,74,-25,-100,-81,-22,1,80,-39,46,4,-32,21,-47,36,-46,-35,-7,83,-14,-63,-32,77,-97,16,-146,144,-65,-47,165,56,117,-13,25,75,44,-36,-129,34,-10,7,124,-147,-157,-50,185,-103,-42,-56,-27,38,-126,78,-74,12,53,25,-32,47,-89,17,156,0,-64,91,21,-30,94,41,11,-4,-133,53,-51,126,-21,98,59,105,-13,0,-67,-77,12,161,-78,-22,-33,283,-25,66,107,302,54,-111,-147,93,152,1,108,6,-124,-28,172,37,99,126,57,-24,-2,-58,63,-69,-128,-1,-25,15,129,34,-16,38,11,-189,-48,-45,-95,-72,8,-46,-58,3,-64,-109,199,-7,-124,68,109,61,63,-27,9,165,70,47,65,-32,-45,-240,5,-32,54,100,-267,57,61,-120,-138,53,110,-229,214,-220,-88,-165,235,-140,90,-51,60,124,40,40,45,61,-47,49,-69,-38,-38,30,-39,-140,-97,12,1,37,-44,-24,45,-27,-31,-2,25,-7,22,8,-24,-68,118,37,159,62,40,55,-79,35,-56,107,-48,-75,124,-47,73,-2,42,-119,-186,-122,-92,-223,-109,10,91,-128,86,96,39,-8,29,-73,138,6,36,-110,63,96,-33,93,138,-1,80,69,-68,43,12,-92,24,54,-60,148,-88,26,9,-45,-171,-129,-36,-61,-10,-129,-75,-254,-5,-695,241,-168,331,45,77,-21,-1,-310,-126,-8,195,96,-128,128,85,76,101,-17,-221,204,188,-23,-238,323,50,69,72,53,130,-6,-181,-233,56,100,-8,-120,49,-225,80,135,114,80,-75,174,43,-62,46,162,-156,231,-151,81,179,-41,-152,143,6,4,-216,-72,495,115,-216,79,214,-394,422,222,-254,244,-159,-154,-38,-237,43,-288,209,408,-90,366,-222,-97,138,31,22,-179,274,-149,179,3,50,-91,-187,371,22,142,128,42,-149,222,-138,136,-5,212,70,142,-25,34,9,-200,201,62,-99,-177,136,-198,108,-152,-95,-79,96,183,-162,170,-48,30,-146,20,13,158,15,-35,244,-122,-111,-78,187,-151,-84,73,-119,186,-104,63,-165,207,70,-105,68,135,63,153,-83,-38,-113,-35,16,94,-20,-35,1,20,42,70,-4,-47,63,-145,-84,55,57,-142,35,170,-22,-68,14,-11,-42,46,150,28,-32,3,116,-52,-186,102,90,9,-7,-38,58,109,-130,-114,-85,-106,243,200,-17,-26,211,73,-16,-293,-150,83,57,-56,94,99,127,-216,67,121,79,-42,65,-31,85,-116,80,120,-55,300,-211,65,176,-112,-19,-72,-6,2,201,-114,19,114,88,-125,127,-57,-107,-15,235,-45,-35,9,-11,238,-286,74,24,48,28,-15,-36,1,-23,23,-1,-187,24,-160,80,32,-128,77,-50,62,-47,-94,129,50,-208,-166,39,90,48,-85,188,30,109,-1,-22,-76,-31,161,-55,45,-47,21,-19,0,-16,23,-93,-114,-35,92,-63,25,27,-201,31,-39,12,16,-9,25,162,-39,148,113,-260,-48,8,56,-36,-116,-60,71,242,-82,-20,145,-146,-124,173,-10,-48,-44,-20,-60,53,116,62,89,-74,-129,-46,60,120,-170,79,-124,-8,-65,-81,-145,233,322,45,240,-17,-9,73,153,-204,-91,-28,93,51,-41,143,33,-2,-7,-117,138,-108,-111,109,-191,291,-82,-111,151,-15,12,1,48,56,116,-213,48,235,-205,177,218,-77,145,111,121,-56,71,-108,161,-8,61,151,-120,33,-34,169,-124,158,-157,283,-28,156,-145,151,-185,-83,-59,-17,-24,304,-30,-39,-257,39,-31,-115,121,86,231,-25,-22,-25,-33,8,-183,196,148,59,135,16,31,63,120,206,218,-85,153,91,-84,11,-138,-8,52,-221,-142,-209,40,-9,-241,-100,181,-3,-262,-159,215,-83,101,90,-55,-239,37,-57,184,260,175,-62,5,133,-21,110,202,132,-446,359,46,70,-189,85,93,24,-63,-48,-65,-23,12,-92,-13,32,317,25,-118,-106,-112,-47,-49,82,105,-150,-256,-47,-54,-65,-17,69,59,-87,-235,101,159,-44,174,56,99,2,42,87,-38,13,40,-3,33,1,-21,-106,89,-57,-118,-33,-58,-97,90,-96,-199,100,-52,-226,135,262,90,44,-33,230,-52,97,77,-57,-25,-43,64,11,92,28,-68,240,182,-73,135,-300,1058,80,-91,108,53,136,-91,-63,-10,250,19,-73,25,29,-36,-39,78,-131,-8,57,-6,-79,-241,-62,67,126,-34,321,75,119,22,-36,131,-20,-138,-39,-111,205,79,17,20,60,-37,-316,170,128,77,-53,151,28,-175,-546,-79,130,-163,223,60,-341,85,-3,168,144,-15,163,-8,177,-44,-67,-224,177,-21,73,-33,-28,170,26,-226,324,6,39,-152,-29,-77,36,-255,-3,111,116,-91,283,-25,-99,10,-119,48,103,129,98,90,36,-215,-238,5,110,-373,-155,236,112,168,29,102,41,-49,-9,-137,29,135,-4,2,-23,4,-215,115,47,29,287,60,-43,-160,64,78,-97,167,62,74,108,87,63,32,42,-53,51,72,85,71,64,-49,-175,57,-5,92,102,-25,31,19,-136,53,26,35,-114,132,43,151,-64,-121,35,-5,28,40,43,144,-209,187,-28,178,27,16,-90,38,-25,61,-291,-52,79,-10,-15,-74,210,71,2,125,55,1,227,174,108,-33,-35,246,-20,-67,79,66,2,-85,269,99,-21,-122,40,8,-116,-65,90,192,-9,-9,-64,-85,248,-301,170,77,12,-267,-49,217,-19,-331,240,-328,-218,-320,166,-420,-6,237,240,509,46,217,138,-96,237,-41,273,255,223,-69,38,216,170,-121,-12,-76,100,-65,-29,227,-140,3,97,348,-199,-5,6,-88,50,249,100,-88,-4,-73,-443,-25,-205,-279,-141,300,803,185,197,36,167,36,105,-109,-236,119,-159,-152,335,627,-107,-103,155,-189,-269,426,186,142,259,336,380,-509,-412,223,-359,338,281,-329,507,-397,183,245,-9,207,-72,190,-204,-307,306,93,98,-4,-124,349,235,-143,-139,250,-395,555,-423,235,663,-279,650,-348,217,-613,745,-388,-503,-225,-217,314,426,80,-153,-171,-94,179,145,417,130,43,-154,175,-203,-282,203,7,144,-136,57,-169,-211,-437,-406,259],"mo":[0,20,42,63,85,106,127,148,170,190,209,232,252,273,295,315,338,359,380,401,422,442,462,484,504,526,547,568,591,610,631,652,672,693,712,732,754,776,796,818,840,860,883,903,924,945,964,985,1006,1027,1048,1070,1091,1112,1135,1154,1176,1196,1215,1237,1258],"yr":[[170,"2011"],[422,"2012"],[672,"2013"],[924,"2014"],[1176,"2015"]]},"2":{"d":[-54,50,-197,-137,-119,365,-234,-2,-235,-93,582,-233,391,150,-106,-228,-164,-81,63,345,-83,26,8,46,-102,-67,-27,-200,-88,-16,301,74,181,-127,-10,185,108,67,61,-78,-40,318,34,-143,163,-197,-76,-68,84,44,75,-6,13,-17,-141,-145,-30,-134,184,81,27,16,-118,-118,-111,47,-310,169,-107,-200,81,146,-77,-142,-43,-15,-178,15,-81,-12,-391,-33,73,-57,-96,-57,-49,59,-210,-54,-94,-79,-129,186,62,3,206,277,25,-212,37,-107,258,183,-118,-51,-80,256,35,-164,215,66,-111,-24,51,39,-139,-84,56,24,104,652,14,110,202,-139,114,157,-329,45,277,-353,82,-231,21,-459,134,-463,230,372,-420,2,-33,164,32,-450,557,191,-357,-126,-295,-508,-71,-491,-92,690,166,-778,335,-50,868,48,-970,217,-285,-163,452,-322,456,104,154,29,-257,-153,240,-9,-10,-372,286,-291,-145,196,-432,-502,380,208,-76,300,306,-577,267,189,-273,350,143,-190,64,-449,127,-244,122,-137,-145,284,-226,-27,-5,41,37,131,278,335,-30,-6,-230,-24,70,-60,82,-144,60,101,-152,242,-35,55,-123,33,256,-62,-48,101,80,1,34,148,-63,-124,76,38,-102,64,-161,-167,-220,-311,174,72,-221,-185,-252,-118,-22,-115,-127,-84,237,-14,59,74,-30,208,-5,-217,-148,533,-22,118,123,55,-246,5,-163,259,76,64,-200,121,273,36,-84,116,208,41,-261,142,-144,-71,136,9,-113,218,-58,45,238,13,71,-249,202,-159,85,-296,179,-90,102,-116,-104,-192,-12,325,-158,15,111,71,137,-119,255,-22,-142,73,-132,112,13,-78,-176,-84,-13,25,-323,40,1,188,-10,27,-198,186,-220,48,-107,-98,78,-31,159,-52,244,67,-4,6,25,-49,123,25,82,64,-74,-9,6,115,85,-28,37,116,-7,-139,55,55,-74,-196,51,0,53,160,-43,112,-86,26,-16,77,-194,-68,10,112,-63,38,102,-10,-21,-86,140,-34,23,-94,113,-26,-108,-52,201,-31,118,-267,-38,117,155,26,130,51,-28,-93,118,60,-73,67,-74,-66,79,-109,38,55,20,22,-101,-21,-12,-146,113,5,53,-25,47,2,5,75,96,-79,-24,103,41,59,-75,-33,13,6,0,-93,112,-18,36,25,62,115,73,154,13,-6,101,94,105,-2,13,26,19,-3,-132,38,101,5,98,-44,-86,-50,17,-22,-40,130,102,-131,-283,23,30,116,-24,-59,-4,110,26,-119,48,-62,-3,2,84,48,68,66,165,-80,-43,-38,138,38,-74,121,-86,-61,188,50,-46,54,7,-4,-53,54,-50,48,147,-13,27,204,-29,-13,13,21,-51,-107,140,92,42,-44,-80,71,-103,-61,230,44,-175,163,137,114,-55,79,242,-326,-17,193,-186,518,-79,177,-713,-167,522,-75,233,66,-216,172,-291,-91,-547,159,72,92,-174,539,-139,-240,398,326,-397,-144,25,-209,326,53,-243,233,-12,14,15,84,-249,-15,-253,30,167,-429,-297,-93,-47,-104,264,99,75,-31,177,-167,3,-300,58,152,-236,194,85,-29,-115,-94,-25,1,92,-45,53,5,-37,25,-55,41,-53,-40,-7,94,-16,-72,-37,89,-111,18,-169,166,-74,-56,191,64,136,-15,29,86,51,-41,-150,40,-12,9,142,-169,-181,-58,213,-118,-48,-65,-32,45,-147,91,-86,15,61,29,-37,54,-104,21,179,0,-74,105,25,-34,107,48,13,-5,-154,62,-58,145,-25,114,67,121,-14,-1,-77,-89,14,186,-90,-25,-39,327,-28,75,123,349,62,-128,-170,108,176,1,124,8,-144,-33,200,42,114,145,67,-28,-2,-67,72,-79,-148,-1,-29,17,149,40,-19,44,13,-219,-55,-52,-110,-82,9,-54,-66,3,-74,-125,229,-7,-144,78,126,71,72,-31,10,190,82,54,75,-37,-53,-275,5,-37,62,116,-309,66,71,-139,-159,61,128,-265,247,-254,-102,-190,271,-162,105,-60,70,143,46,47,51,70,-54,57,-80,-44,-44,35,-45,-161,-112,14,1,43,-51,-28,52,-31,-36,-2,29,-8,25,9,-28,-78,136,43,184,70,46,64,-91,40,-64,124,-55,-87,143,-54,83,-1,48,-137,-215,-141,-106,-258,-125,11,105,-147,98,111,46,-9,32,-83,159,7,42,-127,72,111,-38,107,159,-1,93,79,-79,50,14,-106,28,62,-69,170,-101,29,11,-52,-196,-150,-42,-69,-13,-148,-86,-294,-6,-801,277,-193,382,52,88,-24,-2,-357,-145,-10,226,111,-148,148,98,87,116,-19,-255,235,217,-26,-274,372,57,81,83,61,150,-8,-208,-269,65,115,-9,-139,57,-260,93,156,131,92,-86,201,49,-72,54,187,-180,267,-176,94,206,-47,-175,165,8,4,-250,-82,571,132,-249,92,246,-455,488,255,-292,282,-185,-177,-44,-274,50,-332,241,471,-105,423,-256,-111,158,36,25,-206,316,-171,206,4,57,-105,-216,428,26,163,148,49,-172,256,-159,157,-7,246,80,164,-29,40,10,-231,232,72,-115,-204,157,-229,125,-175,-110,-91,111,211,-186,196,-56,34,-168,22,16,182,18,-41,282,-141,-128,-91,217,-175,-97,85,-138,215,-120,72,-189,238,81,-121,78,156,73,177,-96,-45,-130,-40,19,108,-24,-39,0,23,49,81,-5,-55,74,-167,-98,64,65,-163,40,197,-26,-78,15,-12,-48,52,174,32,-37,3,134,-59,-215,117,104,10,-8,-44,68,126,-150,-132,-98,-123,281,230,-19,-29,243,84,-18,-338,-174,96,66,-65,108,114,147,-249,77,140,91,-49,76,-37,99,-134,93,138,-64,347,-243,75,203,-130,-22,-83,-6,2,232,-133,22,132,102,-145,147,-66,-124,-17,272,-52,-40,9,-12,275,-331,87,27,55,33,-18,-41,1,-27,27,-2,-215,27,-184,93,37,-149,89,-57,71,-54,-109,149,58,-240,-191,44,104,55,-97,217,35,125,-1,-25,-88,-36,186,-64,52,-54,24,-22,1,-20,27,-107,-131,-41,107,-73,29,31,-233,36,-45,14,19,-10,28,187,-45,171,131,-300,-57,10,64,-41,-133,-70,82,279,-95,-22,167,-169,-143,200,-11,-57,-49,-24,-69,61,134,71,103,-86,-148,-53,69,139,-196,90,-143,-8,-75,-94,-168,270,371,51,278,-20,-10,84,176,-235,-105,-32,107,59,-47,165,38,-3,-8,-135,160,-125,-128,126,-221,336,-94,-128,174,-18,15,0,56,65,133,-245,55,271,-236,203,253,-89,167],"mo":[0,20,42,63,84,106,127,148,171,190,212,232,251,273,294,314,336,358,379,400,422,442,464,483,502,525,546,566,588,609,631,652,673,694,716,736,755,778,798,819,841,861,884,905,926,947,968,988,1008,1030,1050,1072,1093,1114,1137,1156,1177,1198,1218,1239,1258],"yr":[[212,"2009"],[464,"2010"],[716,"2011"],[968,"2012"],[1218,"2013"]]},"3":{"d":[-34,75,-17,40,-104,10,-91,47,150,17,95,-16,66,-31,60,109,47,-186,116,-281,-140,135,-79,107,233,0,-79,120,-179,9,107,-136,-65,-118,142,142,-30,141,-71,17,-109,-27,75,31,-234,-104,-23,-150,124,27,-240,76,-174,-46,-159,-199,47,4,-16,14,272,134,-3,-15,-246,-52,-3,51,169,-195,-165,79,251,-114,-213,-49,-39,-127,167,364,40,-70,331,27,53,-294,107,103,-293,-79,-59,121,186,-34,120,60,99,-185,225,46,36,-56,-147,-43,34,144,-52,-46,51,-26,-171,19,-6,-42,76,99,-38,-138,-269,122,-131,123,300,-357,102,15,173,-284,-53,-154,45,12,-64,223,-212,123,-331,-131,1,59,-119,145,146,229,-92,8,111,-154,91,103,-147,-137,-268,-174,-36,109,-361,19,208,-33,134,269,-88,-131,70,-118,93,226,103,150,-7,-59,-133,-66,13,175,-159,165,111,53,-88,30,-25,166,137,139,-72,45,140,-108,-14,-3,-39,51,-28,171,244,51,-82,143,-133,-50,-61,40,134,-346,-124,-134,-104,96,-103,69,70,30,149,-16,-273,8,-112,-67,24,2,-17,-82,-161,87,39,58,-354,-135,226,144,26,27,-260,15,-40,-35,190,-217,160,88,14,-87,216,-13,87,-176,45,229,-54,19,-247,-13,172,-100,-87,-228,551,-72,-221,97,-80,-53,76,-11,178,15,-71,-131,6,311,-100,-90,-184,-131,28,25,-108,149,69,-135,-288,-58,-59,-3,106,-114,69,-72,-84,149,-60,-59,145,-187,293,-146,-1,108,31,-40,-18,-121,-52,112,77,-30,-13,25,68,-112,172,65,7,-37,53,218,-140,-68,-32,161,-26,8,-121,15,-172,15,67,-93,67,-81,-75,-55,232,-21,-141,121,-157,-117,-94,141,-48,366,-148,38,73,-267,-71,45,99,-93,98,-29,127,21,-94,9,-6,52,-1,-150,37,-18,186,-13,8,-33,8,-74,-63,-84,156,73,103,-136,-144,-60,160,21,-17,40,87,-12,85,-41,140,152,-13,-37,-66,-51,82,120,26,-14,18,136,-28,43,-8,-3,11,154,59,-44,17,-36,-33,-121,39,-73,-26,76,59,81,118,-21,56,-48,-26,-106,67,-64,3,-10,25,109,56,35,3,169,13,-38,17,100,-59,-10,-73,75,-52,47,11,-84,-21,-9,57,-90,-37,-93,-1,27,36,93,-50,67,48,76,-17,56,19,126,-40,31,16,89,-52,-22,230,-127,-93,-4,-86,-153,-23,69,-101,31,3,-26,117,-91,-8,-30,119,42,53,33,73,-51,89,-20,-92,-143,-126,-111,138,-81,-131,-46,115,-23,144,227,-23,-135,119,64,-94,169,-50,217,-198,40,11,37,-43,71,-46,-39,-52,-71,76,160,-60,95,-27,90,12,87,78,156,-83,-120,181,47,-207,130,-4,12,-8,12,12,-35,-4,-20,3,104,-35,106,-56,52,0,18,100,162,15,42,76,5,-1,92,35,-214,199,62,113,57,75,4,204,-35,-137,233,73,-122,-16,-67,211,19,-41,-6,-30,52,154,-48,-127,48,86,-132,-26,149,-31,-82,-27,52,117,145,-75,112,55,-106,122,44,55,-123,-63,-149,136,-21,58,29,75,-181,-65,-77,-88,19,-106,85,65,19,-134,123,54,-138,-115,15,150,112,50,-9,-15,22,-74,36,23,-13,15,35,41,-12,-70,86,-74,5,-111,99,-97,67,106,-48,-12,210,110,-12,153,-2,90,104,37,-20,-74,42,100,51,-52,55,67,12,38,15,78,183,-176,73,14,55,-269,-63,-92,150,101,-283,-101,144,69,-61,203,-195,-239,-572,146,-99,286,60,-62,143,12,299,27,-44,-71,-18,-66,147,-121,-9,14,40,132,-206,-85,-78,-217,235,82,160,35,72,-21,-21,-29,174,-25,112,-92,82,0,-16,141,-2,51,-13,123,-29,103,147,-20,83,93,-86,124,9,56,13,-11,-86,-55,-4,122,41,-57,-305,4,-13,162,260,380,-73,123,72,95,-70,-141,51,-23,-18,167,193,28,116,-142,-21,63,64,13,-20,-122,-40,-33,145,-49,32,-11,-55,-381,216,136,-1,227,6,-211,-121,-58,59,288,30,-277,62,-181,99,66,242,-41,171,-91,81,75,-71,-296,160,-52,109,-32,136,19,-52,25,-165,213,14,-117,85,-117,19,102,-5,-398,-15,-119,-109,-189,401,-229,-317,12,-530,117,-498,-37,-48,-136,333,47,-183,112,-12,86,258,23,-149,15,-310,49,77,-48,-744,-751,196,-280,1083,-769,219,18,24,-420,16,-394,484,194,175,91,-31,81,88,115,188,-106,-122,60,189,-7,611,-55,33,52,97,-65,-100,-279,60,-88,208,59,-122,0,-62,164,-74,-112,138,33,53,-121,-45,-148,201,-33,-6,-74,48,98,-93,95,71,-46,-58,58,131,-67,9,79,61,-45,86,14,-4,90,0,-82,-44,51,5,55,226,10,121,-41,-225,16,-57,-15,-93,108,46,87,-8,106,-38,-38,-51,-32,47,212,-76,4,34,-4,-89,-58,15,128,-42,-173,132,63,65,-7,13,-148,41,99,69,14,-98,80,45,85,-62,66,13,29,3,98,51,102,52,-397,193,-66,-28,-147,75,220,64,-91,88,116,150,29,-7,-59,65,90,-170,121,-186,-65,220,3,-55,-256,-94,-104,-104,81,-186,170,283,65,46,29,-61,15,17,-53,123,-50,21,96,-56,-234,21,-30,-166,177,123,107,0,-11,-12,-40,-19,-92,-12,139,105,-26,84,122,61,-86,-75,36,70,-335,70,152,-128,-69,31,-180,62,-21,219,-70,-89,-132,241,-2,-158,36,-204,6,61,79,18,136,-240,147,146,-125,-36,63,-41,281,-118,-148,265,-205,14,-144,-26,286,-56,-265,89,-372,170,-138,97,-203,-154,55,269,65,88,54,-191,342,42,-16,45,133,99,74,183,-65,-34,232,-29,124,-28,-66,45,106,46,0,82,144,-51,136,-23,55,103,194,-198,-7,-22,121,34,62,68,39,32,37,79,-16,-91,39,-434,169,-69,-236,207,82,220,-106,-63,291,-17,-169,39,15,-7,100,134,3,-80,61,17,-39,113,72,-38,-17,-40,-34,-168,1,160,-48,-136,10,-15,26,-369,209,116,260,260,-60,44,105,-28,-46,56,85,-27,-180,-103,-129,-174,73,-37,30,59,113,-41,10,-55,99,101,-61,-80,-42,-75,143,16,-42,52,176,29,270,59,15,-5,88,-144,41,-14,183,130,154,6,58,-125,108,56,-78,-177,16,-192,74,-12,67,-187,-90,157,204,105,-73,-372],"mo":[0,21,43,63,82,105,125,146,167,187,210,231,252,273,294,314,333,356,375,397,418,438,461,481,503,524,544,565,585,605,627,649,668,690,712,732,755,775,796,816,835,856,877,898,918,940,961,982,1005,1024,1046,1066,1085,1107,1128,1148,1169,1191,1212,1233],"yr":[[43,"2022"],[294,"2023"],[544,"2024"],[796,"2025"],[1046,"2026"]]}};
+  var SCEN = {
+    /* ev = den události (šipka), dip = propad v Kč od vrcholu v předchozích 3 měsících po dno v následujícím roce (zvýrazněný sloupec plochy) */
+    '1': {start:[2010,4], dt:'05/2010–04/2015', tt:'Dluhová krize v EU',                  ev:320, dip:[271,320], infl:'7 000 Kč'},   /* šipka 8. 8. 2011, propad 27. 5. – 8. 8. 2011 */
+    '2': {start:[2008,2], dt:'03/2008–02/2013', tt:'Pád Lehman Brothers a finanční krize', ev:136, dip:[128,256], infl:'9 000 Kč'},   /* šipka 15. 9. 2008, propad 3. 9. 2008 – 9. 3. 2009 */
+    '3': {start:[2021,10],dt:'11/2021–10/2026', tt:'Inflační vlna a válka na Ukrajině',   ev:79,  dip:[17,157], infl:'26 000 Kč'}   /* šipka 24. 2. 2022, propad 24. 11. 2021 – 16. 6. 2022 */
+  };
+  var MLOC = ['v lednu','v únoru','v březnu','v dubnu','v květnu','v červnu','v červenci','v srpnu','v září','v říjnu','v listopadu','v prosinci'];
+  var MNOM = ['leden','únor','březen','duben','květen','červen','červenec','srpen','září','říjen','listopad','prosinec'];
+  var ORD = {3:'třetím',4:'čtvrtém',5:'pátém',6:'šestém',7:'sedmém',8:'osmém'};
+  var NB = 24, START = 21, MONTH = 21, SPAN = Math.log(1.8), HOLD = 1260/22, EMBED_ID = 'airbank-trefte-dno';
+  var LIME = '#b4d335', ICE = '#7cc8ff';
+
+  /* ===== root ===== */
+  var root = document.querySelector('[data-cc-airbank-trefte-dno]');
+  if(!root || root.dataset.ccInit) return; root.dataset.ccInit = '1';
+  var $ = function(s){ return root.querySelector(s); };
+  var cv = $('[data-cv]'), ctx = cv.getContext('2d'), stage = $('[data-stage]'), sh = $('[data-sh]'), ov = $('[data-ov]');
+  var holdBtn = $('[data-hold]'), buyBtn = $('[data-buy]'), againBtn = $('[data-again]');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function nb(n){ return Math.round(n).toLocaleString('cs-CZ').replace(/\s/g,' '); }
+  function kc(n){ return nb(Math.max(100, Math.round(n/100)*100)) + ' Kč'; }
+  function pl(n,a,b,c){ return n===1 ? a : (n>=2 && n<=4 ? b : c); }
+
+  /* ===== stav ===== */
+  var key, S, V, N, LAST, MO, YR, Hm, DCAV, L, DV, MV, logMin, logMax;
+  var t = 0, tT = 0, bought = null, phase = 'play', holding = false, touched = false, mix = 0, seq = 0;
+  var cc = 0, cs = SPAN, W = 0, Hh = 0, dpr = 1, running = false, visible = true;
+  var holdStart = 0, holdTap = false, dragging = false, lx = 0, ovH = 0, ttBox = null;
+  var tView = 0, tRound = 0, interacted = false, viewSent = false;
+  var padL = 14, padR = 14, zone = 14;
+  /* mezera mezi poslední cenou a roletou, aby úchyt nezakrýval vývoj */
+  function GAP(){ return W<420 ? 16 : 18; }
+
+  function load(k){
+    key = k; S = SCEN[k]; MO = RAW[k].mo; YR = RAW[k].yr;
+    V = [10000]; RAW[k].d.forEach(function(x){ V.push(V[V.length-1] + x); });
+    N = V.length; LAST = N - 2;
+    var buys = MO.slice(0, NB); Hm = NB / buys.reduce(function(a,i){ return a + 1/V[i]; }, 0); DCAV = 1e5 * V[N-1] / Hm;
+    L = []; for(var i=0;i<=LAST;i++) L.push(1e5 * V[N-1] / V[i]);
+    logMin = Infinity; logMax = -Infinity; V.forEach(function(v){ var l = Math.log(v); if(l<logMin) logMin=l; if(l>logMax) logMax=l; });
+    var amt = 1e5/NB, u = 0, cash = 1e5, bi = 0; DV = [];
+    for(var j=0;j<N;j++){ while(bi<NB && buys[bi]<=j){ u += amt/V[buys[bi]]; cash -= amt; bi++; } DV.push(cash + u*V[j]); }
+    $('[data-dt]').textContent = S.dt; $('[data-tt]').textContent = S.tt;
+  }
+  function pick(exclude){ var ks = ['1','2','3'].filter(function(x){ return x!==exclude; }); return ks[Math.floor(Math.random()*ks.length)]; }
+  function monthOf(i){ var k=0; while(k+1<MO.length && MO[k+1]<=i) k++; var m=S.start[1]+k; return {y:S.start[0]+Math.floor(m/12), m:m%12}; }
+  function valAt(x){ var i=Math.floor(x), f=x-i; if(i>=N-1) return V[N-1]; return V[i]+(V[i+1]-V[i])*f; }
+
+  /* ===== měření ===== */
+  function send(o){ if(window.parent===window) return; try{ o.source='cc-embed'; o.embed_id=EMBED_ID; window.parent.postMessage(o,'*'); }catch(e){} }
+  function secs(from){ return Math.max(0, Math.round((performance.now()-from)/1000)); }
+
+  /* ===== geometrie ===== */
+  var tpc = 26, btc = 0;
+  function tpTarget(){ return phase==='play' ? 26 : ovH + 30; }
+  function btTarget(){ return Hh - (phase==='play' ? 22 : 26); }
+  function bot(){ return btc; }
+  function topY(){ return tpc; }
+  function rrect(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+  function X(i){ return padL + i/(N-1)*(W-padL-padR); }
+  function Y(v){ var tp=topY(), b=bot(), mid=(tp+b)/2; return mid - (Math.log(v)-cc)/cs*(b-tp); }
+  function fitCam(){ return [(logMin+logMax)/2, (logMax-logMin)*1.08]; }
+
+  function measure(){
+    var r = stage.getBoundingClientRect(); dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = r.width; Hh = r.height; cv.width = Math.round(W*dpr); cv.height = Math.round(Hh*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+    ovH = ov.offsetTop + ov.offsetHeight - 12;
+    var tt = $('[data-tt]'), range = document.createRange(); range.selectNodeContents(tt); var rr = range.getBoundingClientRect();
+    ttBox = {l: rr.left - r.left, r: rr.right - r.left, b: rr.bottom - r.top};
+    tpc = tpTarget(); btc = btTarget();
+    /* ochranná zóna vpravo: během hry se do ní vejde ovládání i na posledním dni */
+    zone = GAP() + 9 + 12 + sh.offsetWidth + 10; if(phase==='play') padR = zone;
+    kick();
+  }
+
+  /* ===== kreslení ===== */
+  function trace(pts, dy){ ctx.beginPath(); for(var k=0;k<pts.length;k++){ var p=pts[k]; if(k) ctx.lineTo(p[0],p[1]+(dy||0)); else ctx.moveTo(p[0],p[1]+(dy||0)); } }
+  function glowLine(pts, col, w, glow, alpha){
+    ctx.save(); ctx.globalAlpha = alpha; ctx.lineJoin='round'; ctx.lineCap='round';
+    if(glow){ ctx.shadowColor = col; ctx.shadowBlur = glow; }
+    trace(pts); ctx.strokeStyle = col; ctx.lineWidth = w; ctx.stroke(); ctx.restore();
+  }
+  function grid(){ ctx.strokeStyle='rgba(255,255,255,.03)'; ctx.lineWidth=1; for(var x=.5;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,Hh);ctx.stroke();} for(var y=.5;y<Hh;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();} }
+  function pill(text, x, y, bg, fg){
+    var small = W < 420; ctx.font = '600 ' + (small?10:11) + 'px Poppins, sans-serif';
+    var w = ctx.measureText(text).width + 16, h = small ? 18 : 20;
+    ctx.save(); ctx.shadowColor='rgba(0,0,0,.6)'; ctx.shadowBlur=10; ctx.shadowOffsetY=3; ctx.fillStyle=bg; rrect(x-w, y-h/2, w, h, h/2); ctx.fill(); ctx.restore();
+    ctx.fillStyle=fg; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText(text, x-w+8, y+.5); ctx.textBaseline='alphabetic';
+  }
+
+  function drawMarket(alpha){
+    if(alpha<=0) return;
+    var b = bot(), to = Math.min(t, N-1), n = Math.floor(to), pts = [];
+    for(var i=0;i<=n;i++) pts.push([X(i), Y(V[i])]); if(to>n) pts.push([X(to), Y(valAt(to))]);
+    ctx.save(); ctx.globalAlpha = alpha;
+    trace(pts); ctx.lineTo(X(to), Hh); ctx.lineTo(X(0), Hh); ctx.closePath();
+    var g = ctx.createLinearGradient(0,0,0,Hh); g.addColorStop(0,'rgba(180,211,53,.18)'); g.addColorStop(1,'rgba(180,211,53,0)'); ctx.fillStyle=g; ctx.fill();
+    ctx.restore();
+    glowLine(pts, LIME, 2, 10, alpha);
+    if(phase!=='play'){
+      ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle='#7f8a84'; ctx.font='500 11px Poppins, sans-serif';
+      YR.forEach(function(y){ if(y[0]<=to){ ctx.fillRect(X(y[0]), b-5, 1, 5); ctx.textAlign='left'; ctx.fillText(y[1], X(y[0])+4, b+15); } });
+      ctx.restore();
+    }
+  }
+
+  function drawShutter(){
+    var hx = X(t), sx = hx + GAP(), hy = Y(valAt(t));
+    var sg = ctx.createLinearGradient(sx,0,W,0); sg.addColorStop(0,'#0f1513'); sg.addColorStop(1,'#0a0e0d'); ctx.fillStyle=sg; ctx.fillRect(sx,0,W-sx,Hh);
+    ctx.strokeStyle='rgba(255,255,255,.03)'; ctx.lineWidth=1; for(var y=6;y<Hh;y+=8){ ctx.beginPath(); ctx.moveTo(sx,y+.5); ctx.lineTo(W,y+.5); ctx.stroke(); }
+    var cs2 = ctx.createLinearGradient(sx-22,0,sx,0); cs2.addColorStop(0,'rgba(0,0,0,0)'); cs2.addColorStop(1,'rgba(0,0,0,.5)'); ctx.fillStyle=cs2; ctx.fillRect(sx-22,0,22,Hh);
+    var hl = ctx.createLinearGradient(sx,0,sx+10,0); hl.addColorStop(0,'rgba(255,255,255,.06)'); hl.addColorStop(1,'rgba(255,255,255,0)'); ctx.fillStyle=hl; ctx.fillRect(sx,0,10,Hh);
+    ctx.save(); ctx.shadowColor=LIME; ctx.shadowBlur=8; ctx.fillStyle=LIME; ctx.fillRect(sx-1,0,2,Hh); ctx.restore();
+    var gy = Hh/2; ctx.save(); ctx.shadowColor='rgba(0,0,0,.7)'; ctx.shadowBlur=12; ctx.shadowOffsetY=4;
+    var gg = ctx.createLinearGradient(0,gy-26,0,gy+26); gg.addColorStop(0,'#d2ec6a'); gg.addColorStop(1,'#93b21c'); ctx.fillStyle=gg; rrect(sx-9,gy-26,18,52,9); ctx.fill(); ctx.restore();
+    ctx.fillStyle='rgba(255,255,255,.5)'; ctx.fillRect(sx-6,gy-24,12,1); ctx.fillStyle='rgba(0,0,0,.45)'; for(var k=-1;k<=1;k++) ctx.fillRect(sx-4,gy+k*8-1,8,2);
+    ctx.save(); ctx.shadowColor=LIME; ctx.shadowBlur=12; ctx.fillStyle='#fff'; ctx.strokeStyle=LIME; ctx.lineWidth=2.5; ctx.beginPath(); ctx.arc(hx,hy,5.5,0,Math.PI*2); ctx.fill(); ctx.stroke(); ctx.restore();
+  }
+
+  function drawResult(m){
+    if(m<=0) return;
+    var b = bot(), tp = topY();
+    /* S&P jako plocha v pozadí, ve stejném měřítku jako konec kamery */
+    var pts = []; for(var i=0;i<N;i++) pts.push([X(i), Y(V[i])]);
+    function area(){ trace(pts); ctx.lineTo(X(N-1), b); ctx.lineTo(X(0), b); ctx.closePath(); }
+    ctx.save(); ctx.globalAlpha = m; area();
+    var sg = ctx.createLinearGradient(0,tp,0,b); sg.addColorStop(0,'rgba(255,255,255,.07)'); sg.addColorStop(1,'rgba(255,255,255,.01)'); ctx.fillStyle=sg; ctx.fill(); ctx.restore();
+    /* sloupec propadu, na který míří šipka od názvu krize */
+    var da = S.dip[0], db = S.dip[1];
+    ctx.save(); ctx.globalAlpha = m; area(); ctx.clip();
+    var xa = X(da), xb = X(db); ctx.fillStyle='rgba(255,255,255,.15)'; ctx.fillRect(xa, 0, xb-xa, Hh);
+    ctx.fillStyle='rgba(255,255,255,.4)'; ctx.fillRect(Math.round(xa)-.5, 0, 1, Hh); ctx.fillRect(Math.round(xb)-.5, 0, 1, Hh); ctx.restore();
+    /* hodnota obou investic v Kč */
+    var mn=1e5, mx=1e5; for(i=0;i<N;i+=2){ mn=Math.min(mn,DV[i],MV[i]); mx=Math.max(mx,DV[i],MV[i]); }
+    var pad=(mx-mn)*.1, y0=mn-pad, y1=mx+pad; function Yv(x){ return b-(x-y0)/(y1-y0)*(b-tp); }
+    var upto = Math.max(1, Math.round(m*(N-1)));
+    var pd=[], pm=[]; for(i=0;i<=upto;i++){ pd.push([X(i),Yv(DV[i])]); pm.push([X(i),Yv(MV[i])]); }
+    ctx.save(); ctx.globalAlpha = m;
+    /* čára vloženého vkladu jen na širších rámech, na mobilu graf zbytečně plní */
+    if(W>=420){ ctx.setLineDash([2,4]); ctx.strokeStyle='rgba(255,255,255,.28)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(padL,Yv(1e5)); ctx.lineTo(W-padR,Yv(1e5)); ctx.stroke(); ctx.setLineDash([]); }
+    ctx.font='500 11px Poppins, sans-serif'; ctx.fillStyle='#7f8a84';
+    YR.forEach(function(y){ ctx.fillRect(X(y[0]), b-5, 1, 5); var w=ctx.measureText(y[1]).width; if(X(y[0])+4+w>W-4){ ctx.textAlign='right'; ctx.fillText(y[1], X(y[0])-4, b+15); } else { ctx.textAlign='left'; ctx.fillText(y[1], X(y[0])+4, b+15); } });
+    ctx.textAlign='right'; ctx.fillText('S&P 500', W-padR-4, b-9);
+    ctx.restore();
+    glowLine(pd, ICE, 2.2, 10, m); glowLine(pm, LIME, 3, 12, m);
+    ctx.save(); ctx.globalAlpha=m; ctx.fillStyle=ICE; MO.slice(0,NB).forEach(function(j){ if(j<=upto){ ctx.beginPath(); ctx.arc(X(j),Yv(DV[j]),2.6,0,Math.PI*2); ctx.fill(); } }); ctx.restore();
+    if(bought!==null){ ctx.save(); ctx.globalAlpha=m; ctx.shadowColor=LIME; ctx.shadowBlur=14; ctx.fillStyle='#fff'; ctx.strokeStyle=LIME; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(X(bought),Yv(1e5),6,0,Math.PI*2); ctx.fill(); ctx.stroke(); ctx.restore(); }
+    if(m<1) return;
+    /* popisky až na konci přechodu */
+    var vy = Yv(1e5)+15; if(vy > b-24) vy = Yv(1e5)-7;
+    if(W>=420){ ctx.font='500 11px Poppins, sans-serif'; ctx.textAlign='right'; ctx.lineWidth=4; ctx.strokeStyle='#0d1413'; ctx.strokeText('vloženo 100 000 Kč', W-padR, vy); ctx.fillStyle='#7f8a84'; ctx.fillText('vloženo 100 000 Kč', W-padR, vy); }
+    var xe = W-padR-3, hh = W<420 ? 20 : 23, ym = Yv(MV[N-1])-14, yd = Yv(DV[N-1])-14;
+    if(Math.abs(ym-yd)<hh){ if(ym<yd) yd=ym+hh; else ym=yd+hh; }
+    ym=Math.max(tp-6,ym); yd=Math.max(tp-6,yd);
+    pill('Pravidelný nákup', xe, yd, ICE, '#06131d'); pill('Vaše investice', xe, ym, LIME, '#0b0f0e');
+    /* šipka od názvu krize ke dni, kdy se stala */
+    if(ttBox){ var ei=Math.min(Math.max(S.ev, S.dip[0]+3), S.dip[1]-3), tx=X(ei), ppx=(N-1)/(W-padL-padR), hi=Infinity;
+      /* konec šipky vždy nad plochou i nad oběma linkami (včetně záře) v okolí hrotu */
+      for(var j=Math.max(0,Math.floor(ei-10*ppx)); j<=Math.min(N-1,Math.ceil(ei+16*ppx)); j++) hi=Math.min(hi, Y(V[j]), Yv(DV[j]), Yv(MV[j]));
+      if(bought!==null && Math.abs(X(bought)-tx)<20) hi=Math.min(hi, Yv(1e5)-8);
+      var sy=ttBox.b+5, ty=Math.max(hi-9, sy+28), sx=Math.min(Math.max(tx+18, ttBox.l+12), ttBox.r-6), cx=Math.max(sx,tx)+(W<420?26:46), cy=(sy+ty)/2-6;
+      ctx.save(); ctx.strokeStyle='rgba(232,237,232,.85)'; ctx.lineWidth=1.4; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(sx,sy); ctx.quadraticCurveTo(cx,cy,tx,ty); ctx.stroke();
+      var ang=Math.atan2(ty-cy,tx-cx); ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(tx-7*Math.cos(ang-.45),ty-7*Math.sin(ang-.45)); ctx.moveTo(tx,ty); ctx.lineTo(tx-7*Math.cos(ang+.45),ty-7*Math.sin(ang+.45)); ctx.stroke(); ctx.restore(); }
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,Hh); grid();
+    if(phase==='done'){ drawMarket(1-mix); drawResult(mix); }
+    else { drawMarket(1); if(phase==='play') drawShutter(); }
+  }
+
+  /* ===== smyčka (běží jen, když se něco hýbe) ===== */
+  var last = 0;
+  function kick(){ if(!running){ running = true; last = performance.now(); requestAnimationFrame(frame); } }
+  function frame(now){
+    var dt = Math.min(.05, (now-last)/1000); last = now; var active = false;
+    var kk = reduce ? 1 : Math.min(1, dt*4), a1 = tpTarget(), a2 = btTarget();
+    if(Math.abs(a1-tpc)>.2 || Math.abs(a2-btc)>.2){ tpc += (a1-tpc)*kk; btc += (a2-btc)*kk; active = true; } else { tpc = a1; btc = a2; }
+    var pr = phase==='play' ? zone : 14; if(Math.abs(pr-padR)>.3){ padR += (pr-padR)*(reduce ? 1 : Math.min(1, dt*3)); active = true; } else padR = pr;
+    if(phase==='play'){
+      if(holding){ active = true; if(now-holdStart > 250) tT = Math.min(LAST, tT + dt*HOLD); }
+      if(tT>=LAST && !holding && !dragging){ finish(null); active = true; }
+      var nt = reduce ? tT : t + (tT-t)*Math.min(1, dt*16); if(Math.abs(tT-nt)<.01) nt = tT; if(nt!==t) active = true; t = nt;
+      var lv = Math.log(valAt(t)), band = .2*SPAN, c = cc; if(lv>c+band) c = lv-band; if(lv<c-band) c = lv+band;
+      var nc = reduce ? c : cc + (c-cc)*Math.min(1, dt*5); if(Math.abs(nc-c)<1e-4) nc = c; if(nc!==cc) active = true; cc = nc; cs = SPAN;
+    } else if(phase==='reveal'){
+      t = reduce ? N-1 : Math.min(N-1, t + dt*(N-1)/2.4);
+      var f = fitCam(), k = reduce ? 1 : Math.min(1, dt*2.5); cc += (f[0]-cc)*k; cs += (f[1]-cs)*k; active = true;
+      if(t>=N-1){ t = N-1; cc = f[0]; cs = f[1]; phase = 'done'; showResult(); }
+    } else if(phase==='done'){
+      if(mix<1){ mix = reduce ? 1 : Math.min(1, mix + dt/1.1); active = true; }
+    }
+    if(visible) draw();
+    if(phase==='play') placeSh(); sh.classList.toggle('is-gone', phase!=='play');
+    if(active) requestAnimationFrame(frame); else running = false;
+  }
+
+  /* ===== průběh hry ===== */
+  function reset(k){
+    seq++; load(k); t = tT = (root.classList.contains('is-pre') ? 0 : START); bought = null; phase = 'play'; mix = 0; touched = false; interacted = false;
+    holding = false; holdBtn.setAttribute('aria-pressed','false'); buyBtn.disabled = false;
+    var a=Infinity, b=-Infinity; for(var i=0;i<=START;i++){ var l=Math.log(V[i]); a=Math.min(a,l); b=Math.max(b,l); } cc=(a+b)/2; cs=SPAN;
+    root.classList.remove('is-done'); sh.classList.remove('is-gone'); $('[data-sr]').textContent = '';
+    requestAnimationFrame(function(){ fit(); measure(); });
+  }
+  function nudge(){
+    if(!touched){ touched = true; }
+    if(!interacted){ interacted = true; tRound = performance.now(); send({event:'cc_embed_interact', seconds_to_interact: secs(tView)}); }
+  }
+  function buy(){ if(phase!=='play') return; nudge(); holding = false; holdBtn.setAttribute('aria-pressed','false'); var i = Math.max(0, Math.min(LAST, Math.round(t))); t = tT = i; finish(i); }
+  function finish(i){ if(phase!=='play') return; bought = i; phase = 'reveal'; buyBtn.disabled = true; MV = []; for(var j=0;j<N;j++) MV.push(i===null || j<i ? 1e5 : 1e5*V[j]/V[i]); kick(); }
+
+  function span(d){ var c = Math.max(1, Math.round(d*365/252));
+    if(c<=13) return c + ' ' + pl(c,'den','dny','dní');
+    if(c<=60){ var w = Math.round(c/7); return w + ' ' + pl(w,'týden','týdny','týdnů'); }
+    var mo = Math.round(c/30.4); return mo + ' ' + pl(mo,'měsíc','měsíce','měsíců'); }
+  function showResult(){
+    var mySeq = seq; root.classList.add('is-done'); requestAnimationFrame(function(){ if(mySeq===seq){ measure(); fit(); } });
+    var msg, sr, me = bought===null ? 1e5 : L[bought];
+    $('[data-dca-v]').textContent = kc(DCAV);
+    $('[data-me-v]').textContent = kc(me);
+    if(bought===null){
+      $('[data-me-d]').textContent = 'bez nákupu';
+      msg = 'Nezainvestovali jste a peníze zůstaly na účtu. Pravidelný nákup by vám dal o ' + kc(DCAV-1e5) + ' víc. Naopak vašich 100 000 Kč za tu dobu ztratilo asi ' + S.infl + ' kupní síly.';
+      sr = 'Nezainvestovali jste a máte 100 000 Kč.';
+    } else {
+      var mm = monthOf(bought), diff = me - DCAV;
+      $('[data-me-d]').textContent = MNOM[mm.m] + ' ' + mm.y;
+      if(diff>0){
+        var r = L.filter(function(x){ return x>=me; }).length;
+        if(r===1) msg = 'Trefili jste nejlepší den celých 5 let a pravidelný nákup jste překonali o ' + kc(diff) + '. Šance byla 1 : ' + nb(L.length) + '.';
+        else {
+          var fw=null, bw=null, j; for(j=bought+1;j<=LAST;j++) if(L[j]<=DCAV){ fw=j-bought; break; } for(j=bought-1;j>=0;j--) if(L[j]<=DCAV){ bw=bought-j; break; }
+          var d = (fw!==null && (bw===null || fw<=bw)) ? 'Stačilo nákup o ' + span(fw) + ' odložit a bylo by to nastejno. ' : (bw!==null ? 'Stačilo nakoupit o ' + span(bw) + ' dřív a bylo by to nastejno. ' : '');
+          msg = 'Překonali jste pravidelný nákup o ' + kc(diff) + '. ' + d + 'Šance trefit takový den byla asi 1 : ' + nb(Math.round(L.length/r)) + '.';
+        }
+      } else {
+        var share = L.filter(function(x){ return x>DCAV; }).length / L.length, every = Math.round(1/share), lo = 0;
+        for(var q=1;q<=LAST;q++) if(V[q]<V[lo]) lo = q; var bm = monthOf(lo);
+        msg = 'Pravidelný nákup dopadl o ' + kc(-diff) + ' lépe. ' + (ORD[every] ? 'Porazit ho šlo jen asi v každém ' + ORD[every] + ' dni.' : 'Porazit ho šlo jen asi v ' + Math.round(share*100) + ' % dní.') + ' Dno byste museli trefit ' + MLOC[bm.m] + ' ' + bm.y + '.';
+      }
+      sr = 'Investovali jste ' + MLOC[mm.m] + ' ' + mm.y + ' a máte ' + kc(me) + '.';
+    }
+    $('[data-msg]').textContent = msg;
+    $('[data-sr]').textContent = 'Trefíte dno? Výsledek. ' + S.dt.replace('–',' až ') + ', ' + S.tt + '. ' + sr + ' Pravidelný nákup 24 × 4 167 Kč má ' + kc(DCAV) + '. ' + msg;
+    send({event:'cc_embed_complete', seconds: secs(tRound || tView)});
+    kick();
+  }
+
+  /* ===== ovládání ===== */
+  function bindTap(el, fn){
+    var last = 0;
+    el.addEventListener('pointerdown', function(e){ if(e.button>0) return; e.preventDefault(); last = Date.now(); el.focus({preventScroll:true}); fn(e); });
+    el.addEventListener('click', function(e){ e.preventDefault(); if(Date.now()-last > 600) fn(e); });
+  }
+  /* „Posunout o měsíc“: ťuknutí = o měsíc, podržení (po čtvrt sekundě) = čas běží */
+  function placeSh(){ var x = X(t) + GAP() + 9 + 12, y = Hh/2 - sh.offsetHeight/2; sh.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)'; }
+  function holdOn(e){ if(phase!=='play') return; if(e && e.cancelable) e.preventDefault(); nudge(); holding = true; holdStart = performance.now(); holdBtn.setAttribute('aria-pressed','true'); kick(); }
+  function holdOff(){ if(!holding) return; holding = false; holdBtn.setAttribute('aria-pressed','false'); if(phase==='play' && performance.now()-holdStart < 250) tT = Math.min(LAST, tT + MONTH); kick(); }
+  holdBtn.addEventListener('pointerdown', function(e){ if(e.button>0) return; try{ holdBtn.setPointerCapture(e.pointerId); }catch(_){} holdOn(e); });
+  ['pointerup','pointercancel','lostpointercapture'].forEach(function(ev){ holdBtn.addEventListener(ev, holdOff); });
+  holdBtn.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  holdBtn.addEventListener('keydown', function(e){ if((e.key===' '||e.key==='Enter') && !e.repeat){ e.preventDefault(); holdOn(); } });
+  holdBtn.addEventListener('keyup', function(e){ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); holdOff(); } });
+  holdBtn.addEventListener('blur', holdOff);
+  bindTap(buyBtn, buy);
+  bindTap(againBtn, function(){ if(phase!=='done') return; reset(pick(key)); tView = performance.now(); holdBtn.focus({preventScroll:true}); });
+
+  /* tah po grafu: hrana rolety jde za prstem 1 : 1, jen dopředu */
+  cv.addEventListener('pointerdown', function(e){ if(phase!=='play') return; dragging = true; lx = e.clientX; try{ cv.setPointerCapture(e.pointerId); }catch(_){} nudge(); });
+  cv.addEventListener('pointermove', function(e){ if(!dragging) return; var dx = e.clientX - lx; lx = e.clientX; if(dx>0){ tT = Math.min(LAST, tT + dx*(N-1)/(W-padL-padR)); kick(); } });
+  ['pointerup','pointercancel'].forEach(function(ev){ cv.addEventListener(ev, function(){ dragging = false; kick(); }); });
+  stage.addEventListener('keydown', function(e){ if(e.key==='ArrowRight' && phase==='play'){ e.preventDefault(); nudge(); tT = Math.min(LAST, tT + (e.shiftKey ? MONTH : 5)); kick(); } });
+
+  /* ===== (i) ===== */
+  var overlay = $('[data-overlay]'), openBtn = $('[data-open]'), closeBtn = $('[data-close]');
+  function openP(){ overlay.hidden = false; openBtn.setAttribute('aria-expanded','true'); closeBtn.focus({preventScroll:true}); }
+  function closeP(){ if(overlay.hidden) return; overlay.hidden = true; openBtn.setAttribute('aria-expanded','false'); openBtn.focus({preventScroll:true}); }
+  bindTap(openBtn, function(){ overlay.hidden ? openP() : closeP(); });
+  bindTap(closeBtn, closeP);
+  overlay.addEventListener('pointerdown', function(e){ if(e.target===overlay) closeP(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeP(); if(e.key==='Tab' && !overlay.hidden){ e.preventDefault(); closeBtn.focus(); } });
+
+  /* ===== vyplnění rámu ===== */
+  function overflows(){ return root.scrollHeight > root.clientHeight + 1 || stage.clientHeight < 150; }
+  function fit(){
+    root.classList.remove('is-nolede'); var sc = 1; root.style.setProperty('--sc', 1);
+    for(var k=0;k<16 && overflows();k++){
+      if(!root.classList.contains('is-nolede') && !root.classList.contains('is-done')) root.classList.add('is-nolede');
+      else { sc *= .94; root.style.setProperty('--sc', sc.toFixed(3)); }
+    }
+  }
+  var rt; function refit(){ fit(); measure(); }
+  window.addEventListener('resize', refit); window.addEventListener('load', refit);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
+  if(window.ResizeObserver) new ResizeObserver(function(){ clearTimeout(rt); rt = setTimeout(refit, 60); }).observe(root);
+
+  /* ===== start, vstup bez probliknutí, viditelnost ===== */
+  var hasIO = 'IntersectionObserver' in window;
+  if(hasIO && !reduce) root.classList.add('is-pre');
+  reset(pick(null));
+  tView = performance.now();
+  function enter(){ if(!root.classList.contains('is-pre')) return; root.classList.remove('is-pre'); root.classList.add('is-in'); tT = START; kick(); }
+  if(hasIO){
+    new IntersectionObserver(function(es){ var e = es[0]; visible = e.isIntersecting;
+      if(e.isIntersecting && e.intersectionRatio>=.25){ enter(); if(!viewSent){ viewSent = true; tView = performance.now(); send({event:'cc_embed_view'}); } }
+      if(visible) kick(); }, {threshold:[0,.25]}).observe(root);
+    setTimeout(enter, 6000);
+  } else { send({event:'cc_embed_view'}); viewSent = true; }
+})();
+</script>
+</body>
+</html>
