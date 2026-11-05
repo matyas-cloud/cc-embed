@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S&amp;P 500 v roce 2026 – Peníze pod kontrolou, 2. díl</title>
+<meta name="robots" content="noindex">
+<style>
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-500.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-ext-500.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-ext-600.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-700.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-ext-700.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  /* poznámky ke změnám: Shantell Sans (OFL), písmo jako fix, sdílená složka fonts/ */
+  @font-face{font-family:'Shantell Sans';font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/shantell-latin-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+2212,U+20AC;}
+  @font-face{font-family:'Shantell Sans';font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/shantell-latin-ext-600.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  html,body{margin:0;padding:0;background:#0b0f0e;height:100%;overflow:hidden;}
+  .cc-embed{margin:0!important;}
+</style>
+</head>
+<body>
+
+<style>
+.cc-embed{
+  /* --- barvy --- */
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  /* --- shape --- */
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  /* --- font --- */
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}      /* prvek do krajů (fotka, mapa) */
+.cc-embed--bare{background:none;border:0;padding:0;} /* bez rámečku */
+/* --- typo --- */
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{margin:12px 0 0;font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);
+  letter-spacing:.02em;text-transform:uppercase;}
+.cc-embed .cc-num{font-family:var(--cc-display);font-weight:700;
+  font-size:clamp(22px,4vw,32px);color:var(--cc-blue);font-variant-numeric:tabular-nums;}
+.cc-embed a{color:var(--cc-blue);}
+/* --- UI --- */
+.cc-embed .cc-btn{
+  display:inline-block;padding:10px 20px;
+  border:1px solid var(--cc-blue);border-radius:var(--cc-radius);
+  background:var(--cc-blue);color:#fff;text-decoration:none;
+  font:700 18px/26px var(--cc-display);cursor:pointer;
+  transition:background .18s,color .18s;}
+.cc-embed .cc-btn:hover{background:var(--cc-blue-dark);border-color:var(--cc-blue-dark);}
+.cc-embed .cc-btn--ghost{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-btn--ghost:hover{background:var(--cc-blue);color:#fff;}
+.cc-embed .cc-btn--sm{padding:7px 14px;font-size:15px;line-height:22px;}
+.cc-embed .cc-btn[aria-pressed="true"]{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-card{background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);padding:14px 16px;}
+.cc-embed .cc-badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  background:var(--cc-blue);color:#fff;font:700 12px/18px var(--cc-ui);}
+.cc-embed .cc-badge--red{background:var(--cc-red);}
+.cc-embed .cc-badge--soft{background:#eaf3fd;color:var(--cc-blue-dark);}
+.cc-embed input,.cc-embed select,.cc-embed textarea{
+  font:400 16px/24px var(--cc-ui);color:var(--cc-ink);
+  padding:9px 12px;background:#fff;border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);}
+.cc-embed input[type=range]{padding:0;border:0;background:none;accent-color:var(--cc-blue);width:100%;}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed table{width:100%;border-collapse:collapse;font:400 15px/1.4 var(--cc-ui);}
+.cc-embed th{text-align:left;font-weight:700;color:var(--cc-muted);
+  text-transform:uppercase;font-size:12px;letter-spacing:.05em;padding:8px 10px;}
+.cc-embed td{padding:10px;border-top:1px solid var(--cc-line);}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-grid{display:grid;gap:var(--cc-gap);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.cc-embed .cc-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--cc-gap);}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+
+
+<div class="cc-embed cc-airbank-sp500-2026" data-cc-airbank-sp500-2026>
+  <p class="cc-sr">Graf vývoje indexu S&amp;P 500 v roce 2026 podle denních zavíracích hodnot od 2. ledna do 13. října. 27. ledna index uzavřel na rekordu 6 979 bodů. Do 30. března, v době války v Íránu, klesl na dno roku 6 344 bodů, o 9,1 % pod lednový rekord, a hned další den vzrostl o 2,9 %. 15. dubna uzavřel na novém rekordu 7 023 bodů a 13. října na 7 805 bodech, o 23,0 % výš než 30. března. Kdo prodal 30. března, prodal v nejhorší den roku. O dva a půl týdne později byl index na rekordu. Data S&amp;P Dow Jones Indices a scantips.com.</p>
+  <header class="cc-sp__hd" aria-hidden="true">
+    <h3 class="cc-sp__title">S&amp;P 500 v roce 2026</h3>
+    <p class="cc-sp__lede">Kdo prodal 30.&nbsp;března, prodal v&nbsp;nejhorší den roku. O&nbsp;dva a&nbsp;půl týdne později byl index na rekordu.</p>
+  </header>
+  <div class="cc-sp__stage" data-stage aria-hidden="true"><canvas data-cv></canvas></div>
+  <p class="cc-sp__src" aria-hidden="true">Denní zavírací hodnoty, data S&amp;P Dow Jones Indices a&nbsp;scantips.com.</p>
+</div>
+
+<style>
+.cc-embed.cc-airbank-sp500-2026{
+  --lime:#b4d335; --tx:#e8ede8; --tx2:#8d9892; --sc:1;
+  box-sizing:border-box;position:relative;display:flex;flex-direction:column;gap:calc(12px*var(--sc));
+  height:100vh;margin:0;overflow:hidden;padding:18px 18px 14px;border:0;border-radius:0;
+  background:linear-gradient(180deg,#0e1413,#0a0e0d);color:var(--tx);font-family:var(--cc-display);
+}
+.cc-airbank-sp500-2026 .cc-sp__hd{flex:0 0 auto}
+.cc-airbank-sp500-2026 .cc-sp__title{margin:0;color:#f4f7f3;letter-spacing:-.01em;font-weight:700;line-height:1.15;font-size:max(17px,calc(21px*var(--sc)))}
+.cc-airbank-sp500-2026 .cc-sp__lede{margin:5px 0 0;max-width:62ch;color:#b9c3bd;font:400 max(13px,calc(14.4px*var(--sc)))/1.45 var(--cc-display)}
+.cc-airbank-sp500-2026 .cc-sp__stage{position:relative;flex:1 1 auto;min-height:0;overflow:hidden;border-radius:14px;
+  background:radial-gradient(90% 70% at 70% 10%,#14211f 0%,#0c1211 70%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),0 18px 34px -20px rgba(0,0,0,.9)}
+.cc-airbank-sp500-2026 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.cc-airbank-sp500-2026 .cc-sp__src{flex:0 0 auto;margin:0;color:#7f8a84;font:400 max(12px,calc(12px*var(--sc)))/1.4 var(--cc-display)}
+@media (max-width:619px){
+  .cc-embed.cc-airbank-sp500-2026{padding:14px 12px 12px;gap:calc(10px*var(--sc))}
+  .cc-airbank-sp500-2026 .cc-sp__title{font-size:max(17px,calc(18.5px*var(--sc)))}
+  .cc-airbank-sp500-2026 .cc-sp__lede{font-size:max(13px,calc(13.6px*var(--sc)))}
+}
+</style>
+
+<script>
+(function(){
+  var RAW = {"v":[6858,6902,6945,6921,6921,6966,6977,6964,6927,6944,6940,6797,6876,6913,6916,6950,6979,6978,6969,6939,6976,6918,6883,6798,6932,6965,6942,6941,6833,6836,6843,6881,6862,6910,6838,6890,6946,6909,6879,6882,6817,6870,6831,6740,6796,6781,6776,6673,6632,6699,6716,6625,6606,6506,6581,6556,6592,6477,6369,6344,6529,6575,6583,6612,6617,6783,6825,6817,6886,6967,7023,7041,7126,7109,7064,7138,7108,7165,7174,7139,7136,7209,7230,7201,7259,7365,7337,7399,7413,7401,7444,7501,7409,7403,7354,7433,7446,7473,7519,7520,7564,7580,7600,7610,7554,7584,7384,7406,7387,7267,7394,7431,7554,7511,7420,7501,7473,7365,7358,7357,7354,7440,7499,7483,7483,7537,7504,7483,7544,7575,7515,7544,7572,7534,7458,7443,7509,7499,7408,7412,7413,7429,7316,7438,7490,7601,7737,7724,7710,7758,7753,7728,7749,7799,7786,7745,7692,7708,7641,7674,7653,7677,7676,7731,7712,7686,7631,7667,7748,7719,7674,7636,7592,7657,7620,7586,7552,7638,7651,7765,7765,7706,7704,7743,7684,7671,7652,7666,7723,7774,7819,7802,7765,7812,7807,7805],"mo":[[0,"led"],[20,"úno"],[39,"bře"],[61,"dub"],[82,"kvě"],[102,"čvn"],[123,"čvc"],[145,"srp"],[166,"zář"],[187,"říj"]]}, V = RAW.v, MO = RAW.mo, N = V.length, EMBED_ID = 'airbank-sp500-2026', LIME = '#b4d335';
+  /* body ze zadání: u křivky jen datum a hodnota */
+  var MK = [
+    {i:16,  d:'27. 1.',  v:'6 979', pos:'above'},
+    {i:59,  d:'30. 3.',  v:'6 344', pos:'below'},
+    {i:60,  d:'',        v:'',      pos:''},
+    {i:70,  d:'15. 4.',  v:'7 023', pos:'aboveleft'},
+    {i:N-1, d:'13. 10.', v:'7 805', pos:'aboveright'}
+  ];
+  /* změny jako poznámky fixem: −9,1 % od 27. 1. ke dnu 30. 3. (válka v Íránu od 28. 2.), +2,9 % hned 31. 3., +23,0 % od 30. 3. do 13. 10. */
+  var REC = 16, LOW = 59, NEXT = 60, NOTES = [['−9,1 %','válka v Íránu'], ['+2,9 %','hned další den'], ['+23,0 %','od 30. 3.']];
+  var GRID = [6400, 6800, 7200, 7600];
+
+  var root = document.querySelector('[data-cc-airbank-sp500-2026]');
+  if(!root || root.dataset.ccInit) return; root.dataset.ccInit = '1';
+  var stage = root.querySelector('[data-stage]'), cv = root.querySelector('[data-cv]'), ctx = cv.getContext('2d');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W = 0, H = 0, dpr = 1, prog = 0, started = false, raf = 0;
+  var vmin = Infinity, vmax = -Infinity; V.forEach(function(x){ if(x<vmin) vmin = x; if(x>vmax) vmax = x; });
+
+  function send(o){ if(window.parent===window) return; try{ o.source='cc-embed'; o.embed_id=EMBED_ID; window.parent.postMessage(o,'*'); }catch(e){} }
+  function nb(n){ return Math.round(n).toLocaleString('cs-CZ').replace(/\s/g,' '); }
+
+  /* geometrie: vlevo popisky osy, nahoře místo na popisek konce, dole na popisek dna a měsíce */
+  function small(){ return W < 420; }
+  function padL(){ return small() ? 36 : 44; }
+  function padR(){ return 14; }
+  function top(){ return 50; }
+  function bot(){ return H - 80; }
+  function X(i){ return padL() + i/(N-1)*(W - padL() - padR()); }
+  function Y(v){ return top() + (vmax - v)/(vmax - vmin)*(bot() - top()); }
+
+  function measure(){
+    var r = stage.getBoundingClientRect(); dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = r.width; H = r.height; cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+    draw();
+  }
+
+  function draw(){
+    if(!W) return;
+    ctx.clearRect(0,0,W,H);
+    var s = small(), b = bot(), tp = top();
+    /* mřížka a osa */
+    ctx.font = '500 ' + (s?10:11) + 'px Poppins, sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    GRID.forEach(function(g){ var y = Math.round(Y(g)) + .5; ctx.strokeStyle = 'rgba(255,255,255,.06)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL(), y); ctx.lineTo(W - padR(), y); ctx.stroke();
+      ctx.fillStyle = '#6f7a74'; ctx.fillText(nb(g), padL() - 7, y); });
+    ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left'; ctx.fillStyle = '#7f8a84';
+    var ay = H - (s ? 14 : 16);
+    MO.forEach(function(m){ var x = X(m[0]); ctx.fillRect(Math.round(x), ay - 15, 1, 5); ctx.fillText(m[1], x + 3, ay); });
+    /* křivka s plochou, kreslí se zleva podle průběhu vstupu */
+    var to = prog*(N-1), n = Math.floor(to), pts = [];
+    for(var i=0;i<=n;i++) pts.push([X(i), Y(V[i])]);
+    if(to>n && n+1<N) pts.push([X(to), Y(V[n] + (V[n+1]-V[n])*(to-n))]);
+    if(pts.length>1){
+      ctx.save(); ctx.beginPath(); pts.forEach(function(p,k){ if(k) ctx.lineTo(p[0],p[1]); else ctx.moveTo(p[0],p[1]); });
+      ctx.lineTo(pts[pts.length-1][0], b + 6); ctx.lineTo(pts[0][0], b + 6); ctx.closePath();
+      var g = ctx.createLinearGradient(0, tp, 0, b + 6); g.addColorStop(0,'rgba(180,211,53,.2)'); g.addColorStop(1,'rgba(180,211,53,0)'); ctx.fillStyle = g; ctx.fill(); ctx.restore();
+      ctx.save(); ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.shadowColor = LIME; ctx.shadowBlur = 10; ctx.strokeStyle = LIME; ctx.lineWidth = s ? 1.8 : 2.2;
+      ctx.beginPath(); pts.forEach(function(p,k){ if(k) ctx.lineTo(p[0],p[1]); else ctx.moveTo(p[0],p[1]); }); ctx.stroke(); ctx.restore();
+    }
+    /* body a jejich popisky se objeví, když k nim křivka dojede */
+    var fd = s ? 10.5 : 11.5, fv = s ? 12 : 13.5, lh = s ? 14 : 16, fD = '500 ' + fd + 'px Poppins, sans-serif', fV = '600 ' + fv + 'px Poppins, sans-serif';
+    function dot(i){ ctx.save(); ctx.fillStyle = LIME; ctx.strokeStyle = '#0c1211'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(X(i), Y(V[i]), s ? 3.4 : 3.8, 0, Math.PI*2); ctx.fill(); ctx.stroke(); ctx.restore(); }
+    function txt(t, x, y, al, f, c){ ctx.font = f; ctx.textAlign = al; ctx.lineJoin = 'round'; ctx.lineWidth = 3; ctx.strokeStyle = '#0e1514'; ctx.strokeText(t, x, y); ctx.fillStyle = c; ctx.fillText(t, x, y); }
+    function lab(m){ var x = X(m.i), y = Y(V[m.i]), al = 'center', yv;
+      ctx.font = fD; var w = Math.max(ctx.measureText(m.d).width, (ctx.font = fV, ctx.measureText(m.v).width));
+      if(m.pos==='above'){ x = Math.max(padL() + 2 + w/2, x); yv = y - 11; }
+      else if(m.pos==='below'){ yv = y + 19 + lh; }
+      else if(m.pos==='aboveleft'){ al = 'right'; x = x - 7; yv = y - 7; }
+      else { al = 'right'; x = x + 3; yv = y - 11; }
+      txt(m.d, x, yv - lh, al, fD, '#8d9892'); txt(m.v, x, yv, al, fV, '#f1f5f1'); }
+    /* šipka fixem: hladký oblouk, na konci hrot */
+    function sketch(P0, P1, P2, f){
+      if(f<=0) return; var pts = [], n = 40; for(var k=0;k<=n;k++){ var u = k/n, a = (1-u)*(1-u), b2 = 2*(1-u)*u, c = u*u; pts.push([a*P0[0] + b2*P1[0] + c*P2[0], a*P0[1] + b2*P1[1] + c*P2[1]]); }
+      var m = Math.max(2, Math.round(n*f) + 1); ctx.save(); ctx.strokeStyle = 'rgba(244,246,240,.9)'; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = s ? 1.6 : 1.8;
+      ctx.beginPath(); for(var k=0;k<m;k++){ if(k) ctx.lineTo(pts[k][0], pts[k][1]); else ctx.moveTo(pts[k][0], pts[k][1]); } ctx.stroke();
+      if(f>=1){ var e = pts[n], pr = pts[n-3], an = Math.atan2(e[1]-pr[1], e[0]-pr[0]), hl = s ? 7 : 8; ctx.beginPath();
+        ctx.moveTo(e[0] - hl*Math.cos(an - .45), e[1] - hl*Math.sin(an - .45)); ctx.lineTo(e[0], e[1]); ctx.lineTo(e[0] - hl*Math.cos(an + .45), e[1] - hl*Math.sin(an + .45)); ctx.stroke(); }
+      ctx.restore(); return pts[Math.round(n/2)]; }
+    function NB(){ return W < 340 ? 14.5 : s ? 15.5 : 17.5; } function NS(){ return W < 340 ? 10.5 : s ? 11 : 12.5; }
+    function note(t, x, y, al, f){ var big = NB(), sm = NS(); ctx.save(); ctx.globalAlpha = Math.max(0, Math.min(1, f*1.4 - .3)); ctx.fillStyle = '#f4f6f0'; ctx.textAlign = al;
+      ctx.translate(x, y); ctx.font = '600 ' + big + "px 'Shantell Sans', sans-serif"; ctx.fillText(t[0], 0, 0); ctx.font = '600 ' + sm + "px 'Shantell Sans', sans-serif"; ctx.fillStyle = '#c3ccc6'; ctx.fillText(t[1], 0, sm + 4); ctx.restore(); }
+    var xr = X(REC), yr = Y(V[REC]), xd = X(LOW), yd = Y(V[LOW]), xn = X(NEXT), yn = Y(V[NEXT]);
+    /* −9,1 %: šipka od lednového vrcholu ke dnu, pod křivkou, poznámka vlevo pod ní */
+    var fA = Math.max(0, Math.min(1, (to - LOW)/14));
+    if(fA>0){ var P0 = [xr + 1, yr + 13], P2 = [xd - 7, yd + 1], dx = P2[0]-P0[0], dy = P2[1]-P0[1], L = Math.hypot(dx,dy), bow = s ? 20 : 34;
+      var P1 = [(P0[0]+P2[0])/2 - dy/L*bow, (P0[1]+P2[1])/2 + dx/L*bow], mid = sketch(P0, P1, P2, fA);
+      ctx.font = '600 ' + NS() + "px 'Shantell Sans', sans-serif"; var wN = ctx.measureText(NOTES[0][1]).width;
+      /* na mobilu vlevo od šipky není místo, poznámka jde pod její hrot vlevo od popisku dna */
+      if(s) note(NOTES[0], xd - 24, yd + 20, 'right', fA); else note(NOTES[0], Math.max(padL() + 4 + wN, mid[0] - 10), mid[1] + 20, 'right', fA); }
+    /* +2,9 %: krátký háček z poznámky vpravo ode dna k bodu 31. 3. */
+    var fB = Math.max(0, Math.min(1, (to - NEXT - 6)/12));
+    if(fB>0){ var tx = xd + (s ? 22 : 30), ty = (yd + yn)/2 + 6;
+      sketch([tx - 5, ty - 6], [xn + 11, ty - 6], [xn + 6, yn + 3], fB); note(NOTES[1], tx, ty, 'left', fB); }
+    /* +23,0 %: svislá šipka u pravého okraje z úrovně dna ke 13. 10., poznámka vlevo od ní */
+    var fC = Math.max(0, Math.min(1, (to - (N - 14))/13));
+    if(fC>0){ var xe = X(N-1), ye = Y(V[N-1]), ax = xe - (s ? 5 : 7);
+      sketch([ax, yd - 1], [ax - (s ? 5 : 8), (yd + ye)/2], [ax + 1, ye + 13], fC); note(NOTES[2], ax - (s ? 11 : 15), (yd + ye)/2 + 4, 'right', fC); }
+    MK.forEach(function(m){ if(to < m.i - .01) return; if(m.d) lab(m); dot(m.i); });
+  }
+
+  /* vstup bez probliknutí: křivka se nakreslí zleva, když je graf vidět */
+  function run(){ if(started) return; started = true; if(reduce){ prog = 1; draw(); return; }
+    var t0 = performance.now(), D = 1900;
+    (function tick(now){ var k = Math.min(1, (now - t0)/D); prog = k<.5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2)/2; draw(); if(k<1) raf = requestAnimationFrame(tick); })(t0); }
+
+  /* vyplnění rámu: při nedostatku místa se zmenší písmo, popisek zůstává */
+  function overflows(){ return root.scrollHeight > root.clientHeight + 1 || stage.clientHeight < 150; }
+  function fit(){ var sc = 1; root.style.setProperty('--sc', 1); for(var k=0;k<10 && overflows();k++){ sc *= .94; root.style.setProperty('--sc', sc.toFixed(3)); } }
+  var rt; function refit(){ fit(); measure(); }
+  window.addEventListener('resize', refit); window.addEventListener('load', refit);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
+  if(document.fonts && document.fonts.load) Promise.all(["600 17px 'Shantell Sans'",'600 13px Poppins','500 11px Poppins'].map(function(f){ return document.fonts.load(f, '−+9,1 % válka v Íránu hned další den'); })).then(draw, draw);
+  if(window.ResizeObserver) new ResizeObserver(function(){ clearTimeout(rt); rt = setTimeout(refit, 60); }).observe(root);
+  refit();
+
+  var viewSent = false;
+  if('IntersectionObserver' in window && !reduce){
+    new IntersectionObserver(function(es){ var e = es[0];
+      if(e.isIntersecting && e.intersectionRatio >= .3){ run(); if(!viewSent){ viewSent = true; send({event:'cc_embed_view'}); } } }, {threshold:[0,.3]}).observe(root);
+    setTimeout(run, 6000);
+  } else { prog = 1; started = true; draw(); send({event:'cc_embed_view'}); viewSent = true; }
+})();
+</script>
+</body>
+</html>
