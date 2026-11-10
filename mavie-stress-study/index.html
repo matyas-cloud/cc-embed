@@ -9,19 +9,22 @@
      Cíl: článek cc.cz s partnerem Mavie Work (premium/nativ), sourozenec prvku visa-ai-nakupovani.
      Vložení: mavie-stress-study-vlozeni.html, obalový div s výškou podle šířky okna.
      Nasazení: matyas-cloud/cc-embed/mavie-stress-study/index.html, Poppins ze sdílené složky ../fonts/.
-     Formát: bílá plocha se stínem uvnitř rámu, nahoře titulek a (i) se zdrojem. Kapitoly odshora:
-       1 stres (lidičky s legendou „1 postavička = 10 %“, pod nimi zhoršení za rok), 2 co stres dělá s prací (dva prstence),
-       3 finance Česko × Rakousko (sloupce) | 4 pomoc a mlčení (tmavá karta, žlutá = pomoc),
-       5 šéf ve stresu (velké číslo + věta). Na desktopu 3 a 4 vedle sebe, na mobilu pod sebou.
+     Formát: bílá plocha se stínem uvnitř rámu, nahoře titulek a (i) se zdroji. Každý údaj je číslo + věta z podkladu.
+       1 stres (61 %, lidičky s legendou „1 postavička = 10 %“), 2 vyčerpání a výkon (tři prstence 76 / 62 / 69 %),
+       3 náklady 16 mld. Kč (s poznámkou o zdroji) | 4 pomoc a mlčení (tmavá karta, žlutá = pomoc),
+       5 šéf ve stresu (23 %). Na desktopu 3 a 4 vedle sebe, na mobilu pod sebou.
      Barvy podle e-a.as: petrolejová #025450 jako barva dat (gradient), žlutá #f9e54f jen jako akcent u pomoci.
      Nástup po kapitolách přes IntersectionObserver. Bez IO, s omezeným pohybem nebo s ?static rovnou konečný stav;
        ?info otevře panel (i) – jen pro náhledy.
-     Data: infobox z článku (Mavie Stress Study 2026, červen a červenec 2026, 394 pracujících v Česku 18–64 let,
-       alespoň poloviční úvazek). Texty a čísla jsou v bloku D, z něj se skládá i shrnutí pro čtečky.
+     Data: podklad redakce (Mavie Stress Study 2026, 394 pracujících v Česku ve věku 18 až 64 let; 16 mld. Kč
+       Masarykova univerzita, Tachezyová, Špalková, Hlávka, 2025). Texty a čísla jsou v bloku D, z něj se skládá i shrnutí pro čtečky.
      Změny obsahu:
        2026-11-05  v1 infografika v pěti kapitolách.
        2026-11-05  v2 titulek zkrácen na „Mavie Stress Study 2026“ (feedback redakce), úklid nepoužitých proměnných.
-       2026-11-05  v3 u 61 % legenda „1 postavička = 10 %“ pod lidičkami, u 23 % lidičky pryč (číslo s větou stačí), věta o postavičce z (i) pryč, je v legendě. -->
+       2026-11-05  v3 u 61 % legenda „1 postavička = 10 %“ pod lidičkami, u 23 % lidičky pryč (číslo s větou stačí), věta o postavičce z (i) pryč, je v legendě.
+       2026-11-10  v4 změny klienta přes redakci: pryč Rakousko a 40 % (zhoršení za rok), nově 69 % (práce i přes vyčerpání
+                   z finančních důvodů) a 16 mld. Kč (MU); věty u čísel 1:1 z podkladu včetně „zaměstnanců“, proto pryč popisky kapitol;
+                   „3 ze 4“ → „3/4“ podle podkladu; zdroj v (i) podle podkladu. -->
 <style>
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
@@ -125,18 +128,19 @@
 @media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
 </style>
 
+
 <style>
 .cc-mavie{
   --ink:#13201f; --ink2:#566664; --line:#e5ebe9;
   --teal:#025450; --track:#e8efed; --yel:#f9e54f;
   --sc:1; --ease:cubic-bezier(.2,.7,.2,1);
-  --vf:max(14px, calc(clamp(15px,3vw,18px)*var(--sc)));        /* hodnota v grafu */
+  --vf:max(14px, calc(clamp(15px,3vw,18px)*var(--sc)));        /* hodnota v prstenci */
   --hf:max(26px, calc(clamp(30px,6.4vw,40px)*var(--sc)));      /* velké číslo */
-  --lf:max(14px, calc(clamp(14px,2.5vw,15px)*var(--sc)));      /* popisek kapitoly */
-  --tf:max(12px, calc(clamp(12px,2.3vw,13px)*var(--sc)));      /* popisky v grafu */
-  --gap:calc(clamp(8px,1.8vw,12px)*var(--sc));                 /* popisek kapitoly → graf */
-  --pw:calc(clamp(18px,3.4vw,22px)*var(--sc)); --pwb:calc(clamp(24px,5vw,32px)*var(--sc));
-  --ring:calc(clamp(82px,15vw,100px)*var(--sc));
+  --lf:max(14px, calc(clamp(14px,2.5vw,15px)*var(--sc)));      /* věta u čísla */
+  --tf:max(12px, calc(clamp(12px,2.3vw,13px)*var(--sc)));      /* drobné popisky */
+  --gap:calc(clamp(8px,1.8vw,12px)*var(--sc));                 /* věta → graf */
+  --pw:calc(clamp(18px,3.4vw,22px)*var(--sc)); --pwb:calc(clamp(24px,4.6vw,30px)*var(--sc));
+  --ring:calc(clamp(76px,14vw,92px)*var(--sc));
   box-sizing:border-box;height:100%;display:flex;flex-direction:column;overflow:hidden;position:relative;
   padding:clamp(16px,4.2vw,28px) clamp(16px,4.2vw,30px) clamp(16px,3.6vw,24px);
   background:radial-gradient(120% 55% at 100% 0%, rgba(162,204,140,.16), rgba(162,204,140,0) 62%), #fff;
@@ -159,16 +163,21 @@
 .val.hero{font-size:var(--hf);letter-spacing:-.02em;}
 .val [data-c]{display:inline-block;}
 .val .u{display:inline-block;font-size:.7em;margin-left:.2em;letter-spacing:0;transition:opacity .3s;}
+.val .u--frac{font-size:1em;margin-left:0;}
 .is-count .u{opacity:0;}
 
+/* číslo + věta z podkladu */
+.st{display:flex;align-items:center;gap:clamp(12px,3vw,20px);}
+.st .val.hero{flex:none;}
+.cc-mavie .st__t{margin:0;min-width:0;flex:1 1 auto;color:var(--ink);font:500 var(--lf)/1.32 var(--cc-display);letter-spacing:-.005em;text-wrap:balance;}
+
 /* mřížka kapitol */
-.cc-mavie__grid{flex:1 1 auto;min-height:0;display:grid;margin-top:calc(clamp(4px,1.2vw,8px)*var(--sc));
-  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);grid-template-areas:"str str" "dop dop" "fin pom" "sef sef";
+.cc-mavie__grid{flex:1 1 auto;min-height:0;display:grid;margin-top:calc(clamp(8px,2vw,14px)*var(--sc));
+  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);grid-template-areas:"str str" "dop dop" "kc pom" "sef sef";
   align-content:space-between;column-gap:clamp(18px,4vw,30px);row-gap:calc(12px*var(--sc));}
 .vs{min-width:0;padding-top:calc(clamp(12px,2.6vw,16px)*var(--sc));border-top:1px solid var(--line);}
-.vs--str{grid-area:str;border-top:0;padding-top:calc(6px*var(--sc));}
-.vs--dop{grid-area:dop;} .vs--fin{grid-area:fin;display:flex;flex-direction:column;} .vs--pom{grid-area:pom;} .vs--sef{grid-area:sef;}
-.cc-mavie .vs__h{margin:0;color:var(--ink);font:600 var(--lf)/1.3 var(--cc-display);letter-spacing:-.005em;text-wrap:balance;}
+.vs--str{grid-area:str;border-top:0;padding-top:0;}
+.vs--dop{grid-area:dop;} .vs--kc{grid-area:kc;display:flex;flex-direction:column;} .vs--pom{grid-area:pom;} .vs--sef{grid-area:sef;}
 .vs__viz{margin-top:var(--gap);position:relative;}
 .vs--sef{padding-bottom:4px;}   /* rezerva pro přesah písma velkého čísla */
 
@@ -182,69 +191,48 @@
 .ppl--fit .pp{flex:1 1 0;width:auto;max-width:var(--pw);height:auto;aspect-ratio:.75;}
 
 /* 1 stres */
-.big{display:flex;align-items:center;gap:clamp(14px,3vw,22px);}
-.big__p{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;}
-.big .ppl{--pw:var(--pwb);}
+.str__p{display:flex;flex-direction:column;}
+.str__p .ppl{--pw:var(--pwb);}
+.str__p .pp__on{filter:drop-shadow(0 4px 5px rgba(2,84,80,.22));}
 .lgd{align-self:flex-end;margin-top:calc(6px*var(--sc));color:var(--ink2);font:400 calc(var(--tf)*.95)/1.2 var(--cc-display);transition:opacity .5s var(--ease) .7s;}
 .cc-mavie.is-pre .vs:not(.is-on) .lgd{opacity:0;}
-.big .pp__on{filter:drop-shadow(0 4px 5px rgba(2,84,80,.22));}
-.trend{display:flex;align-items:center;gap:10px;margin:calc(12px*var(--sc)) 0 0;color:var(--ink);font:400 var(--tf)/1.3 var(--cc-display);transition:opacity .5s var(--ease) .9s,transform .5s var(--ease) .9s;}
-.trend .val{font-size:calc(var(--tf)*1.15);}
-.trend__ic{flex:none;display:grid;place-items:center;width:calc(24px*var(--sc));height:calc(24px*var(--sc));border-radius:50%;
-  background:linear-gradient(145deg,#e6f1ee,#cfe4de);box-shadow:inset 0 0 0 1px rgba(2,84,80,.08);}
-.trend__ic svg{width:58%;height:58%;fill:none;stroke:var(--teal);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
-.cc-mavie.is-pre .vs:not(.is-on) .trend{opacity:0;transform:translateY(5px);}
 
-/* 2 dopad – prstence */
-.rgs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:clamp(14px,3vw,26px);}
-.rg{display:flex;align-items:center;gap:clamp(12px,2.6vw,18px);min-width:0;}
+/* 2 prstence */
+.vs--dop .vs__viz{margin-top:0;}
+.rgs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(10px,3vw,24px);}
+.rg{display:flex;flex-direction:column;align-items:center;text-align:center;gap:calc(10px*var(--sc));min-width:0;}
 .rg__ring{position:relative;flex:none;width:var(--ring);height:var(--ring);}
 .rg__ring svg{display:block;width:100%;height:100%;transform:rotate(-90deg);overflow:visible;}
 .rg__tr{fill:none;stroke:var(--track);stroke-width:9;}
 .rg__v{fill:none;stroke:url(#mv-r);stroke-width:9;stroke-linecap:round;stroke-dasharray:263.89;stroke-dashoffset:var(--o);
   filter:drop-shadow(0 3px 4px rgba(2,84,80,.28));transition:stroke-dashoffset 1.2s var(--ease);transition-delay:var(--d,0ms);}
 .cc-mavie.is-pre .vs:not(.is-on) .rg__v{stroke-dashoffset:263.89;}
-.rg__ring .val{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:calc(var(--vf)*1.2);}
-.rg__t{margin:0;min-width:0;color:var(--ink);font:400 var(--tf)/1.35 var(--cc-display);text-wrap:balance;}
+.rg__ring .val{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:calc(var(--vf)*1.15);}
+.cc-mavie .rg__t{margin:0;max-width:22ch;color:var(--ink);font:400 var(--tf)/1.35 var(--cc-display);text-wrap:balance;}
 
-/* 3 finance – sloupce */
-.vs--fin .vs__viz{flex:1 1 auto;display:flex;flex-direction:column;}
-.fc__plot{flex:1 1 auto;min-height:calc(96px*var(--sc));display:flex;justify-content:center;align-items:flex-end;gap:clamp(24px,7vw,44px);border-bottom:1px solid #d9e3e0;}
-.fc__c{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;width:clamp(50px,11vw,64px);}
-.fc__c .val{margin-bottom:6px;}
-.fc__bar{width:100%;height:calc(var(--v)*var(--k,1px));border-radius:8px 8px 0 0;
-  background:linear-gradient(180deg,#1a8d7a 0%,#025450 100%);box-shadow:0 10px 18px -10px rgba(2,84,80,.6), inset 0 1px 0 rgba(255,255,255,.18);
-  transition:height .8s var(--ease);transition-delay:var(--d,0ms);}
-.fc__c.is-ref .fc__bar{background:linear-gradient(180deg,#cfe2dd 0%,#a8c9c2 100%);box-shadow:0 10px 18px -12px rgba(2,84,80,.3);}
-.cc-mavie.is-pre .vs:not(.is-on) .fc__bar{height:0;}
-.fc__labs{display:flex;justify-content:center;gap:clamp(24px,7vw,44px);margin-top:calc(7px*var(--sc));}
-.fc__labs span{width:clamp(50px,11vw,64px);text-align:center;color:var(--ink);font:500 var(--tf)/1.3 var(--cc-display);}
-.fc__labs span.is-ref{color:var(--ink2);font-weight:400;}
+/* 3 náklady */
+.vs--kc .st{flex-direction:column;align-items:flex-start;gap:calc(8px*var(--sc));}
+.cc-mavie .kc__fn{margin:auto 0 0;padding-top:calc(10px*var(--sc));color:var(--ink2);font:400 max(12px, calc(12px*var(--sc)))/1.35 var(--cc-display);}
 
 /* 4 pomoc – tmavá karta, žlutá = pomoc */
 .vs--pom{border-top:0;padding:calc(clamp(14px,2.8vw,18px)*var(--sc)) clamp(14px,3vw,20px);border-radius:14px;color:#fff;
   background:radial-gradient(90% 70% at 100% 0%, rgba(26,141,122,.55), rgba(26,141,122,0) 70%), linear-gradient(160deg,#03625d 0%,#025450 50%,#013c39 100%);
   box-shadow:0 18px 30px -18px rgba(1,50,47,.75), inset 0 1px 0 rgba(255,255,255,.08);}
-.vs--pom .vs__h{color:rgba(255,255,255,.92);}
+.vs--pom .st__t{color:rgba(255,255,255,.94);}
 .vs--pom .val{color:#fff;}
+.vs--pom .st .val.hero{min-width:calc(var(--hf)*1.55);}
 .pom__i + .pom__i{margin-top:calc(12px*var(--sc));padding-top:calc(12px*var(--sc));border-top:1px solid rgba(255,255,255,.14);}
-.pom__row{display:flex;align-items:center;gap:clamp(10px,2.4vw,16px);margin-top:var(--gap);}
-.pom__row .val{flex:none;min-width:calc(var(--hf)*1.55);}
-.pom__row .ppl{flex:1 1 auto;min-width:0;}
+.pom__i .vs__viz{display:flex;}
 .vs--pom .pp__off{fill:rgba(255,255,255,.14);}
 .vs--pom .pp__on{fill:var(--yel);filter:drop-shadow(0 0 6px rgba(249,229,79,.35));}
-.bub{flex:1 1 auto;display:flex;justify-content:flex-start;gap:clamp(6px,1.6vw,10px);}
-.bub{min-width:0;}
+.vs--pom .ppl{flex:1 1 auto;min-width:0;}
+.bub{flex:1 1 auto;min-width:0;display:flex;justify-content:flex-start;gap:clamp(6px,1.6vw,10px);}
 .bub svg{display:block;flex:0 1 auto;min-width:0;width:calc(clamp(28px,4.8vw,36px)*var(--sc));height:auto;overflow:visible;
   transition:opacity .35s var(--ease),transform .45s var(--ease);transition-delay:var(--d,0ms);}
 .bub__mute{fill:rgba(255,255,255,.92);filter:drop-shadow(0 4px 6px rgba(0,0,0,.18));}
 .bub__talk{fill:rgba(255,255,255,.06);stroke:rgba(255,255,255,.42);stroke-width:1.4;}
 .bub__dot{fill:var(--yel);}
 .cc-mavie.is-pre .pom__i:not(.is-on) .bub svg{opacity:0;transform:translateY(6px) scale(.8);}
-
-/* 5 šéf */
-.vs--sef .vs__viz{margin-top:0;display:flex;align-items:center;gap:clamp(12px,3vw,22px);}
-.sef__txt{flex:1 1 auto;min-width:0;margin:0;color:var(--ink);font:600 var(--lf)/1.3 var(--cc-display);text-wrap:balance;}
 
 /* hodnoty se ukážou, až se kapitola rozehraje */
 .cc-mavie.is-pre .vs:not(.is-on) .val,.cc-mavie.is-pre .pom__i:not(.is-on) .val{opacity:0;}
@@ -264,12 +252,13 @@
 
 /* užší než 600 px: kapitoly pod sebou */
 @media (max-width:599px){
-  .cc-mavie__grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"str" "dop" "fin" "pom" "sef";}
-  .big{flex-wrap:wrap;row-gap:8px;}
-  .big__p{flex:1 0 100%;}
-  .cc-mavie{--pwb:calc(min(30px, (100vw - 76px)/10)*var(--sc));--ring:calc(clamp(74px,22vw,90px)*var(--sc));}
-  .rg{flex-direction:column;align-items:center;text-align:center;gap:8px;}
-  .fc__plot{min-height:calc(110px*var(--sc));}
+  .cc-mavie__grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"str" "dop" "kc" "pom" "sef";}
+  .cc-mavie{--pwb:calc(min(30px, (100vw - 76px)/10)*var(--sc));}
+  .vs--kc .st{flex-direction:row;align-items:center;}
+  .rgs{grid-template-columns:minmax(0,1fr);row-gap:calc(10px*var(--sc));}
+  .rg{flex-direction:row;text-align:left;gap:clamp(12px,4vw,18px);}
+  .cc-mavie .rg__t{max-width:none;font-size:var(--lf);font-weight:500;}
+  .cc-mavie{--ring:calc(clamp(64px,19vw,76px)*var(--sc));}
 }
 @media (prefers-reduced-motion:reduce){.cc-mavie *,.cc-mavie *::after{transition:none!important;}}
 .cc-mavie.is-static *,.cc-mavie.is-static *::after{transition:none!important;}
@@ -298,6 +287,7 @@
   </div>
 </div>
 
+
 <script>
 (function(){
   var root = document.querySelector('[data-cc-mavie]');
@@ -311,42 +301,43 @@
   if(ANIM) root.classList.add('is-pre');                            // skrytý výchozí stav hned, žádné probliknutí
   if(STATIC) root.classList.add('is-static');
 
-  /* ===== D: popisky kapitol, data a texty panelu (i) ===== */
+  /* ===== D: čísla a věty 1:1 z podkladu redakce, texty panelu (i) ===== */
   var D = {
-    str: {h:'Je často nebo velmi často ve stresu', v:61, tr:['U ',40,' se stres za rok zhoršil'], lgd:'1 postavička = 10 %'},
-    dop: {h:'Co stres dělá s prací', items:[[76,'Chodí do práce navzdory vyčerpání'],[62,'Kvůli stresu klesá výkon']]},
-    fin: {h:'Jako důvod stresu uvádí finance', cols:[['Česko',69],['Rakousko',39]]},
-    pom: {h1:'Vyhledá odbornou pomoc', v1:9, h2:'O duševním zdraví v práci nemluví', n:3, of:4},
-    sef: {v:23, t:'Častěji uvažuje o odchodu, když je jejich šéf dlouhodobě ve stresu'},
-    info:['Mavie Stress Study 2026. Průzkum proběhl v červnu a červenci 2026 mezi 394 pracujícími v Česku ve věku 18 až 64 let s alespoň polovičním úvazkem.']
+    str: {v:61, t:'zaměstnanců je často nebo velmi často ve stresu', lgd:'1 postavička = 10 %'},
+    dop: {items:[[76,'chodí do práce navzdory vyčerpání'],[62,'zaměstnanců vnímá kvůli stresu pokles výkonu'],[69,'pracuje i přes vyčerpání z finančních důvodů']]},
+    kc:  {v:16, u:'mld. Kč', t:'stála v roce 2024 pracovní neschopnost kvůli duševním onemocněním*', fn:'* Masarykova univerzita (Tachezyová, Špalková, Hlávka, 2025)'},
+    pom: {v1:9, t1:'zaměstnanců vyhledá odbornou pomoc', n:3, of:4, t2:'lidí o duševním zdraví v práci nemluví'},
+    sef: {v:23, t:'zaměstnanců častěji uvažuje o odchodu, když je jejich šéf dlouhodobě ve stresu'},
+    info:['Mavie Stress Study 2026, 394 pracujících v Česku ve věku 18 až 64 let.',
+          '* Masarykova univerzita (Tachezyová, Špalková, Hlávka, 2025)']
   };
 
   var NB = ' ', C = 263.89;
-  var val = function(n, unit, cls, cd){ return '<span class="val'+(cls?' '+cls:'')+'"'+(cd!=null?' data-cd="'+cd+'"':'')+'><span data-c="'+n+'">'+n+'</span><span class="u">'+(unit||'%')+'</span></span>'; };
+  var nb = function(t){ return t.replace(/(^| )([vzsaoikuVZSAOIKU]) /g, '$1$2'+NB).replace(/(\d) (let|%|mld\.|Kč)/g, '$1'+NB+'$2').replace(/(mld\.) (Kč)/g, '$1'+NB+'$2'); };
+  var val = function(n, unit, cls, cd, ucls){ return '<span class="val'+(cls?' '+cls:'')+'"'+(cd!=null?' data-cd="'+cd+'"':'')+'><span data-c="'+n+'">'+n+'</span><span class="u'+(ucls?' '+ucls:'')+'">'+(unit||'%')+'</span></span>'; };
   var grid = root.querySelector('[data-grid]');
-  var lc = function(t){ return t.charAt(0).toLowerCase()+t.slice(1); };
+  var st = function(v, t){ return '<div class="st">'+v+'<p class="st__t">'+nb(t)+'</p></div>'; };
 
   /* shrnutí pro čtečky (vizuální části mají aria-hidden) */
+  var pc = function(n, t){ return n+' procent '+t+'.'; };
   root.querySelector('[data-sr]').textContent = [
     'Mavie Stress Study 2026.',
-    D.str.v+' procent zaměstnanců '+lc(D.str.h)+'.',
-    D.str.tr[0]+D.str.tr[1]+' procent'+D.str.tr[2]+'.',
-    D.dop.items.map(function(r){ return r[0]+' procent – '+lc(r[1]); }).join(', ')+'.',
-    D.fin.h+' – '+D.fin.cols.map(function(r){ return r[0]+' '+r[1]+' procent'; }).join(', ')+'.',
-    D.pom.h1+' '+D.pom.v1+' procent.',
-    D.pom.n+' ze '+D.pom.of+' '+lc(D.pom.h2)+'.',
-    D.sef.v+' procent '+lc(D.sef.t)+'.',
-    'Zdroj: '+D.info[0]
+    pc(D.str.v, D.str.t),
+    D.dop.items.map(function(r){ return pc(r[0], r[1]); }).join(' '),
+    D.kc.v+' miliard korun '+D.kc.t.replace('*', '')+'.',
+    pc(D.pom.v1, D.pom.t1),
+    'Tři čtvrtiny '+D.pom.t2+'.',
+    pc(D.sef.v, D.sef.t),
+    'Zdroj: '+D.info[0]+' Údaj o pracovní neschopnosti: '+D.info[1].replace('* ', '')+'.'
   ].join(' ');
-  root.querySelector('[data-pbody]').innerHTML = D.info.map(function(t){ return '<p>'+t.replace(/ ([zvsaokui]) /gi, ' $1'+NB).replace(/(\d) (let|%)/g, '$1'+NB+'$2')+'</p>'; }).join('');
+  root.querySelector('[data-pbody]').innerHTML = D.info.map(function(t){ return '<p>'+nb(t)+'</p>'; }).join('');
 
-  function sec(key, inner, head){
+  function sec(key, inner){
     var s = document.createElement('section');
-    s.className = 'vs vs--'+key; s.dataset.sec = key;
-    s.innerHTML = (head || '') + '<div class="vs__viz" aria-hidden="true">'+inner+'</div>';
+    s.className = 'vs vs--'+key; s.dataset.sec = key; s.setAttribute('aria-hidden', 'true');
+    s.innerHTML = inner;
     grid.appendChild(s); return s;
   }
-  var label = function(t){ return '<h4 class="vs__h" aria-hidden="true">'+t+'</h4>'; };
   function people(v, d0, step, cls){
     var h = '';
     for(var k=0; k<10; k++){
@@ -357,22 +348,18 @@
   }
 
   /* 1 stres */
-  sec('str', '<div class="big">'+val(D.str.v, '%', 'hero')+'<span class="big__p">'+people(D.str.v, 0, 60)+'<span class="lgd">'+D.str.lgd.replace(/ /g, NB)+'</span></span></div>'
-    + '<p class="trend"><span class="trend__ic"><svg viewBox="0 0 16 16"><path d="M3 12L12.5 3.5M6 3.5h6.5V10"/></svg></span>'
-    + '<span>'+D.str.tr[0]+val(D.str.tr[1], '%', '', 900)+D.str.tr[2]+'</span></p>', label(D.str.h));
+  sec('str', st(val(D.str.v, '%', 'hero'), D.str.t)
+    + '<div class="vs__viz str__p">'+people(D.str.v, 0, 60)+'<span class="lgd">'+D.str.lgd.replace(/ /g, NB)+'</span></div>');
 
-  /* 2 dopad */
-  sec('dop', '<div class="rgs">' + D.dop.items.map(function(r, i){
+  /* 2 prstence */
+  sec('dop', '<div class="vs__viz"><div class="rgs">' + D.dop.items.map(function(r, i){
     return '<div class="rg"><div class="rg__ring"><svg viewBox="0 0 100 100"><circle class="rg__tr" cx="50" cy="50" r="42"/>'
       + '<circle class="rg__v" cx="50" cy="50" r="42" style="--o:'+(C*(1 - r[0]/100)).toFixed(2)+';--d:'+(i*250)+'ms"/></svg>'+val(r[0], '%', '', i*250)+'</div>'
-      + '<p class="rg__t">'+r[1]+'</p></div>';
-  }).join('') + '</div>', label(D.dop.h));
+      + '<p class="rg__t">'+nb(r[1])+'</p></div>';
+  }).join('') + '</div></div>');
 
-  /* 3 finance */
-  var sFin = sec('fin', '<div class="fc__plot" data-plot>' + D.fin.cols.map(function(r, i){
-      return '<div class="fc__c'+(i?' is-ref':'')+'" style="--v:'+r[1]+';--d:'+(i*220)+'ms">'+val(r[1], '%', '', i*220)+'<span class="fc__bar"></span></div>';
-    }).join('') + '</div><div class="fc__labs">' + D.fin.cols.map(function(r, i){ return '<span'+(i?' class="is-ref"':'')+'>'+r[0]+'</span>'; }).join('') + '</div>',
-    label(D.fin.h));
+  /* 3 náklady */
+  sec('kc', st(val(D.kc.v, D.kc.u.replace(' ', NB), 'hero'), D.kc.t) + '<p class="kc__fn">'+nb(D.kc.fn)+'</p>');
 
   /* 4 pomoc – dvě části, každá se rozehraje sama */
   var BUB = 'M6 1h20a5 5 0 0 1 5 5v11a5 5 0 0 1-5 5H14l-6.5 5.2V22H6a5 5 0 0 1-5-5V6a5 5 0 0 1 5-5z';
@@ -382,17 +369,17 @@
     bubs += '<svg viewBox="0 0 32 28" style="--d:'+(b*120)+'ms"><path class="'+(talk?'bub__talk':'bub__mute')+'" d="'+BUB+'"/>'
       + (talk ? '<circle class="bub__dot" cx="10" cy="11.5" r="1.9"/><circle class="bub__dot" cx="16" cy="11.5" r="1.9"/><circle class="bub__dot" cx="22" cy="11.5" r="1.9"/>' : '') + '</svg>';
   }
-  var sPom = document.createElement('section');
-  sPom.className = 'vs vs--pom is-on'; sPom.dataset.sec = 'pom';   // karta sama nenastupuje, nastupují její dvě části
-  sPom.innerHTML = '<div class="pom__i" data-sub>'+label(D.pom.h1)+'<div class="pom__row" aria-hidden="true">'+val(D.pom.v1, '%', 'hero')+people(D.pom.v1, 200, 0, 'ppl--fit')+'</div></div>'
-    + '<div class="pom__i" data-sub>'+label(D.pom.h2)+'<div class="pom__row" aria-hidden="true">'+val(D.pom.n, 'ze'+NB+D.pom.of, 'hero')+'<span class="bub">'+bubs+'</span></div></div>';
-  grid.appendChild(sPom);
+  var sPom = sec('pom',
+      '<div class="pom__i" data-sub>'+st(val(D.pom.v1, '%', 'hero'), D.pom.t1)+'<div class="vs__viz">'+people(D.pom.v1, 200, 0, 'ppl--fit')+'</div></div>'
+    + '<div class="pom__i" data-sub>'+st(val(D.pom.n, '/'+D.pom.of, 'hero', null, 'u--frac'), D.pom.t2)+'<div class="vs__viz"><span class="bub">'+bubs+'</span></div></div>');
+  sPom.classList.add('is-on');   // karta sama nenastupuje, nastupují její dvě části
 
   /* 5 šéf */
-  sec('sef', val(D.sef.v, '%', 'hero') + '<p class="sef__txt">'+D.sef.t+'</p>');
+  sec('sef', st(val(D.sef.v, '%', 'hero'), D.sef.t));
 
   /* ===== pomocníci ===== */
-  var secs = [].slice.call(grid.children).filter(function(s){ return s !== sPom; });
+  var all = [].slice.call(grid.children);
+  var secs = all.filter(function(s){ return s !== sPom; });
   var subs = [].slice.call(sPom.querySelectorAll('[data-sub]'));
   var ease = function(k){ return 1 - Math.pow(1-k, 3); };
   function tween(dur, delay, fn, done){
@@ -427,21 +414,14 @@
   });
 
   /* ===== vyplnění rámu ===== */
-  var plot = sFin.querySelector('[data-plot]'), fcVal = plot.querySelector('.val');
-  function layoutK(){   // měřítko sloupců: vyšší hodnota + popisek se vejdou do plochy
-    var ph = plot.clientHeight, mx = Math.max.apply(null, D.fin.cols.map(function(r){ return r[1]; }));
-    var k = Math.max(0.5, (ph - fcVal.offsetHeight - 12) / mx);
-    root.style.setProperty('--k', k.toFixed(3)+'px');
-  }
-  var all = secs.concat([sPom]);
   function over(){   // měří se rozložení kapitol vůči mřížce, ne scrollHeight
     var gb = grid.getBoundingClientRect().bottom, mx = 0;
     all.forEach(function(s){ mx = Math.max(mx, s.getBoundingClientRect().bottom); });
     return mx > gb + 1;
   }
   function fit(){
-    var sc = 1; root.style.setProperty('--sc', 1); root.style.setProperty('--k', '0px'); layoutK();
-    for(var k=0; k<18 && over() && sc > .66; k++){ sc *= .95; root.style.setProperty('--sc', sc.toFixed(3)); root.style.setProperty('--k', '0px'); layoutK(); }
+    var sc = 1; root.style.setProperty('--sc', 1);
+    for(var k=0; k<18 && over() && sc > .66; k++){ sc *= .95; root.style.setProperty('--sc', sc.toFixed(3)); }
   }
   var rt;
   window.addEventListener('resize', fit);
