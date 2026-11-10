@@ -11,20 +11,26 @@
      Umístění v repu:  cc-embed/allwyn-restart-pomucky/index.html  +  obrázky v cc-embed/allwyn-restart-pomucky/img/
      Vložení:          komponenta Iframe ve speciálu, celý tag <iframe src="…" title="…">
      Místo v textu:    blok „Jak technika vrací soběstačnost“, za „…přesednout z postele na vozík.“
-     Formát:           3D kolotoč bílých karet. Karta nese všechno: barevnou hlavičku kategorie,
-                       ilustraci, název, jak pomůcka funguje, cenu a kdo ji hradí. Listuje se tahem,
-                       šipkami, klávesami ← →, klepnutím na boční kartu; štítky kategorií nahoře skočí
-                       na první kartu kategorie. Poznámka k cenám a zdroje pod „i“.
-     Rám:              karta se počítá z výšky plochy (na výšku 1 karta + okraje sousedních, na šířku
-                       3 karty); text na každé kartě se zmenšuje vlastní smyčkou --cs, při nouzi se zmenší obrázek.
+     Formát:           3D kolotoč bílých karet, nekonečný (za poslední kartou je zase první). Karta nese
+                       všechno: barevnou hlavičku kategorie, ilustraci, název, jak pomůcka funguje, cenu
+                       a kdo ji hradí. Listuje se tahem, šipkami, klávesami ← →, klepnutím na boční kartu;
+                       štítky kategorií skočí na první kartu kategorie. Poznámka k cenám a zdroje pod „i“.
+     Rám:              karta se počítá z výšky plochy. Na výšku 1 karta + okraje sousedních, kategorie pod
+                       nadpisem, šipky po stranách. Na šířku tři celé karty s mezerou (v užším rámu jedna
+                       a velké části sousedních), šipky a kategorie v jednom řádku pod kartami. Text na každé
+                       kartě se zmenšuje vlastní smyčkou --cs, při nouzi se zmenší obrázek (vždy je vidět celý).
+                       Šířka prvku je nejvýš 1,5násobek výšky (při otevření mimo rám).
      Texty a karty:    objekt CFG ve skriptu. Nová karta = nový blok v CFG.cards + obrázek do img/.
                        Hodnoty v [hranatých závorkách] se zobrazí šedě jako chybějící údaj.
      Data:             ceny a úhrady viz CFG.info; chybí ceny prkna, zvedáku, schodolezu, elektrostimulace,
                        úhrada prkna a elektrostimulace, limit pojišťovny u vozíku.
-     Ilustrace:        3D clay, vygenerováno (Nano Banana 2), 640 × 794 px JPG.
+     Ilustrace:        3D clay, vygenerováno (Nano Banana 2); výřez 3 : 2 (900 × 600 px JPG) s celým předmětem,
+                       chybějící šířka dokreslena pozadím. V kartě se vkládají celé (contain).
      Pohyb:            vstup – karty se jednou rozjedou ze středu (IntersectionObserver, pojistka 6 s,
                        reduced-motion bez animace); jinak jen přechod při listování.
      Historie:         10. 11. 2026 první ostrá verze podle mockupu v7
+                       10. 11. 2026 opravená perspektiva (karty jsou opravdu natočené), karty s odstupem,
+                       nekonečný kolotoč, ilustrace celé (nové výřezy 3 : 2), na šířku ovládání pod kartami
      ============================================================ -->
 <style>
   /* sdílené fonty repa cc-embed (složka /fonts v kořeni), Poppins 400/500/600/700 */
@@ -132,11 +138,13 @@
     <h3 class="cc-rp__title" data-title></h3>
     <button type="button" class="cc-rp__info" data-info aria-expanded="false" aria-controls="cc-rp-src" aria-label="Poznámka k cenám a zdroje">i</button>
   </div>
-  <div class="cc-rp__cats" data-cats role="group" aria-label="Kategorie pomůcek"></div>
+  <div class="cc-rp__nav">
+    <button type="button" class="cc-rp__arrow cc-rp__arrow--prev" data-prev></button>
+    <div class="cc-rp__cats" data-cats role="group" aria-label="Kategorie pomůcek"></div>
+    <button type="button" class="cc-rp__arrow cc-rp__arrow--next" data-next></button>
+  </div>
   <div class="cc-rp__stage" data-stage tabindex="0" role="region" aria-roledescription="kolotoč" aria-label="Pomůcky, listujte šipkami doleva a doprava">
     <div class="cc-rp__deck" data-deck aria-live="polite"></div>
-    <button type="button" class="cc-rp__arrow cc-rp__arrow--prev" data-prev></button>
-    <button type="button" class="cc-rp__arrow cc-rp__arrow--next" data-next></button>
   </div>
   <div class="cc-rp__src" id="cc-rp-src" role="dialog" aria-modal="true" aria-label="Poznámka k cenám a zdroje" hidden>
     <button type="button" class="cc-rp__close" data-close aria-label="Zavřít">×</button>
@@ -148,7 +156,7 @@
 <style>
 .cc-embed.cc-rp{
   --ink:#14181a; --tq:#27e2cc; --muted:#6b6f70; --line:#e4e4e1; --soft:#f4f4f2; --clay:#e6e2d7; --sc:1;
-  box-sizing:border-box;position:relative;height:100vh;margin:0;padding:12px 6px 10px;overflow:hidden;
+  box-sizing:border-box;position:relative;height:100vh;max-width:150vh;margin:0 auto;padding:12px 6px 10px;overflow:hidden;
   display:flex;flex-direction:column;gap:8px;
   font-family:var(--cc-display);color:var(--ink);-webkit-font-smoothing:antialiased;
 }
@@ -158,21 +166,27 @@
   color:var(--muted);font:700 12px/1 var(--cc-display);cursor:pointer;position:relative;touch-action:manipulation;}
 .cc-rp .cc-rp__info::after{content:"";position:absolute;inset:-8px;border-radius:50%;}
 .cc-rp .cc-rp__info[aria-expanded="true"],.cc-rp .cc-rp__info:hover{border-color:var(--ink);color:var(--ink);}
+/* na výšku: kategorie pod nadpisem, šipky po stranách karty; na šířku je celý řádek ovládání pod kartami */
+.cc-rp .cc-rp__nav{display:contents;}
 .cc-rp .cc-rp__cats{display:flex;flex-wrap:wrap;gap:6px;}
 .cc-rp .cc-rp__cat{display:flex;align-items:center;gap:6px;margin:0;padding:6px 10px;border:1.5px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);
   font:600 max(11px,calc(11.5px*var(--sc)))/1.1 var(--cc-display);cursor:pointer;touch-action:manipulation;}
 .cc-rp .cc-rp__cat i{width:10px;height:10px;border-radius:3px;box-shadow:0 0 0 1px rgba(20,24,26,.2);font-style:normal;}
 .cc-rp .cc-rp__cat[aria-pressed="true"]{border-color:var(--ink);}
-.cc-rp .cc-rp__stage{flex:1 1 auto;min-height:0;position:relative;perspective:1100px;touch-action:pan-y;outline:none;user-select:none;-webkit-user-select:none;}
-.cc-rp .cc-rp__deck{position:absolute;inset:0;}
+.cc-rp .cc-rp__stage{flex:1 1 auto;min-height:0;position:relative;touch-action:pan-y;outline:none;user-select:none;-webkit-user-select:none;}
+/* perspektiva patří přímo rodiči karet, jinak se natočení vykreslí naplocho */
+.cc-rp .cc-rp__deck{position:absolute;inset:0;perspective:1200px;perspective-origin:50% 50%;}
 /* karta: všechno na kartě – hlavička kategorie, obrázek, název, popis, cena, kdo hradí */
 .cc-rp .cc-rp__card{position:absolute;left:50%;top:50%;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden;
   width:var(--cw);height:var(--ch);margin:calc(var(--ch)/-2) 0 0 calc(var(--cw)/-2);
   background:#fff;border-radius:16px;cursor:default;--cs:1;
   box-shadow:0 18px 30px -14px rgba(20,24,26,.45),0 2px 5px rgba(20,24,26,.12);
-  transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .4s,filter .4s;}
+  transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .4s,filter .4s;}
+.cc-rp .cc-rp__card.is-jump{transition:none;}
+.cc-rp .cc-rp__card.is-off{pointer-events:none;}
 .cc-rp .cc-rp__band{flex:0 0 auto;padding:9px 14px;font:700 max(9.5px,calc(10px*var(--cs)))/1.2 var(--cc-display);letter-spacing:.1em;text-transform:uppercase;}
-.cc-rp .cc-rp__img{flex:0 0 auto;height:var(--ih);background:var(--clay) center 45%/cover no-repeat;}
+/* ilustrace je vidět vždy celá (contain); zbytek pruhu doplní barva jejího pozadí */
+.cc-rp .cc-rp__img{flex:0 0 auto;height:var(--ih);background:var(--clay) center/contain no-repeat;}
 .cc-rp .cc-rp__body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;padding:11px 14px 13px;}
 .cc-rp .cc-rp__card .cc-rp__name{margin:0;font:700 max(15px,calc(18px*var(--cs)))/1.15 var(--cc-display);}
 .cc-rp .cc-rp__card .cc-rp__text{margin:5px 0 10px;font:400 max(12px,calc(12.5px*var(--cs)))/1.45 var(--cc-display);color:#3b3f40;}
@@ -182,10 +196,9 @@
 .cc-rp .cc-rp__price{font:700 max(14px,calc(16.5px*var(--cs)))/1.15 var(--cc-display);}
 .cc-rp .cc-rp__payer{font:500 max(11px,calc(11.5px*var(--cs)))/1.35 var(--cc-display);}
 .cc-rp .is-ph{font-style:italic;font-weight:500;color:var(--muted);}
-.cc-rp .cc-rp__arrow{position:absolute;top:50%;z-index:200;width:36px;height:36px;margin-top:-18px;padding:0;border:0;border-radius:50%;
+.cc-rp .cc-rp__arrow{position:absolute;top:var(--ay,50%);z-index:200;width:36px;height:36px;margin-top:-18px;padding:0;border:0;border-radius:50%;
   background:rgba(255,255,255,.96);box-shadow:0 2px 8px rgba(0,0,0,.18);color:var(--ink);font:400 20px/1 var(--cc-display);cursor:pointer;touch-action:manipulation;}
 .cc-rp .cc-rp__arrow--prev{left:2px;} .cc-rp .cc-rp__arrow--next{right:2px;}
-.cc-rp .cc-rp__arrow[disabled]{opacity:0;pointer-events:none;}
 .cc-rp .cc-rp__cat:focus,.cc-rp .cc-rp__arrow:focus,.cc-rp .cc-rp__info:focus{outline:none;}
 .cc-rp.is-kbd .cc-rp__cat:focus-visible,.cc-rp.is-kbd .cc-rp__arrow:focus-visible,.cc-rp.is-kbd .cc-rp__info:focus-visible,.cc-rp.is-kbd .cc-rp__close:focus-visible{outline:3px solid var(--ink);outline-offset:2px;}
 .cc-rp.is-kbd .cc-rp__stage:focus-visible .cc-rp__card.is-active{outline:3px solid var(--ink);outline-offset:3px;}
@@ -202,12 +215,18 @@
 .cc-rp .cc-rp__srcbody p{margin:0 0 12px;font:400 13.5px/1.45 var(--cc-display);color:#d9dcda;}
 .cc-rp .cc-rp__srcbody b{color:#fff;font-weight:600;}
 .cc-rp .cc-rp__srcbody a{color:var(--tq);}
+/* na šířku: nadpis nahoře, tři karty s odstupem uprostřed, kategorie vystředěné pod nimi */
 @media (min-aspect-ratio:1/1){
-  .cc-embed.cc-rp{padding:14px 10px 12px;gap:10px;}
+  .cc-embed.cc-rp{padding:16px 14px 14px;gap:12px;}
   .cc-rp .cc-rp__head{align-items:center;}
   .cc-rp .cc-rp__title{font-size:max(18px,calc(24px*var(--sc)));}
-  .cc-rp .cc-rp__cat{font-size:max(11px,calc(12.5px*var(--sc)));padding:7px 12px;}
-  .cc-rp .cc-rp__arrow{width:40px;height:40px;margin-top:-20px;}
+  .cc-rp .cc-rp__nav{order:3;display:flex;align-items:center;justify-content:center;gap:14px;}
+  .cc-rp .cc-rp__cats{flex-wrap:nowrap;gap:8px;}
+  .cc-rp .cc-rp__cat{font-size:max(11px,calc(12.5px*var(--sc)));padding:8px 14px;white-space:nowrap;}
+  .cc-rp .cc-rp__arrow{position:static;flex:0 0 38px;width:38px;height:38px;margin:0;border:1.5px solid var(--line);box-shadow:none;}
+  .cc-rp .cc-rp__arrow:hover{border-color:var(--ink);}
+  .cc-rp .cc-rp__band{padding:10px 16px;}
+  .cc-rp .cc-rp__body{padding:13px 16px 15px;}
 }
 @media (prefers-reduced-motion:reduce){.cc-rp .cc-rp__card{transition:none !important;}}
 </style>
@@ -216,7 +235,8 @@
 /* =====================================================================
    CFG – texty a karty. Měň jen hodnoty.
    PŘIDÁNÍ KARTY: zkopíruj jeden blok { … } v cards, změň texty a nahraj
-   obrázek do složky img/ (poměr asi 4 : 5, šířka 640 px, JPG). Pořadí
+   obrázek do složky img/ (na šířku 3 : 2, 900 × 600 px, JPG, celý předmět
+   uvnitř; jiný poměr se nezdeformuje, jen se vloží celý). Pořadí
    v poli = pořadí karet v kolotoči. cat = klíč z categories.
    Hodnota začínající „[“ se zobrazí jako šedý zástupný text (chybí údaj).
    Text pro odečítače obrazovky se skládá z karet sám.
@@ -309,20 +329,28 @@ var CFG = {
     deck.appendChild(d); cards.push(d);
   });
 
+  /* poloha karty vůči aktivní: kolotoč je nekonečný, bere se kratší cesta dokola */
+  function mode(){ var land = root.clientWidth > root.clientHeight; return !land ? 1 : stage.clientWidth >= 700 ? 3 : 2; }
+  function rel(i){ var n = C.length, d = ((i - a) % n + n) % n; return d > n/2 ? d - n : d; }
   function lay(){
-    var land = root.clientWidth > root.clientHeight, cw = parseFloat(root.style.getPropertyValue('--cw')) || 200;
-    var step = cw * (land ? .78 : .62), depth = cw * .55;
+    var m = mode(), cw = parseFloat(root.style.getPropertyValue('--cw')) || 200;
+    /* široký rám: tři celé karty s mezerou; užší na šířku: jedna a velké části sousedních; na výšku: jedna a okraje */
+    var X = m === 3 ? [0, 1.13, 2.3] : m === 2 ? [0, 1.08, 2.2] : [0, .84, 1.6];
+    var Z = m === 3 ? [0, -.42, -.9] : m === 2 ? [0, -.45, -.9] : [0, -.75, -1.1], R = m === 3 ? [0, 32, 40] : m === 2 ? [0, 34, 40] : [0, 38, 42];
     cards.forEach(function(c, i){
-      var d = i - a, ad = Math.abs(d);
-      c.style.transform = 'translateX('+(d*step).toFixed(1)+'px) translateZ('+(-ad*depth).toFixed(1)+'px) rotateY('+(-Math.sign(d)*Math.min(ad,1)*38)+'deg)';
-      c.style.zIndex = 100 - ad; c.style.opacity = ad > (land ? 2 : 1) ? 0 : 1; c.style.filter = ad ? 'brightness(.92)' : 'none';
-      c.classList.toggle('is-active', ad === 0);
+      var d = rel(i), ad = Math.abs(d), k = Math.min(ad, 2), sg = d < 0 ? -1 : 1;
+      if(c._d !== undefined && Math.abs(d - c._d) > 2) c.classList.add('is-jump');   /* přeskok přes zadní stranu bez přeletu */
+      c._d = d;
+      c.style.transform = 'translateX('+(sg*X[k]*cw).toFixed(1)+'px) translateZ('+(Z[k]*cw).toFixed(1)+'px) rotateY('+(-sg*R[k])+'deg)';
+      c.style.zIndex = 100 - ad; c.style.opacity = ad > 1 ? 0 : 1; c.style.filter = ad ? 'brightness(.95)' : 'none';
+      c.classList.toggle('is-active', ad === 0); c.classList.toggle('is-off', ad > 1);
       c.setAttribute('aria-hidden', ad === 0 ? 'false' : 'true');
     });
-    prev.disabled = a === 0; next.disabled = a === C.length - 1;
+    void deck.offsetWidth;
+    cards.forEach(function(c){ c.classList.remove('is-jump'); });
     [].forEach.call(catsBox.children, function(b){ b.setAttribute('aria-pressed', b.dataset.k === C[a].cat ? 'true' : 'false'); });
   }
-  function go(i){ a = Math.max(0, Math.min(C.length-1, i)); lay(); }
+  function go(i){ var n = C.length; a = ((i % n) + n) % n; lay(); }
 
   function bindTap(node, fn){
     if(window.PointerEvent) node.addEventListener('pointerdown', function(e){ if(e.button > 0) return; e.preventDefault(); e.stopPropagation(); node.focus({preventScroll:true}); fn(); });
@@ -350,20 +378,41 @@ var CFG = {
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeSrc(true); if(e.key === 'Tab') root.classList.add('is-kbd'); });
   document.addEventListener('pointerdown', function(e){ root.classList.remove('is-kbd'); if(!src.hidden && !src.contains(e.target) && e.target !== info) closeSrc(false); }, true);
 
+  /* barva pozadí ilustrace = průměr jejích krajních sloupců; doplní pruh, když je obrázek užší než karta */
+  cards.forEach(function(c, i){
+    var im = new Image();
+    im.onload = function(){
+      try{
+        var cv = document.createElement('canvas'); cv.width = 12; cv.height = 8;
+        var cx = cv.getContext('2d'); cx.drawImage(im, 0, 0, 12, 8);
+        var px = cx.getImageData(0, 0, 12, 8).data, r = 0, g = 0, b = 0, n = 0;
+        for(var y=0;y<8;y++){ [0, 11].forEach(function(x){ var k = (y*12+x)*4; r += px[k]; g += px[k+1]; b += px[k+2]; n++; }); }
+        c.querySelector('.cc-rp__img').style.backgroundColor = 'rgb('+Math.round(r/n)+','+Math.round(g/n)+','+Math.round(b/n)+')';
+      }catch(e){ /* bez přístupu k bodům obrázku zůstane výchozí barva */ }
+    };
+    im.src = C[i].img;
+  });
+
   /* velikost karty z plochy + zmenšení textu, aby se vešel na každou kartu */
+  var IMG_AR = 1.5;   /* poměr stran ilustrací (3 : 2) */
   function fit(){
-    var sc = 1; root.style.setProperty('--sc', 1);
-    for(var k=0;k<10 && root.scrollHeight > root.clientHeight + 1;k++){ sc *= .94; root.style.setProperty('--sc', sc.toFixed(3)); }
     var land = root.clientWidth > root.clientHeight;
-    var sw = stage.clientWidth, sh = stage.clientHeight - 8;
-    var cw = Math.min(sh / 1.62, sw * (land ? .36 : .74), 300), ch = Math.min(sh, cw * 1.9);
+    /* ve velkém rámu na šířku roste písmo s výškou (výchozí je rám 786 × 560) */
+    var sc = land ? Math.max(1, Math.min(1.45, root.clientHeight/560)) : 1; root.style.setProperty('--sc', sc.toFixed(3));
+    for(var k=0;k<14 && root.scrollHeight > root.clientHeight + 1;k++){ sc *= .94; root.style.setProperty('--sc', sc.toFixed(3)); }
+    root.style.setProperty('--ay', (stage.offsetTop + stage.clientHeight/2).toFixed(0)+'px');
+    var sw = stage.clientWidth, sh = stage.clientHeight - (land ? 30 : 8);
+    var m = mode();
+    var cw = m === 3 ? Math.min(sh / 1.74, sw * .315, 380) : m === 2 ? Math.min(sh / 1.5, sw * .44, 300) : Math.min(sh / 1.62, sw * .74, 300), ch = Math.min(sh, cw * 1.9);
+    var cs0 = m === 3 ? Math.max(1, Math.min(1.5, cw/238)) : 1;
+    var ih = Math.min(cw / IMG_AR, ch * .42);
     root.style.setProperty('--cw', cw.toFixed(1)+'px'); root.style.setProperty('--ch', ch.toFixed(1)+'px');
-    root.style.setProperty('--ih', (ch * .36).toFixed(1)+'px');
+    root.style.setProperty('--ih', ih.toFixed(1)+'px');
     cards.forEach(function(c){
-      var body = c.querySelector('.cc-rp__body'), cs = 1; c.style.setProperty('--cs', 1);
-      for(var k=0;k<10 && body.scrollHeight > body.clientHeight + 1;k++){ cs *= .94; c.style.setProperty('--cs', cs.toFixed(3)); }
-      var im = c.querySelector('.cc-rp__img'), r = .36; im.style.height = '';
-      while(body.scrollHeight > body.clientHeight + 1 && r > .2){ r -= .02; im.style.height = (ch * r).toFixed(1)+'px'; }
+      var body = c.querySelector('.cc-rp__body'), cs = cs0; c.style.setProperty('--cs', cs.toFixed(3));
+      for(var k=0;k<14 && body.scrollHeight > body.clientHeight + 1;k++){ cs *= .94; c.style.setProperty('--cs', cs.toFixed(3)); }
+      var im = c.querySelector('.cc-rp__img'), h = ih; im.style.height = '';
+      while(body.scrollHeight > body.clientHeight + 1 && h > ch * .2){ h -= ch * .02; im.style.height = h.toFixed(1)+'px'; }
     });
     lay();
   }

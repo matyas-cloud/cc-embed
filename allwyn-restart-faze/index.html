@@ -11,20 +11,27 @@
      Umístění v repu:  cc-embed/allwyn-restart-faze/index.html
      Vložení:          komponenta Iframe ve speciálu, celý tag <iframe src="…" title="…">
      Místo v textu:    INTERAKTIVNÍ PRVEK „Fáze po úrazu“ (za odstavec „…až k odpuštění sobě i okolí.“)
-     Formát:           plochý graf. Výchozí stav = 4 schody „v učebnici“, tlačítko „A teď doopravdy“
-                       nakreslí čáru se smyčkami a propadem (7 zastávek, fáze z učebnice tyrkysově),
-                       „Zpět do učebnice“ vrací první stav bez animace. Klepnutí / najetí / Tab na bod
-                       ukáže kartu zastávky.
+     Formát:           plochý graf. Nahoře uprostřed nadpis, věta s pointou a přepínač „V učebnici / Doopravdy“.
+                       „V učebnici“ = 4 schody. „Doopravdy“ nakreslí přes schody čáru se smyčkami a propadem
+                       (7 zastávek se jménem přímo v grafu, fáze z učebnice tyrkysově); zpět se vrací bez animace.
+                       Klepnutí / najetí / Tab na bod ukáže kartu zastávky pod grafem.
      Rám:              pevný poměr šablony (≤619 px 150 %, 620–1023 px 85 %, ≥1024 px 73,5 %).
-                       Na výšku: nadpis / graf / karta / tlačítko. Na šířku (min-aspect-ratio 1/1):
-                       graf vlevo, karta a tlačítko vpravo. Výška karty se rezervuje podle nejdelšího
-                       textu, zmenšovací smyčka --sc hlídá, aby graf neklesl pod 40 % výšky.
+                       Všechno je na středu: nadpis / věta / přepínač / graf / karta. Na šířku má karta vlevo
+                       název a větu, vpravo popis. Výšky nadpisu, věty i karty se rezervují podle delšího
+                       stavu, aby graf při přepnutí neposkočil; zmenšovací smyčka --sc hlídá, aby graf neklesl
+                       pod 40 % výšky, na nejmenších mobilech ustoupí věta pod nadpisem. Šířka prvku je
+                       nejvýš 1,5násobek výšky (při otevření mimo rám).
      Texty:            všechny v objektu CFG (níže ve skriptu) – draft CC, klient je upraví.
      Data:             fáze podle psychologa Jindřicha Duška (text speciálu); nic se nepočítá.
      Fonty:            sdílený Poppins z repa (../fonts/), neblokující, přeměření na document.fonts.ready
-     Pohyb:            kreslení čáry 2,4 s jen po kliknutí, tlačítko je během kreslení zamčené;
+     Pohyb:            kreslení čáry 2,4 s jen po kliknutí na „Doopravdy“ (během kreslení nejde spustit znovu);
                        při prefers-reduced-motion bez animace. Nic se nehýbe samo.
      Historie:         10. 11. 2026 první ostrá verze podle mockupu v7
+                       10. 11. 2026 desktop: graf roztažený na šířku, karta a tlačítko pod grafem;
+                       číslo zastávky v kartě jako kolečko (bez tečky mezi číslem a názvem)
+                       10. 11. 2026 po připomínkách: vycentrovaná kompozice, místo tlačítka přepínač nahoře,
+                       jména zastávek v grafu, věta s pointou pod nadpisem; pryč „4 fáze“ / „7 zastávek“,
+                       popisek „předtím“ a legenda „fáze z učebnice“
      ============================================================ -->
 <style>
   /* sdílené fonty repa cc-embed (složka /fonts v kořeni), Poppins 400/500/600/700 */
@@ -128,11 +135,17 @@
 <!-- 2) prvek -->
 <div class="cc-embed cc-embed--bare cc-rf" data-cc-rf>
   <p class="cc-sr" data-sr></p>
-  <h3 class="cc-rf__title" data-title aria-live="polite"></h3>
+  <div class="cc-rf__top">
+    <h3 class="cc-rf__title" data-title aria-live="polite"></h3>
+    <p class="cc-rf__sub" data-sub></p>
+    <div class="cc-rf__seg" role="group" data-seg>
+      <button type="button" data-to="book"></button>
+      <button type="button" data-to="real"></button>
+    </div>
+  </div>
   <div class="cc-rf__stage" data-stage><svg class="cc-rf__svg" data-svg role="group" aria-label="Graf fází" focusable="false" tabindex="-1"></svg></div>
   <div class="cc-rf__side">
     <div class="cc-rf__card" data-card aria-live="polite"></div>
-    <button type="button" class="cc-rf__btn" data-btn></button>
   </div>
 </div>
 
@@ -140,32 +153,36 @@
 .cc-embed.cc-rf{
   --ink:#14181a; --tq:#27e2cc; --tq-ink:#07302c; --tq-deep:#1aa594;
   --step:#ecebe7; --step-edge:#c9c7c0; --muted:#6b6f70; --sc:1;
-  box-sizing:border-box;position:relative;height:100vh;margin:0;padding:12px 4px 10px;overflow:hidden;
-  display:flex;flex-direction:column;gap:10px;
+  box-sizing:border-box;position:relative;height:100vh;max-width:150vh;margin:0 auto;padding:12px 4px 10px;overflow:hidden;
+  display:flex;flex-direction:column;gap:8px;
   font-family:var(--cc-display);color:var(--ink);-webkit-font-smoothing:antialiased;
 }
+/* nahoře uprostřed: nadpis, věta s pointou a přepínač obou pohledů */
+.cc-rf .cc-rf__top{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;}
 .cc-rf .cc-rf__title{margin:0;padding:0 4px;font:700 max(17px,calc(19px*var(--sc)))/1.25 var(--cc-display);color:var(--ink);text-wrap:balance;}
+.cc-rf .cc-rf__top .cc-rf__sub{margin:0;max-width:560px;font:500 max(12px,calc(13px*var(--sc)))/1.4 var(--cc-display);color:var(--muted);text-wrap:balance;}
 .cc-rf .cc-rf__stage{flex:1 1 auto;min-height:0;position:relative;}
 .cc-rf .cc-rf__svg{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none;overflow:visible;}
-.cc-rf .cc-rf__side{display:flex;flex-direction:column;gap:10px;}
+.cc-rf.is-tight .cc-rf__top .cc-rf__sub{display:none;}
+.cc-rf .cc-rf__side{display:flex;flex-direction:column;align-items:center;}
 /* karta zastávky: výška se rezervuje podle nejdelšího textu, aby graf při klikání neskákal */
-.cc-rf .cc-rf__card{box-sizing:border-box;background:var(--ink);color:#fff;border-radius:14px;padding:13px 15px 14px;}
-.cc-rf .cc-rf__st{display:block;font:600 max(11px,calc(11px*var(--sc)))/1.2 var(--cc-display);letter-spacing:.08em;text-transform:uppercase;color:var(--tq);}
+.cc-rf .cc-rf__card{box-sizing:border-box;width:100%;max-width:640px;background:var(--ink);color:#fff;border-radius:14px;padding:13px 15px 14px;}
+.cc-rf .cc-rf__st{display:flex;align-items:center;gap:8px;font:600 max(11px,calc(11px*var(--sc)))/1.2 var(--cc-display);letter-spacing:.08em;text-transform:uppercase;color:var(--tq);}
+.cc-rf .cc-rf__st b{flex:0 0 22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-sizing:border-box;border:1.5px solid #fff;
+  background:#fff;color:var(--ink);font:700 11px/1 var(--cc-display);letter-spacing:0;}
+.cc-rf .cc-rf__st b.is-tq{background:var(--tq);border-color:var(--tq);color:var(--tq-ink);}
 .cc-rf .cc-rf__card .cc-rf__q{margin:6px 0 6px;font:700 max(16px,calc(18px*var(--sc)))/1.25 var(--cc-display);}
 .cc-rf .cc-rf__card .cc-rf__d{margin:0;font:400 max(13px,calc(13.5px*var(--sc)))/1.5 var(--cc-display);color:#c9cbc9;}
-/* tlačítko: velké tyrkysové „A teď doopravdy“, po přepnutí tiché „Zpět do učebnice“ */
-.cc-rf .cc-rf__btn{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin:0 0 6px;
-  padding:12px 14px 12px 18px;border:0;border-radius:12px;background:var(--tq);color:var(--tq-ink);
-  font:700 max(15px,calc(16px*var(--sc)))/1.2 var(--cc-display);cursor:pointer;text-align:left;
-  box-shadow:0 5px 0 var(--tq-deep);transition:transform .15s,box-shadow .15s,opacity .2s;touch-action:manipulation;}
-.cc-rf .cc-rf__btn i{flex:0 0 32px;height:32px;border-radius:50%;background:var(--ink);color:var(--tq);display:flex;align-items:center;justify-content:center;font:700 18px/1 var(--cc-display);font-style:normal;}
-.cc-rf .cc-rf__btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--tq-deep);}
-.cc-rf .cc-rf__btn[disabled]{opacity:.55;cursor:default;}
-.cc-rf .cc-rf__btn.is-back{justify-content:flex-start;margin:0;padding:8px 12px;background:#fff;color:var(--ink);border:1.5px solid #e4e4e1;box-shadow:none;font-size:13px;}
-.cc-rf .cc-rf__btn.is-back i{flex-basis:26px;height:26px;background:#f1f1ee;color:var(--ink);font-size:14px;}
-.cc-rf .cc-rf__btn:focus{outline:none;}
-.cc-rf.is-kbd .cc-rf__btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px;}
-@media (hover:hover){.cc-rf .cc-rf__btn:not(.is-back):not([disabled]):hover{transform:translateY(-1px);box-shadow:0 6px 0 var(--tq-deep);}}
+/* přepínač V učebnici / Doopravdy: zapnutá půlka je černá, „Doopravdy“ je před prvním kliknutím tyrkysová a zve ke kliknutí */
+.cc-rf .cc-rf__seg{display:inline-flex;margin:4px 0 2px;padding:4px;border-radius:999px;background:#eeeeeb;}
+.cc-rf .cc-rf__seg button{margin:0;padding:10px 22px;border:0;border-radius:999px;background:transparent;color:var(--ink);
+  font:700 max(14px,calc(15px*var(--sc)))/1.1 var(--cc-display);cursor:pointer;touch-action:manipulation;transition:background .2s,color .2s,box-shadow .2s,transform .15s;}
+.cc-rf .cc-rf__seg button[aria-pressed="true"]{background:var(--ink);color:#fff;cursor:default;}
+.cc-rf .cc-rf__seg button.is-go{background:var(--tq);color:var(--tq-ink);box-shadow:0 3px 0 var(--tq-deep);}
+.cc-rf .cc-rf__seg button.is-go:active{transform:translateY(2px);box-shadow:0 1px 0 var(--tq-deep);}
+.cc-rf .cc-rf__seg button:focus{outline:none;}
+.cc-rf.is-kbd .cc-rf__seg button:focus-visible{outline:3px solid var(--ink);outline-offset:3px;}
+@media (hover:hover){.cc-rf .cc-rf__seg button[aria-pressed="false"]:not(.is-go):hover{background:#e0e0dc;}}
 /* graf */
 .cc-rf .cc-rf__pt{cursor:pointer;outline:none;touch-action:manipulation;}
 .cc-rf .cc-rf__pt .ring{fill:none;stroke:var(--tq);stroke-width:3;opacity:0;transition:opacity .2s;}
@@ -174,26 +191,25 @@
 .cc-rf .cc-rf__pt .hd{transition:fill .2s;}
 .cc-rf .cc-rf__pt.is-on .hd{fill:var(--ink);}
 .cc-rf .cc-rf__pt.is-on .pn{fill:#fff;}
-.cc-rf .pn{font:700 11px var(--cc-display);fill:var(--ink);pointer-events:none;}
-.cc-rf .lab{font:600 10px var(--cc-display);fill:var(--muted);}
+.cc-rf .pn{font:700 calc(11px*var(--u,1)) var(--cc-display);fill:var(--ink);pointer-events:none;}
+.cc-rf .lab{font:600 calc(10px*var(--u,1)) var(--cc-display);fill:var(--muted);}
 .cc-rf .stp{font:700 11px var(--cc-display);fill:var(--ink);}
 .cc-rf .wrd{font:500 10px var(--cc-display);fill:var(--muted);}
-.cc-rf .big{font:700 24px var(--cc-display);fill:var(--ink);}
-.cc-rf .sub{font:500 12px var(--cc-display);fill:var(--muted);}
+/* jméno zastávky přímo v grafu, s bílým obrysem, aby se dalo číst i přes čáru */
+.cc-rf .nm{font:700 calc(11px*var(--u,1)*var(--nf,1)) var(--cc-display);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round;pointer-events:none;}
 .cc-rf .cc-rf__layer{transition:opacity .45s;}
 .cc-rf .cc-rf__layer.is-off{opacity:0;pointer-events:none;}
 .cc-rf .cc-rf__layer.is-quick{transition:none;}
-/* na šířku (tablet a desktop, rám 85 % / 73,5 %): graf vlevo, karta a tlačítko vpravo */
+/* na šířku (tablet a desktop, rám 85 % / 73,5 %): totéž na středu, karta má vlevo název a větu, vpravo popis */
 @media (min-aspect-ratio:1/1){
-  .cc-embed.cc-rf{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);
-    column-gap:22px;row-gap:8px;padding:16px 10px 14px;}
-  .cc-rf .cc-rf__title{grid-column:1/-1;font-size:max(18px,calc(22px*var(--sc)));}
-  .cc-rf .cc-rf__stage{grid-column:1;grid-row:2;}
-  .cc-rf .cc-rf__side{grid-column:2;grid-row:2;justify-content:center;gap:14px;}
-  .cc-rf .cc-rf__card{padding:18px 20px 20px;border-radius:16px;}
-  .cc-rf .cc-rf__card .cc-rf__q{font-size:max(17px,calc(22px*var(--sc)));margin:8px 0 10px;}
-  .cc-rf .cc-rf__card .cc-rf__d{font-size:max(13px,calc(14.5px*var(--sc)));}
-  .cc-rf .cc-rf__btn{font-size:max(15px,calc(17px*var(--sc)));padding:14px 16px 14px 20px;}
+  .cc-embed.cc-rf{padding:16px 14px 14px;gap:6px;}
+  .cc-rf .cc-rf__title{padding:0;font-size:max(18px,calc(23px*var(--sc)));}
+  .cc-rf .cc-rf__top .cc-rf__sub{font-size:max(12.5px,calc(13.5px*var(--sc)));}
+  .cc-rf .cc-rf__card{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);grid-template-rows:auto auto;
+    column-gap:22px;row-gap:6px;align-content:center;padding:14px 20px 15px;border-radius:16px;}
+  .cc-rf .cc-rf__st{grid-column:1;grid-row:1;}
+  .cc-rf .cc-rf__card .cc-rf__q{grid-column:1;grid-row:2;align-self:start;margin:0;font-size:max(16px,calc(20px*var(--sc)));}
+  .cc-rf .cc-rf__card .cc-rf__d{grid-column:2;grid-row:1/3;align-self:center;font-size:max(13px,calc(14px*var(--sc)));}
 }
 @media (prefers-reduced-motion:reduce){.cc-rf .cc-rf__layer{transition:none;}}
 </style>
@@ -206,24 +222,24 @@
    - stops  = zastávky na čáře „doopravdy“ (pořadí = číslování 1–N).
               id se páruje s texts; zastávka se stejným id jako schod
               se automaticky vybarví tyrkysově („fáze z učebnice“).
-              at = poloha na čáře v souřadnicích grafu 320 × 250,
+              at = poloha na čáře v souřadnicích grafu 376 × 250,
               při přidání zastávky ji vyber na čáře (viz GEOM.line).
+              lab = kde stojí jméno zastávky vůči bodu: l vlevo, r vpravo,
+              t nad, b pod, tl vlevo nahoře, br vpravo dole.
    - texts  = obsah karty: name (nadpis karty), quote (velká věta),
               text (popis, ~200 znaků, aby se karta vešla na mobil).
-   - Počty („4 fáze“, „7 zastávek“) se dopočítají samy.
+   - subBook / subReal = věta pod nadpisem, která říká pointu slovy.
    ===================================================================== */
 var CFG = {
   title: {
     book: 'Takhle se vyrovnání s úrazem popisuje v učebnici.',
     real: 'A takhle to vypadá doopravdy.'
   },
-  bookSub: ['jedna po druhé,', 'schod po schodu'],
-  realSub: ['a cesta se vrací'],
-  btnReal: 'A teď doopravdy',
-  btnBook: 'Zpět do učebnice',
+  subBook: 'Čtyři fáze, jedna po druhé, schod po schodu.',
+  subReal: 'Fáze nejdou popořadě. Vracejí se, přijde propad a nahoru často pomůže až pohyb.',
+  segBook: 'V učebnici',
+  segReal: 'Doopravdy',
   labelBook: 'v učebnici',
-  labelBefore: 'předtím',
-  legend: 'fáze z učebnice',
   steps: [
     { id: 'sok',  word: 'nevíra'  },
     { id: 'agr',  word: 'vztek'   },
@@ -231,13 +247,13 @@ var CFG = {
     { id: 'odp',  word: 'smíření' }
   ],
   stops: [
-    { id: 'uraz', at: [70, 130] },
-    { id: 'sok',  at: [72, 212] },
-    { id: 'agr',  at: [118, 158] },
-    { id: 'pad',  at: [158, 224] },
-    { id: 'poh',  at: [186, 168] },
-    { id: 'poch', at: [256, 92]  },
-    { id: 'odp',  at: [302, 62]  }
+    { id: 'uraz', at: [70, 130],  lab: 'l'  },
+    { id: 'sok',  at: [72, 212],  lab: 'l'  },
+    { id: 'agr',  at: [118, 158], lab: 't'  },
+    { id: 'pad',  at: [158, 224], lab: 'r'  },
+    { id: 'poh',  at: [186, 168], lab: 'br' },
+    { id: 'poch', at: [256, 92],  lab: 'tl' },
+    { id: 'odp',  at: [302, 62],  lab: 't'  }
   ],
   texts: {
     uraz: { name: 'Úraz',       quote: 'Zlomek vteřiny.',
@@ -259,15 +275,15 @@ var CFG = {
   sr: 'V učebnici má vyrovnání s úrazem čtyři fáze za sebou: šok, agrese, pochopení a odpuštění. Doopravdy je cesta delší a vrací se. Má sedm zastávek: úraz, šok, agrese, propad, kdy je člověk zase dole, pohyb, kdy často pomůže sport, pochopení a odpuštění.'
 };
 
-/* Geometrie grafu v souřadnicích 320 × 250 (měnit jen s rozmyslem). */
+/* Geometrie grafu v souřadnicích 376 × 250 (měnit jen s rozmyslem). Schody jsou uprostřed šířky. */
 var GEOM = {
-  bounds: [4, 14, 318, 240],                       // x0, y0, x1, y1 obsahu
+  bounds: [4, 14, 372, 240],                       // x0, y0, x1, y1 obsahu
   stairs: [[72,196],[130,196],[130,160],[188,160],[188,124],[246,124],[246,88],[304,88]],
   floor: 232,
   start: [[10,40],[60,40],[66,32],[74,58],[68,84],[72,212]],   // „předtím“ a pád
   line: [[72,212],[98,206],[122,184],[118,158],[98,160],[96,184],[122,198],[148,196],[166,216],[150,228],
          [138,214],[160,192],[186,168],[204,140],[226,118],[246,132],[236,152],[214,140],[232,108],[256,92],[280,74],[302,62]],
-  end: [302, 62]
+  end: [302, 62], endTo: 362                      // tyrkysový konec cesty doprava
 };
 </script>
 
@@ -277,14 +293,16 @@ var GEOM = {
   if(!root || root.dataset.ccInit) return; root.dataset.ccInit = '1';
   var NS = 'http://www.w3.org/2000/svg';
   var svg = root.querySelector('[data-svg]'), stage = root.querySelector('[data-stage]');
-  var card = root.querySelector('[data-card]'), btn = root.querySelector('[data-btn]'), title = root.querySelector('[data-title]');
+  var card = root.querySelector('[data-card]'), title = root.querySelector('[data-title]'), sub = root.querySelector('[data-sub]');
+  var segB = root.querySelector('[data-to="book"]'), segR = root.querySelector('[data-to="real"]');
+  segB.textContent = CFG.segBook; segR.textContent = CFG.segReal;
+  root.querySelector('[data-seg]').setAttribute('aria-label', CFG.segBook+' / '+CFG.segReal);
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var real = false, sel = {book:'sok', real:'uraz'}, seq = 0, revealing = false, drawTimer = null;
   var inBook = {}; CFG.steps.forEach(function(s){ inBook[s.id] = true; });
 
   root.querySelector('[data-sr]').textContent = CFG.sr;
 
-  function plural(n, a, b, c){ return n === 1 ? a : (n >= 2 && n <= 4 ? b : c); }
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
   function el(tag, attrs, parent){ var e = document.createElementNS(NS, tag); for(var k in attrs) e.setAttribute(k, attrs[k]); if(parent) parent.appendChild(e); return e; }
   function txt(parent, x, y, s, cls, anchor){ var t = el('text', {x:x, y:y, 'class':cls, 'text-anchor':anchor || 'start'}, parent); t.textContent = s; return t; }
@@ -303,7 +321,7 @@ var GEOM = {
   /* ---------- karta ---------- */
   function cardHTML(id, n){
     var t = CFG.texts[id] || {name:id, quote:'', text:''};
-    return '<span class="cc-rf__st">'+(n ? n+' · ' : '')+esc(t.name)+'</span><p class="cc-rf__q">'+esc(t.quote)+'</p><p class="cc-rf__d">'+esc(t.text)+'</p>';
+    return '<span class="cc-rf__st">'+(n ? '<b'+(inBook[id] ? ' class="is-tq"' : '')+'>'+n+'</b>' : '')+esc(t.name)+'</span><p class="cc-rf__q">'+esc(t.quote)+'</p><p class="cc-rf__d">'+esc(t.text)+'</p>';
   }
   function numberOf(id){
     var list = real ? CFG.stops : CFG.steps;
@@ -327,21 +345,28 @@ var GEOM = {
     card.innerHTML = cur; card.style.height = max + 'px';
   }
 
-  /* ---------- tlačítko a nadpis ---------- */
+  /* ---------- nadpis, věta a přepínač ---------- */
   function syncUI(){
     title.textContent = real ? CFG.title.real : CFG.title.book;
-    btn.classList.toggle('is-back', real);
-    btn.innerHTML = real ? '<i aria-hidden="true">←</i><span>'+esc(CFG.btnBook)+'</span>' : '<span>'+esc(CFG.btnReal)+'</span><i aria-hidden="true">→</i>';
-    btn.disabled = revealing;
+    sub.textContent = real ? CFG.subReal : CFG.subBook;
+    segB.setAttribute('aria-pressed', real ? 'false' : 'true'); segR.setAttribute('aria-pressed', real ? 'true' : 'false');
+    segR.classList.toggle('is-go', !real);
+  }
+  /* rezerva výšky nadpisu a věty = delší z obou stavů, aby graf při přepnutí neposkočil */
+  function reserveTop(){
+    title.style.minHeight = ''; sub.style.minHeight = ''; var th = 0, sh = 0;
+    [[CFG.title.book, CFG.subBook], [CFG.title.real, CFG.subReal]].forEach(function(k){
+      title.textContent = k[0]; sub.textContent = k[1]; th = Math.max(th, title.offsetHeight); sh = Math.max(sh, sub.offsetHeight); });
+    title.style.minHeight = th+'px'; sub.style.minHeight = sh+'px'; syncUI();
   }
 
   /* ---------- kreslení grafu v pixelech rámu ---------- */
-  var layers = {}, linePath = null, lineLen = 0;
+  var layers = {}, linePath = null, lineLen = 0, U = 1;
   function draw(){
     var w = stage.clientWidth, h = stage.clientHeight; if(!w || !h) return;
-    var B = GEOM.bounds, bw = B[2]-B[0], bh = B[3]-B[1], m = 14;
+    var B = GEOM.bounds, bw = B[2]-B[0], bh = B[3]-B[1], m = 14*U;
     var sx = (w-2*m)/bw, sy = (h-2*m)/bh;
-    if(sy > sx*1.9) sy = sx*1.9; if(sx > sy*1.7) sx = sy*1.7;
+    if(sy > sx*1.9) sy = sx*1.9; if(sx > sy*2.3) sx = sy*2.3;
     var ox = (w - bw*sx)/2, oy = (h - bh*sy)/2;
     var X = function(x){ return +(ox + (x-B[0])*sx).toFixed(1); }, Y = function(y){ return +(oy + (y-B[1])*sy).toFixed(1); };
     var P = function(p){ return [X(p[0]), Y(p[1])]; };
@@ -355,41 +380,41 @@ var GEOM = {
     txt(svg, S[S.length-1][0]-6, fl-8, CFG.labelBook, 'lab', 'end');
     /* --- učebnice --- */
     var gb = layers.book = el('g', {'class':'cc-rf__layer'+(real?' is-off':'')}, svg);
-    var big = txt(gb, X(10), Y(30)+6, CFG.steps.length+' '+plural(CFG.steps.length,'fáze','fáze','fází'), 'big');
-    CFG.bookSub.forEach(function(s,i){ txt(gb, X(10), Y(30)+26+i*15, s, 'sub'); });
     var colW = (S[1][0]-S[0][0]);
     CFG.steps.forEach(function(s, i){
       var a = S[i*2], b = S[i*2+1], cx = (a[0]+b[0])/2, cy = a[1];
-      var fs = Math.max(9.5, Math.min(11.5, colW/5.4));
-      var t1 = txt(gb, cx, cy+26, (CFG.texts[s.id]||{}).name || s.id, 'stp', 'middle'); t1.style.fontSize = fs+'px';
-      var t2 = txt(gb, cx, cy+26+fs+3, s.word || '', 'wrd', 'middle'); t2.style.fontSize = (fs-1)+'px';
+      var fs = Math.max(9.5, Math.min(11.5*U, colW/5.4));
+      var t1 = txt(gb, cx, cy+15*U+fs, (CFG.texts[s.id]||{}).name || s.id, 'stp', 'middle'); t1.style.fontSize = fs+'px';
+      var t2 = txt(gb, cx, cy+15*U+2*fs+3, s.word || '', 'wrd', 'middle'); t2.style.fontSize = (fs-1)+'px';
       pin(gb, 'book', s.id, i+1, cx, cy, true);
     });
     /* --- doopravdy --- */
     var gr = layers.real = el('g', {'class':'cc-rf__layer'+(real?'':' is-off')}, svg);
     var st = GEOM.start.map(P), ln = GEOM.line.map(P);
     var d = 'M'+st.map(function(p){return p[0]+' '+p[1];}).join(' L') + smooth(ln);
-    linePath = el('path', {d:d, fill:'none', stroke:'#14181a', 'stroke-width':4.5, 'stroke-linejoin':'round', 'stroke-linecap':'round'}, svg);
+    linePath = el('path', {d:d, fill:'none', stroke:'#14181a', 'stroke-width':4.5*U, 'stroke-linejoin':'round', 'stroke-linecap':'round'}, svg);
     svg.insertBefore(linePath, gr);
     lineLen = linePath.getTotalLength();
     linePath.style.strokeDasharray = lineLen; linePath.style.strokeDashoffset = real ? 0 : lineLen;
-    var e = P(GEOM.end); el('path', {d:'M'+e[0]+' '+e[1]+' l'+Math.max(10,14*sx)+' 0', stroke:'#27e2cc', 'stroke-width':7, 'stroke-linecap':'round'}, gr);
-    txt(gr, st[0][0], st[0][1]-10, CFG.labelBefore, 'lab');
-    var n = CFG.stops.length;
-    txt(gr, X(128), Y(30)+6, n+' '+plural(n,'zastávka','zastávky','zastávek'), 'big');
-    CFG.realSub.forEach(function(s,i){ txt(gr, X(128), Y(30)+26+i*15, s, 'sub'); });
-    el('circle', {cx:X(10)+6, cy:fl+2, r:6, fill:'#27e2cc', stroke:'#14181a', 'stroke-width':1.5}, gr);
-    txt(gr, X(10)+17, fl+6, '= '+CFG.legend, 'lab');
-    CFG.stops.forEach(function(s, i){ var p = P(s.at); pin(gr, 'real', s.id, i+1, p[0], p[1], !!inBook[s.id]); });
+    var e = P(GEOM.end); el('path', {d:'M'+e[0]+' '+e[1]+' L'+X(GEOM.endTo)+' '+e[1], stroke:'#27e2cc', 'stroke-width':6*U, 'stroke-linecap':'round'}, gr);
+    /* zastávky a jejich jména; v úzkém grafu se písmo jmen zmenší */
+    svg.style.setProperty('--nf', Math.max(.86, Math.min(1, sx/1.5)).toFixed(2));
+    CFG.stops.forEach(function(s, i){
+      var p = P(s.at), L = s.lab || 't', o = 18*U;
+      var dx = L === 'l' ? -o : L === 'r' ? o : L === 'tl' ? -o*.2 : L === 'br' ? o*.9 : 0;
+      var dy = L === 't' || L === 'tl' ? -o : L === 'b' ? o + 8*U : L === 'br' ? o*.75 : 4*U;
+      txt(gr, p[0]+dx, p[1]+dy, (CFG.texts[s.id]||{}).name || '', 'nm', L === 'l' || L === 'tl' ? 'end' : L === 'r' || L === 'br' ? 'start' : 'middle').setAttribute('aria-hidden','true');
+      pin(gr, 'real', s.id, i+1, p[0], p[1], !!inBook[s.id]);
+    });
     showCard(sel[real ? 'real' : 'book']);
   }
   function pin(parent, layer, id, n, x, y, tq){
     var t = CFG.texts[id] || {name:id};
     var g = el('g', {'class':'cc-rf__pt', tabindex:'0', role:'button', 'aria-label':n+'. '+t.name, 'data-id':id, 'data-layer':layer}, parent);
-    el('circle', {'class':'ring', cx:x, cy:y, r:16}, g);
-    el('circle', {'class':'hd', cx:x, cy:y, r:12, fill: tq ? '#27e2cc' : '#fff', stroke:'#14181a', 'stroke-width':2}, g);
-    txt(g, x, y+4, String(n), 'pn', 'middle');
-    el('circle', {cx:x, cy:y, r:20, fill:'transparent'}, g);
+    el('circle', {'class':'ring', cx:x, cy:y, r:16*U}, g);
+    el('circle', {'class':'hd', cx:x, cy:y, r:12*U, fill: tq ? '#27e2cc' : '#fff', stroke:'#14181a', 'stroke-width':2}, g);
+    txt(g, x, y+4*U, String(n), 'pn', 'middle');
+    el('circle', {cx:x, cy:y, r:20*U, fill:'transparent'}, g);
   }
 
   /* ---------- přepnutí učebnice ↔ doopravdy ---------- */
@@ -429,7 +454,8 @@ var GEOM = {
     }
     node.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); fn(e); } });
   }
-  bindTap(btn, function(){ if(btn.disabled) return; real ? toBook() : toReal(); });
+  bindTap(segB, function(){ if(real) toBook(); });
+  bindTap(segR, function(){ if(!real) toReal(); });
   svg.addEventListener('pointerdown', function(e){
     var g = e.target.closest && e.target.closest('.cc-rf__pt'); if(!g) return;
     e.preventDefault(); g.focus({preventScroll:true}); showCard(g.dataset.id);
@@ -449,13 +475,18 @@ var GEOM = {
 
   /* ---------- vyplnění rámu ---------- */
   function fit(){
-    var sc = 1; root.style.setProperty('--sc', 1);
-    syncUI(); reserveCard();
+    /* ve velkém rámu na šířku roste písmo i značky v grafu s výškou (výchozí je rám 786 × 560) */
+    var land = root.clientWidth > root.clientHeight, sc0 = land ? Math.max(1, Math.min(1.45, root.clientHeight/560)) : 1;
     var minStage = function(){ return Math.min(root.clientHeight*0.4, 300); };
-    for(var k=0; k<16; k++){
-      if(root.scrollHeight <= root.clientHeight + 1 && stage.clientHeight >= minStage()) break;
-      sc *= .94; root.style.setProperty('--sc', sc.toFixed(3)); reserveCard();
-    }
+    var ok = function(){ return root.scrollHeight <= root.clientHeight + 1 && stage.clientHeight >= minStage(); };
+    var pass = function(){
+      var sc = sc0; root.style.setProperty('--sc', sc.toFixed(3)); reserveTop(); reserveCard();
+      for(var k=0; k<20 && !ok(); k++){ sc *= .94; root.style.setProperty('--sc', sc.toFixed(3)); reserveTop(); reserveCard(); }
+    };
+    U = sc0; root.style.setProperty('--u', U.toFixed(3));
+    /* když se graf nevejde ani po zmenšení písma (nejmenší mobily), ustoupí věta pod nadpisem */
+    root.classList.remove('is-tight'); pass();
+    if(!ok()){ root.classList.add('is-tight'); pass(); }
     draw();
   }
   var t;
