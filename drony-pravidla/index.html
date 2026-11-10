@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jak se v Česku létá s dronem</title>
+<meta name="robots" content="noindex">
+<!-- CSG × UpVision × CzechCrunch – interaktivní krajina „Jak se v Česku létá s dronem“.
+     Cíl: nativní článek cc.cz o systému CIS+ pro ŘLP. Vkládá se kódem z drony-pravidla-vlozeni.html
+       (obalový div s výškou 480 px na desktopu a 580 px na mobilu, uvnitř iframe).
+     Nasazení: matyas-cloud/cc-embed/drony-pravidla/index.html, Poppins ze sdílené složky ../fonts/.
+     Formát: bílá plocha s linkou (nativ). Uvnitř tmavomodrá pixelová krajina široká asi jako tři a půl rámu,
+       sedm zastávek, nahoře roletky ze štítků, dole posuvník se zobáčkem. Krajina se táhne myší nebo prstem
+       a po puštění dosedne na nejbližší zastávku. Při ≤ 619 px šířky rámu mobilní formát (popisek jen v posuvníku).
+     Data: EASA FAQ k otevřené kategorii (A1 do 250 g, A2 třída C2 do 4 kg a 30 m od lidí, A3 do 25 kg a 150 m od zástavby,
+       do 120 m a na dohled), BVLOS = specifická kategorie s povolením ÚCL (nařízení EU 2019/947);
+       Remote ID (nařízení EU 2019/945), zóny a DroneMap (ÚCL), U-space (nařízení EU 2021/664), CIS+ (TZ CSG 9. 11. 2026).
+       Stav k 14. 11. 2026. Scéna je ilustrační, vzdálenosti nejsou v měřítku.
+     Texty jsou v bloku OBSAH na začátku skriptu.
+     Parametry pro náhledy: ?static (bez pohybu a nástupu), ?sel=s250|s4|s25|bv|rid|apt|us, ?info (otevřené (i)).
+     Log změn:
+       2026-11-10  první ostrá verze podle makety A1 v2 a Mattových připomínek: posuvník jako okýnko tachometru se zobáčkem,
+                   roletka nad scénou, krajina vykreslená jednou, drony jako samostatné sprity, paralaxa ve dvou vrstvách,
+                   nástup až po zobrazení, opravy z nezávislé UX revize.
+       2026-11-10  podle designové banky: okýnko se zobáčkem jako fyzický jezdec (zamáčkne se), světlo vybraného dronu na zemi,
+                   přechody v oklch, roletka bez přestřelu s textem, který zaostří, bez dýchajícího majáku a hover zvětšování.
+       2026-11-10  sjednocení s ostatními prvky CC v článcích: ploché karty bez přechodů, okraje, záhlaví, (i) a panel jako u Visa a Mavie,
+                   popisky pod okýnkem se schovají, nízký široký rám ukáže víc oblohy. -->
+<style>
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-500.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-ext-500.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-ext-600.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-700.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-ext-700.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;}
+</style>
+</head>
+<body>
+<!-- .cc-embed základ, beze změny z assets/cc-embed-base.html -->
+<style>
+.cc-embed{
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}
+.cc-embed--bare{background:none;border:0;padding:0;}
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{margin:12px 0 0;font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);
+  letter-spacing:.02em;text-transform:uppercase;}
+.cc-embed .cc-num{font-family:var(--cc-display);font-weight:700;
+  font-size:clamp(22px,4vw,32px);color:var(--cc-blue);font-variant-numeric:tabular-nums;}
+.cc-embed a{color:var(--cc-blue);}
+.cc-embed .cc-btn{
+  display:inline-block;padding:10px 20px;
+  border:1px solid var(--cc-blue);border-radius:var(--cc-radius);
+  background:var(--cc-blue);color:#fff;text-decoration:none;
+  font:700 18px/26px var(--cc-display);cursor:pointer;
+  transition:background .18s,color .18s;}
+.cc-embed .cc-btn:hover{background:var(--cc-blue-dark);border-color:var(--cc-blue-dark);}
+.cc-embed .cc-btn--ghost{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-btn--ghost:hover{background:var(--cc-blue);color:#fff;}
+.cc-embed .cc-btn--sm{padding:7px 14px;font-size:15px;line-height:22px;}
+.cc-embed .cc-btn[aria-pressed="true"]{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-card{background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);padding:14px 16px;}
+.cc-embed .cc-badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  background:var(--cc-blue);color:#fff;font:700 12px/18px var(--cc-ui);}
+.cc-embed .cc-badge--red{background:var(--cc-red);}
+.cc-embed .cc-badge--soft{background:#eaf3fd;color:var(--cc-blue-dark);}
+.cc-embed input,.cc-embed select,.cc-embed textarea{
+  font:400 16px/24px var(--cc-ui);color:var(--cc-ink);
+  padding:9px 12px;background:#fff;border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);}
+.cc-embed input[type=range]{padding:0;border:0;background:none;accent-color:var(--cc-blue);width:100%;}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed table{width:100%;border-collapse:collapse;font:400 15px/1.4 var(--cc-ui);}
+.cc-embed th{text-align:left;font-weight:700;color:var(--cc-muted);
+  text-transform:uppercase;font-size:12px;letter-spacing:.05em;padding:8px 10px;}
+.cc-embed td{padding:10px;border-top:1px solid var(--cc-line);}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-grid{display:grid;gap:var(--cc-gap);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.cc-embed .cc-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--cc-gap);}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+
+
+<div class="cc-embed cc-drony-pravidla" data-cc-drony-pravidla>
+  <p class="cc-sr" data-sr></p>
+  <div class="dp-head">
+    <h3 class="dp-title" data-title></h3>
+    <button type="button" class="dp-i" data-open aria-expanded="false" aria-label="Zdroje a vysvětlivky">i</button>
+  </div>
+  <div class="dp-stage" data-stage aria-hidden="true">
+    <div class="dp-lay dp-far" data-far></div>
+    <div class="dp-lay dp-mid" data-mid></div>
+    <div class="dp-lay dp-cam" data-cam></div>
+    <div class="dp-hud" data-hud><span class="dp-hud__h" data-hudh></span><span class="dp-hud__b"><span><b data-hudb></b></span></span></div>
+    <span class="dp-ceil" data-ceil></span>
+    <button type="button" class="dp-edge dp-edge--l" data-edge="-1" tabindex="-1"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button type="button" class="dp-edge dp-edge--r" data-edge="1" tabindex="-1"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M5 2l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+  <div class="dp-rail" data-rail>
+    <span class="dp-rail__track" aria-hidden="true"></span>
+    <span class="dp-rail__ticks" data-ticks aria-hidden="true"></span>
+    <div class="dp-rail__stops" data-stops aria-hidden="true"></div>
+    <div class="dp-thumb" data-thumb role="slider" tabindex="0" aria-label="Místo v krajině" aria-valuemin="1" aria-valuemax="7">
+      <span class="dp-thumb__knob"><i></i></span>
+      <span class="dp-thumb__plate" data-plate></span>
+    </div>
+  </div>
+  <div class="dp-ov" data-ov hidden>
+    <div class="dp-panel" role="dialog" aria-modal="true" aria-labelledby="cdp-ptitle">
+      <div class="dp-phd"><p class="dp-ptitle" id="cdp-ptitle">Zdroje a vysvětlivky</p><button type="button" class="dp-x" data-close aria-label="Zavřít">×</button></div>
+      <div class="dp-pbody" data-pbody></div>
+    </div>
+  </div>
+</div>
+
+<style>
+.cc-embed.cc-drony-pravidla{
+  --navy:#2b3046; --org:#fb7d0f; --ink:#16181c; --ink2:#5b616b; --ink3:#3c3c3c; --line:#e0e0e0;
+  --pop:0 12px 28px -14px rgba(8,10,20,.8),0 2px 6px -2px rgba(8,10,20,.35);
+  --ease-cam:cubic-bezier(.65,0,.35,1); --ease-spring:cubic-bezier(.34,1.42,.64,1); --ease-out:cubic-bezier(.22,1,.36,1); --ease-expo:cubic-bezier(.16,1,.3,1);
+  box-sizing:border-box;position:relative;display:flex;flex-direction:column;height:100vh;margin:0!important;overflow:hidden;
+  padding:clamp(16px,4.2vw,28px) clamp(16px,4.2vw,30px) clamp(14px,3.2vw,22px);background:#fff;border:1px solid var(--line);border-radius:var(--cc-radius);color:var(--ink);
+  font-family:var(--cc-display);-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;}
+.cc-drony-pravidla.is-static *,.cc-drony-pravidla.is-static *::before,.cc-drony-pravidla.is-static *::after{transition:none!important;animation:none!important;}
+.cc-drony-pravidla button{font-family:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation;cursor:pointer;}
+/* záhlaví stejně jako u ostatních prvků v článcích CC */
+.cc-drony-pravidla .dp-head{flex:0 0 auto;display:flex;align-items:flex-start;gap:12px;margin:0 0 14px;}
+.cc-drony-pravidla .dp-title{margin:0;font:700 clamp(19px,4.4vw,24px)/1.2 var(--cc-display);letter-spacing:-.01em;color:var(--ink);}
+.cc-drony-pravidla .dp-i{position:relative;margin-left:auto;flex:none;width:26px;height:26px;padding:0;border-radius:50%;border:1.5px solid #b4bac4;background:#fff;color:var(--ink2);
+  display:grid;place-items:center;font:600 13px/1 var(--cc-display);transition:border-color .15s,color .15s;}
+.cc-drony-pravidla .dp-i::after{content:"";position:absolute;inset:-9px;}
+@media (hover:hover){ .cc-drony-pravidla .dp-i:hover{border-color:var(--ink);color:var(--ink);} }
+
+/* ===== scéna ===== */
+.cc-drony-pravidla .dp-stage{position:relative;flex:1 1 auto;min-height:0;border-radius:var(--cc-radius-sm);overflow:hidden;overflow:clip;touch-action:pan-y;cursor:grab;
+  background:radial-gradient(120% 70% at 50% 108%,rgba(251,125,15,.2),rgba(251,125,15,0) 58%),linear-gradient(180deg,#1b1f33 0%,#242941 48%,#2b3046 100%);
+  background:radial-gradient(120% 70% at 50% 108% in oklch,rgba(251,125,15,.22),rgba(251,125,15,0) 60%),linear-gradient(180deg in oklch,#191c30 0%,#232840 46%,#2d3249 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);}
+.cc-drony-pravidla .dp-stage.is-drag{cursor:grabbing;}
+.cc-drony-pravidla .dp-stage::before,.cc-drony-pravidla .dp-stage::after{content:"";position:absolute;top:0;bottom:0;width:44px;z-index:6;pointer-events:none;transition:opacity .35s;}
+.cc-drony-pravidla .dp-stage::before{left:0;background:linear-gradient(to right,rgba(24,27,43,.88),rgba(24,27,43,0));}
+.cc-drony-pravidla .dp-stage::after{right:0;background:linear-gradient(to left,rgba(24,27,43,.88),rgba(24,27,43,0));}
+.cc-drony-pravidla.is-m .dp-stage::before,.cc-drony-pravidla.is-m .dp-stage::after{width:26px;}
+.cc-drony-pravidla .dp-stage.at-start::before,.cc-drony-pravidla .dp-stage.at-end::after{opacity:0;}
+.cc-drony-pravidla .dp-lay{position:absolute;left:0;top:0;will-change:transform;transition:transform var(--dur,.8s) var(--ease-cam);}
+.cc-drony-pravidla .dp-stage.is-drag .dp-lay,.cc-drony-pravidla .dp-lay.no-tr{transition:none!important;}
+.cc-drony-pravidla .dp-lay svg{display:block;max-width:none;}
+.cc-drony-pravidla .dp-ceil{position:absolute;left:12px;z-index:2;font:400 12px/1 var(--cc-display);color:rgba(255,255,255,.5);pointer-events:none;transition:opacity .3s;}
+.cc-drony-pravidla .dp-ceil.is-hid{opacity:0;}
+
+/* svět: značky vybrané zastávky se dokreslí po dosednutí kamery */
+.cc-drony-pravidla .mk{opacity:0;transition:opacity .2s;}
+.cc-drony-pravidla .dp-world.is-marks[data-k="s250"] .mk-s250,
+.cc-drony-pravidla .dp-world.is-marks[data-k="s4"] .mk-s4,
+.cc-drony-pravidla .dp-world.is-marks[data-k="s25"] .mk-s25,
+.cc-drony-pravidla .dp-world.is-marks[data-k="bv"] .mk-bv,
+.cc-drony-pravidla .dp-world.is-marks[data-k="apt"] .mk-apt,
+.cc-drony-pravidla .dp-world.is-marks[data-k="us"] .mk-us{opacity:1;transition:opacity .45s var(--ease-out) .05s;}
+.cc-drony-pravidla .mk-x{transform-box:fill-box;transform-origin:center;transform:scale(1.6);transition:transform .4s var(--ease-spring) .25s;}
+.cc-drony-pravidla .dp-world.is-marks[data-k="bv"] .mk-x{transform:none;}
+.cc-drony-pravidla .mk-us .gd{opacity:0;transition:opacity .2s;}
+.cc-drony-pravidla .dp-world.is-marks[data-k="us"] .mk-us .gd{opacity:.8;transition:opacity .35s ease var(--d,0ms);}
+.cc-drony-pravidla .dp-b{transform-box:fill-box;transition:transform .8s var(--ease-spring) var(--d,0ms);}
+.cc-drony-pravidla.is-pre .dp-b{transform:translateY(105%);}
+
+/* drony jako samostatné sprity: animace běží mimo vykreslování krajiny */
+.cc-drony-pravidla .dp-spr{position:absolute;pointer-events:none;--r:#a3abbb;--b:#7a849a;--p:#7a849a;transition:opacity .5s var(--ease-out) var(--d,0ms),transform .7s var(--ease-spring) var(--d,0ms);}
+.cc-drony-pravidla .dp-spr::before{content:"";position:absolute;left:50%;top:50%;width:var(--gw,90px);height:var(--gw,90px);margin:calc(var(--gw,90px)/-2) 0 0 calc(var(--gw,90px)/-2);border-radius:50%;
+  background:radial-gradient(closest-side,rgba(251,125,15,.34),rgba(251,125,15,.11) 45%,rgba(251,125,15,0));opacity:.25;transition:opacity .6s var(--ease-out);}
+.cc-drony-pravidla .dp-spr svg{position:relative;display:block;}
+/* jediné světlo ve scéně: vybraný dron rozsvítí zem pod sebou */
+.cc-drony-pravidla .dp-pool{position:absolute;pointer-events:none;border-radius:50%;opacity:0;mix-blend-mode:screen;
+  background:radial-gradient(closest-side,rgba(253,160,70,.5),rgba(251,125,15,.16) 55%,rgba(251,125,15,0));transform:scaleX(.6);transition:opacity .25s,transform .25s;}
+.cc-drony-pravidla .dp-pool.is-on{opacity:1;transform:none;transition:opacity .9s var(--ease-out) .25s,transform 1.1s var(--ease-expo) .25s;}
+.cc-drony-pravidla.is-pre .dp-pool{opacity:0;}
+.cc-drony-pravidla .dp-spr .r{fill:var(--r);} .cc-drony-pravidla .dp-spr .b{fill:var(--b);} .cc-drony-pravidla .dp-spr .p{fill:var(--p);}
+.cc-drony-pravidla .dp-spr .rb{opacity:0;}
+.cc-drony-pravidla .dp-spr.is-on{--r:#fb7d0f;--b:#ffffff;--p:#fdb24c;}
+.cc-drony-pravidla .dp-spr.is-on::before{opacity:1;}
+.cc-drony-pravidla.is-live .dp-spr.is-on svg{animation:cdparrive .6s var(--ease-out),cdpbob 3.4s ease-in-out .6s infinite;}
+.cc-drony-pravidla.is-live .dp-spr.is-on .ra{animation:cdprot .14s steps(1) infinite;}
+.cc-drony-pravidla.is-live .dp-spr.is-on .rb{animation:cdprot .14s steps(1) infinite reverse;}
+.cc-drony-pravidla.is-pre .dp-spr{opacity:0;transform:translateY(-12px);}
+@keyframes cdparrive{0%{transform:none;}35%{transform:translateY(3px);}100%{transform:none;}}
+@keyframes cdpbob{0%,100%{transform:none;}50%{transform:translateY(-2px);}}
+@keyframes cdprot{0%{opacity:1;}50%{opacity:0;}}
+.cc-drony-pravidla .dp-mini{position:absolute;pointer-events:none;animation:cdplane var(--t,26s) linear var(--dl,0s) infinite;animation-play-state:paused;}
+.cc-drony-pravidla .dp-cam.is-us .dp-mini{animation-play-state:running;}
+.cc-drony-pravidla.is-off .dp-mini,.cc-drony-pravidla.is-off *{animation-play-state:paused!important;}
+@keyframes cdplane{from{transform:translateX(0);}to{transform:translateX(var(--len));}}
+.cc-drony-pravidla .dp-waves path{opacity:.3;}
+.cc-drony-pravidla .dp-waves.is-on path{stroke:#fb7d0f;opacity:0;}
+.cc-drony-pravidla.is-live .dp-waves.is-on path{animation:cdpwave 1.8s ease-out infinite;}
+.cc-drony-pravidla.is-live .dp-waves.is-on path:nth-child(2){animation-delay:.3s;}
+.cc-drony-pravidla.is-live .dp-waves.is-on path:nth-child(3){animation-delay:.6s;}
+.cc-drony-pravidla.is-static .dp-waves.is-on path,.cc-drony-pravidla:not(.is-live) .dp-waves.is-on path{opacity:.85;}
+@keyframes cdpwave{0%{opacity:0;}25%{opacity:.95;}100%{opacity:0;}}
+
+/* maják a tyčka */
+.cc-drony-pravidla .dp-bcn{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;padding:0;border:0;border-radius:50%;background:transparent;z-index:2;transition:opacity .4s;}
+.cc-drony-pravidla .dp-bcn::before,.cc-drony-pravidla .dp-bcn::after{content:"";position:absolute;inset:3px;border-radius:50%;border:2px solid var(--org);opacity:0;transition:opacity .3s;}
+.cc-drony-pravidla .dp-bcn.is-seen::before{opacity:.35;border-color:#fff;}
+.cc-drony-pravidla.is-live .dp-bcn.is-new::before{animation:cdpping 2.8s cubic-bezier(.1,.6,.3,1) infinite;}
+.cc-drony-pravidla.is-live .dp-bcn.is-new::after{animation:cdpping 2.8s cubic-bezier(.1,.6,.3,1) 1.4s infinite;}
+.cc-drony-pravidla .dp-bcn.is-on::before{opacity:1;border-color:var(--org);box-shadow:0 0 0 5px rgba(251,125,15,.16),0 0 18px rgba(251,125,15,.45);}
+.cc-drony-pravidla .dp-bcn.is-on::after{display:none;}
+@keyframes cdpping{0%{transform:scale(.38);opacity:.95;}100%{transform:scale(1.5);opacity:0;}}
+@media (hover:hover){ .cc-drony-pravidla .dp-bcn:not(.is-on):hover::before{animation:none;opacity:1;border-color:#fff;} }
+.cc-drony-pravidla .dp-stem{position:absolute;width:0;border-left:1.5px dashed rgba(255,255,255,.4);pointer-events:none;z-index:1;transition:opacity .4s;}
+.cc-drony-pravidla .dp-stem.is-on{border-left:2px solid var(--org);}
+.cc-drony-pravidla .dp-stem.is-cut{opacity:0;}
+.cc-drony-pravidla.is-pre .dp-bcn,.cc-drony-pravidla.is-pre .dp-stem,.cc-drony-pravidla.is-pre .dp-tag{opacity:0;}
+
+/* zavřené štítky ve scéně: bílá karta CC, jediný měkký stín, protože plave nad tmavou krajinou */
+.cc-drony-pravidla .dp-tag{position:absolute;z-index:3;display:flex;align-items:center;gap:8px;height:32px;padding:0 12px 0 10px;border:0;border-radius:var(--cc-radius-sm);background:#fff;
+  font:600 14px/1 var(--cc-display);color:var(--ink);white-space:nowrap;box-shadow:var(--pop);transition:opacity .3s,box-shadow .15s;}
+.cc-drony-pravidla .dp-tag svg,.cc-drony-pravidla .dp-hud__h svg{display:block;flex:0 0 auto;}
+.cc-drony-pravidla .dp-tag em,.cc-drony-pravidla .dp-hud__h em{display:inline-block;padding:4px 7px;border-radius:999px;background:#f1f2f5;color:var(--ink2);font:600 11px/1 var(--cc-display);font-style:normal;}
+@media (hover:hover){ .cc-drony-pravidla .dp-tag:hover{box-shadow:0 0 0 2px var(--org),var(--pop);} }
+.cc-drony-pravidla .dp-tag.is-cut,.cc-drony-pravidla .dp-tag.is-hud{opacity:0;pointer-events:none;}
+
+/* roletka: z oranžového štítku se rozbalí bílá karta s textem, žije nad scénou, nikdy se neořízne */
+.cc-drony-pravidla .dp-hud{position:absolute;z-index:8;top:12px;left:0;width:0;border-radius:var(--cc-radius-sm);background:#fff;overflow:hidden;pointer-events:none;opacity:0;box-shadow:var(--pop);
+  transition:width .18s cubic-bezier(.55,.06,.68,.19),left .18s cubic-bezier(.55,.06,.68,.19),opacity .14s ease-in .05s;}
+.cc-drony-pravidla .dp-hud.is-on{opacity:1;transition:width .5s var(--ease-expo),left .5s var(--ease-expo),opacity .12s;}
+.cc-drony-pravidla .dp-hud__h{position:relative;display:flex;align-items:center;gap:8px;height:32px;padding:0 12px 0 10px;background:var(--org);font:600 14px/1 var(--cc-display);color:var(--ink);white-space:nowrap;}
+.cc-drony-pravidla .dp-hud__h em{margin-left:auto;background:rgba(255,255,255,.88);color:var(--ink);}
+.cc-drony-pravidla .dp-hud__b{display:grid;grid-template-rows:0fr;transition:grid-template-rows .14s ease-in;}
+.cc-drony-pravidla .dp-hud.is-on .dp-hud__b{grid-template-rows:1fr;transition:grid-template-rows .46s var(--ease-expo) .1s;}
+.cc-drony-pravidla .dp-hud__b > span{display:block;overflow:hidden;min-height:0;}
+.cc-drony-pravidla .dp-hud__b b{display:block;padding:10px 12px 12px;font:400 13.5px/1.5 var(--cc-display);color:var(--ink3);white-space:normal;opacity:0;transform:translateY(-3px);filter:blur(3px);transition:opacity .1s,transform .1s,filter .1s;}
+.cc-drony-pravidla .dp-hud.is-on .dp-hud__b b{opacity:1;transform:none;filter:none;transition:opacity .32s ease .22s,transform .45s var(--ease-out) .22s,filter .4s var(--ease-out) .22s;}
+
+/* šipky u okrajů: krátce kývnou, pak stojí */
+.cc-drony-pravidla .dp-edge{position:absolute;bottom:58px;z-index:7;width:32px;height:32px;padding:0;border:0;border-radius:50%;
+  background:#fff;color:var(--ink);display:flex;align-items:center;justify-content:center;box-shadow:var(--pop);transition:opacity .35s,box-shadow .15s;}
+.cc-drony-pravidla .dp-edge::after{content:"";position:absolute;inset:-6px;}
+.cc-drony-pravidla .dp-edge svg{display:block;}
+.cc-drony-pravidla .dp-edge--l{left:8px;} .cc-drony-pravidla .dp-edge--r{right:8px;}
+.cc-drony-pravidla.is-live .dp-edge--r svg{animation:cdpnudge 1.6s ease-in-out .4s 3;}
+.cc-drony-pravidla .dp-stage.at-start .dp-edge--l,.cc-drony-pravidla .dp-stage.at-end .dp-edge--r{opacity:0;pointer-events:none;}
+.cc-drony-pravidla.is-pre .dp-edge{opacity:0;}
+@media (hover:hover){ .cc-drony-pravidla .dp-edge:hover{box-shadow:0 0 0 2px var(--org),var(--pop);} }
+@keyframes cdpnudge{0%,100%{transform:translateX(0);}50%{transform:translateX(4px);}}
+
+/* ===== posuvník: tenká linka, čtverečky zastávek, tmavé okýnko se zobáčkem ===== */
+.cc-drony-pravidla .dp-rail{flex:0 0 auto;position:relative;height:58px;margin:12px 4px 0;touch-action:pan-y;}
+.cc-drony-pravidla .dp-rail__track{position:absolute;left:-2px;right:-2px;top:10px;height:4px;border-radius:99px;background:#ececec;}
+.cc-drony-pravidla .dp-rail__ticks{position:absolute;left:0;right:0;top:19px;height:4px;}
+.cc-drony-pravidla .dp-rail__ticks i{position:absolute;top:0;width:1px;height:4px;background:#e0e0e0;}
+.cc-drony-pravidla .dp-rail__stops{position:absolute;inset:0;}
+.cc-drony-pravidla .dp-stop{position:absolute;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;padding:0 2px;border:0;background:none;
+  font:500 13px/1 var(--cc-display);color:var(--ink2);white-space:nowrap;transition:color .15s,opacity .25s;}
+.cc-drony-pravidla .dp-stop i{display:block;width:24px;height:24px;position:relative;}
+.cc-drony-pravidla .dp-stop i::after{content:"";position:absolute;left:6px;top:6px;width:12px;height:12px;border-radius:3px;background:#fff;box-shadow:inset 0 0 0 2px #c5cad3;transition:box-shadow .15s;}
+.cc-drony-pravidla .dp-stop.is-future i::after{background:repeating-linear-gradient(45deg,#fff 0 2px,#e3e6eb 2px 4px);}
+.cc-drony-pravidla .dp-stop.is-seen i::after{box-shadow:inset 0 0 0 2px #8f97a6;}
+.cc-drony-pravidla .dp-stop.is-tick i::after{animation:cdptick .22s var(--ease-out);}
+@keyframes cdptick{0%{transform:scale(1.3);}100%{transform:none;}}
+@keyframes cdpswap{from{opacity:.4;filter:blur(2px);}to{opacity:1;filter:none;}}
+@media (hover:hover){ .cc-drony-pravidla .dp-stop:hover{color:var(--ink);} .cc-drony-pravidla .dp-stop:hover i::after{box-shadow:inset 0 0 0 2px var(--ink);} }
+.cc-drony-pravidla .dp-stop span{transition:opacity .12s;}
+.cc-drony-pravidla .dp-stop.is-near span{opacity:0;}
+.cc-drony-pravidla.is-m .dp-stop span{display:none;}
+.cc-drony-pravidla .dp-thumb{position:absolute;left:0;top:0;width:0;height:58px;z-index:3;outline:none;cursor:grab;touch-action:pan-y;transition:transform var(--dur,.6s) cubic-bezier(.62,0,.32,1.16),opacity .4s;}
+.cc-drony-pravidla .dp-thumb.is-drag{cursor:grabbing;transition:opacity .4s;}
+.cc-drony-pravidla .dp-thumb.no-tr{transition:opacity .4s;}
+.cc-drony-pravidla.is-pre .dp-thumb{opacity:0;}
+.cc-drony-pravidla .dp-thumb__knob{position:absolute;left:-9px;top:3px;width:18px;height:18px;border-radius:5px;z-index:1;background:var(--navy);transition:transform .15s var(--ease-out),background .15s;}
+.cc-drony-pravidla .dp-thumb__knob i{position:absolute;left:5px;top:5px;width:8px;height:8px;border-radius:2px;background:var(--org);}
+.cc-drony-pravidla .dp-thumb__plate{position:absolute;top:29px;left:0;transform:translate(calc(-50% + var(--px,0px)),0);display:block;padding:7px 10px;border-radius:var(--cc-radius-sm);white-space:nowrap;
+  background:var(--navy);color:#fff;font:600 13px/1 var(--cc-display);transition:transform .3s var(--ease-out),background .15s;}
+.cc-drony-pravidla .dp-thumb__plate::before{content:"";position:absolute;left:calc(50% - var(--px,0px));top:-7px;width:12px;height:8px;margin-left:-6px;background:inherit;clip-path:polygon(50% 0,100% 100%,0 100%);}
+.cc-drony-pravidla .dp-thumb__plate.is-swap{animation:cdpswap .2s var(--ease-out);}
+@media (hover:hover){ .cc-drony-pravidla .dp-thumb:not(.is-drag):hover .dp-thumb__plate,.cc-drony-pravidla .dp-thumb:not(.is-drag):hover .dp-thumb__knob{background:#363c58;} }
+.cc-drony-pravidla .dp-thumb.is-drag .dp-thumb__plate{transform:translate(calc(-50% + var(--px,0px)),1px);background:#1f2336;transition:background .1s;}
+.cc-drony-pravidla .dp-thumb.is-drag .dp-thumb__knob{transform:translateY(1px);background:#1f2336;}
+.cc-drony-pravidla .dp-thumb:focus-visible .dp-thumb__plate{outline:3px solid var(--cc-blue);outline-offset:2px;}
+
+/* ===== (i): stejný panel jako u ostatních prvků v článcích ===== */
+.cc-drony-pravidla .dp-ov{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vw,24px);
+  background:rgba(255,255,255,.86);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);border-radius:inherit;animation:cdpfade .2s ease;}
+.cc-drony-pravidla .dp-ov[hidden]{display:none;}
+.cc-drony-pravidla .dp-panel{position:relative;width:100%;max-width:470px;max-height:100%;display:flex;flex-direction:column;background:#fff;border:1px solid #e0e0e0;border-radius:14px;
+  box-shadow:0 18px 40px -18px rgba(20,24,40,.35);padding:clamp(16px,3.6vw,22px) clamp(16px,3.6vw,24px);animation:cdppop .3s var(--ease-out);}
+.cc-drony-pravidla .dp-phd{display:flex;align-items:flex-start;gap:12px;}
+.cc-drony-pravidla .dp-ptitle{margin:0;font:600 15px/1.3 var(--cc-display);color:var(--ink);}
+.cc-drony-pravidla .dp-x{margin-left:auto;flex:none;width:28px;height:28px;padding:0;border:0;border-radius:50%;background:#f1f2f5;color:var(--ink);font:400 18px/1 var(--cc-display);}
+.cc-drony-pravidla .dp-pbody{margin-top:10px;overflow-y:auto;min-height:0;}
+.cc-drony-pravidla .dp-pbody p{margin:0 0 9px;font:400 13px/1.5 var(--cc-display);color:var(--ink3);}
+.cc-drony-pravidla .dp-pbody p:last-child{margin-bottom:0;}
+.cc-drony-pravidla .dp-pbody b{font-weight:600;color:var(--ink);}
+@keyframes cdpfade{from{opacity:0;}to{opacity:1;}}
+@keyframes cdppop{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+</style>
+
+<script>
+(function(){
+  /* ===================== OBSAH: texty smí redakce měnit bez sahání do kódu ===================== */
+  var TEXT = {
+    title: 'Jak se v Česku létá s dronem',
+    ceiling: 'max. 120 m',
+    info: '<p><b>Stav k 14. 11. 2026.</b> EASA navrhuje pravidla zjednodušit (NPA 2026-103), zatím jde o návrh.</p>'+
+          '<p>Kategorie, váhy a vzdálenosti podle nařízení EU 2019/947 a přehledu EASA k otevřené kategorii. Remote ID podle nařízení EU 2019/945. Zóny a mapa DroneMap podle ÚCL. U-space podle nařízení EU 2021/664, CIS+ podle tiskové zprávy CSG z 9. 11. 2026.</p>'+
+          '<p>Scéna je ilustrační, vzdálenosti v ní nejsou v měřítku.</p>'
+  };
+  var STOPS = [   /* tag = štítek ve scéně i v posuvníku, d = text roletky */
+    {k:'s250', tag:'do 250 g',    d:'I nad lidmi, jen ne nad davem.'},
+    {k:'s4',   tag:'do 4 kg',     d:'Dron třídy C2, od lidí nejméně 30 m.'},
+    {k:'s25',  tag:'do 25 kg',    d:'Daleko od lidí, nejméně 150 m od domů.'},
+    {k:'bv',   tag:'Mimo dohled', d:'Pilot dron nevidí. Smí jen s povolením ÚCL, třeba při doručování.'},
+    {k:'rid',  tag:'Remote ID',   d:'Drony tříd C1 až C3 a všechny ve specifické kategorii musí do okolí vysílat, kdo je řídí a kde jsou. Zachytí to i telefon.'},
+    {k:'apt',  tag:'Letiště',     d:'Kolem letiště je zóna, kde se nelétá, nebo jen s podmínkou. Ukáže ji DroneMap.'},
+    {k:'us',   tag:'U-space',     d:'Prostor, kde se drony hlásí přes síť a let dostane schválení digitálně. ŘLP na to má systém CIS+ od UpVision.', badge:'Připravuje se'}
+  ];
+  var SR = 'Interaktivní krajina o pravidlech pro drony v Česku. Dron do 250 gramů smí létat i nad lidmi, jen ne nad davem. Dron do 4 kilogramů třídy C2 musí být od lidí nejméně 30 metrů. Dron do 25 kilogramů létá daleko od lidí, nejméně 150 metrů od domů. Tyto drony létají nejvýš 120 metrů nad zemí a na dohled pilota. Let mimo dohled pilota je možný jen s povolením ÚCL, třeba při doručování. Drony tříd C1 až C3 a všechny drony ve specifické kategorii musí do okolí vysílat Remote ID, tedy kdo je řídí a kde jsou, a zachytí to i telefon. Kolem letiště je zóna, kde se nelétá, nebo jen s podmínkou, ukáže ji mapa DroneMap. U-space se připravuje. Je to prostor, kde se drony hlásí přes síť a let dostane schválení digitálně. ŘLP na to má systém CIS+ od UpVision. Stav k 14. 11. 2026.';
+  /* ============================================================================================= */
+
+  var root = document.querySelector('[data-cc-drony-pravidla]');
+  if(!root || root.dataset.ccInit) return; root.dataset.ccInit = '1';
+  var $ = function(s){ return root.querySelector(s); };
+  var Q = location.search;
+  var STATIC = /[?&]static/.test(Q);
+  var REDUCE = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var MOVE = !STATIC && !REDUCE;
+  var HAS_IO = 'IntersectionObserver' in window;
+  if(STATIC) root.classList.add('is-static');
+  if(MOVE && HAS_IO) root.classList.add('is-pre');   /* skrytý výchozí stav hned, žádné probliknutí */
+
+  function nb(s){ return s.replace(/(^|\s)([vkszouaiVKSZOUAI])\s/g,'$1$2 ').replace(/(\d)\s(?=(g|kg|m)\b)/g,'$1 ').replace(/(do|od|max\.) (\d)/g,'$1 $2').replace(/(\d\.) (?=\d)/g,'$1 ').replace(/(C\d) až (C\d)/g,'$1 až $2').replace(/Remote ID/g,'Remote ID'); }
+  function rnd(a,b){ var x=Math.sin(a*127.1+b*311.7)*43758.5453; return x-Math.floor(x); }
+  function f(n){ return +(+n).toFixed(2); }
+  function R(x,y,w,h,c,o,cl){ return '<rect'+(cl?' class="'+cl+'"':'')+' x="'+f(x)+'" y="'+f(y)+'" width="'+f(w)+'" height="'+f(h)+'"'+(c?' fill="'+c+'"':'')+(o!=null&&o<1?' opacity="'+o.toFixed(2)+'"':'')+'/>'; }
+  function pat(rows,x,y,s,map){ var o=''; rows.forEach(function(r,j){ for(var i=0;i<r.length;i++){ var c=map[r[i]]; if(c) o+=R(x+i*s,y+j*s,s,s,c); } }); return o; }
+  function T(x,y,t){ return '<text x="'+f(x)+'" y="'+f(y)+'" text-anchor="middle" font-size="3" font-family="Poppins,sans-serif" fill="#fb7d0f">'+t+'</text>'; }
+
+  $('[data-title]').textContent = nb(TEXT.title);
+  $('[data-sr]').textContent = nb(SR);
+  $('[data-pbody]').innerHTML = nb(TEXT.info);
+  $('[data-ceil]').textContent = nb(TEXT.ceiling);
+
+  /* ===================== svět: jednotka = 1 pixel krajiny ===================== */
+  var G=88, GH=96, W=800;
+  var DR = [   /* dron: střed, horní hrana, velikost pixelu, balík; maják; v0 = levý okraj záběru na desktopu */
+    {cx:28,  ty:58, s:.75, bx:28,  by:59.5},
+    {cx:176, ty:54, s:1,   bx:176, by:56},
+    {cx:292, ty:50, s:1.5, bx:292, by:53, v0:232},
+    {cx:400, ty:59, s:1,   bx:400, by:63, v0:330, pkg:true},
+    {cx:505, ty:52, s:1,   bx:505, by:54},
+    {cx:608, ty:0,  s:0,   bx:608, by:56, v0:566},
+    {cx:729, ty:50, s:1,   bx:729, by:53}
+  ];
+  var ICO = {
+    drone:['XXX...XXX','X.X...X.X','XXX...XXX','...XXX...','...XXX...','...XXX...','XXX...XXX','X.X...X.X','XXX...XXX'],
+    eye:['X........','.X.XXXX..','..X....X.','.X.X.X..X','X...X.X..','.X....X..','..XXXX.X.','........X'],
+    wave:['.XXXXXXX.','X.......X','..XXXXX..','.X.....X.','...XXX...','.........','....X....'],
+    plane:['....X....','....X....','.XXXXXXX.','XXXXXXXXX','...XXX...','....X....','...XXX...'],
+    grid:['X.X.X.X','.......','X.X.X.X','.......','X.X.X.X','.......','X.X.X.X']
+  };
+  var ICOF = ['drone','drone','drone','eye','wave','plane','grid'];
+  function icon(k, dark){ var rows=ICO[k], s=1.6, w=rows[0].length*s, h=rows.length*s;
+    return '<svg width="'+f(w)+'" height="'+f(h)+'" viewBox="0 0 '+f(w)+' '+f(h)+'" shape-rendering="crispEdges" aria-hidden="true">'+pat(rows,0,0,s,{X:dark?'#1f2336':'#fb7d0f'})+'</svg>'; }
+  var BODY =['.B.......B.','.BBBBBBBBB.','....BBB....'], BODYP=BODY.concat(['.....B.....','....PPP....','....PPP....']);
+  var MINI =['R...R','BBBBB'];
+  var PLANE=['...........XX...','..........XXX...','.XXXXXXXXXXXXXX.','XXOXOXOXOXXXXXXX','.XXXXXXXXXXXXXX.','.....XXXX.......'];
+  function B(inner, x){ return '<g class="dp-b" data-x="'+x+'">'+inner+'</g>'; }
+  function house(x,w,h,seed,tone){ var top=G-h, o=R(x,top,w,h,tone||(seed%2?'#465068':'#4b576c'))+R(x,top,w,1,'#6a7c85')+R(x+w-1,top+1,1,h-1,'#3a4160',.55);
+    for(var wx=x+1; wx<x+w-1; wx+=2) for(var wy=top+2; wy<G-2; wy+=3){ var q=rnd(wx*3+seed,wy); o+=R(wx,wy,1,1,q<.3?'#fb9c2e':'#353b56',q<.3?.92:1); } return B(o,x); }
+  function panel(x,w,h){ var top=G-h, o=R(x,top,w,h,'#55636e')+R(x,top,w,1,'#7a8b93')+R(x+w-1,top+1,1,h-1,'#3c4462',.6);
+    for(var wx=x+1; wx<x+w-1; wx+=2) for(var wy=top+2; wy<G-1; wy+=2){ var q=rnd(wx,wy*7); o+=R(wx,wy,1,1,q<.22?'#fdb24c':'#3c4462',q<.22?.88:1); } return B(o,x); }
+  function tree(x){ return B(R(x+2,G-4,1,4,'#3a4160')+R(x,G-10,5,6,'#3c4462')+R(x+1,G-11,3,1,'#3c4462')+R(x+1,G-10,1,1,'#4b576c')+R(x+3,G-8,1,1,'#4b576c'),x); }
+  function person(x){ return B(R(x,G-9,2,2,'#ffffff')+R(x,G-7,2,7,'#7c869b'),x); }
+  function pilot(x){ return B(R(x,G-9,2,2,'#ffffff')+R(x,G-7,2,7,'#fb7d0f')+R(x+2,G-6,1,1,'#fdb24c'),x); }
+  function crowd(x){ var o=''; [1,4,7,10].forEach(function(d){ o+=R(x+d,G-10,2,2,'#c9ced8')+R(x+d,G-8,2,7,'#5f6a80'); }); [0,3,6,9,12].forEach(function(d){ o+=R(x+d,G-9,2,2,'#fff')+R(x+d,G-7,2,7,'#7c869b'); }); return B(o,x); }
+  function tower(x){ return B(R(x+2,G-30,3,30,'#4b576c')+R(x,G-36,7,6,'#55636e')+R(x,G-36,7,1,'#7a8b93')+R(x+1,G-34,5,2,'#fdb24c',.85)+R(x+3,G-40,1,4,'#8a93a6')+R(x+3,G-41,1,1,'#fb7d0f'),x); }
+  function bracket(x1,x2,y,lab){ return '<g stroke="#fb7d0f" stroke-width=".35"><line x1="'+x1+'" y1="'+y+'" x2="'+x2+'" y2="'+y+'"/><line x1="'+x1+'" y1="'+(y-1)+'" x2="'+x1+'" y2="'+(y+1)+'"/><line x1="'+x2+'" y1="'+(y-1)+'" x2="'+x2+'" y2="'+(y+1)+'"/></g>'+T((x1+x2)/2,y-1.3,lab); }
+  function vdrop(x,y1,y2){ return '<line x1="'+x+'" y1="'+y1+'" x2="'+x+'" y2="'+y2+'" stroke="#fb7d0f" stroke-width=".3" stroke-dasharray=".8 .8"/>'; }
+
+  function world(){
+    var o = '<defs><linearGradient id="cdp-ground" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262b42"/><stop offset="1" stop-color="#161929"/></linearGradient>'+
+      '<radialGradient id="cdp-dome" cx=".5" cy="1" r="1"><stop offset="0" stop-color="#fb7d0f" stop-opacity=".18"/><stop offset="1" stop-color="#fb7d0f" stop-opacity=".02"/></radialGradient>'+
+      '<pattern id="cdp-hatch" width="1.6" height="1.6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width=".45" height="1.6" fill="#fb7d0f" opacity=".55"/></pattern></defs>';
+    o += '<line x1="0" y1="22" x2="'+W+'" y2="22" stroke="#fff" stroke-opacity=".22" stroke-width=".3" stroke-dasharray="1.2 1.2"/>';
+    // U-space síť: tlumená vždy, rozsvícená vlnou po příjezdu
+    var dim='', lit=''; for(var gx=664; gx<=800; gx+=3) for(var gy=28; gy<=55; gy+=3){ dim+=R(gx,gy,.6,.6,'#ffffff',.2); lit+='<rect class="gd" style="--d:'+Math.round(((gx-664)+(gy-28)*2)*3.2)+'ms" x="'+gx+'" y="'+gy+'" width=".6" height=".6" fill="#fdb24c"/>'; }
+    o += dim; [30,38,46].forEach(function(ly){ o += '<line x1="664" y1="'+ly+'" x2="800" y2="'+ly+'" stroke="#fb7d0f" stroke-opacity=".28" stroke-width=".3" stroke-dasharray="1.5 1.5"/>'; });
+    o += '<g class="mk mk-us">'+lit+'</g>';
+    // 1 město s davem
+    o += house(4,8,18,1)+house(15,7,28,2)+house(33,9,16,3)+house(56,8,22,4)+house(67,7,14,5)+house(78,9,20,6)+person(27)+crowd(41)+pilot(92);
+    // 2 park
+    o += tree(110)+tree(126)+tree(204)+tree(218)+person(168)+person(141)+pilot(190);
+    // 3 pole a vesnice
+    o += house(236,8,12,7)+house(246,6,9,8)+pilot(304);
+    // 4 panelák a doručení
+    o += pilot(340)+panel(376,15,48)+house(396,9,8,9)+tree(418)+tree(324);
+    // 5 Remote ID
+    o += person(488)+B(R(490,G-6,1,1,'#fdb24c'),490)+pilot(522)+house(470,7,12,10)+tree(536);
+    // 6 letiště
+    o += tower(574)+B(pat(PLANE,596,G-6,1,{X:'#c9ced8',O:'#fb9c2e'}),596);
+    // 7 město budoucnosti
+    o += house(668,8,30,11)+panel(680,12,40)+house(696,9,24,12)+panel(709,10,36)+house(723,8,18,13)+panel(735,13,42)+house(752,9,26,14)+panel(765,11,34)+house(780,9,20,15)+house(791,9,28,16);
+    // země přes paty budov (budovy z ní při nástupu vyrůstají)
+    o += R(0,G,W,GH-G,'url(#cdp-ground)')+R(0,G,W,1,'#4b576c');
+    for(var gx2=0; gx2<W; gx2+=2) for(var gy2=G+2; gy2<GH; gy2+=2){ if(rnd(gx2,gy2)<.26) o+=R(gx2,gy2,1,1,'#3a4160',.65); }
+    for(var fx=262; fx<340; fx+=3) o += R(fx,G-1,1,1,'#3c4462');
+    o += R(583,G,67,1,'#6f7f88'); for(var rx=585; rx<648; rx+=5) o += R(rx,G,2,1,'#e6e8ef',.8);
+    o += '<path d="M576 '+G+' A 32 32 0 0 1 640 '+G+'" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width=".35" stroke-dasharray="1.2 1"/>';
+    // značky jednotlivých zastávek
+    o += '<g class="mk mk-s250"><rect x="40.5" y="58" width="14" height="29.5" fill="url(#cdp-hatch)" opacity=".5"/><rect x="40.5" y="58" width="14" height="29.5" fill="none" stroke="#fb7d0f" stroke-width=".35" stroke-dasharray="1 1"/>'+T(47.5,56.6,'dav')+'</g>';
+    o += '<g class="mk mk-s4">'+bracket(168,176,77,'30 m')+vdrop(176,58,76)+'</g>';
+    o += '<g class="mk mk-s25">'+bracket(252,292,66,'150 m')+vdrop(292,56,65)+'</g>';
+    var eye=[341,79.5], wallX=376, tg=[400,62], sl=(tg[1]-eye[1])/(tg[0]-eye[0]), wy=eye[1]+sl*(wallX-eye[0]), lx=eye[0]+(wallX-eye[0])*.5, ly=eye[1]+sl*(lx-eye[0]);
+    o += '<g class="mk mk-bv"><line x1="'+eye[0]+'" y1="'+eye[1]+'" x2="'+wallX+'" y2="'+f(wy)+'" stroke="#fb7d0f" stroke-width=".45" stroke-dasharray="1.2 .9"/>'+
+         '<line x1="'+wallX+'" y1="'+f(wy)+'" x2="'+tg[0]+'" y2="'+tg[1]+'" stroke="#fb7d0f" stroke-opacity=".45" stroke-width=".35" stroke-dasharray=".4 .9"/>'+
+         '<g class="mk-x" stroke="#fb7d0f" stroke-width=".55"><line x1="'+(wallX-1.4)+'" y1="'+f(wy-1.4)+'" x2="'+(wallX+1.4)+'" y2="'+f(wy+1.4)+'"/><line x1="'+(wallX-1.4)+'" y1="'+f(wy+1.4)+'" x2="'+(wallX+1.4)+'" y2="'+f(wy-1.4)+'"/></g>'+
+         '<text transform="translate('+f(lx)+' '+f(ly-1.4)+') rotate('+f(Math.atan(sl)*180/Math.PI)+')" text-anchor="middle" font-size="3" font-family="Poppins,sans-serif" fill="#fb7d0f">dohled pilota</text></g>';
+    o += '<g class="mk mk-apt"><path d="M576 '+G+' A 32 32 0 0 1 640 '+G+'" fill="url(#cdp-dome)" stroke="#fb7d0f" stroke-width=".4" stroke-dasharray="1.2 1"/></g>';
+    return o;
+  }
+  /* sprite dronu: vrtule ve dvou fázích (točí se jen u vybraného) */
+  function droneSprite(d,u){ var s=d.s, w=11*s, rows=d.pkg?BODYP:BODY, h=(rows.length+1)*s, o='';
+    o += '<g class="ra">'+R(0,0,3*s,s,null,null,'r')+R(8*s,0,3*s,s,null,null,'r')+'</g>';
+    o += '<g class="rb">'+R(.5*s,0,2*s,s,null,.55,'r')+R(8.5*s,0,2*s,s,null,.55,'r')+R(s,0,s,s,null,null,'r')+R(9*s,0,s,s,null,null,'r')+'</g>';
+    rows.forEach(function(r,j){ for(var i=0;i<r.length;i++){ var c=r[i]; if(c==='B') o+=R(i*s,(j+1)*s,s,s,null,null,'b'); else if(c==='P') o+=R(i*s,(j+1)*s,s,s,null,null,'p'); } });
+    return '<svg width="'+f(w*u)+'" height="'+f(h*u)+'" viewBox="0 0 '+f(w)+' '+f(h)+'" shape-rendering="crispEdges">'+o+'</svg>'; }
+  /* vzdálené vrstvy: paralaxa 0,3× a 0,6× */
+  var PF=.3, PM=.6;
+  function farSvg(wU){ var o=''; for(var bx=4; bx<wU; bx+= 8 + Math.round(rnd(bx,3)*10)){ var bw=4+Math.round(rnd(bx,1)*5), bh=10+Math.round(rnd(bx,2)*18), top=78-bh;
+      o += R(bx,top,bw,bh+18,'#2a2f4a'); for(var wy=top+2; wy<78; wy+=3) if(rnd(bx,wy)<.18) o+=R(bx+1+Math.floor(rnd(wy,bx)*(bw-2)),wy,1,1,'#fb9c2e',.28); } return o; }
+  function midSvg(wU){ var s='0,'+GH; for(var x=0; x<=wU; x+=2){ var y=Math.round(80 - 4*Math.sin(x/29+1) - 3*Math.sin(x/11)); s+=' '+x+','+y+' '+(x+2)+','+y; } s+=' '+wU+','+GH;
+    return '<polygon points="'+s+'" fill="#252a42"/>'; }
+
+  /* ===================== stav a geometrie ===================== */
+  var ceil=$('[data-ceil]'), stage=$('[data-stage]'), cam=$('[data-cam]'), farEl=$('[data-far]'), midEl=$('[data-mid]'), hud=$('[data-hud]'), hudH=$('[data-hudh]'), hudB=$('[data-hudb]');
+  var rail=$('[data-rail]'), stopsEl=$('[data-stops]'), ticks=$('[data-ticks]'), thumb=$('[data-thumb]'), plate=$('[data-plate]');
+  var mSel = /[?&]sel=(\w+)/.exec(Q), cur = 0;
+  if(mSel){ STOPS.forEach(function(s,i){ if(s.k===mSel[1]) cur=i; }); }
+  var seen = {}; seen[cur] = true;
+  var Gm = {}, camX = 0, stopX = [], camF = [], mobile = false, worldEl = null, tags = [], bcns = [], stems = [], sprs = [], pools = [], waveEl = null, lastNear = -1;
+
+  STOPS.forEach(function(s,i){ var b=document.createElement('button'); b.type='button'; b.tabIndex=-1; b.className='dp-stop'+(s.badge?' is-future':''); b.setAttribute('data-go',i);
+    b.innerHTML='<i></i><span>'+nb(s.tag)+'</span>'; stopsEl.appendChild(b); });
+  var stopBtns = [].slice.call(stopsEl.children);
+
+  function camFor(i){ var g=DR[i], vw=Gm.vw, l = g.v0!=null ? (mobile ? Math.max(g.bx-vw*.8, Math.min(g.v0+6, g.bx-vw*.12)) : g.v0) : g.bx - vw*(mobile?.24:.2);
+    return Math.max(0, Math.min(Gm.maxX, l*Gm.u)); }
+  function railFromCam(cx){ if(cx<=camF[0]) return stopX[0]; if(cx>=camF[6]) return stopX[6]; var i=0; while(i<5 && cx>camF[i+1]) i++;
+    var a=camF[i], b=camF[i+1]; return stopX[i] + (b>a?(cx-a)/(b-a):0)*(stopX[i+1]-stopX[i]); }
+  function camFromRail(rx){ if(rx<=stopX[0]) return camF[0]; if(rx>=stopX[6]) return camF[6]; var i=0; while(i<5 && rx>stopX[i+1]) i++;
+    var a=stopX[i], b=stopX[i+1]; return camF[i] + (b>a?(rx-a)/(b-a):0)*(camF[i+1]-camF[i]); }
+  function nearest(rx){ var n=0, d=1e9; stopX.forEach(function(x,i){ var dd=Math.abs(x-rx); if(dd<d){ d=dd; n=i; } }); return n; }
+  function tagHTML(i){ var s=STOPS[i]; return icon(ICOF[i])+'<span>'+nb(s.tag)+'</span>'+(s.badge?'<em>'+nb(s.badge)+'</em>':''); }
+
+  function build(){
+    mobile = root.clientWidth < 620; root.classList.toggle('is-m', mobile);
+    var SW=stage.clientWidth, SH=stage.clientHeight; if(!SW || !SH) return false;
+    var u = mobile ? Math.max(SH < 400 ? 4 : 4.6, SH/GH) : Math.max(4, SW/150), vw=SW/u, vh=SH/u, y0=Math.max(0,GH-vh);
+    Gm = {SW:SW, SH:SH, u:u, vw:vw, y0:y0, maxX:(W-vw)*u, WO: mobile ? Math.min(262, SW-20) : 252, top: Math.round(y0*u)+12};
+    $('[data-ceil]').style.top = Math.max(4,(22-y0)*u + 5)+'px';
+    // krajina se vykreslí jednou, výběr jen přepíná třídy
+    var h = '<svg class="dp-world" data-k="'+STOPS[cur].k+'" width="'+f(W*u)+'" height="'+f(GH*u)+'" viewBox="0 0 '+W+' '+GH+'" shape-rendering="crispEdges">'+world()+'</svg>';
+    DR.forEach(function(d,i){ if(!d.s) return; var w=11*d.s, hh=((d.pkg?BODYP:BODY).length+1)*d.s;
+      h += '<span class="dp-pool" data-i="'+i+'" style="left:'+f((d.cx-20)*u)+'px;top:'+f((G-3.5)*u)+'px;width:'+f(40*u)+'px;height:'+f(7*u)+'px"></span>';
+      h += '<span class="dp-spr" data-i="'+i+'" data-x="'+d.cx+'" style="left:'+f((d.cx-w/2)*u)+'px;top:'+f(d.ty*u)+'px;--gw:'+f((18+w)*u)+'px">'+droneSprite(d,u)+'</span>'; });
+    h += '<svg class="dp-waves" style="position:absolute;left:'+f(495*u)+'px;top:'+f(57*u)+'px" width="'+f(20*u)+'px" height="'+f(13*u)+'px" viewBox="495 57 20 13">';
+    [3,6,9].forEach(function(r){ h += '<path d="M'+(505-r)+' '+(57+r*.7)+' Q 505 '+(57+r*1.25)+' '+(505+r)+' '+(57+r*.7)+'" fill="none" stroke="#fff" stroke-width=".45" stroke-dasharray="1 .7"/>'; });
+    h += '</svg>';
+    [29.5,37.5,45.5,29.5,37.5,45.5].forEach(function(ly,k){ var dir=k%2?-1:1, len=128*u, t=[26,32,22,29,35,24][k], dl=-[3,11,7,17,5,13][k];
+      h += '<span class="dp-mini" style="left:'+f((dir>0?666:794)*u)+'px;top:'+f(ly*u)+'px;--len:'+f(dir*len)+'px;--t:'+t+'s;--dl:'+dl+'s;transform:translateX('+f(dir*len*(-dl/t))+'px)"><svg width="'+f(4*u)+'" height="'+f(1.6*u)+'" viewBox="0 0 4 1.6" shape-rendering="crispEdges">'+pat(MINI,0,0,.8,{R:'#fb7d0f',B:'#ffffff'})+'</svg></span>'; });
+    DR.forEach(function(d,i){ var x=d.bx*u, y=d.by*u;
+      h += '<button type="button" class="dp-bcn" data-go="'+i+'" tabindex="-1" style="left:'+f(x)+'px;top:'+f(y)+'px"></button>';
+      h += '<span class="dp-stem" style="left:'+f(x)+'px;top:'+(Gm.top+30)+'px;height:'+f(Math.max(0,y-22-Gm.top-30))+'px"></span>';
+      h += '<button type="button" class="dp-tag" data-go="'+i+'" tabindex="-1" style="top:'+Gm.top+'px;left:'+f(x-18)+'px">'+tagHTML(i)+'</button>'; });
+    cam.innerHTML = h;
+    worldEl = cam.querySelector('.dp-world'); waveEl = cam.querySelector('.dp-waves');
+    tags=[].slice.call(cam.querySelectorAll('.dp-tag')); bcns=[].slice.call(cam.querySelectorAll('.dp-bcn')); stems=[].slice.call(cam.querySelectorAll('.dp-stem')); sprs=[].slice.call(cam.querySelectorAll('.dp-spr')); pools=[].slice.call(cam.querySelectorAll('.dp-pool'));
+    var fw = vw + (W - vw)*PF + 4, mw = vw + (W - vw)*PM + 4;
+    farEl.innerHTML = '<svg width="'+f(fw*u)+'" height="'+f(GH*u)+'" viewBox="0 0 '+f(fw)+' '+GH+'" shape-rendering="crispEdges">'+farSvg(fw)+'</svg>';
+    midEl.innerHTML = '<svg width="'+f(mw*u)+'" height="'+f(GH*u)+'" viewBox="0 0 '+f(mw)+' '+GH+'" shape-rendering="crispEdges">'+midSvg(mw)+'</svg>';
+    // posuvník: rozestup podle popisků, mezera mezi váhami (1–3) a pravidly pro všechny (4–7)
+    var RW = rail.clientWidth, GAP = mobile ? 10 : 18;
+    if(!mobile){ var ws = stopBtns.map(function(b){ return b.offsetWidth; }), tot = ws.reduce(function(a,b){return a+b;},0), gap=(RW - 20 - tot - GAP)/6, x=10;
+      stopX = ws.map(function(w,i){ var c = x + w/2; x += w + gap + (i===2?GAP:0); return c; }); }
+    else { var p=14, st=(RW-2*p-GAP)/6; stopX = stopBtns.map(function(b,i){ return p + i*st + (i>2?GAP:0); }); }
+    stopBtns.forEach(function(b,i){ b.style.left = f(stopX[i])+'px'; });
+    var tk=''; for(var i=0;i<6;i++) for(var j=1;j<4;j++) tk += '<i style="left:'+f(stopX[i]+(stopX[i+1]-stopX[i])*j/4)+'px"></i>'; ticks.innerHTML = tk;
+    camF = STOPS.map(function(s,i){ return camFor(i); });
+    return true;
+  }
+  function paint(){   // třídy podle stavu, bez překreslování krajiny
+    var k = STOPS[cur].k;
+    worldEl.setAttribute('data-k', k);
+    sprs.forEach(function(s){ s.classList.toggle('is-on', +s.getAttribute('data-i')===cur); });
+    pools.forEach(function(s){ s.classList.toggle('is-on', +s.getAttribute('data-i')===cur); });
+    waveEl.classList.toggle('is-on', k==='rid');
+    cam.classList.toggle('is-us', k==='us');
+    bcns.forEach(function(b,i){ b.classList.toggle('is-on', i===cur); b.classList.toggle('is-new', !seen[i] && i!==cur); b.classList.toggle('is-seen', !!seen[i] && i!==cur); });
+    stems.forEach(function(s,i){ s.classList.toggle('is-on', i===cur); });
+    stopBtns.forEach(function(b,i){ b.classList.toggle('is-seen', !!seen[i]); });
+  }
+  function setThumb(rx, n){
+    thumb.style.transform = 'translateX('+f(rx)+'px)';
+    if(plate.dataset.n !== String(n)){ plate.dataset.n = n; plate.textContent = nb(STOPS[n].tag); if(lastNear>=0){ plate.classList.remove('is-swap'); plate.offsetWidth; plate.classList.add('is-swap'); } }
+    var pw = plate.offsetWidth, RW = rail.clientWidth, half = pw/2, px = 0;   // plaketa nesmí utéct z posuvníku
+    if(rx - half < -4) px = -4 - (rx - half); else if(rx + half > RW + 4) px = (RW + 4) - (rx + half);
+    plate.style.setProperty('--px', f(px)+'px');
+    var pl = rx - half + px - 2, pr = rx + half + px + 2;   // popisky, které okýnko zrovna zakrývá, se schovají pod něj
+    stopBtns.forEach(function(b,i){ var sw = b.lastChild.offsetWidth/2; b.classList.toggle('is-near', i===n || (sw > 0 && stopX[i]+sw > pl && stopX[i]-sw < pr)); });
+    if(n !== lastNear && lastNear >= 0 && (dragging || thumbDrag)){ var sb=stopBtns[n]; sb.classList.remove('is-tick'); sb.offsetWidth; sb.classList.add('is-tick'); }
+    lastNear = n;
+    thumb.setAttribute('aria-valuenow', n+1); thumb.setAttribute('aria-valuetext', STOPS[n].tag+'. '+STOPS[n].d);
+  }
+  function place(noTr){
+    var X = Math.round(camX), y = -Math.round(Gm.y0*Gm.u);
+    [cam,farEl,midEl,thumb].forEach(function(el){ el.classList.toggle('no-tr', !!noTr); });
+    cam.style.transform = 'translate3d('+(-X)+'px,'+y+'px,0)';
+    farEl.style.transform = 'translate3d('+(-Math.round(camX*PF))+'px,'+y+'px,0)';
+    midEl.style.transform = 'translate3d('+(-Math.round(camX*PM))+'px,'+y+'px,0)';
+    stage.classList.toggle('at-start', camX < 2); stage.classList.toggle('at-end', camX > Gm.maxX-2);
+    var cx = Math.max(0, Math.min(Gm.maxX, camX));
+    if(!thumbDrag){ var rx = railFromCam(cx); setThumb(rx, (dragging ? nearest(rx) : cur)); }
+    tags.forEach(function(t,i){ var l = t.offsetLeft - camX, cut = l < 4 || l + t.offsetWidth > Gm.SW - 4; t.classList.toggle('is-cut', cut); stems[i].classList.toggle('is-cut', cut && !hudOpen); });
+  }
+  /* roletka nad scénou: vyjede ze štítku a vrátí se do něj */
+  var hudOpen = false, hudT = 0;
+  function hudShow(){
+    var i=cur, tag=tags[i], c=camF[i], tl = tag.offsetLeft - c, wc = tag.offsetWidth, WO = Gm.WO;
+    hudH.innerHTML = icon(ICOF[i], true)+'<span>'+nb(STOPS[i].tag)+'</span>'+(STOPS[i].badge?'<em>'+nb(STOPS[i].badge)+'</em>':'');
+    hudB.textContent = nb(STOPS[i].d); hudB.style.width = WO+'px';
+    var cap = mobile ? Math.min(330, Gm.SW-20) : 330, max3 = 22 + 13.5*1.5*3 + 2;   // delší text dostane širší roletku, ať má nejvýš tři řádky
+    while(WO < cap && hudB.offsetHeight > max3){ WO = Math.min(cap, WO+12); hudB.style.width = WO+'px'; }
+    var openL = Math.max(8, Math.min(Gm.SW - WO - 8, tl)), hTop = Gm.top - Math.round(Gm.y0*Gm.u);
+    hud.style.top = hTop+'px';
+    var cT = parseFloat(ceil.style.top)||0; ceil.classList.toggle('is-hid', openL < 12 + ceil.offsetWidth + 8 && hTop + 34 + hudB.offsetHeight > cT - 4);
+    if(MOVE){ hud.classList.add('no-tr'); hud.style.transition='none'; hud.style.left = f(tl)+'px'; hud.style.width = wc+'px'; hud.offsetWidth; hud.style.transition=''; hud.classList.remove('no-tr'); }
+    hud.style.left = f(openL)+'px'; hud.style.width = WO+'px'; hud.classList.add('is-on'); tag.classList.add('is-hud'); hudOpen = true;
+    worldEl.classList.add('is-marks');
+  }
+  function hudHide(){
+    if(!hudOpen){ return; } hudOpen = false; clearTimeout(hudT);
+    var tag=tags[cur]; ceil.classList.remove('is-hid'); hud.classList.remove('is-on'); hud.style.left = f(tag.offsetLeft - camX)+'px'; hud.style.width = tag.offsetWidth+'px';
+    hudT = setTimeout(function(){ tags.forEach(function(t){ t.classList.remove('is-hud'); }); }, MOVE ? 180 : 0);
+  }
+  var selT = 0;
+  function select(i, opt){
+    opt = opt || {}; if(i<0 || i>6) return;
+    root.classList.add('is-used');
+    var from = camX; cur = i; seen[i] = true; camX = camF[i];
+    clearTimeout(selT); hudHide(); worldEl.classList.remove('is-marks');
+    var dist = Math.abs(camX - from), dur = MOVE ? Math.max(420, Math.min(1100, 420 + dist*.22)) : 0;
+    [cam,farEl,midEl,thumb].forEach(function(el){ el.style.setProperty('--dur', dur+'ms'); });
+    paint(); place(!MOVE);
+    thumb.classList.remove('is-drag');
+    if(MOVE) selT = setTimeout(hudShow, dist < 4 ? 60 : dur*.82); else hudShow();
+  }
+
+  /* ===================== ovládání ===================== */
+  function bindTap(el, fn){   // tap = puštění bez tažení (kvůli posouvání krajiny), click jen pro klávesnici a čtečky
+    var last = 0, sx = 0, sy = 0, st = 0, armed = false;
+    el.addEventListener('pointerdown', function(e){ if(e.button > 0) return; armed = true; sx = e.clientX; sy = e.clientY; st = Date.now(); });
+    el.addEventListener('pointerup', function(e){ if(!armed) return; armed = false; if(Math.abs(e.clientX-sx) < 8 && Math.abs(e.clientY-sy) < 8 && Date.now()-st < 600){ last = Date.now(); fn(e); } });
+    el.addEventListener('pointercancel', function(){ armed = false; });
+    el.addEventListener('click', function(e){ e.preventDefault(); if(Date.now() - last > 600) fn(e); });
+  }
+  bindTap(cam, function(e){ var t=e.target.closest('[data-go]'); if(t){ var i=+t.getAttribute('data-go'); if(i!==cur || !hudOpen) select(i); } });
+  bindTap(stopsEl, function(e){ var t=e.target.closest('[data-go]'); if(t) select(+t.getAttribute('data-go')); else if(e.clientX){ select(nearest(e.clientX - rail.getBoundingClientRect().left)); } });
+  [].slice.call(root.querySelectorAll('[data-edge]')).forEach(function(b){ bindTap(b, function(){ var d=+b.getAttribute('data-edge'), n=cur;
+    if(d>0){ while(n<6 && camF[n] <= camX+4) n++; } else { while(n>0 && camF[n] >= camX-4) n--; } select(n); }); });
+  stage.addEventListener('scroll', function(){ stage.scrollLeft = 0; stage.scrollTop = 0; });
+
+  // tažení krajiny: gumový odpor na krajích, po puštění dosedne na zastávku (setrvačnost nejvýš o jednu dál)
+  var dragging=false, moved=false, decided=false, sx=0, sy=0, sc=0, lastX=0, lastT=0, vel=0, base=0;
+  function rubber(v){ return v < 0 ? v*.3 : (v > Gm.maxX ? Gm.maxX + (v-Gm.maxX)*.3 : v); }
+  stage.addEventListener('pointerdown', function(e){ if(e.button>0 || e.target.closest('.dp-edge')) return; dragging=true; moved=false; decided=false; sx=lastX=e.clientX; sy=e.clientY; sc=camX; lastT=performance.now(); vel=0; base=cur; });
+  stage.addEventListener('pointermove', function(e){ if(!dragging) return; var dx=e.clientX-sx, dy=e.clientY-sy;
+    if(!decided){ if(Math.abs(dx)<6 && Math.abs(dy)<6) return; decided=true; if(Math.abs(dy)>Math.abs(dx)){ dragging=false; return; } moved=true; stage.classList.add('is-drag'); try{ stage.setPointerCapture(e.pointerId); }catch(_){} hudHide(); worldEl.classList.remove('is-marks'); clearTimeout(selT); }
+    var now=performance.now(); vel = .75*vel + .25*((e.clientX-lastX)/Math.max(1,now-lastT)); lastX=e.clientX; lastT=now;
+    camX = rubber(sc-dx); place(true); });
+  /* kam dosednout po puštění: jako listování, stačí kousek tahu nebo švih a přijede další zastávka ve směru pohybu */
+  function snapTo(sc0, c, fwdV){
+    var tol = Gm.SW*.15, d = c - sc0, b = nearest(railFromCam(sc0)), i;
+    if(Math.abs(d) < 24 && Math.abs(fwdV) < .35) return nearest(railFromCam(c));
+    if(d > 0 || (Math.abs(d) < 24 && fwdV > 0)){ for(i=0;i<6;i++) if(camF[i] >= c - tol) break; return Math.min(6, Math.max(i, b+1)); }
+    for(i=6;i>0;i--) if(camF[i] <= c + tol) break; return Math.max(0, Math.min(i, b-1));
+  }
+  function endDrag(){ if(!dragging) return; dragging=false; stage.classList.remove('is-drag'); if(!moved) return;
+    select(snapTo(sc, Math.max(0, Math.min(Gm.maxX, camX)), -vel), {drag:true}); }
+  stage.addEventListener('pointerup', endDrag); stage.addEventListener('pointercancel', endDrag);
+  var wheelT=0, wsc=null; stage.addEventListener('wheel', function(e){ if(Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return; e.preventDefault(); hudHide(); worldEl.classList.remove('is-marks'); clearTimeout(selT);
+    if(wsc === null) wsc = camF[cur];
+    camX = Math.max(0, Math.min(Gm.maxX, camX + e.deltaX)); place(true); clearTimeout(wheelT); wheelT = setTimeout(function(){ var s0=wsc; wsc=null; select(snapTo(s0, camX, 0)); }, 140); }, {passive:false});
+
+  // posuvník: chytit zobáček a šoupnout, krajina jede s ním
+  var thumbDrag=false, tOff=0, tLast=0, tVel=0, tLT=0;
+  thumb.addEventListener('pointerdown', function(e){ if(e.button>0) return; e.preventDefault(); thumbDrag=true; thumb.classList.add('is-drag'); try{ thumb.setPointerCapture(e.pointerId); }catch(_){}
+    var r=rail.getBoundingClientRect(); tOff = (e.clientX - r.left) - railFromCam(camX); tLast=e.clientX; tLT=performance.now(); tVel=0; hudHide(); worldEl.classList.remove('is-marks'); clearTimeout(selT); });
+  thumb.addEventListener('pointermove', function(e){ if(!thumbDrag) return; var r=rail.getBoundingClientRect(), raw=e.clientX - r.left - tOff, lo=stopX[0], hi=stopX[6];
+    var rx = raw < lo ? lo + (raw-lo)*.3 : (raw > hi ? hi + (raw-hi)*.3 : raw);
+    var now=performance.now(); tVel=.75*tVel+.25*((e.clientX-tLast)/Math.max(1,now-tLT)); tLast=e.clientX; tLT=now;
+    setThumb(rx, nearest(rx)); camX = camFromRail(Math.max(lo, Math.min(hi, rx))); place(true); });
+  function endThumb(){ if(!thumbDrag) return; thumbDrag=false; var rx = railFromCam(camX), here=nearest(rx), proj=nearest(rx + tVel*90); select(Math.max(here-1, Math.min(here+1, proj)), {drag:true}); }
+  thumb.addEventListener('pointerup', endThumb); thumb.addEventListener('pointercancel', endThumb);
+  thumb.addEventListener('keydown', function(e){ var k=e.key, n=cur;
+    if(k==='ArrowRight'||k==='ArrowUp') n=Math.min(6,cur+1); else if(k==='ArrowLeft'||k==='ArrowDown') n=Math.max(0,cur-1); else if(k==='Home') n=0; else if(k==='End') n=6; else return;
+    e.preventDefault(); if(n!==cur) select(n); });
+
+  // (i)
+  var ov=$('[data-ov]'), openB=$('[data-open]'), closeB=$('[data-close]');
+  function openP(){ ov.hidden=false; openB.setAttribute('aria-expanded','true'); closeB.focus({preventScroll:true}); }
+  function closeP(){ if(ov.hidden) return; ov.hidden=true; openB.setAttribute('aria-expanded','false'); openB.focus({preventScroll:true}); }
+  bindTap(openB, function(){ ov.hidden ? openP() : closeP(); });
+  bindTap(closeB, closeP);
+  ov.addEventListener('pointerdown', function(e){ if(e.target===ov) closeP(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeP(); if(e.key==='Tab' && !ov.hidden){ e.preventDefault(); closeB.focus(); } });
+
+  /* ===================== vyplnění rámu a přepočet ===================== */
+  function layout(){ if(!build()) return; paint(); place(true); camX = camF[cur]; place(true); if(!root.classList.contains('is-pre')){ hudOpen=false; hudShow(); } }
+  var rT=0, lastW=0, lastH=0;
+  function relayout(){ clearTimeout(rT); rT=setTimeout(function(){ var w=root.clientWidth, h=root.clientHeight; if(w===lastW && h===lastH) return; lastW=w; lastH=h; layout(); }, 90); }
+  window.addEventListener('resize', relayout);
+  /* nástup čeká na písmo: přeměření po načtení Poppins překresluje scénu a nesmí spadnout doprostřed animace */
+  var fontsOk = !(document.fonts && document.fonts.ready), wantIn = false;
+  function fontsDone(){ if(fontsOk) return; fontsOk = true; lastW=root.clientWidth; lastH=root.clientHeight; layout(); if(wantIn) entrance(); }
+  if(!fontsOk){ document.fonts.ready.then(fontsDone); setTimeout(fontsDone, 1500); }
+  try{ new ResizeObserver(relayout).observe(root); }catch(_){}
+  lastW=root.clientWidth; lastH=root.clientHeight; layout();
+  if(/[?&]info/.test(Q)) openP();
+
+  /* ===================== nástup: budovy vyrostou, drony přiletí, roletka se rozbalí, kamera jednou popojede ===================== */
+  function entrance(){
+    if(!root.classList.contains('is-pre')) return;
+    if(!fontsOk){ wantIn = true; return; }
+    var x0=camX/Gm.u, vw=Gm.vw;
+    [].slice.call(cam.querySelectorAll('.dp-b')).forEach(function(g){ var x=+g.getAttribute('data-x'); g.style.setProperty('--d', Math.round(Math.max(0, Math.min(620, (x-x0)/vw*520)))+'ms'); });
+    sprs.forEach(function(g){ var x=+g.getAttribute('data-x'); g.style.setProperty('--d', Math.round(560 + Math.max(0, Math.min(400, (x-x0)/vw*300)))+'ms'); });
+    root.offsetWidth;
+    root.classList.remove('is-pre'); root.classList.add('is-live');
+    setTimeout(function(){ if(!hudOpen && !dragging && !thumbDrag) hudShow(); }, 1150);
+    setTimeout(function(){ if(dragging || thumbDrag || root.classList.contains('is-used')) return; var c0=camX; if(c0 > Gm.maxX-40) return;
+      hudHide(); camX = c0 + Math.min(mobile ? 34 : 56, (camF[Math.min(6,cur+1)]-c0)*.3); [cam,farEl,midEl,thumb].forEach(function(el){ el.style.setProperty('--dur','420ms'); }); place(false);
+      setTimeout(function(){ if(root.classList.contains('is-used')) return; camX=c0; [cam,farEl,midEl,thumb].forEach(function(el){ el.style.setProperty('--dur','620ms'); }); place(false); setTimeout(function(){ if(!hudOpen && !root.classList.contains('is-used')) hudShow(); }, 560); }, 460); }, 2300);
+  }
+  if(MOVE && HAS_IO){
+    var played=false, io=new IntersectionObserver(function(es){ es.forEach(function(en){ root.classList.toggle('is-off', !en.isIntersecting); if(en.isIntersecting && en.intersectionRatio >= .4 && !played){ played=true; entrance(); } }); }, {threshold:[0,.4]});
+    io.observe(root);
+    setTimeout(function(){ if(!played){ played=true; entrance(); } }, 6000);
+  } else if(MOVE){ root.classList.add('is-live'); }
+
+  window.__dronyPravidla = function(){ return {cur:cur, key:STOPS[cur].k, camX:Math.round(camX), mobile:mobile, hud:hudOpen, live:root.classList.contains('is-live'), pre:root.classList.contains('is-pre')}; };
+})();
+</script>
+</body>
+</html>
