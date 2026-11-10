@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Allwyn ParaRestart – pomůcky</title>
+<meta name="robots" content="noindex">
+<!-- ============================================================
+     POMŮCKY (3D KOLOTOČ KARET) — speciál Allwyn „Restart po úrazu nebo vážné nemoci“ (ParaRestart)
+     ============================================================
+     Umístění v repu:  cc-embed/allwyn-restart-pomucky/index.html  +  obrázky v cc-embed/allwyn-restart-pomucky/img/
+     Vložení:          komponenta Iframe ve speciálu, celý tag <iframe src="…" title="…">
+     Místo v textu:    blok „Jak technika vrací soběstačnost“, za „…přesednout z postele na vozík.“
+     Formát:           3D kolotoč bílých karet. Karta nese všechno: barevnou hlavičku kategorie,
+                       ilustraci, název, jak pomůcka funguje, cenu a kdo ji hradí. Listuje se tahem,
+                       šipkami, klávesami ← →, klepnutím na boční kartu; štítky kategorií nahoře skočí
+                       na první kartu kategorie. Poznámka k cenám a zdroje pod „i“.
+     Rám:              karta se počítá z výšky plochy (na výšku 1 karta + okraje sousedních, na šířku
+                       3 karty); text na každé kartě se zmenšuje vlastní smyčkou --cs, při nouzi se zmenší obrázek.
+     Texty a karty:    objekt CFG ve skriptu. Nová karta = nový blok v CFG.cards + obrázek do img/.
+                       Hodnoty v [hranatých závorkách] se zobrazí šedě jako chybějící údaj.
+     Data:             ceny a úhrady viz CFG.info; chybí ceny prkna, zvedáku, schodolezu, elektrostimulace,
+                       úhrada prkna a elektrostimulace, limit pojišťovny u vozíku.
+     Ilustrace:        3D clay, vygenerováno (Nano Banana 2), 640 × 794 px JPG.
+     Pohyb:            vstup – karty se jednou rozjedou ze středu (IntersectionObserver, pojistka 6 s,
+                       reduced-motion bez animace); jinak jen přechod při listování.
+     Historie:         10. 11. 2026 první ostrá verze podle mockupu v7
+     ============================================================ -->
+<style>
+  /* sdílené fonty repa cc-embed (složka /fonts v kořeni), Poppins 400/500/600/700 */
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-ext-500.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-500.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-ext-600.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-600.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-ext-700.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-700.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;}
+</style>
+</head>
+<body>
+
+<!-- 1) sdílený základ .cc-embed (verbatim z assets/cc-embed-base.html) -->
+<style>
+.cc-embed{
+  /* --- barvy --- */
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  /* --- shape --- */
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  /* --- font --- */
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}      /* prvek do krajů (fotka, mapa) */
+.cc-embed--bare{background:none;border:0;padding:0;} /* bez rámečku */
+/* --- typo --- */
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{margin:12px 0 0;font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);
+  letter-spacing:.02em;text-transform:uppercase;}
+.cc-embed .cc-num{font-family:var(--cc-display);font-weight:700;
+  font-size:clamp(22px,4vw,32px);color:var(--cc-blue);font-variant-numeric:tabular-nums;}
+.cc-embed a{color:var(--cc-blue);}
+/* --- UI --- */
+.cc-embed .cc-btn{
+  display:inline-block;padding:10px 20px;
+  border:1px solid var(--cc-blue);border-radius:var(--cc-radius);
+  background:var(--cc-blue);color:#fff;text-decoration:none;
+  font:700 18px/26px var(--cc-display);cursor:pointer;
+  transition:background .18s,color .18s;}
+.cc-embed .cc-btn:hover{background:var(--cc-blue-dark);border-color:var(--cc-blue-dark);}
+.cc-embed .cc-btn--ghost{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-btn--ghost:hover{background:var(--cc-blue);color:#fff;}
+.cc-embed .cc-btn--sm{padding:7px 14px;font-size:15px;line-height:22px;}
+.cc-embed .cc-btn[aria-pressed="true"]{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-card{background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);padding:14px 16px;}
+.cc-embed .cc-badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  background:var(--cc-blue);color:#fff;font:700 12px/18px var(--cc-ui);}
+.cc-embed .cc-badge--red{background:var(--cc-red);}
+.cc-embed .cc-badge--soft{background:#eaf3fd;color:var(--cc-blue-dark);}
+.cc-embed input,.cc-embed select,.cc-embed textarea{
+  font:400 16px/24px var(--cc-ui);color:var(--cc-ink);
+  padding:9px 12px;background:#fff;border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);}
+.cc-embed input[type=range]{padding:0;border:0;background:none;accent-color:var(--cc-blue);width:100%;}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed table{width:100%;border-collapse:collapse;font:400 15px/1.4 var(--cc-ui);}
+.cc-embed th{text-align:left;font-weight:700;color:var(--cc-muted);
+  text-transform:uppercase;font-size:12px;letter-spacing:.05em;padding:8px 10px;}
+.cc-embed td{padding:10px;border-top:1px solid var(--cc-line);}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-grid{display:grid;gap:var(--cc-gap);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.cc-embed .cc-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--cc-gap);}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+
+<!-- 2) prvek -->
+<div class="cc-embed cc-embed--bare cc-rp" data-cc-rp>
+  <div class="cc-sr" data-sr></div>
+  <div class="cc-rp__head">
+    <h3 class="cc-rp__title" data-title></h3>
+    <button type="button" class="cc-rp__info" data-info aria-expanded="false" aria-controls="cc-rp-src" aria-label="Poznámka k cenám a zdroje">i</button>
+  </div>
+  <div class="cc-rp__cats" data-cats role="group" aria-label="Kategorie pomůcek"></div>
+  <div class="cc-rp__stage" data-stage tabindex="0" role="region" aria-roledescription="kolotoč" aria-label="Pomůcky, listujte šipkami doleva a doprava">
+    <div class="cc-rp__deck" data-deck aria-live="polite"></div>
+    <button type="button" class="cc-rp__arrow cc-rp__arrow--prev" data-prev></button>
+    <button type="button" class="cc-rp__arrow cc-rp__arrow--next" data-next></button>
+  </div>
+  <div class="cc-rp__src" id="cc-rp-src" role="dialog" aria-modal="true" aria-label="Poznámka k cenám a zdroje" hidden>
+    <button type="button" class="cc-rp__close" data-close aria-label="Zavřít">×</button>
+    <p class="cc-rp__srclabel" data-srclabel></p>
+    <div class="cc-rp__srcbody" data-srcbody></div>
+  </div>
+</div>
+
+<style>
+.cc-embed.cc-rp{
+  --ink:#14181a; --tq:#27e2cc; --muted:#6b6f70; --line:#e4e4e1; --soft:#f4f4f2; --clay:#e6e2d7; --sc:1;
+  box-sizing:border-box;position:relative;height:100vh;margin:0;padding:12px 6px 10px;overflow:hidden;
+  display:flex;flex-direction:column;gap:8px;
+  font-family:var(--cc-display);color:var(--ink);-webkit-font-smoothing:antialiased;
+}
+.cc-rp .cc-rp__head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.cc-rp .cc-rp__title{margin:0;font:700 max(17px,calc(20px*var(--sc)))/1.25 var(--cc-display);color:var(--ink);text-wrap:balance;}
+.cc-rp .cc-rp__info{flex:0 0 26px;width:26px;height:26px;margin-top:1px;padding:0;border:1.5px solid #b9bbb8;border-radius:50%;background:#fff;
+  color:var(--muted);font:700 12px/1 var(--cc-display);cursor:pointer;position:relative;touch-action:manipulation;}
+.cc-rp .cc-rp__info::after{content:"";position:absolute;inset:-8px;border-radius:50%;}
+.cc-rp .cc-rp__info[aria-expanded="true"],.cc-rp .cc-rp__info:hover{border-color:var(--ink);color:var(--ink);}
+.cc-rp .cc-rp__cats{display:flex;flex-wrap:wrap;gap:6px;}
+.cc-rp .cc-rp__cat{display:flex;align-items:center;gap:6px;margin:0;padding:6px 10px;border:1.5px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);
+  font:600 max(11px,calc(11.5px*var(--sc)))/1.1 var(--cc-display);cursor:pointer;touch-action:manipulation;}
+.cc-rp .cc-rp__cat i{width:10px;height:10px;border-radius:3px;box-shadow:0 0 0 1px rgba(20,24,26,.2);font-style:normal;}
+.cc-rp .cc-rp__cat[aria-pressed="true"]{border-color:var(--ink);}
+.cc-rp .cc-rp__stage{flex:1 1 auto;min-height:0;position:relative;perspective:1100px;touch-action:pan-y;outline:none;user-select:none;-webkit-user-select:none;}
+.cc-rp .cc-rp__deck{position:absolute;inset:0;}
+/* karta: všechno na kartě – hlavička kategorie, obrázek, název, popis, cena, kdo hradí */
+.cc-rp .cc-rp__card{position:absolute;left:50%;top:50%;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden;
+  width:var(--cw);height:var(--ch);margin:calc(var(--ch)/-2) 0 0 calc(var(--cw)/-2);
+  background:#fff;border-radius:16px;cursor:default;--cs:1;
+  box-shadow:0 18px 30px -14px rgba(20,24,26,.45),0 2px 5px rgba(20,24,26,.12);
+  transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .4s,filter .4s;}
+.cc-rp .cc-rp__band{flex:0 0 auto;padding:9px 14px;font:700 max(9.5px,calc(10px*var(--cs)))/1.2 var(--cc-display);letter-spacing:.1em;text-transform:uppercase;}
+.cc-rp .cc-rp__img{flex:0 0 auto;height:var(--ih);background:var(--clay) center 45%/cover no-repeat;}
+.cc-rp .cc-rp__body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;padding:11px 14px 13px;}
+.cc-rp .cc-rp__card .cc-rp__name{margin:0;font:700 max(15px,calc(18px*var(--cs)))/1.15 var(--cc-display);}
+.cc-rp .cc-rp__card .cc-rp__text{margin:5px 0 10px;font:400 max(12px,calc(12.5px*var(--cs)))/1.45 var(--cc-display);color:#3b3f40;}
+.cc-rp .cc-rp__spec{margin-top:auto;display:flex;flex-direction:column;gap:7px;padding:9px 11px;border-radius:10px;background:var(--soft);}
+.cc-rp .cc-rp__row{display:flex;flex-direction:column;gap:1px;}
+.cc-rp .cc-rp__lab{font:700 9px/1.2 var(--cc-display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.cc-rp .cc-rp__price{font:700 max(14px,calc(16.5px*var(--cs)))/1.15 var(--cc-display);}
+.cc-rp .cc-rp__payer{font:500 max(11px,calc(11.5px*var(--cs)))/1.35 var(--cc-display);}
+.cc-rp .is-ph{font-style:italic;font-weight:500;color:var(--muted);}
+.cc-rp .cc-rp__arrow{position:absolute;top:50%;z-index:200;width:36px;height:36px;margin-top:-18px;padding:0;border:0;border-radius:50%;
+  background:rgba(255,255,255,.96);box-shadow:0 2px 8px rgba(0,0,0,.18);color:var(--ink);font:400 20px/1 var(--cc-display);cursor:pointer;touch-action:manipulation;}
+.cc-rp .cc-rp__arrow--prev{left:2px;} .cc-rp .cc-rp__arrow--next{right:2px;}
+.cc-rp .cc-rp__arrow[disabled]{opacity:0;pointer-events:none;}
+.cc-rp .cc-rp__cat:focus,.cc-rp .cc-rp__arrow:focus,.cc-rp .cc-rp__info:focus{outline:none;}
+.cc-rp.is-kbd .cc-rp__cat:focus-visible,.cc-rp.is-kbd .cc-rp__arrow:focus-visible,.cc-rp.is-kbd .cc-rp__info:focus-visible,.cc-rp.is-kbd .cc-rp__close:focus-visible{outline:3px solid var(--ink);outline-offset:2px;}
+.cc-rp.is-kbd .cc-rp__stage:focus-visible .cc-rp__card.is-active{outline:3px solid var(--ink);outline-offset:3px;}
+/* vstup: karty se rozjedou ze středu */
+.cc-rp.is-pre .cc-rp__card{opacity:0 !important;transform:translateY(16px) scale(.92) !important;}
+.cc-rp.is-in .cc-rp__card{transition:transform .7s cubic-bezier(.2,.8,.2,1) calc(var(--i)*60ms),opacity .5s calc(var(--i)*60ms),filter .4s;}
+/* zdroje */
+.cc-rp .cc-rp__src{position:absolute;inset:0;z-index:300;display:flex;flex-direction:column;padding:18px 18px 16px;background:var(--ink);color:#fff;border-radius:14px;}
+.cc-rp .cc-rp__src[hidden]{display:none;}
+.cc-rp .cc-rp__close:focus{outline:none;}
+.cc-rp .cc-rp__close{position:absolute;top:10px;right:10px;width:34px;height:34px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font:400 22px/1 var(--cc-display);cursor:pointer;}
+.cc-rp .cc-rp__src .cc-rp__srclabel{margin:0 0 10px;font:600 11px/1.2 var(--cc-display);letter-spacing:.08em;text-transform:uppercase;color:var(--tq);}
+.cc-rp .cc-rp__srcbody{flex:1 1 auto;min-height:0;overflow-y:auto;padding-right:30px;}
+.cc-rp .cc-rp__srcbody p{margin:0 0 12px;font:400 13.5px/1.45 var(--cc-display);color:#d9dcda;}
+.cc-rp .cc-rp__srcbody b{color:#fff;font-weight:600;}
+.cc-rp .cc-rp__srcbody a{color:var(--tq);}
+@media (min-aspect-ratio:1/1){
+  .cc-embed.cc-rp{padding:14px 10px 12px;gap:10px;}
+  .cc-rp .cc-rp__head{align-items:center;}
+  .cc-rp .cc-rp__title{font-size:max(18px,calc(24px*var(--sc)));}
+  .cc-rp .cc-rp__cat{font-size:max(11px,calc(12.5px*var(--sc)));padding:7px 12px;}
+  .cc-rp .cc-rp__arrow{width:40px;height:40px;margin-top:-20px;}
+}
+@media (prefers-reduced-motion:reduce){.cc-rp .cc-rp__card{transition:none !important;}}
+</style>
+
+<script>
+/* =====================================================================
+   CFG – texty a karty. Měň jen hodnoty.
+   PŘIDÁNÍ KARTY: zkopíruj jeden blok { … } v cards, změň texty a nahraj
+   obrázek do složky img/ (poměr asi 4 : 5, šířka 640 px, JPG). Pořadí
+   v poli = pořadí karet v kolotoči. cat = klíč z categories.
+   Hodnota začínající „[“ se zobrazí jako šedý zástupný text (chybí údaj).
+   Text pro odečítače obrazovky se skládá z karet sám.
+   Typografie: české uvozovky „…“, pomlčka –, nedělitelná mezera  .
+   ===================================================================== */
+var CFG = {
+  title: 'Co vrací soběstačnost',
+  labelPrice: 'Cena',
+  labelPayer: 'Kdo hradí',
+  prev: 'Předchozí pomůcka',
+  next: 'Další pomůcka',
+  categories: {
+    part: { name: 'Částečná hybnost',    color: '#27e2cc', ink: '#07302c' },
+    full: { name: 'Úplné ochrnutí',      color: '#14181a', ink: '#ffffff' },
+    limb: { name: 'Chybějící končetina', color: '#efe9dc', ink: '#14181a' }
+  },
+  cards: [
+    { cat: 'part', img: 'img/elektrostimulace.jpg', name: 'Elektrostimulace',
+      text: 'Malý přístroj pod kolenem posílá impulzy do svalu a při kroku zvedne špičku chodidla. Člověk nezakopává a zvládne chůzi s holemi.',
+      price: '[doplnit cenu]', payer: '[doplnit]' },
+    { cat: 'part', img: 'img/exoskelet.jpg', name: 'Exoskelet',
+      text: 'Motorizovaná konstrukce na nohy. Motory v kyčlích a kolenou vedou pohyb a pomáhají nacvičit přirozený krok.',
+      price: 'kolem 1,6 milionu Kč', payer: 'Používají ho hlavně rehabilitační centra, úhradu pro domácí použití [ověřit]' },
+    { cat: 'full', img: 'img/vozik.jpg', name: 'Vozík na míru',
+      text: 'Lehký aktivní vozík postavený přesně na tělo. Čím je lehčí, tím víc sil zbude na zbytek dne.',
+      price: 'například 109 000 Kč', payer: 'Zdravotní pojišťovna na poukaz do limitu, zbytek doplácí člověk [doplnit limit]' },
+    { cat: 'full', img: 'img/prkno.jpg', name: 'Přesedací prkno',
+      text: 'Hladké prkno jako most mezi postelí a vozíkem. Člověk po něm přesedne sám, bez pomoci druhého.',
+      price: '[doplnit cenu]', payer: '[doplnit]' },
+    { cat: 'full', img: 'img/zvedak.jpg', name: 'Stropní zvedák',
+      text: 'Kolejnice ve stropě a motor se závěsem. Přenese člověka z postele do koupelny bez zvedání.',
+      price: '[doplnit cenu]', payer: 'Úřad práce přispívá až 90 % ceny, nejvýš 350 000 Kč' },
+    { cat: 'full', img: 'img/schodolez.jpg', name: 'Schodolez',
+      text: 'Elektrický pomocník, který vyveze vozík po schodech tam, kde chybí výtah.',
+      price: '[doplnit cenu]', payer: 'Úřad práce přispívá až 90 % ceny, nejvýš 350 000 Kč' },
+    { cat: 'limb', img: 'img/bionicka-ruka.jpg', name: 'Bionická ruka',
+      text: 'Ovládá se jemnými svalovými impulzy v předloktí. Jonáš Kešnar s ní krájí, zapíná pásek a v tramvaji drží madlo.',
+      price: 'kolem 750 000 Kč', payer: 'Pojišťovna jen výjimečně, když chybí obě ruce nebo druhá nefunguje' }
+  ],
+  infoLabel: 'Ceny a úhrady',
+  info: [
+    'Ceny jsou orientační a liší se podle modelu a výrobce. O úhradě rozhoduje zdravotní pojišťovna nebo úřad práce vždy individuálně.',
+    '<b>Příspěvek na zvláštní pomůcku:</b> Ministerstvo práce a sociálních věcí, 2026.',
+    '<b>Vozík:</b> konkrétní model Quickie Nitrum, veřejná sbírka na Donio.cz.',
+    '<b>Exoskelet:</b> ReWalk, kolem 70 000 dolarů (New Mobility, 2014).',
+    '<b>Bionická ruka:</b> text speciálu; úhrada podle Novinky.cz (2017).'
+  ]
+};
+</script>
+
+<script>
+(function(){
+  var root = document.querySelector('[data-cc-rp]');
+  if(!root || root.dataset.ccInit) return; root.dataset.ccInit = '1';
+  var stage = root.querySelector('[data-stage]'), deck = root.querySelector('[data-deck]'), catsBox = root.querySelector('[data-cats]');
+  var prev = root.querySelector('[data-prev]'), next = root.querySelector('[data-next]');
+  var C = CFG.cards, a = 0, cards = [];
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function val(s){ s = String(s); return s.charAt(0) === '[' ? '<span class="is-ph">'+esc(s)+'</span>' : esc(s).replace(/\[([^\]]+)\]/g, '<span class="is-ph">[$1]</span>'); }
+
+  root.querySelector('[data-title]').textContent = CFG.title;
+  prev.innerHTML = '‹'; prev.setAttribute('aria-label', CFG.prev);
+  next.innerHTML = '›'; next.setAttribute('aria-label', CFG.next);
+  root.querySelector('[data-srclabel]').textContent = CFG.infoLabel;
+  root.querySelector('[data-srcbody]').innerHTML = CFG.info.map(function(s){ return '<p>'+s+'</p>'; }).join('');
+  root.querySelector('[data-sr]').innerHTML = '<p>Kompenzační pomůcky po úrazu nebo nemoci.</p><ul>' + C.map(function(c){
+    return '<li>'+esc(c.name)+' ('+esc(CFG.categories[c.cat].name)+'). '+esc(c.text)+' '+CFG.labelPrice+': '+esc(c.price)+'. '+CFG.labelPayer+': '+esc(c.payer)+'.</li>';
+  }).join('') + '</ul>';
+
+  /* kategorie */
+  Object.keys(CFG.categories).forEach(function(k){
+    var cat = CFG.categories[k]; if(!C.some(function(c){ return c.cat === k; })) return;
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'cc-rp__cat'; b.dataset.k = k;
+    b.innerHTML = '<i style="background:'+cat.color+'"></i>'+esc(cat.name);
+    bindTap(b, function(){ go(C.findIndex(function(c){ return c.cat === k; })); });
+    catsBox.appendChild(b);
+  });
+  /* karty */
+  C.forEach(function(c, i){
+    var cat = CFG.categories[c.cat], d = document.createElement('div');
+    d.className = 'cc-rp__card'; d.style.setProperty('--i', i);
+    d.setAttribute('role','group'); d.setAttribute('aria-roledescription','karta'); d.setAttribute('aria-label', (i+1)+' z '+C.length+': '+c.name);
+    d.innerHTML = '<div class="cc-rp__band" style="background:'+cat.color+';color:'+cat.ink+'">'+esc(cat.name)+'</div>'
+      + '<div class="cc-rp__img" style="background-image:url(\''+c.img+'\')" role="presentation"></div>'
+      + '<div class="cc-rp__body"><p class="cc-rp__name">'+esc(c.name)+'</p><p class="cc-rp__text">'+esc(c.text)+'</p>'
+      + '<div class="cc-rp__spec"><div class="cc-rp__row"><span class="cc-rp__lab">'+CFG.labelPrice+'</span><span class="cc-rp__price">'+val(c.price)+'</span></div>'
+      + '<div class="cc-rp__row"><span class="cc-rp__lab">'+CFG.labelPayer+'</span><span class="cc-rp__payer">'+val(c.payer)+'</span></div></div></div>';
+    d.addEventListener('click', function(){ if(i !== a) go(i); });
+    deck.appendChild(d); cards.push(d);
+  });
+
+  function lay(){
+    var land = root.clientWidth > root.clientHeight, cw = parseFloat(root.style.getPropertyValue('--cw')) || 200;
+    var step = cw * (land ? .78 : .62), depth = cw * .55;
+    cards.forEach(function(c, i){
+      var d = i - a, ad = Math.abs(d);
+      c.style.transform = 'translateX('+(d*step).toFixed(1)+'px) translateZ('+(-ad*depth).toFixed(1)+'px) rotateY('+(-Math.sign(d)*Math.min(ad,1)*38)+'deg)';
+      c.style.zIndex = 100 - ad; c.style.opacity = ad > (land ? 2 : 1) ? 0 : 1; c.style.filter = ad ? 'brightness(.92)' : 'none';
+      c.classList.toggle('is-active', ad === 0);
+      c.setAttribute('aria-hidden', ad === 0 ? 'false' : 'true');
+    });
+    prev.disabled = a === 0; next.disabled = a === C.length - 1;
+    [].forEach.call(catsBox.children, function(b){ b.setAttribute('aria-pressed', b.dataset.k === C[a].cat ? 'true' : 'false'); });
+  }
+  function go(i){ a = Math.max(0, Math.min(C.length-1, i)); lay(); }
+
+  function bindTap(node, fn){
+    if(window.PointerEvent) node.addEventListener('pointerdown', function(e){ if(e.button > 0) return; e.preventDefault(); e.stopPropagation(); node.focus({preventScroll:true}); fn(); });
+    else { node.addEventListener('touchstart', function(e){ e.preventDefault(); fn(); }, {passive:false}); node.addEventListener('mousedown', fn); }
+    node.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); fn(); } });
+  }
+  bindTap(prev, function(){ go(a-1); }); bindTap(next, function(){ go(a+1); });
+  /* tah prstem / myší do strany */
+  var x0 = null, moved = false;
+  stage.addEventListener('pointerdown', function(e){ x0 = e.clientX; moved = false; });
+  stage.addEventListener('pointermove', function(e){ if(x0 !== null && Math.abs(e.clientX - x0) > 8) moved = true; });
+  stage.addEventListener('pointerup', function(e){ if(x0 === null) return; var dx = e.clientX - x0; x0 = null; if(Math.abs(dx) > 30) go(a + (dx < 0 ? 1 : -1)); });
+  stage.addEventListener('click', function(e){ if(moved){ e.stopPropagation(); moved = false; } }, true);
+  stage.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight'){ e.preventDefault(); go(a+1); } if(e.key === 'ArrowLeft'){ e.preventDefault(); go(a-1); }
+    if(e.key === 'Home'){ e.preventDefault(); go(0); } if(e.key === 'End'){ e.preventDefault(); go(C.length-1); }
+  });
+
+  /* zdroje */
+  var info = root.querySelector('[data-info]'), src = root.querySelector('#cc-rp-src'), close = root.querySelector('[data-close]');
+  function openSrc(){ src.hidden = false; info.setAttribute('aria-expanded','true'); close.focus({preventScroll:true}); }
+  function closeSrc(back){ if(src.hidden) return; src.hidden = true; info.setAttribute('aria-expanded','false'); if(back) info.focus({preventScroll:true}); }
+  bindTap(info, function(){ src.hidden ? openSrc() : closeSrc(true); });
+  bindTap(close, function(){ closeSrc(true); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeSrc(true); if(e.key === 'Tab') root.classList.add('is-kbd'); });
+  document.addEventListener('pointerdown', function(e){ root.classList.remove('is-kbd'); if(!src.hidden && !src.contains(e.target) && e.target !== info) closeSrc(false); }, true);
+
+  /* velikost karty z plochy + zmenšení textu, aby se vešel na každou kartu */
+  function fit(){
+    var sc = 1; root.style.setProperty('--sc', 1);
+    for(var k=0;k<10 && root.scrollHeight > root.clientHeight + 1;k++){ sc *= .94; root.style.setProperty('--sc', sc.toFixed(3)); }
+    var land = root.clientWidth > root.clientHeight;
+    var sw = stage.clientWidth, sh = stage.clientHeight - 8;
+    var cw = Math.min(sh / 1.62, sw * (land ? .36 : .74), 300), ch = Math.min(sh, cw * 1.9);
+    root.style.setProperty('--cw', cw.toFixed(1)+'px'); root.style.setProperty('--ch', ch.toFixed(1)+'px');
+    root.style.setProperty('--ih', (ch * .36).toFixed(1)+'px');
+    cards.forEach(function(c){
+      var body = c.querySelector('.cc-rp__body'), cs = 1; c.style.setProperty('--cs', 1);
+      for(var k=0;k<10 && body.scrollHeight > body.clientHeight + 1;k++){ cs *= .94; c.style.setProperty('--cs', cs.toFixed(3)); }
+      var im = c.querySelector('.cc-rp__img'), r = .36; im.style.height = '';
+      while(body.scrollHeight > body.clientHeight + 1 && r > .2){ r -= .02; im.style.height = (ch * r).toFixed(1)+'px'; }
+    });
+    lay();
+  }
+  var t;
+  window.addEventListener('resize', function(){ clearTimeout(t); t = setTimeout(fit, 60); });
+  window.addEventListener('load', fit);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  if(window.ResizeObserver) new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(fit, 90); }).observe(root);
+  fit();
+
+  /* vstup: skrytý výchozí stav hned, IntersectionObserver ho jen odkryje (bez IO / reduced-motion rovnou hotové) */
+  if(!reduce && 'IntersectionObserver' in window){
+    root.classList.add('is-pre');
+    var played = false, guard;
+    var io = new IntersectionObserver(function(es){ if(es.some(function(e){ return e.isIntersecting; })) play(); }, {threshold:.25});
+    function play(){ if(played) return; played = true; io.disconnect(); clearTimeout(guard); root.classList.remove('is-pre'); root.classList.add('is-in'); setTimeout(function(){ root.classList.remove('is-in'); }, 1400); }
+    io.observe(root); guard = setTimeout(play, 6000);
+  }
+})();
+</script>
+
+</body>
+</html>
