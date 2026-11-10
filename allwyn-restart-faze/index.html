@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Allwyn ParaRestart – fáze po úrazu</title>
+<meta name="robots" content="noindex">
+<!-- ============================================================
+     FÁZE PO ÚRAZU — speciál Allwyn „Restart po úrazu nebo vážné nemoci“ (ParaRestart)
+     ============================================================
+     Umístění v repu:  cc-embed/allwyn-restart-faze/index.html
+     Vložení:          komponenta Iframe ve speciálu, celý tag <iframe src="…" title="…">
+     Místo v textu:    INTERAKTIVNÍ PRVEK „Fáze po úrazu“ (za odstavec „…až k odpuštění sobě i okolí.“)
+     Formát:           plochý graf. Výchozí stav = 4 schody „v učebnici“, tlačítko „A teď doopravdy“
+                       nakreslí čáru se smyčkami a propadem (7 zastávek, fáze z učebnice tyrkysově),
+                       „Zpět do učebnice“ vrací první stav bez animace. Klepnutí / najetí / Tab na bod
+                       ukáže kartu zastávky.
+     Rám:              pevný poměr šablony (≤619 px 150 %, 620–1023 px 85 %, ≥1024 px 73,5 %).
+                       Na výšku: nadpis / graf / karta / tlačítko. Na šířku (min-aspect-ratio 1/1):
+                       graf vlevo, karta a tlačítko vpravo. Výška karty se rezervuje podle nejdelšího
+                       textu, zmenšovací smyčka --sc hlídá, aby graf neklesl pod 40 % výšky.
+     Texty:            všechny v objektu CFG (níže ve skriptu) – draft CC, klient je upraví.
+     Data:             fáze podle psychologa Jindřicha Duška (text speciálu); nic se nepočítá.
+     Fonty:            sdílený Poppins z repa (../fonts/), neblokující, přeměření na document.fonts.ready
+     Pohyb:            kreslení čáry 2,4 s jen po kliknutí, tlačítko je během kreslení zamčené;
+                       při prefers-reduced-motion bez animace. Nic se nehýbe samo.
+     Historie:         10. 11. 2026 první ostrá verze podle mockupu v7
+     ============================================================ -->
+<style>
+  /* sdílené fonty repa cc-embed (složka /fonts v kořeni), Poppins 400/500/600/700 */
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-ext-500.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-500.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-ext-600.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-600.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-ext-700.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-700.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;}
+</style>
+</head>
+<body>
+
+<!-- 1) sdílený základ .cc-embed (verbatim z assets/cc-embed-base.html) -->
+<style>
+.cc-embed{
+  /* --- barvy --- */
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  /* --- shape --- */
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  /* --- font --- */
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}      /* prvek do krajů (fotka, mapa) */
+.cc-embed--bare{background:none;border:0;padding:0;} /* bez rámečku */
+/* --- typo --- */
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{margin:12px 0 0;font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);
+  letter-spacing:.02em;text-transform:uppercase;}
+.cc-embed .cc-num{font-family:var(--cc-display);font-weight:700;
+  font-size:clamp(22px,4vw,32px);color:var(--cc-blue);font-variant-numeric:tabular-nums;}
+.cc-embed a{color:var(--cc-blue);}
+/* --- UI --- */
+.cc-embed .cc-btn{
+  display:inline-block;padding:10px 20px;
+  border:1px solid var(--cc-blue);border-radius:var(--cc-radius);
+  background:var(--cc-blue);color:#fff;text-decoration:none;
+  font:700 18px/26px var(--cc-display);cursor:pointer;
+  transition:background .18s,color .18s;}
+.cc-embed .cc-btn:hover{background:var(--cc-blue-dark);border-color:var(--cc-blue-dark);}
+.cc-embed .cc-btn--ghost{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-btn--ghost:hover{background:var(--cc-blue);color:#fff;}
+.cc-embed .cc-btn--sm{padding:7px 14px;font-size:15px;line-height:22px;}
+.cc-embed .cc-btn[aria-pressed="true"]{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-card{background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);padding:14px 16px;}
+.cc-embed .cc-badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  background:var(--cc-blue);color:#fff;font:700 12px/18px var(--cc-ui);}
+.cc-embed .cc-badge--red{background:var(--cc-red);}
+.cc-embed .cc-badge--soft{background:#eaf3fd;color:var(--cc-blue-dark);}
+.cc-embed input,.cc-embed select,.cc-embed textarea{
+  font:400 16px/24px var(--cc-ui);color:var(--cc-ink);
+  padding:9px 12px;background:#fff;border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);}
+.cc-embed input[type=range]{padding:0;border:0;background:none;accent-color:var(--cc-blue);width:100%;}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed table{width:100%;border-collapse:collapse;font:400 15px/1.4 var(--cc-ui);}
+.cc-embed th{text-align:left;font-weight:700;color:var(--cc-muted);
+  text-transform:uppercase;font-size:12px;letter-spacing:.05em;padding:8px 10px;}
+.cc-embed td{padding:10px;border-top:1px solid var(--cc-line);}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-grid{display:grid;gap:var(--cc-gap);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.cc-embed .cc-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--cc-gap);}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+
+<!-- 2) prvek -->
+<div class="cc-embed cc-embed--bare cc-rf" data-cc-rf>
+  <p class="cc-sr" data-sr></p>
+  <h3 class="cc-rf__title" data-title aria-live="polite"></h3>
+  <div class="cc-rf__stage" data-stage><svg class="cc-rf__svg" data-svg role="group" aria-label="Graf fází" focusable="false" tabindex="-1"></svg></div>
+  <div class="cc-rf__side">
+    <div class="cc-rf__card" data-card aria-live="polite"></div>
+    <button type="button" class="cc-rf__btn" data-btn></button>
+  </div>
+</div>
+
+<style>
+.cc-embed.cc-rf{
+  --ink:#14181a; --tq:#27e2cc; --tq-ink:#07302c; --tq-deep:#1aa594;
+  --step:#ecebe7; --step-edge:#c9c7c0; --muted:#6b6f70; --sc:1;
+  box-sizing:border-box;position:relative;height:100vh;margin:0;padding:12px 4px 10px;overflow:hidden;
+  display:flex;flex-direction:column;gap:10px;
+  font-family:var(--cc-display);color:var(--ink);-webkit-font-smoothing:antialiased;
+}
+.cc-rf .cc-rf__title{margin:0;padding:0 4px;font:700 max(17px,calc(19px*var(--sc)))/1.25 var(--cc-display);color:var(--ink);text-wrap:balance;}
+.cc-rf .cc-rf__stage{flex:1 1 auto;min-height:0;position:relative;}
+.cc-rf .cc-rf__svg{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none;overflow:visible;}
+.cc-rf .cc-rf__side{display:flex;flex-direction:column;gap:10px;}
+/* karta zastávky: výška se rezervuje podle nejdelšího textu, aby graf při klikání neskákal */
+.cc-rf .cc-rf__card{box-sizing:border-box;background:var(--ink);color:#fff;border-radius:14px;padding:13px 15px 14px;}
+.cc-rf .cc-rf__st{display:block;font:600 max(11px,calc(11px*var(--sc)))/1.2 var(--cc-display);letter-spacing:.08em;text-transform:uppercase;color:var(--tq);}
+.cc-rf .cc-rf__card .cc-rf__q{margin:6px 0 6px;font:700 max(16px,calc(18px*var(--sc)))/1.25 var(--cc-display);}
+.cc-rf .cc-rf__card .cc-rf__d{margin:0;font:400 max(13px,calc(13.5px*var(--sc)))/1.5 var(--cc-display);color:#c9cbc9;}
+/* tlačítko: velké tyrkysové „A teď doopravdy“, po přepnutí tiché „Zpět do učebnice“ */
+.cc-rf .cc-rf__btn{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin:0 0 6px;
+  padding:12px 14px 12px 18px;border:0;border-radius:12px;background:var(--tq);color:var(--tq-ink);
+  font:700 max(15px,calc(16px*var(--sc)))/1.2 var(--cc-display);cursor:pointer;text-align:left;
+  box-shadow:0 5px 0 var(--tq-deep);transition:transform .15s,box-shadow .15s,opacity .2s;touch-action:manipulation;}
+.cc-rf .cc-rf__btn i{flex:0 0 32px;height:32px;border-radius:50%;background:var(--ink);color:var(--tq);display:flex;align-items:center;justify-content:center;font:700 18px/1 var(--cc-display);font-style:normal;}
+.cc-rf .cc-rf__btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--tq-deep);}
+.cc-rf .cc-rf__btn[disabled]{opacity:.55;cursor:default;}
+.cc-rf .cc-rf__btn.is-back{justify-content:flex-start;margin:0;padding:8px 12px;background:#fff;color:var(--ink);border:1.5px solid #e4e4e1;box-shadow:none;font-size:13px;}
+.cc-rf .cc-rf__btn.is-back i{flex-basis:26px;height:26px;background:#f1f1ee;color:var(--ink);font-size:14px;}
+.cc-rf .cc-rf__btn:focus{outline:none;}
+.cc-rf.is-kbd .cc-rf__btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px;}
+@media (hover:hover){.cc-rf .cc-rf__btn:not(.is-back):not([disabled]):hover{transform:translateY(-1px);box-shadow:0 6px 0 var(--tq-deep);}}
+/* graf */
+.cc-rf .cc-rf__pt{cursor:pointer;outline:none;touch-action:manipulation;}
+.cc-rf .cc-rf__pt .ring{fill:none;stroke:var(--tq);stroke-width:3;opacity:0;transition:opacity .2s;}
+.cc-rf .cc-rf__pt.is-on .ring,.cc-rf.is-kbd .cc-rf__pt:focus .ring{opacity:1;}
+.cc-rf.is-kbd .cc-rf__pt:focus .ring{stroke:var(--ink);}
+.cc-rf .cc-rf__pt .hd{transition:fill .2s;}
+.cc-rf .cc-rf__pt.is-on .hd{fill:var(--ink);}
+.cc-rf .cc-rf__pt.is-on .pn{fill:#fff;}
+.cc-rf .pn{font:700 11px var(--cc-display);fill:var(--ink);pointer-events:none;}
+.cc-rf .lab{font:600 10px var(--cc-display);fill:var(--muted);}
+.cc-rf .stp{font:700 11px var(--cc-display);fill:var(--ink);}
+.cc-rf .wrd{font:500 10px var(--cc-display);fill:var(--muted);}
+.cc-rf .big{font:700 24px var(--cc-display);fill:var(--ink);}
+.cc-rf .sub{font:500 12px var(--cc-display);fill:var(--muted);}
+.cc-rf .cc-rf__layer{transition:opacity .45s;}
+.cc-rf .cc-rf__layer.is-off{opacity:0;pointer-events:none;}
+.cc-rf .cc-rf__layer.is-quick{transition:none;}
+/* na šířku (tablet a desktop, rám 85 % / 73,5 %): graf vlevo, karta a tlačítko vpravo */
+@media (min-aspect-ratio:1/1){
+  .cc-embed.cc-rf{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);
+    column-gap:22px;row-gap:8px;padding:16px 10px 14px;}
+  .cc-rf .cc-rf__title{grid-column:1/-1;font-size:max(18px,calc(22px*var(--sc)));}
+  .cc-rf .cc-rf__stage{grid-column:1;grid-row:2;}
+  .cc-rf .cc-rf__side{grid-column:2;grid-row:2;justify-content:center;gap:14px;}
+  .cc-rf .cc-rf__card{padding:18px 20px 20px;border-radius:16px;}
+  .cc-rf .cc-rf__card .cc-rf__q{font-size:max(17px,calc(22px*var(--sc)));margin:8px 0 10px;}
+  .cc-rf .cc-rf__card .cc-rf__d{font-size:max(13px,calc(14.5px*var(--sc)));}
+  .cc-rf .cc-rf__btn{font-size:max(15px,calc(17px*var(--sc)));padding:14px 16px 14px 20px;}
+}
+@media (prefers-reduced-motion:reduce){.cc-rf .cc-rf__layer{transition:none;}}
+</style>
+
+<script>
+/* =====================================================================
+   CFG – všechny texty prvku. Měň jen hodnoty v uvozovkách.
+   - Typografie: české uvozovky „…“, pomlčka –, nedělitelná mezera  .
+   - steps  = schody „v učebnici“ (pořadí = pořadí schodů zdola nahoru).
+   - stops  = zastávky na čáře „doopravdy“ (pořadí = číslování 1–N).
+              id se páruje s texts; zastávka se stejným id jako schod
+              se automaticky vybarví tyrkysově („fáze z učebnice“).
+              at = poloha na čáře v souřadnicích grafu 320 × 250,
+              při přidání zastávky ji vyber na čáře (viz GEOM.line).
+   - texts  = obsah karty: name (nadpis karty), quote (velká věta),
+              text (popis, ~200 znaků, aby se karta vešla na mobil).
+   - Počty („4 fáze“, „7 zastávek“) se dopočítají samy.
+   ===================================================================== */
+var CFG = {
+  title: {
+    book: 'Takhle se vyrovnání s úrazem popisuje v učebnici.',
+    real: 'A takhle to vypadá doopravdy.'
+  },
+  bookSub: ['jedna po druhé,', 'schod po schodu'],
+  realSub: ['a cesta se vrací'],
+  btnReal: 'A teď doopravdy',
+  btnBook: 'Zpět do učebnice',
+  labelBook: 'v učebnici',
+  labelBefore: 'předtím',
+  legend: 'fáze z učebnice',
+  steps: [
+    { id: 'sok',  word: 'nevíra'  },
+    { id: 'agr',  word: 'vztek'   },
+    { id: 'poch', word: 'řešení'  },
+    { id: 'odp',  word: 'smíření' }
+  ],
+  stops: [
+    { id: 'uraz', at: [70, 130] },
+    { id: 'sok',  at: [72, 212] },
+    { id: 'agr',  at: [118, 158] },
+    { id: 'pad',  at: [158, 224] },
+    { id: 'poh',  at: [186, 168] },
+    { id: 'poch', at: [256, 92]  },
+    { id: 'odp',  at: [302, 62]  }
+  ],
+  texts: {
+    uraz: { name: 'Úraz',       quote: 'Zlomek vteřiny.',
+            text: 'Skok do vody, smyk na mokrém asfaltu, mrtvice uprostřed obýváku. Život se v tu chvíli rozdělí na předtím a potom.' },
+    sok:  { name: 'Šok',        quote: '„Proč já?“',
+            text: 'První dny přichází otupělost a popírání. Člověk diagnózu slyší, ale nevěří jí. Ze všeho nejvíc potřebuje, aby u něj někdo byl.' },
+    agr:  { name: 'Agrese',     quote: '„Kdo za to může?“',
+            text: 'Vztek na lékaře, na rodinu i na sebe. Terapeut v té době funguje jako kontejner a unese to, co pacient sám neunese.' },
+    pad:  { name: 'Propad',     quote: '„Zase jsem na začátku.“',
+            text: 'Stačí jeden špatný den a člověk je zpátky dole. Fáze se vracejí, klidně i po letech. Neznamená to, že cesta selhala.' },
+    poh:  { name: 'Pohyb',      quote: 'První disk. První pálka.',
+            text: 'V té nejkřehčí chvíli často pomůže sport. Tělo ukáže, že i když přestalo poslouchat, pořád zvládne neuvěřitelné věci. Odsud čára stoupá.' },
+    poch: { name: 'Pochopení',  quote: '„Co mi teď může pomoct?“',
+            text: 'Místo viníka hledá řešení. Malé cíle, jako přesednout sám, vyjet obrubník nebo se vrátit k práci.' },
+    odp:  { name: 'Odpuštění',  quote: '„Jsem pořád já. Jen jinak.“',
+            text: 'Odpuštění sobě i okolí. Není to návrat do starého života, ale restart s novými cíli.' }
+  },
+  /* text pro odečítače obrazovky – při změně obsahu uprav i tady */
+  sr: 'V učebnici má vyrovnání s úrazem čtyři fáze za sebou: šok, agrese, pochopení a odpuštění. Doopravdy je cesta delší a vrací se. Má sedm zastávek: úraz, šok, agrese, propad, kdy je člověk zase dole, pohyb, kdy často pomůže sport, pochopení a odpuštění.'
+};
+
+/* Geometrie grafu v souřadnicích 320 × 250 (měnit jen s rozmyslem). */
+var GEOM = {
+  bounds: [4, 14, 318, 240],                       // x0, y0, x1, y1 obsahu
+  stairs: [[72,196],[130,196],[130,160],[188,160],[188,124],[246,124],[246,88],[304,88]],
+  floor: 232,
+  start: [[10,40],[60,40],[66,32],[74,58],[68,84],[72,212]],   // „předtím“ a pád
+  line: [[72,212],[98,206],[122,184],[118,158],[98,160],[96,184],[122,198],[148,196],[166,216],[150,228],
+         [138,214],[160,192],[186,168],[204,140],[226,118],[246,132],[236,152],[214,140],[232,108],[256,92],[280,74],[302,62]],
+  end: [302, 62]
+};
+</script>
+
+<script>
+(function(){
+  var root = document.querySelector('[data-cc-rf]');
+  if(!root || root.dataset.ccInit) return; root.dataset.ccInit = '1';
+  var NS = 'http://www.w3.org/2000/svg';
+  var svg = root.querySelector('[data-svg]'), stage = root.querySelector('[data-stage]');
+  var card = root.querySelector('[data-card]'), btn = root.querySelector('[data-btn]'), title = root.querySelector('[data-title]');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var real = false, sel = {book:'sok', real:'uraz'}, seq = 0, revealing = false, drawTimer = null;
+  var inBook = {}; CFG.steps.forEach(function(s){ inBook[s.id] = true; });
+
+  root.querySelector('[data-sr]').textContent = CFG.sr;
+
+  function plural(n, a, b, c){ return n === 1 ? a : (n >= 2 && n <= 4 ? b : c); }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function el(tag, attrs, parent){ var e = document.createElementNS(NS, tag); for(var k in attrs) e.setAttribute(k, attrs[k]); if(parent) parent.appendChild(e); return e; }
+  function txt(parent, x, y, s, cls, anchor){ var t = el('text', {x:x, y:y, 'class':cls, 'text-anchor':anchor || 'start'}, parent); t.textContent = s; return t; }
+
+  /* Catmull-Rom → hladká čára přes body */
+  function smooth(P){
+    var d = '';
+    for(var i=0;i<P.length-1;i++){
+      var p0 = P[i-1] || P[i], p1 = P[i], p2 = P[i+1], p3 = P[i+2] || p2;
+      var c1 = [p1[0]+(p2[0]-p0[0])/6, p1[1]+(p2[1]-p0[1])/6], c2 = [p2[0]-(p3[0]-p1[0])/6, p2[1]-(p3[1]-p1[1])/6];
+      d += ' C'+c1[0].toFixed(1)+' '+c1[1].toFixed(1)+','+c2[0].toFixed(1)+' '+c2[1].toFixed(1)+','+p2[0].toFixed(1)+' '+p2[1].toFixed(1);
+    }
+    return d;
+  }
+
+  /* ---------- karta ---------- */
+  function cardHTML(id, n){
+    var t = CFG.texts[id] || {name:id, quote:'', text:''};
+    return '<span class="cc-rf__st">'+(n ? n+' · ' : '')+esc(t.name)+'</span><p class="cc-rf__q">'+esc(t.quote)+'</p><p class="cc-rf__d">'+esc(t.text)+'</p>';
+  }
+  function numberOf(id){
+    var list = real ? CFG.stops : CFG.steps;
+    for(var i=0;i<list.length;i++) if(list[i].id === id) return i+1;
+    return 0;
+  }
+  function showCard(id){
+    sel[real ? 'real' : 'book'] = id;
+    card.innerHTML = cardHTML(id, numberOf(id));
+    [].forEach.call(svg.querySelectorAll('.cc-rf__pt'), function(g){
+      var mine = g.dataset.layer === (real ? 'real' : 'book');
+      g.classList.toggle('is-on', g.dataset.id === id && mine);
+      g.setAttribute('tabindex', mine ? '0' : '-1'); g.setAttribute('aria-hidden', mine ? 'false' : 'true');
+    });
+  }
+  /* rezerva výšky karty = nejvyšší ze všech textů v aktuální šířce */
+  function reserveCard(){
+    card.style.height = 'auto';
+    var cur = card.innerHTML, max = 0, ids = Object.keys(CFG.texts);
+    for(var i=0;i<ids.length;i++){ card.innerHTML = cardHTML(ids[i], 7); max = Math.max(max, card.offsetHeight); }
+    card.innerHTML = cur; card.style.height = max + 'px';
+  }
+
+  /* ---------- tlačítko a nadpis ---------- */
+  function syncUI(){
+    title.textContent = real ? CFG.title.real : CFG.title.book;
+    btn.classList.toggle('is-back', real);
+    btn.innerHTML = real ? '<i aria-hidden="true">←</i><span>'+esc(CFG.btnBook)+'</span>' : '<span>'+esc(CFG.btnReal)+'</span><i aria-hidden="true">→</i>';
+    btn.disabled = revealing;
+  }
+
+  /* ---------- kreslení grafu v pixelech rámu ---------- */
+  var layers = {}, linePath = null, lineLen = 0;
+  function draw(){
+    var w = stage.clientWidth, h = stage.clientHeight; if(!w || !h) return;
+    var B = GEOM.bounds, bw = B[2]-B[0], bh = B[3]-B[1], m = 14;
+    var sx = (w-2*m)/bw, sy = (h-2*m)/bh;
+    if(sy > sx*1.9) sy = sx*1.9; if(sx > sy*1.7) sx = sy*1.7;
+    var ox = (w - bw*sx)/2, oy = (h - bh*sy)/2;
+    var X = function(x){ return +(ox + (x-B[0])*sx).toFixed(1); }, Y = function(y){ return +(oy + (y-B[1])*sy).toFixed(1); };
+    var P = function(p){ return [X(p[0]), Y(p[1])]; };
+    svg.setAttribute('viewBox', '0 0 '+w+' '+h);
+    svg.innerHTML = '';
+    /* schody (podklad v obou stavech) */
+    var S = GEOM.stairs.map(P), fl = Y(GEOM.floor);
+    var dS = 'M'+S[0][0]+' '+fl+' L'+S.map(function(p){return p[0]+' '+p[1];}).join(' L')+' L'+S[S.length-1][0]+' '+fl+' Z';
+    el('path', {d:dS, fill:'#ecebe7'}, svg);
+    el('path', {d:'M'+S.map(function(p){return p[0]+' '+p[1];}).join(' L'), fill:'none', stroke:'#c9c7c0', 'stroke-width':2}, svg);
+    txt(svg, S[S.length-1][0]-6, fl-8, CFG.labelBook, 'lab', 'end');
+    /* --- učebnice --- */
+    var gb = layers.book = el('g', {'class':'cc-rf__layer'+(real?' is-off':'')}, svg);
+    var big = txt(gb, X(10), Y(30)+6, CFG.steps.length+' '+plural(CFG.steps.length,'fáze','fáze','fází'), 'big');
+    CFG.bookSub.forEach(function(s,i){ txt(gb, X(10), Y(30)+26+i*15, s, 'sub'); });
+    var colW = (S[1][0]-S[0][0]);
+    CFG.steps.forEach(function(s, i){
+      var a = S[i*2], b = S[i*2+1], cx = (a[0]+b[0])/2, cy = a[1];
+      var fs = Math.max(9.5, Math.min(11.5, colW/5.4));
+      var t1 = txt(gb, cx, cy+26, (CFG.texts[s.id]||{}).name || s.id, 'stp', 'middle'); t1.style.fontSize = fs+'px';
+      var t2 = txt(gb, cx, cy+26+fs+3, s.word || '', 'wrd', 'middle'); t2.style.fontSize = (fs-1)+'px';
+      pin(gb, 'book', s.id, i+1, cx, cy, true);
+    });
+    /* --- doopravdy --- */
+    var gr = layers.real = el('g', {'class':'cc-rf__layer'+(real?'':' is-off')}, svg);
+    var st = GEOM.start.map(P), ln = GEOM.line.map(P);
+    var d = 'M'+st.map(function(p){return p[0]+' '+p[1];}).join(' L') + smooth(ln);
+    linePath = el('path', {d:d, fill:'none', stroke:'#14181a', 'stroke-width':4.5, 'stroke-linejoin':'round', 'stroke-linecap':'round'}, svg);
+    svg.insertBefore(linePath, gr);
+    lineLen = linePath.getTotalLength();
+    linePath.style.strokeDasharray = lineLen; linePath.style.strokeDashoffset = real ? 0 : lineLen;
+    var e = P(GEOM.end); el('path', {d:'M'+e[0]+' '+e[1]+' l'+Math.max(10,14*sx)+' 0', stroke:'#27e2cc', 'stroke-width':7, 'stroke-linecap':'round'}, gr);
+    txt(gr, st[0][0], st[0][1]-10, CFG.labelBefore, 'lab');
+    var n = CFG.stops.length;
+    txt(gr, X(128), Y(30)+6, n+' '+plural(n,'zastávka','zastávky','zastávek'), 'big');
+    CFG.realSub.forEach(function(s,i){ txt(gr, X(128), Y(30)+26+i*15, s, 'sub'); });
+    el('circle', {cx:X(10)+6, cy:fl+2, r:6, fill:'#27e2cc', stroke:'#14181a', 'stroke-width':1.5}, gr);
+    txt(gr, X(10)+17, fl+6, '= '+CFG.legend, 'lab');
+    CFG.stops.forEach(function(s, i){ var p = P(s.at); pin(gr, 'real', s.id, i+1, p[0], p[1], !!inBook[s.id]); });
+    showCard(sel[real ? 'real' : 'book']);
+  }
+  function pin(parent, layer, id, n, x, y, tq){
+    var t = CFG.texts[id] || {name:id};
+    var g = el('g', {'class':'cc-rf__pt', tabindex:'0', role:'button', 'aria-label':n+'. '+t.name, 'data-id':id, 'data-layer':layer}, parent);
+    el('circle', {'class':'ring', cx:x, cy:y, r:16}, g);
+    el('circle', {'class':'hd', cx:x, cy:y, r:12, fill: tq ? '#27e2cc' : '#fff', stroke:'#14181a', 'stroke-width':2}, g);
+    txt(g, x, y+4, String(n), 'pn', 'middle');
+    el('circle', {cx:x, cy:y, r:20, fill:'transparent'}, g);
+  }
+
+  /* ---------- přepnutí učebnice ↔ doopravdy ---------- */
+  function toReal(){
+    if(revealing) return;
+    real = true; var my = ++seq; revealing = !reduce; syncUI();
+    layers.book.classList.add('is-off');
+    if(reduce){ linePath.style.transition = 'none'; linePath.style.strokeDashoffset = 0; layers.real.classList.remove('is-off'); showCard(sel.real); return; }
+    linePath.style.transition = 'none'; linePath.style.strokeDashoffset = lineLen;
+    void linePath.getBoundingClientRect();
+    linePath.style.transition = 'stroke-dashoffset 2.4s ease-in-out';
+    linePath.style.strokeDashoffset = 0;
+    clearTimeout(drawTimer);
+    drawTimer = setTimeout(function(){
+      if(my !== seq) return;
+      layers.real.classList.remove('is-off'); revealing = false; syncUI(); showCard(sel.real);
+    }, 2000);
+  }
+  function toBook(){
+    real = false; seq++; revealing = false; clearTimeout(drawTimer);
+    /* zpět bez animace: čára i zastávky zmizí hned */
+    linePath.style.transition = 'none'; linePath.style.strokeDashoffset = lineLen;
+    layers.real.classList.add('is-quick'); layers.book.classList.add('is-quick');
+    layers.real.classList.add('is-off'); layers.book.classList.remove('is-off');
+    void svg.getBoundingClientRect();
+    layers.real.classList.remove('is-quick'); layers.book.classList.remove('is-quick');
+    syncUI(); showCard(sel.book);
+  }
+
+  /* ---------- dotyk, myš, klávesnice ---------- */
+  function bindTap(node, fn){
+    if(window.PointerEvent){
+      node.addEventListener('pointerdown', function(e){ if(e.button > 0) return; e.preventDefault(); if(node.focus) node.focus({preventScroll:true}); fn(e); });
+    } else {
+      node.addEventListener('touchstart', function(e){ e.preventDefault(); fn(e); }, {passive:false});
+      node.addEventListener('mousedown', fn);
+    }
+    node.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); fn(e); } });
+  }
+  bindTap(btn, function(){ if(btn.disabled) return; real ? toBook() : toReal(); });
+  svg.addEventListener('pointerdown', function(e){
+    var g = e.target.closest && e.target.closest('.cc-rf__pt'); if(!g) return;
+    e.preventDefault(); g.focus({preventScroll:true}); showCard(g.dataset.id);
+  });
+  svg.addEventListener('keydown', function(e){
+    var g = e.target.closest && e.target.closest('.cc-rf__pt'); if(!g) return;
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); showCard(g.dataset.id); }
+  });
+  svg.addEventListener('focusin', function(e){ var g = e.target.closest && e.target.closest('.cc-rf__pt'); if(g) showCard(g.dataset.id); });
+  if(window.matchMedia && matchMedia('(hover:hover)').matches){
+    svg.addEventListener('mouseover', function(e){ var g = e.target.closest && e.target.closest('.cc-rf__pt'); if(g) showCard(g.dataset.id); });
+  }
+
+  /* obrys fokusu jen při ovládání klávesnicí */
+  document.addEventListener('keydown', function(e){ if(e.key === 'Tab') root.classList.add('is-kbd'); });
+  document.addEventListener('pointerdown', function(){ root.classList.remove('is-kbd'); }, true);
+
+  /* ---------- vyplnění rámu ---------- */
+  function fit(){
+    var sc = 1; root.style.setProperty('--sc', 1);
+    syncUI(); reserveCard();
+    var minStage = function(){ return Math.min(root.clientHeight*0.4, 300); };
+    for(var k=0; k<16; k++){
+      if(root.scrollHeight <= root.clientHeight + 1 && stage.clientHeight >= minStage()) break;
+      sc *= .94; root.style.setProperty('--sc', sc.toFixed(3)); reserveCard();
+    }
+    draw();
+  }
+  var t;
+  window.addEventListener('resize', function(){ clearTimeout(t); t = setTimeout(fit, 60); });
+  window.addEventListener('load', fit);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  if(window.ResizeObserver) new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(fit, 90); }).observe(root);
+  fit();
+})();
+</script>
+
+</body>
+</html>
