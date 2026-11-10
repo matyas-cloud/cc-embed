@@ -25,7 +25,9 @@
        2026-11-10  podle designové banky: okýnko se zobáčkem jako fyzický jezdec (zamáčkne se), světlo vybraného dronu na zemi,
                    přechody v oklch, roletka bez přestřelu s textem, který zaostří, bez dýchajícího majáku a hover zvětšování.
        2026-11-10  sjednocení s ostatními prvky CC v článcích: ploché karty bez přechodů, okraje, záhlaví, (i) a panel jako u Visa a Mavie,
-                   popisky pod okýnkem se schovají, nízký široký rám ukáže víc oblohy. -->
+                   popisky pod okýnkem se schovají, nízký široký rám ukáže víc oblohy.
+       2026-11-10  nápověda před první interakcí (šipka se zmáčkne, okraj se rozsvítí, krajina s okýnkem popojede, nejvýš 4×),
+                   texty jako krátké věty s třídou v nadpisu roletky, dav i lidé jako panáčci. -->
 <style>
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
@@ -131,6 +133,7 @@
     <div class="dp-lay dp-cam" data-cam></div>
     <div class="dp-hud" data-hud><span class="dp-hud__h" data-hudh></span><span class="dp-hud__b"><span><b data-hudb></b></span></span></div>
     <span class="dp-ceil" data-ceil></span>
+    <span class="dp-glow" data-glow></span>
     <button type="button" class="dp-edge dp-edge--l" data-edge="-1" tabindex="-1"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     <button type="button" class="dp-edge dp-edge--r" data-edge="1" tabindex="-1"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M5 2l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   </div>
@@ -263,6 +266,8 @@
 .cc-drony-pravidla .dp-hud.is-on{opacity:1;transition:width .5s var(--ease-expo),left .5s var(--ease-expo),opacity .12s;}
 .cc-drony-pravidla .dp-hud__h{position:relative;display:flex;align-items:center;gap:8px;height:32px;padding:0 12px 0 10px;background:var(--org);font:600 14px/1 var(--cc-display);color:var(--ink);white-space:nowrap;}
 .cc-drony-pravidla .dp-hud__h em{margin-left:auto;background:rgba(255,255,255,.88);color:var(--ink);}
+.cc-drony-pravidla .dp-meas{position:absolute;left:0;top:0;display:inline-flex;visibility:hidden;pointer-events:none;}
+.cc-drony-pravidla .dp-meas em{margin-left:2px;}
 .cc-drony-pravidla .dp-hud__b{display:grid;grid-template-rows:0fr;transition:grid-template-rows .14s ease-in;}
 .cc-drony-pravidla .dp-hud.is-on .dp-hud__b{grid-template-rows:1fr;transition:grid-template-rows .46s var(--ease-expo) .1s;}
 .cc-drony-pravidla .dp-hud__b > span{display:block;overflow:hidden;min-height:0;}
@@ -275,11 +280,18 @@
 .cc-drony-pravidla .dp-edge::after{content:"";position:absolute;inset:-6px;}
 .cc-drony-pravidla .dp-edge svg{display:block;}
 .cc-drony-pravidla .dp-edge--l{left:8px;} .cc-drony-pravidla .dp-edge--r{right:8px;}
-.cc-drony-pravidla.is-live .dp-edge--r svg{animation:cdpnudge 1.6s ease-in-out .4s 3;}
 .cc-drony-pravidla .dp-stage.at-start .dp-edge--l,.cc-drony-pravidla .dp-stage.at-end .dp-edge--r{opacity:0;pointer-events:none;}
 .cc-drony-pravidla.is-pre .dp-edge{opacity:0;}
 @media (hover:hover){ .cc-drony-pravidla .dp-edge:hover{box-shadow:0 0 0 2px var(--org),var(--pop);} }
-@keyframes cdpnudge{0%,100%{transform:translateX(0);}50%{transform:translateX(4px);}}
+/* nápověda před první interakcí: šipka se sama zmáčkne, okraj se rozsvítí a krajina i okýnko kus popojedou */
+.cc-drony-pravidla .dp-edge{transition:opacity .35s,box-shadow .15s,transform .14s var(--ease-out);}
+.cc-drony-pravidla .dp-edge.is-press{transform:scale(.88);}
+.cc-drony-pravidla .dp-edge::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--org);opacity:0;pointer-events:none;}
+.cc-drony-pravidla .dp-edge.is-ring::before{animation:cdpring .9s var(--ease-out);}
+@keyframes cdpring{0%{opacity:.95;transform:scale(1);}100%{opacity:0;transform:scale(1.9);}}
+.cc-drony-pravidla .dp-glow{position:absolute;top:0;right:0;bottom:0;width:30%;z-index:7;pointer-events:none;opacity:0;
+  background:radial-gradient(90% 60% at 100% 55%,rgba(251,125,15,.32),rgba(251,125,15,0) 70%);transition:opacity .7s var(--ease-out);}
+.cc-drony-pravidla .dp-glow.is-on{opacity:1;transition:opacity .35s var(--ease-out);}
 
 /* ===== posuvník: tenká linka, čtverečky zastávek, tmavé okýnko se zobáčkem ===== */
 .cc-drony-pravidla .dp-rail{flex:0 0 auto;position:relative;height:58px;margin:12px 4px 0;touch-action:pan-y;}
@@ -339,19 +351,19 @@
     title: 'Jak se v Česku létá s dronem',
     ceiling: 'max. 120 m',
     info: '<p><b>Stav k 14. 11. 2026.</b> EASA navrhuje pravidla zjednodušit (NPA 2026-103), zatím jde o návrh.</p>'+
-          '<p>Kategorie, váhy a vzdálenosti podle nařízení EU 2019/947 a přehledu EASA k otevřené kategorii. Remote ID podle nařízení EU 2019/945. Zóny a mapa DroneMap podle ÚCL. U-space podle nařízení EU 2021/664, CIS+ podle tiskové zprávy CSG z 9. 11. 2026.</p>'+
+          '<p>Třídy, váhy a vzdálenosti podle nařízení EU 2019/947 a přehledu EASA k otevřené kategorii. Registrace a zkoušky podle ÚCL. Remote ID podle nařízení EU 2019/945. Zóny a mapa DroneMap podle ÚCL. U-space podle nařízení EU 2021/664, CIS+ podle tiskové zprávy CSG z 9. 11. 2026.</p>'+
           '<p>Scéna je ilustrační, vzdálenosti v ní nejsou v měřítku.</p>'
   };
-  var STOPS = [   /* tag = štítek ve scéně i v posuvníku, d = text roletky */
-    {k:'s250', tag:'do 250 g',    d:'I nad lidmi, jen ne nad davem.'},
-    {k:'s4',   tag:'do 4 kg',     d:'Dron třídy C2, od lidí nejméně 30 m.'},
-    {k:'s25',  tag:'do 25 kg',    d:'Daleko od lidí, nejméně 150 m od domů.'},
-    {k:'bv',   tag:'Mimo dohled', d:'Pilot dron nevidí. Smí jen s povolením ÚCL, třeba při doručování.'},
-    {k:'rid',  tag:'Remote ID',   d:'Drony tříd C1 až C3 a všechny ve specifické kategorii musí do okolí vysílat, kdo je řídí a kde jsou. Zachytí to i telefon.'},
-    {k:'apt',  tag:'Letiště',     d:'Kolem letiště je zóna, kde se nelétá, nebo jen s podmínkou. Ukáže ji DroneMap.'},
-    {k:'us',   tag:'U-space',     d:'Prostor, kde se drony hlásí přes síť a let dostane schválení digitálně. ŘLP na to má systém CIS+ od UpVision.', badge:'Připravuje se'}
+  var STOPS = [   /* tag = štítek ve scéně a v posuvníku, head = nadpis roletky, d = text roletky */
+    {k:'s250', tag:'do 250 g',    head:'Třída C0 (do 250 g)',     d:'Může létat i nad lidmi, jen ne nad davem. Zkouška není potřeba. Když má kameru, musíte se registrovat u ÚCL.'},
+    {k:'s4',   tag:'do 4 kg',     head:'Třída C2 (do 4 kg)',      d:'Létá nejméně 30 metrů od lidí. Pilot musí mít online test a k tomu další zkoušku.'},
+    {k:'s25',  tag:'do 25 kg',    head:'Třídy C3 a C4 (do 25 kg)', d:'Létá daleko od lidí, nejméně 150 metrů od zástavby. Pilotovi stačí online test.'},
+    {k:'bv',   tag:'Mimo dohled', head:'Mimo dohled (specifická kategorie)', d:'Když pilot dron nevidí, smí letět jen s povolením ÚCL. Třeba při doručování zásilek nebo kontrole elektrického vedení.'},
+    {k:'rid',  tag:'Remote ID',   head:'Remote ID',               d:'Dron vysílá digitální SPZ, tedy čí je a kde letí. Zachytí ji i telefon. Mají ji třídy C1 až C3 a drony ve specifické kategorii.'},
+    {k:'apt',  tag:'Letiště',     head:'Zóny kolem letišť',       d:'Kolem letiště se nelétá, nebo jen za podmínek. Podobné zóny jsou i u dálnic nebo v národních parcích. Ukazuje je online mapa DroneMap.'},
+    {k:'us',   tag:'U-space',     head:'U-space',                 d:'Drony tu poletí přes digitální služby. Let se schválí online a drony o sobě budou vědět. ŘLP na to bude mít systém CIS+ od UpVision.', badge:'Připravuje se'}
   ];
-  var SR = 'Interaktivní krajina o pravidlech pro drony v Česku. Dron do 250 gramů smí létat i nad lidmi, jen ne nad davem. Dron do 4 kilogramů třídy C2 musí být od lidí nejméně 30 metrů. Dron do 25 kilogramů létá daleko od lidí, nejméně 150 metrů od domů. Tyto drony létají nejvýš 120 metrů nad zemí a na dohled pilota. Let mimo dohled pilota je možný jen s povolením ÚCL, třeba při doručování. Drony tříd C1 až C3 a všechny drony ve specifické kategorii musí do okolí vysílat Remote ID, tedy kdo je řídí a kde jsou, a zachytí to i telefon. Kolem letiště je zóna, kde se nelétá, nebo jen s podmínkou, ukáže ji mapa DroneMap. U-space se připravuje. Je to prostor, kde se drony hlásí přes síť a let dostane schválení digitálně. ŘLP na to má systém CIS+ od UpVision. Stav k 14. 11. 2026.';
+  var SR = 'Interaktivní krajina o pravidlech pro drony v Česku. Dron třídy C0 do 250 gramů může létat i nad lidmi, jen ne nad davem. Zkouška není potřeba, když má kameru, musíte se ale registrovat u ÚCL. Dron třídy C2 do 4 kilogramů létá nejméně 30 metrů od lidí a pilot musí mít online test a k tomu další zkoušku. Drony tříd C3 a C4 do 25 kilogramů létají daleko od lidí, nejméně 150 metrů od zástavby, a pilotovi stačí online test. Všechny létají nejvýš 120 metrů nad zemí a na dohled pilota. Když pilot dron nevidí, smí letět jen s povolením ÚCL ve specifické kategorii, třeba při doručování zásilek nebo kontrole elektrického vedení. Remote ID je digitální SPZ dronu. Dron vysílá, čí je a kde letí, a zachytí to i telefon. Mají ji třídy C1 až C3 a drony ve specifické kategorii. Kolem letiště se nelétá, nebo jen za podmínek. Podobné zóny jsou i u dálnic nebo v národních parcích a ukazuje je online mapa DroneMap. U-space se připravuje. Drony v něm poletí přes digitální služby, let se schválí online a drony o sobě budou vědět. ŘLP na to bude mít systém CIS+ od UpVision. Stav k 14. 11. 2026.';
   /* ============================================================================================= */
 
   var root = document.querySelector('[data-cc-drony-pravidla]');
@@ -365,7 +377,7 @@
   if(STATIC) root.classList.add('is-static');
   if(MOVE && HAS_IO) root.classList.add('is-pre');   /* skrytý výchozí stav hned, žádné probliknutí */
 
-  function nb(s){ return s.replace(/(^|\s)([vkszouaiVKSZOUAI])\s/g,'$1$2 ').replace(/(\d)\s(?=(g|kg|m)\b)/g,'$1 ').replace(/(do|od|max\.) (\d)/g,'$1 $2').replace(/(\d\.) (?=\d)/g,'$1 ').replace(/(C\d) až (C\d)/g,'$1 až $2').replace(/Remote ID/g,'Remote ID'); }
+  function nb(s){ return s.replace(/(^|\s)([vkszouaiVKSZOUAI])\s/g,'$1$2 ').replace(/(\d)\s(?=(g|kg|m)\b|metr|kilogram|gram)/g,'$1 ').replace(/(do|od|max\.) (\d)/g,'$1 $2').replace(/(\d\.) (?=\d)/g,'$1 ').replace(/(C\d) až (C\d)/g,'$1 až $2').replace(/Remote ID/g,'Remote ID'); }
   function rnd(a,b){ var x=Math.sin(a*127.1+b*311.7)*43758.5453; return x-Math.floor(x); }
   function f(n){ return +(+n).toFixed(2); }
   function R(x,y,w,h,c,o,cl){ return '<rect'+(cl?' class="'+cl+'"':'')+' x="'+f(x)+'" y="'+f(y)+'" width="'+f(w)+'" height="'+f(h)+'"'+(c?' fill="'+c+'"':'')+(o!=null&&o<1?' opacity="'+o.toFixed(2)+'"':'')+'/>'; }
@@ -407,9 +419,15 @@
   function panel(x,w,h){ var top=G-h, o=R(x,top,w,h,'#55636e')+R(x,top,w,1,'#7a8b93')+R(x+w-1,top+1,1,h-1,'#3c4462',.6);
     for(var wx=x+1; wx<x+w-1; wx+=2) for(var wy=top+2; wy<G-1; wy+=2){ var q=rnd(wx,wy*7); o+=R(wx,wy,1,1,q<.22?'#fdb24c':'#3c4462',q<.22?.88:1); } return B(o,x); }
   function tree(x){ return B(R(x+2,G-4,1,4,'#3a4160')+R(x,G-10,5,6,'#3c4462')+R(x+1,G-11,3,1,'#3c4462')+R(x+1,G-10,1,1,'#4b576c')+R(x+3,G-8,1,1,'#4b576c'),x); }
-  function person(x){ return B(R(x,G-9,2,2,'#ffffff')+R(x,G-7,2,7,'#7c869b'),x); }
-  function pilot(x){ return B(R(x,G-9,2,2,'#ffffff')+R(x,G-7,2,7,'#fb7d0f')+R(x+2,G-6,1,1,'#fdb24c'),x); }
-  function crowd(x){ var o=''; [1,4,7,10].forEach(function(d){ o+=R(x+d,G-10,2,2,'#c9ced8')+R(x+d,G-8,2,7,'#5f6a80'); }); [0,3,6,9,12].forEach(function(d){ o+=R(x+d,G-9,2,2,'#fff')+R(x+d,G-7,2,7,'#7c869b'); }); return B(o,x); }
+  /* panáček 4 × 9 px: hlava, ramena, trup, nohy; x = levý okraj hlavy jako dřív */
+  var FIG=['.HH.','.HH.','TTTT','TTTT','TTTT','.TT.','.LL.','.LL.','.LL.'];
+  function fig(x,y,body,head,legs){ return pat(FIG,x-1,y,1,{H:head||'#ffffff',T:body,L:legs||'#3a4160'}); }
+  function person(x){ return B(fig(x,G-9,'#7c869b'),x); }
+  function pilot(x){ return B(fig(x,G-9,'#fb7d0f','#ffffff','#b85a0c')+R(x+3,G-6,1,1,'#fdb24c'),x); }
+  function crowd(x){ var o='', back=['#525c76','#4b556e'], front=['#8a93a6','#717c92','#a3abbb'];
+    [3,8].forEach(function(d,i){ o+=fig(x+d,G-11,back[i],'#b4bbc8','#2f354f'); });     // zadní řada: hlavy mezi předními, tmavší
+    [0,5,10].forEach(function(d,i){ o+=fig(x+d,G-9,front[i],'#ffffff','#3a4160'); });   // přední řada
+    return B(o,x); }
   function tower(x){ return B(R(x+2,G-30,3,30,'#4b576c')+R(x,G-36,7,6,'#55636e')+R(x,G-36,7,1,'#7a8b93')+R(x+1,G-34,5,2,'#fdb24c',.85)+R(x+3,G-40,1,4,'#8a93a6')+R(x+3,G-41,1,1,'#fb7d0f'),x); }
   function bracket(x1,x2,y,lab){ return '<g stroke="#fb7d0f" stroke-width=".35"><line x1="'+x1+'" y1="'+y+'" x2="'+x2+'" y2="'+y+'"/><line x1="'+x1+'" y1="'+(y-1)+'" x2="'+x1+'" y2="'+(y+1)+'"/><line x1="'+x2+'" y1="'+(y-1)+'" x2="'+x2+'" y2="'+(y+1)+'"/></g>'+T((x1+x2)/2,y-1.3,lab); }
   function vdrop(x,y1,y2){ return '<line x1="'+x+'" y1="'+y1+'" x2="'+x+'" y2="'+y2+'" stroke="#fb7d0f" stroke-width=".3" stroke-dasharray=".8 .8"/>'; }
@@ -432,7 +450,7 @@
     // 4 panelák a doručení
     o += pilot(340)+panel(376,15,48)+house(396,9,8,9)+tree(418)+tree(324);
     // 5 Remote ID
-    o += person(488)+B(R(490,G-6,1,1,'#fdb24c'),490)+pilot(522)+house(470,7,12,10)+tree(536);
+    o += person(488)+B(R(491,G-6,1,1,'#fdb24c'),491)+pilot(522)+house(470,7,12,10)+tree(536);
     // 6 letiště
     o += tower(574)+B(pat(PLANE,596,G-6,1,{X:'#c9ced8',O:'#fb9c2e'}),596);
     // 7 město budoucnosti
@@ -444,7 +462,7 @@
     o += R(583,G,67,1,'#6f7f88'); for(var rx=585; rx<648; rx+=5) o += R(rx,G,2,1,'#e6e8ef',.8);
     o += '<path d="M576 '+G+' A 32 32 0 0 1 640 '+G+'" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width=".35" stroke-dasharray="1.2 1"/>';
     // značky jednotlivých zastávek
-    o += '<g class="mk mk-s250"><rect x="40.5" y="58" width="14" height="29.5" fill="url(#cdp-hatch)" opacity=".5"/><rect x="40.5" y="58" width="14" height="29.5" fill="none" stroke="#fb7d0f" stroke-width=".35" stroke-dasharray="1 1"/>'+T(47.5,56.6,'dav')+'</g>';
+    o += '<g class="mk mk-s250"><rect x="39.5" y="58" width="15" height="29.5" fill="url(#cdp-hatch)" opacity=".3"/><rect x="39.5" y="58" width="15" height="29.5" fill="none" stroke="#fb7d0f" stroke-width=".35" stroke-dasharray="1 1"/>'+T(47,56.6,'dav')+'</g>';
     o += '<g class="mk mk-s4">'+bracket(168,176,77,'30 m')+vdrop(176,58,76)+'</g>';
     o += '<g class="mk mk-s25">'+bracket(252,292,66,'150 m')+vdrop(292,56,65)+'</g>';
     var eye=[341,79.5], wallX=376, tg=[400,62], sl=(tg[1]-eye[1])/(tg[0]-eye[0]), wy=eye[1]+sl*(wallX-eye[0]), lx=eye[0]+(wallX-eye[0])*.5, ly=eye[1]+sl*(lx-eye[0]);
@@ -557,15 +575,17 @@
     stage.classList.toggle('at-start', camX < 2); stage.classList.toggle('at-end', camX > Gm.maxX-2);
     var cx = Math.max(0, Math.min(Gm.maxX, camX));
     if(!thumbDrag){ var rx = railFromCam(cx); setThumb(rx, (dragging ? nearest(rx) : cur)); }
-    tags.forEach(function(t,i){ var l = t.offsetLeft - camX, cut = l < 4 || l + t.offsetWidth > Gm.SW - 4; t.classList.toggle('is-cut', cut); stems[i].classList.toggle('is-cut', cut && !hudOpen); });
+    tags.forEach(function(t,i){ var l = t.offsetLeft - camX, cut = l < 4 || Gm.SW - l < 56; t.classList.toggle('is-cut', cut); stems[i].classList.toggle('is-cut', cut && !hudOpen); });
   }
   /* roletka nad scénou: vyjede ze štítku a vrátí se do něj */
   var hudOpen = false, hudT = 0;
   function hudShow(){
     var i=cur, tag=tags[i], c=camF[i], tl = tag.offsetLeft - c, wc = tag.offsetWidth, WO = Gm.WO;
-    hudH.innerHTML = icon(ICOF[i], true)+'<span>'+nb(STOPS[i].tag)+'</span>'+(STOPS[i].badge?'<em>'+nb(STOPS[i].badge)+'</em>':'');
+    hudH.innerHTML = icon(ICOF[i], true)+'<span>'+nb(STOPS[i].head||STOPS[i].tag)+'</span>'+(STOPS[i].badge?'<em>'+nb(STOPS[i].badge)+'</em>':'');
+    var ms = document.createElement('span'); ms.className = 'dp-hud__h dp-meas'; ms.innerHTML = hudH.innerHTML; stage.appendChild(ms);   // nadpis se musí vejít celý
+    WO = Math.min(Gm.SW - 16, Math.max(WO, ms.offsetWidth + 2)); stage.removeChild(ms);
     hudB.textContent = nb(STOPS[i].d); hudB.style.width = WO+'px';
-    var cap = mobile ? Math.min(330, Gm.SW-20) : 330, max3 = 22 + 13.5*1.5*3 + 2;   // delší text dostane širší roletku, ať má nejvýš tři řádky
+    var cap = mobile ? Math.min(330, Gm.SW-20) : 360, max3 = 22 + 13.5*1.5*3 + 2;   // delší text dostane širší roletku, ať má nejvýš tři řádky
     while(WO < cap && hudB.offsetHeight > max3){ WO = Math.min(cap, WO+12); hudB.style.width = WO+'px'; }
     var openL = Math.max(8, Math.min(Gm.SW - WO - 8, tl)), hTop = Gm.top - Math.round(Gm.y0*Gm.u);
     hud.style.top = hTop+'px';
@@ -582,7 +602,7 @@
   var selT = 0;
   function select(i, opt){
     opt = opt || {}; if(i<0 || i>6) return;
-    root.classList.add('is-used');
+    stopAttract();
     var from = camX; cur = i; seen[i] = true; camX = camF[i];
     clearTimeout(selT); hudHide(); worldEl.classList.remove('is-marks');
     var dist = Math.abs(camX - from), dur = MOVE ? Math.max(420, Math.min(1100, 420 + dist*.22)) : 0;
@@ -665,6 +685,44 @@
   if(/[?&]info/.test(Q)) openP();
 
   /* ===================== nástup: budovy vyrostou, drony přiletí, roletka se rozbalí, kamera jednou popojede ===================== */
+  /* nápověda: dokud čtenář na nic nesáhne, šipka vpravo se zmáčkne, okraj se rozsvítí a krajina s okýnkem kus popojede a vrátí se. Nejvýš čtyřikrát. */
+  var attractT = 0, attractN = 0, peek = null, edgeR = root.querySelector('.dp-edge--r'), glow = $('[data-glow]');
+  function attract(){
+    if(root.classList.contains('is-used') || dragging || thumbDrag) return;
+    if(cur >= 6) return;
+    if(root.classList.contains('is-off')){ attractT = setTimeout(attract, 1500); return; }
+    attractN++;
+    var c0 = camF[cur], d = Math.min(mobile ? 150 : 190, (camF[cur+1]-c0)*.34);
+    glow.classList.add('is-on'); edgeR.classList.add('is-ring');
+    setTimeout(function(){ edgeR.classList.add('is-press'); }, 120);
+    setTimeout(function(){ edgeR.classList.remove('is-press'); }, 320);
+    peek = setTimeout(function(){
+      if(root.classList.contains('is-used')) return;
+      hudHide(); worldEl.classList.remove('is-marks'); camX = c0 + d;
+      [cam,farEl,midEl,thumb].forEach(function(el){ el.style.setProperty('--dur','760ms'); }); place(false);
+      peek = setTimeout(function(){
+        if(root.classList.contains('is-used')) return;
+        glow.classList.remove('is-on'); edgeR.classList.remove('is-ring'); camX = c0;
+        [cam,farEl,midEl,thumb].forEach(function(el){ el.style.setProperty('--dur','680ms'); }); place(false);
+        peek = setTimeout(function(){ peek = null; if(!root.classList.contains('is-used') && !hudOpen) hudShow(); }, 620);
+        if(attractN < 4) attractT = setTimeout(attract, 5200);
+      }, 1100);
+    }, 260);
+  }
+  function stopAttract(){
+    if(root.classList.contains('is-used') && !peek && !attractT) return;
+    root.classList.add('is-used'); clearTimeout(attractT); attractT = 0;
+    glow.classList.remove('is-on'); edgeR.classList.remove('is-ring','is-press');
+    if(peek){ clearTimeout(peek); peek = null;   // zastaví krajinu tam, kde zrovna je, ať tah nezačne skokem
+      var m = new DOMMatrixReadOnly(getComputedStyle(cam).transform); camX = Math.max(0, Math.min(Gm.maxX, -m.m41)); place(true);
+      var settle = function(){ if(!dragging && !thumbDrag && Math.abs(camX - camF[cur]) > 2) select(nearest(railFromCam(camX))); };   // jen ťuknutí bez tahu: dojet na zastávku
+      var up = function(){ window.removeEventListener('pointerup', up, true); setTimeout(settle, 40); };
+      window.addEventListener('pointerup', up, true); setTimeout(settle, 1500); }
+  }
+  root.addEventListener('pointerdown', stopAttract, true);
+  root.addEventListener('keydown', stopAttract, true);
+  root.addEventListener('wheel', stopAttract, {capture:true, passive:true});
+
   function entrance(){
     if(!root.classList.contains('is-pre')) return;
     if(!fontsOk){ wantIn = true; return; }
@@ -674,9 +732,7 @@
     root.offsetWidth;
     root.classList.remove('is-pre'); root.classList.add('is-live');
     setTimeout(function(){ if(!hudOpen && !dragging && !thumbDrag) hudShow(); }, 1150);
-    setTimeout(function(){ if(dragging || thumbDrag || root.classList.contains('is-used')) return; var c0=camX; if(c0 > Gm.maxX-40) return;
-      hudHide(); camX = c0 + Math.min(mobile ? 34 : 56, (camF[Math.min(6,cur+1)]-c0)*.3); [cam,farEl,midEl,thumb].forEach(function(el){ el.style.setProperty('--dur','420ms'); }); place(false);
-      setTimeout(function(){ if(root.classList.contains('is-used')) return; camX=c0; [cam,farEl,midEl,thumb].forEach(function(el){ el.style.setProperty('--dur','620ms'); }); place(false); setTimeout(function(){ if(!hudOpen && !root.classList.contains('is-used')) hudShow(); }, 560); }, 460); }, 2300);
+    attractT = setTimeout(attract, 2300);
   }
   if(MOVE && HAS_IO){
     var played=false, io=new IntersectionObserver(function(es){ es.forEach(function(en){ root.classList.toggle('is-off', !en.isIntersecting); if(en.isIntersecting && en.intersectionRatio >= .4 && !played){ played=true; entrance(); } }); }, {threshold:[0,.4]});
