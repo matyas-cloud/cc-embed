@@ -29,7 +29,8 @@
                    „16 / 24 h“, pryč přehrávání znovu, legenda vystředěná k obrysu Česka a na šířku horní mapy.
        2026-11-23  v4 podle Matta: místo „16 / 24 h“ digitální displej se segmentovými číslicemi 00:00 → 24:00
                    (tmavá #140D33, limetková #8FFF08), blikající dvojtečka, při 24:00 záblesk a dvojí bliknutí.
-       2026-11-23  v5 podle Matta: displej v barvách prvku (světle fialová plocha #F6F2FF, číslice #6100FF), bez kurzívy. -->
+       2026-11-23  v5 podle Matta: displej v barvách prvku (světle fialová plocha #F6F2FF, číslice #6100FF), bez kurzívy.
+       2026-11-23  v6 podle Matta: displej menší a subtilnější, na výšku tlačítka (i) (26 px), tenčí segmenty, menší záblesk. -->
 <style>
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
@@ -153,18 +154,18 @@
 .cc-s1data .hd{flex:0 0 auto;display:flex;align-items:center;gap:12px;}
 .cc-s1data .cc-s1data__title{flex:1 1 auto;min-width:0;margin:0;color:#000;font:600 var(--tf)/1.25 var(--cc-display);letter-spacing:-.01em;text-wrap:balance;}
 /* digitální displej 00:00 → 24:00 */
-.cc-s1data .clk{flex:none;display:block;padding:calc(7px*var(--sc)) calc(10px*var(--sc));border-radius:9px;background:#f6f2ff;
+.cc-s1data .clk{flex:none;align-self:flex-start;display:flex;align-items:center;height:26px;padding:0 9px;border-radius:13px;background:#f6f2ff;
   box-shadow:inset 0 0 0 1px #ddd0ff;transform-origin:50% 50%;}
-.cc-s1data .clk svg{display:block;height:calc(clamp(22px,4.4vw,28px)*var(--sc));width:auto;overflow:visible;}
-.cc-s1data .clk .sg{fill:rgba(97,0,255,.07);}
-.cc-s1data .clk .sg.on{fill:#6100ff;}
-.cc-s1data .clk .cn{fill:#6100ff;}
+.cc-s1data .clk svg{display:block;height:13px;width:auto;overflow:visible;}
+.cc-s1data .clk .sg{fill:rgba(97,0,255,.06);}
+.cc-s1data .clk .sg.on{fill:#7a33ff;}
+.cc-s1data .clk .cn{fill:#7a33ff;}
 .cc-s1data .clk.is-run .cn{animation:cc-s1-colon 1s steps(1,end) infinite;}
 .cc-s1data .clk.is-hit{animation:cc-s1-hit .9s cubic-bezier(.2,.7,.2,1) both;}
 .cc-s1data .clk.is-hit svg{animation:cc-s1-blink .6s steps(1,end) 2;}
 @keyframes cc-s1-colon{50%{opacity:.15;}}
-@keyframes cc-s1-hit{0%{transform:scale(1.12);box-shadow:inset 0 0 0 1px #6100ff,0 0 0 0 rgba(97,0,255,.45);}
-  100%{transform:scale(1);box-shadow:inset 0 0 0 1px #ddd0ff,0 0 0 14px rgba(97,0,255,0);}}
+@keyframes cc-s1-hit{0%{transform:scale(1.08);box-shadow:inset 0 0 0 1px #6100ff,0 0 0 0 rgba(97,0,255,.35);}
+  100%{transform:scale(1);box-shadow:inset 0 0 0 1px #ddd0ff,0 0 0 8px rgba(97,0,255,0);}}
 @keyframes cc-s1-blink{50%{opacity:.25;}}
 .cc-s1data .info{flex:none;align-self:flex-start;width:26px;height:26px;border-radius:50%;border:1.5px solid #b9c0c6;background:#fff;color:var(--ink3);
   cursor:pointer;display:grid;place-items:center;font:600 13px/1 var(--cc-display);transition:border-color .15s,color .15s;}
@@ -313,7 +314,7 @@
   var DIG = ['abcdef','bc','abged','abgcd','fgbc','afgcd','afgedc','abc','abcdefg','abcdfg'];
   var seg = $('[data-seg]'), cells = [], clkEl = $('[data-clk]');
   (function buildSeg(){
-    var T = 2.7, G = .55, L = 1.5, Rx = 12.5, Tp = 1.5, M = 12, B = 22.5, h = '';
+    var T = 1.9, G = .6, L = 1.5, Rx = 12.5, Tp = 1.5, M = 12, B = 22.5, h = '';
     function hz(x1,x2,y){ return [[x1,y],[x1+T/2,y-T/2],[x2-T/2,y-T/2],[x2,y],[x2-T/2,y+T/2],[x1+T/2,y+T/2]]; }
     function vt(x,y1,y2){ return [[x,y1],[x+T/2,y1+T/2],[x+T/2,y2-T/2],[x,y2],[x-T/2,y2-T/2],[x-T/2,y1+T/2]]; }
     var P = { a:hz(L+G,Rx-G,Tp), b:vt(Rx,Tp+G,M-G), c:vt(Rx,M+G,B-G), d:hz(L+G,Rx-G,B), e:vt(L,M+G,B-G), f:vt(L,Tp+G,M-G), g:hz(L+G,Rx-G,M) };
