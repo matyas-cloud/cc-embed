@@ -10,7 +10,7 @@
        kde končí Kretovova…“, před odstavcem „Tým Militsyny staví…“.
      Vložení: sentinelone-data-vlozeni.html, obalový div (aspect-ratio + min-height) s iframem.
      Nasazení: matyas-cloud/cc-embed/sentinelone-data/ (index.html, logo-sentinelone.svg), Poppins ze sdílené ../fonts/.
-     Formát: bílá karta s linkou #e0e0e0. Za 8 s proběhne 24 hodin (počítadlo „0 / 24 h“ vpravo nahoře). Data padají do obrysů
+     Formát: bílá karta s linkou #e0e0e0. Za 8 s proběhne 24 hodin (digitální displej 00:00 → 24:00 vpravo nahoře, na konci záblesk). Data padají do obrysů
        Česka. Jeden obrys = všechno, co za 24 hodin v průměru přenesou mobilní sítě v Česku (5,9 PB). SentinelOne zaplní
        jeden obrys a druhý z 86 %. Od 480 px šířky řádky vedle sebe, pod 480 px pod sebou, SentinelOne vždy první.
      Barvy SentinelOne podle sentinelone.com (23. 11. 2026): fialová #6100FF, tmavá #140D33, limetková #8FFF08 (padající data).
@@ -26,7 +26,9 @@
                    SentinelOne s „celosvětově“, hodiny s popiskem „24 hodin“, legenda „Jeden obrys Česka = objem veškerých dat,
                    která mobilní sítě v Česku přenesou v průměru za 24 hodin.“, závěrečná věta přesunuta do (i).
        2026-11-23  v3 podle Matta: nadpis „Objem dat za jeden den“, místo ciferníku a popisku „24 hodin“ jen počítadlo
-                   „16 / 24 h“, pryč přehrávání znovu, legenda vystředěná k obrysu Česka a na šířku horní mapy. -->
+                   „16 / 24 h“, pryč přehrávání znovu, legenda vystředěná k obrysu Česka a na šířku horní mapy.
+       2026-11-23  v4 podle Matta: místo „16 / 24 h“ digitální displej se segmentovými číslicemi 00:00 → 24:00
+                   (tmavá #140D33, limetková #8FFF08), blikající dvojtečka, při 24:00 záblesk a dvojí bliknutí. -->
 <style>
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
@@ -146,12 +148,23 @@
 .cc-s1data *{box-sizing:border-box;}
 .cc-s1data button{font:inherit;color:inherit;margin:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 
-/* záhlaví: nadpis, počítadlo hodin, (i) */
+/* záhlaví: nadpis, digitální displej, (i) */
 .cc-s1data .hd{flex:0 0 auto;display:flex;align-items:center;gap:12px;}
 .cc-s1data .cc-s1data__title{flex:1 1 auto;min-width:0;margin:0;color:#000;font:600 var(--tf)/1.25 var(--cc-display);letter-spacing:-.01em;text-wrap:balance;}
-.cc-s1data .hrs{flex:none;display:flex;align-items:baseline;white-space:nowrap;color:var(--s1d);}
-.cc-s1data .hrs__v{display:inline-block;min-width:1.25em;text-align:right;font:600 calc(var(--tf)*1.15)/1 var(--cc-display);}
-.cc-s1data .hrs__u{margin-left:.3em;font:500 var(--lf)/1 var(--cc-display);color:#8a8fa3;}
+/* digitální displej 00:00 → 24:00 */
+.cc-s1data .clk{flex:none;display:block;padding:calc(7px*var(--sc)) calc(10px*var(--sc));border-radius:9px;background:#140d33;
+  box-shadow:inset 0 0 0 1px rgba(143,255,8,.12);transform-origin:50% 50%;}
+.cc-s1data .clk svg{display:block;height:calc(clamp(22px,4.4vw,28px)*var(--sc));width:auto;overflow:visible;}
+.cc-s1data .clk .sg{fill:rgba(143,255,8,.07);}
+.cc-s1data .clk .sg.on{fill:#8fff08;filter:drop-shadow(0 0 2.5px rgba(143,255,8,.55));}
+.cc-s1data .clk .cn{fill:#8fff08;filter:drop-shadow(0 0 2.5px rgba(143,255,8,.55));}
+.cc-s1data .clk.is-run .cn{animation:cc-s1-colon 1s steps(1,end) infinite;}
+.cc-s1data .clk.is-hit{animation:cc-s1-hit .9s cubic-bezier(.2,.7,.2,1) both;}
+.cc-s1data .clk.is-hit svg{animation:cc-s1-blink .6s steps(1,end) 2;}
+@keyframes cc-s1-colon{50%{opacity:.15;}}
+@keyframes cc-s1-hit{0%{transform:scale(1.12);box-shadow:inset 0 0 0 1px rgba(143,255,8,.5),0 0 0 0 rgba(143,255,8,.75);}
+  100%{transform:scale(1);box-shadow:inset 0 0 0 1px rgba(143,255,8,.12),0 0 0 14px rgba(143,255,8,0);}}
+@keyframes cc-s1-blink{50%{opacity:.25;}}
 .cc-s1data .info{flex:none;align-self:flex-start;width:26px;height:26px;border-radius:50%;border:1.5px solid #b9c0c6;background:#fff;color:var(--ink3);
   cursor:pointer;display:grid;place-items:center;font:600 13px/1 var(--cc-display);transition:border-color .15s,color .15s;}
 @media (hover:hover){.cc-s1data .info:hover{border-color:var(--ink);color:var(--ink);}}
@@ -195,7 +208,6 @@
 /* pod 480 px: popisek nad každým řádkem, dva obrysy vedle sebe */
 @media (max-width:479px){
   .cc-s1data .hd{align-items:flex-start;}
-  .cc-s1data .hrs{margin-top:2px;}
   .cc-s1data .bd{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto minmax(0,1fr);
     grid-template-areas:"l1 l1" "m1 m2" "l2 l2" "m3 lg";row-gap:calc(6px*var(--sc));}
   .cc-s1data .lab{flex-direction:row;align-items:flex-end;justify-content:space-between;gap:10px;}
@@ -213,7 +225,7 @@
   <p class="cc-sr" data-sr></p>
   <div class="hd">
     <h3 class="cc-s1data__title" data-title></h3>
-    <div class="hrs" aria-hidden="true"><span class="hrs__v" data-h>0</span><span class="hrs__u">/ 24 h</span></div>
+    <div class="clk" data-clk aria-hidden="true"><svg data-seg viewBox="-2 -1 79 26"></svg></div>
     <button type="button" class="info" data-info aria-label="Jak počítáme a zdroje" aria-expanded="false" aria-controls="s1-panel">i</button>
   </div>
   <div class="bd" aria-hidden="true">
@@ -295,8 +307,31 @@
     var p = s.split(',');                                // celá část přirozeně, desetinná číslice v buňce pevné šířky (mění se nejrychleji)
     el.innerHTML = p[0] + '<span class="k">,</span><span class="d">'+p[1]+'</span><span class="u">PB</span>';
   }
-  var hEl = $('[data-h]');
-  function setHours(f){ var h = String(Math.floor(cl(f,0,1)*24 + 1e-9)); if(hEl.textContent !== h) hEl.textContent = h; }
+  /* segmentové číslice: 4 číslice + dvojtečka, skosené jako digitální displej */
+  var SEGS = {a:'h',b:'v',c:'v',d:'h',e:'v',f:'v',g:'h'};
+  var DIG = ['abcdef','bc','abged','abgcd','fgbc','afgcd','afgedc','abc','abcdefg','abcdfg'];
+  var seg = $('[data-seg]'), cells = [], clkEl = $('[data-clk]');
+  (function buildSeg(){
+    var T = 2.7, G = .55, L = 1.5, Rx = 12.5, Tp = 1.5, M = 12, B = 22.5, h = '';
+    function hz(x1,x2,y){ return [[x1,y],[x1+T/2,y-T/2],[x2-T/2,y-T/2],[x2,y],[x2-T/2,y+T/2],[x1+T/2,y+T/2]]; }
+    function vt(x,y1,y2){ return [[x,y1],[x+T/2,y1+T/2],[x+T/2,y2-T/2],[x,y2],[x-T/2,y2-T/2],[x-T/2,y1+T/2]]; }
+    var P = { a:hz(L+G,Rx-G,Tp), b:vt(Rx,Tp+G,M-G), c:vt(Rx,M+G,B-G), d:hz(L+G,Rx-G,B), e:vt(L,M+G,B-G), f:vt(L,Tp+G,M-G), g:hz(L+G,Rx-G,M) };
+    var X0 = [0,17,41,58];
+    h += '<g transform="skewX(-7) translate(2 0)">';
+    X0.forEach(function(x0, i){
+      for(var k in P) h += '<polygon class="sg" data-d="'+i+'" data-s="'+k+'" points="'+P[k].map(function(p){ return (p[0]+x0).toFixed(2)+','+p[1].toFixed(2); }).join(' ')+'"/>';
+    });
+    h += '<rect class="cn" x="35.6" y="6.6" width="2.8" height="2.8" rx=".5"/><rect class="cn" x="35.6" y="15.6" width="2.8" height="2.8" rx=".5"/></g>';
+    seg.innerHTML = h;
+    for(var i=0;i<4;i++){ var o = {}; [].forEach.call(seg.querySelectorAll('[data-d="'+i+'"]'), function(p){ o[p.getAttribute('data-s')] = p; }); cells.push(o); }
+  })();
+  var lastClk = '';
+  function setClock(f){
+    var m = Math.round(cl(f,0,1)*1440), hh = Math.floor(m/60), mm = m%60;
+    var s4 = (hh<10?'0':'')+hh + (mm<10?'0':'')+mm;
+    if(s4 === lastClk) return; lastClk = s4; root.dataset.clk = s4;
+    for(var i=0;i<4;i++){ var on = DIG[+s4[i]]; for(var k in cells[i]) cells[i][k].classList.toggle('on', on.indexOf(k) >= 0); }
+  }
 
   /* ===== mapy ===== */
   var DPR = Math.min(3, Math.max(1, window.devicePixelRatio || 1));
@@ -350,21 +385,22 @@
     drawMap(maps[0], f*R, live && f < 1/R ? RS : 0);
     drawMap(maps[1], f*R-1, live && f >= 1/R && f < 1 ? RS : 0);
     drawMap(maps[2], f, live && f < 1 ? RM : 0);
-    setNum(n1, D.s1*f); setNum(n2, D.mob*f); setHours(f);
+    setNum(n1, D.s1*f); setNum(n2, D.mob*f); setClock(f);
   }
   function tick(now){
     var f = cl((now - t0)/DUR, 0, 1);
     render(f, f < 1);
     if(f < 1){ raf = requestAnimationFrame(tick); }
-    else { playing = false; raf = 0; render(1, false); }
+    else { playing = false; raf = 0; render(1, false); hit(); }
   }
   function play(){
     if(playing) return;
     if(reduce){ render(1, false); return; }
-    playing = true;
+    playing = true; clkEl.classList.remove('is-hit'); clkEl.classList.add('is-run');
     t0 = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(tick);
   }
-  function finish(){ playing = false; cancelAnimationFrame(raf); raf = 0; render(1, false); }
+  function hit(){ clkEl.classList.remove('is-run'); void clkEl.offsetWidth; clkEl.classList.add('is-hit'); }   // 24:00 – záblesk a dvojí bliknutí
+  function finish(){ playing = false; cancelAnimationFrame(raf); raf = 0; render(1, false); clkEl.classList.remove('is-run'); }
 
   /* ===== rozměry: šířka číslic, mapy, zmenšení textu ===== */
   function measure(){
@@ -427,7 +463,13 @@
     if(e.key === 'Tab' && !panel.hidden){ e.preventDefault(); closeBtn.focus(); }
   });
   if(/[?&]info\b/.test(Q)) openP();
-  if(/[?&]rec\b/.test(Q)) window.__ccS1 = function(f){ render(f, f < 1); if(f >= 1) finish(); };   // jen pro export videa
+  if(/[?&]rec\b/.test(Q)) window.__ccS1 = function(f, ms, hitMs){   // jen pro export videa: stav dne a čas CSS animací
+    render(f, f < 1);
+    clkEl.classList.toggle('is-run', f > 0 && f < 1);
+    if(hitMs != null && !clkEl.classList.contains('is-hit')) clkEl.classList.add('is-hit');
+    if(hitMs == null) clkEl.classList.remove('is-hit');
+    document.getAnimations().forEach(function(an){ an.pause(); an.currentTime = hitMs != null ? hitMs : ms; });
+  };
 })();
 </script>
 </body>
