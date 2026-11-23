@@ -3,27 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Počítadlo dat: platforma SentinelOne a mobilní sítě v Česku</title>
+<title>Kolik dat proteče za jeden den: platforma SentinelOne a mobilní sítě v Česku</title>
 <meta name="robots" content="noindex">
-<!-- CzechCrunch × SentinelOne – počítadlo dat do nativního článku (Google Doc „SentinelOne - draft NTV“).
+<!-- CzechCrunch × SentinelOne – animace „Kolik dat proteče za jeden den“ do nativního článku (Google Doc „SentinelOne - draft NTV“).
      Místo: pod mezititulkem „Skoro dvakrát víc dat než české mobilní sítě“, za odstavcem „Její práce začíná tam,
-       kde končí Kretovova…“, před odstavcem „Tým Militsyny staví…“. Nic nenahrazuje, doplňuje větu o 11 petabajtech.
-     Vložení: sentinelone-data-vlozeni.html, obalový div (aspect-ratio + min-height) s iframem, loading="eager".
-     Nasazení: matyas-cloud/cc-embed/sentinelone-data/index.html, Poppins ze sdílené složky ../fonts/.
-     Formát: článkový standard, bílá karta s linkou #e0e0e0. Dvě běžící čísla (platforma SentinelOne, mobilní sítě v Česku),
-       pod každým pruh ve stejném měřítku 127 : 68, těsně pod pruhy řádek s průměrnými rychlostmi. Od 480 px šířky vedle sebe,
-       pod 480 px pod sebou, SentinelOne vždy první.
-     Čas: performance.now() = čas od načtení prvku (snippet načítá iframe hned s článkem). Hodnota se počítá z uplynulého času,
-       ne přičítáním. Mimo zorné pole a na skryté záložce se nepřekresluje, po návratu ukáže správnou hodnotu.
-       S omezeným pohybem se číslo obnoví jednou za sekundu a pruhy jsou rovnou v konečném stavu.
-     Čísla: TB na dvě desetinná místa, Poppins, každá číslice v buňce pevné šířky, celá část na tři místa s tlumenými nulami
-       vpředu (pole nemění šířku do 999,99 TB, tj. 2 h 10 min u článku). Inter cc.cz nenačítá, proto Poppins.
-     Data (zadání v2, 20. 11. 2026): SentinelOne 11 PB denně (údaj firmy, říjen 2026) → 127,3 GB/s;
-       ČTÚ, výroční zpráva za rok 2025, str. 19: přibližně 2 160 PB za rok 2025 (odhad úřadu) → 68,5 GB/s.
-       Kontrolní hodnoty: 60 s → 7,64 / 4,11 TB, 600 s → 76,39 / 41,10 TB.
-     Jen pro náhledy: ?t=600 přičte k času 600 s, ?static zastaví počítání a ukáže pruhy hotové, ?info otevře (i).
+       kde končí Kretovova…“, před odstavcem „Tým Militsyny staví…“.
+     Vložení: sentinelone-data-vlozeni.html, obalový div (aspect-ratio + min-height) s iframem.
+     Nasazení: matyas-cloud/cc-embed/sentinelone-data/ (index.html, logo-sentinelone.svg), Poppins ze sdílené ../fonts/.
+     Formát: bílá karta s linkou #e0e0e0. Za 8 s proběhne 24 hodin (ciferník = jedna otáčka za den). Data padají do obrysů
+       Česka. Jeden obrys = všechno, co za 24 hodin v průměru přenesou mobilní sítě v Česku (5,9 PB). SentinelOne zaplní
+       jeden obrys a druhý z 86 %. Od 480 px šířky řádky vedle sebe, pod 480 px pod sebou, SentinelOne vždy první.
+     Barvy SentinelOne podle sentinelone.com (23. 11. 2026): fialová #6100FF, tmavá #140D33, limetková #8FFF08 (padající data).
+       Logo: sentinelone.com/next-assets/webui/logos/logo-sentinelone-dark.svg, beze změny.
+     Spuštění: jednou při vstupu do zorného pole (IntersectionObserver, pre-stav hned, záloha 6 s = rovnou konečný stav).
+       Po doběhnutí je na ciferníku šipka, klik na hodiny den přehraje znovu. S omezeným pohybem rovnou konečný stav.
+     Data: SentinelOne 11 PB denně (údaj firmy, říjen 2026); ČTÚ, výroční zpráva za rok 2025, str. 19: přibližně 2 160 PB
+       za rok 2025 (odhad úřadu) → dopočet 5,9 PB za 24 hodin, poměr 1,86 (v textu jen „skoro dvakrát“).
+     Jen pro náhledy: ?static&t=0.5 (podíl dne 0–1, bez animace), ?info otevře (i).
      Změny obsahu:
-       2026-11-20  v1 podle zadání v2 (varianta A). -->
+       2026-11-20  v1 dvě běžící počítadla od otevření článku (zadání v2, varianta A).
+       2026-11-23  v2 předěláno podle Matta: místo počítadel sypání dat do mapy Česka za 24 hodin (směr A), barvy a logo
+                   SentinelOne s „celosvětově“, hodiny s popiskem „24 hodin“, legenda „Jeden obrys Česka = objem veškerých dat,
+                   která mobilní sítě v Česku přenesou v průměru za 24 hodin.“, závěrečná věta přesunuta do (i). -->
 <style>
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
@@ -128,102 +129,113 @@
 <style>
 .cc-s1data{
   --ink:#0b0c0e; --ink2:#3c4247; --ink3:#5f6870; --line:#e0e0e0;
-  --s1:#121417; --s1b:#3b4148; --mob:#b8c0c7; --mobb:#cdd3d8;
-  --n1:#0b0c0e; --z1:#e3e6e9; --n2:#59636b; --z2:#eceef0;
-  --sc:1; --ease:cubic-bezier(.2,.7,.2,1);
-  --tf:max(16px, calc(clamp(18px,3.4vw,22px)*var(--sc)));      /* nadpis */
-  --lf:max(13px, calc(clamp(13px,2.4vw,15px)*var(--sc)));      /* popisek nad číslem */
-  --nf:max(28px, calc(clamp(36px,8.6vw,56px)*var(--sc)));      /* běžící číslo */
-  --af:max(13px, calc(clamp(13px,2.2vw,14px)*var(--sc)));      /* řádek s rychlostmi */
-  --bh:calc(clamp(8px,1.6vw,10px)*var(--sc));                  /* výška pruhu */
-  --dw:.61em;                                                  /* šířka buňky číslice, dopočítá se z písma */
+  --s1:#6100ff; --s1d:#140d33; --mob:#59636b;
+  --sc:1;
+  --tf:max(16px, calc(clamp(17px,3.4vw,21px)*var(--sc)));      /* nadpis */
+  --nf:max(20px, calc(clamp(22px,4.6vw,30px)*var(--sc)));      /* číslo v PB */
+  --lf:max(12px, calc(clamp(12px,2.2vw,13px)*var(--sc)));      /* popisky */
+  --gf:max(11px, calc(clamp(11px,2vw,12px)*var(--sc)));        /* legenda */
+  --lw:clamp(132px,26vw,168px);                                /* sloupec s popisky */
   box-sizing:border-box;height:100%;display:flex;flex-direction:column;overflow:hidden;position:relative;
-  padding:clamp(18px,4vw,26px) clamp(18px,4.4vw,28px);
+  padding:clamp(14px,3.6vw,22px) clamp(16px,4.2vw,28px) clamp(12px,3vw,18px);
   background:#fff;border:1px solid var(--line);border-radius:var(--cc-radius);color:var(--ink);
   font-family:var(--cc-display);
 }
 .cc-s1data *{box-sizing:border-box;}
 .cc-s1data button{font:inherit;color:inherit;margin:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 
-/* záhlaví */
-.cc-s1data .hd{flex:0 0 auto;display:flex;align-items:flex-start;gap:12px;}
-.cc-s1data .cc-s1data__title{margin:0;color:#000;font:600 var(--tf)/1.25 var(--cc-display);letter-spacing:-.01em;text-wrap:balance;}
-.cc-s1data .info{margin-left:auto;flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid #b9c0c6;background:#fff;color:var(--ink3);
+/* záhlaví: nadpis, hodiny, (i) */
+.cc-s1data .hd{flex:0 0 auto;display:flex;align-items:center;gap:12px;}
+.cc-s1data .cc-s1data__title{flex:1 1 auto;min-width:0;margin:0;color:#000;font:600 var(--tf)/1.25 var(--cc-display);letter-spacing:-.01em;text-wrap:balance;}
+.cc-s1data .clk{flex:none;display:flex;align-items:center;gap:10px;padding:0;border:0;background:none;cursor:default;border-radius:12px;}
+.cc-s1data .clk.is-done{cursor:pointer;}
+.cc-s1data .clk__t{display:flex;flex-direction:column;align-items:flex-end;line-height:1;}
+.cc-s1data .clk__l{font:500 11px/1.2 var(--cc-display);color:#8a8fa3;}
+.cc-s1data .clk__v{margin-top:3px;font:600 calc(var(--tf)*1.02)/1 var(--cc-display);color:var(--s1d);white-space:nowrap;}
+.cc-s1data .clk__v .d{display:inline-block;width:var(--dw,.61em);text-align:center;}
+.cc-s1data .clk__v .k{display:inline-block;width:.3em;text-align:center;}
+.cc-s1data .clk canvas{display:block;width:46px;height:46px;}
+.cc-s1data .info{flex:none;align-self:flex-start;width:26px;height:26px;border-radius:50%;border:1.5px solid #b9c0c6;background:#fff;color:var(--ink3);
   cursor:pointer;display:grid;place-items:center;font:600 13px/1 var(--cc-display);transition:border-color .15s,color .15s;}
-@media (hover:hover){.cc-s1data .info:hover{border-color:var(--ink);color:var(--ink);}}
+@media (hover:hover){.cc-s1data .info:hover{border-color:var(--ink);color:var(--ink);}.cc-s1data .clk.is-done:hover canvas{filter:brightness(.96);}}
 
-/* tělo: počítadla a řádek s rychlostmi drží spolu u spodní hrany, vzduch pod nadpisem */
-.cc-s1data .bd{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;padding-top:calc(clamp(10px,2.4vw,16px)*var(--sc));}
-.cc-s1data .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:clamp(20px,4.6vw,32px);}
-.cc-s1data .ctr{min-width:0;}
-/* vedle sebe: popisky, čísla a pruhy v jedné řadě, i když se jeden popisek zalomí */
-@media (min-width:480px){
-  .cc-s1data .cols{grid-template-rows:auto auto auto;}
-  .cc-s1data .ctr{display:contents;}
-  .cc-s1data .ctr--s1 > *{grid-column:1;} .cc-s1data .ctr--mob > *{grid-column:2;}
-  .cc-s1data .lab{grid-row:1;align-self:end;} .cc-s1data .num{grid-row:2;} .cc-s1data .bar{grid-row:3;}
-}
-.cc-s1data .lab{margin:0;color:var(--ink2);font:500 var(--lf)/1.3 var(--cc-display);}
-.cc-s1data .num{display:flex;align-items:baseline;white-space:nowrap;margin-top:calc(6px*var(--sc));
-  font:600 var(--nf)/1.08 var(--cc-display);letter-spacing:0;color:var(--n1);}
-.cc-s1data .ctr--mob .num{color:var(--n2);}
-.cc-s1data .num .d{display:inline-block;width:var(--dw);text-align:center;}
+/* tělo: dva řádky – popisky vlevo, obrysy Česka vpravo */
+.cc-s1data .bd{flex:1 1 auto;min-height:0;display:grid;margin-top:calc(clamp(6px,1.6vw,12px)*var(--sc));
+  grid-template-columns:var(--lw) minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) minmax(0,1fr);
+  grid-template-areas:"l1 m1 m2" "l2 m3 lg";column-gap:clamp(10px,2.6vw,16px);row-gap:calc(clamp(8px,2vw,14px)*var(--sc));}
+.cc-s1data .lab{min-width:0;display:flex;flex-direction:column;justify-content:center;}
+.cc-s1data .lab--s1{grid-area:l1;} .cc-s1data .lab--mob{grid-area:l2;}
+.cc-s1data .lab__n{min-width:0;}
+.cc-s1data .logo{display:block;width:clamp(104px,20vw,128px);height:auto;}
+.cc-s1data .lab__t{margin:0;color:var(--ink3);font:500 var(--lf)/1.3 var(--cc-display);}
+.cc-s1data .lab--s1 .lab__t{margin-top:5px;}
+.cc-s1data .num{display:flex;align-items:baseline;white-space:nowrap;margin-top:calc(8px*var(--sc));font:600 var(--nf)/1.05 var(--cc-display);color:var(--s1d);}
+.cc-s1data .lab--mob .num{color:var(--mob);}
+.cc-s1data .num .d{display:inline-block;width:var(--dw,.61em);text-align:left;}
 .cc-s1data .num .k{display:inline-block;width:.27em;text-align:left;}
-.cc-s1data .num .g{display:inline-block;width:.22em;}
-.cc-s1data .num .z{color:var(--z1);}
-.cc-s1data .ctr--mob .num .z{color:var(--z2);}
-.cc-s1data .num .u{margin-left:.5em;font-size:.4em;font-weight:500;color:var(--ink3);}
-.cc-s1data .bar{position:relative;height:var(--bh);margin-top:calc(clamp(10px,2vw,14px)*var(--sc));}
-.cc-s1data .bar i{position:absolute;left:0;top:0;bottom:0;width:var(--w);border-radius:99px;transform-origin:0 50%;
-  transition:transform 1.1s var(--ease);transition-delay:var(--d,0ms);}
-.cc-s1data .ctr--s1 .bar i{background:linear-gradient(90deg,var(--s1),var(--s1b));}
-.cc-s1data .ctr--mob .bar i{background:linear-gradient(90deg,var(--mob),var(--mobb));}
-.cc-s1data.is-pre:not(.is-in) .bar i{transform:scaleX(0);transition:none;}
-.cc-s1data .avg{margin:calc(clamp(12px,2.6vw,16px)*var(--sc)) 0 0;color:var(--ink3);font:400 var(--af)/1.4 var(--cc-display);}
+.cc-s1data .num .u{margin-left:.24em;font-size:.6em;font-weight:500;}
+.cc-s1data .map{position:relative;min-width:0;min-height:0;}
+.cc-s1data .map canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.cc-s1data .m1{grid-area:m1;} .cc-s1data .m2{grid-area:m2;} .cc-s1data .m3{grid-area:m3;}
+.cc-s1data .leg{grid-area:lg;align-self:center;margin:0;color:var(--ink3);font:400 var(--gf)/1.45 var(--cc-display);}
+.cc-s1data .leg b{font-weight:600;color:var(--ink2);}
 
 /* panel (i) */
 .cc-s1data .panel{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vw,20px);
   background:rgba(255,255,255,.88);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);border-radius:var(--cc-radius);}
 .cc-s1data .panel[hidden]{display:none;}
-.cc-s1data .panel__box{position:relative;width:100%;max-width:480px;max-height:100%;display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);
-  border-radius:14px;box-shadow:0 18px 40px -18px rgba(0,0,0,.28);padding:clamp(14px,3.4vw,20px) clamp(16px,3.6vw,22px);}
+.cc-s1data .panel__box{position:relative;width:100%;max-width:500px;max-height:100%;display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);
+  border-radius:14px;box-shadow:0 18px 40px -18px rgba(20,13,51,.3);padding:clamp(14px,3.4vw,20px) clamp(16px,3.6vw,22px);}
 .cc-s1data .panel__hd{display:flex;align-items:flex-start;gap:12px;}
 .cc-s1data .panel__t{margin:0;font:600 15px/1.3 var(--cc-display);color:var(--ink);}
 .cc-s1data .panel__x{margin-left:auto;flex:none;width:28px;height:28px;border:0;border-radius:50%;background:#f0f2f4;cursor:pointer;font:400 18px/1 var(--cc-display);color:var(--ink);}
 .cc-s1data .panel__body{margin-top:8px;overflow-y:auto;min-height:0;}
 .cc-s1data .panel__body p{margin:0 0 8px;font:400 13px/1.5 var(--cc-display);color:var(--ink2);}
 .cc-s1data .panel__body p:last-child{margin-bottom:0;}
+.cc-s1data .panel__body .lead{font-weight:500;color:var(--ink);}
 .cc-s1data .panel__body .src{color:var(--ink3);}
 
-/* pod 480 px: počítadla pod sebou, SentinelOne nahoře */
+/* pod 480 px: popisek nad každým řádkem, dva obrysy vedle sebe, hodiny pod nadpisem */
 @media (max-width:479px){
-  .cc-s1data{--nf:max(28px, calc(clamp(36px,12.4vw,50px)*var(--sc)));}
-  .cc-s1data .cols{grid-template-columns:minmax(0,1fr);row-gap:calc(clamp(14px,4vw,20px)*var(--sc));}
+  .cc-s1data .hd{flex-wrap:wrap;row-gap:8px;}
+  .cc-s1data .cc-s1data__title{flex-basis:calc(100% - 38px);order:1;}
+  .cc-s1data .info{order:2;}
+  .cc-s1data .clk{order:3;flex-direction:row-reverse;}
+  .cc-s1data .clk__t{align-items:flex-start;}
+  .cc-s1data .clk canvas{width:38px;height:38px;}
+  .cc-s1data .bd{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto minmax(0,1fr);
+    grid-template-areas:"l1 l1" "m1 m2" "l2 l2" "m3 lg";row-gap:calc(6px*var(--sc));}
+  .cc-s1data .lab{flex-direction:row;align-items:flex-end;justify-content:space-between;gap:10px;}
+  .cc-s1data .lab--mob{margin-top:calc(8px*var(--sc));}
+  .cc-s1data .lab--mob .lab__n{align-self:flex-end;}
+  .cc-s1data .num{margin-top:0;}
+  .cc-s1data .logo{width:clamp(96px,30vw,112px);}
 }
-@media (prefers-reduced-motion:reduce){.cc-s1data *{transition:none!important;}}
-.cc-s1data.is-static *{transition:none!important;}
 </style>
 
 <div class="cc-embed cc-s1data" data-cc-s1data>
   <p class="cc-sr" data-sr></p>
   <div class="hd">
     <h3 class="cc-s1data__title" data-title></h3>
+    <button type="button" class="clk" data-clk aria-label="Přehrát 24 hodin znovu" aria-disabled="true">
+      <span class="clk__t" aria-hidden="true"><span class="clk__l">24 hodin</span><span class="clk__v" data-time></span></span>
+      <canvas data-dial aria-hidden="true"></canvas>
+    </button>
     <button type="button" class="info" data-info aria-label="Jak počítáme a zdroje" aria-expanded="false" aria-controls="s1-panel">i</button>
   </div>
   <div class="bd" aria-hidden="true">
-    <div class="cols">
-      <div class="ctr ctr--s1">
-        <p class="lab" data-l1></p>
-        <div class="num" data-n1></div>
-        <div class="bar"><i data-b1></i></div>
-      </div>
-      <div class="ctr ctr--mob">
-        <p class="lab" data-l2></p>
-        <div class="num" data-n2></div>
-        <div class="bar"><i data-b2></i></div>
-      </div>
+    <div class="lab lab--s1">
+      <div class="lab__n"><img class="logo" src="logo-sentinelone.svg" alt="SentinelOne" width="225" height="43"><p class="lab__t" data-l1></p></div>
+      <div class="num" data-n1></div>
     </div>
-    <p class="avg" data-avg></p>
+    <div class="map m1"><canvas data-map="0"></canvas></div>
+    <div class="map m2"><canvas data-map="1"></canvas></div>
+    <div class="lab lab--mob">
+      <div class="lab__n"><p class="lab__t" data-l2></p></div>
+      <div class="num" data-n2></div>
+    </div>
+    <div class="map m3"><canvas data-map="2"></canvas></div>
+    <p class="leg" data-leg></p>
   </div>
   <div class="panel" id="s1-panel" role="dialog" aria-modal="true" aria-labelledby="s1-panel-t" data-panel hidden>
     <div class="panel__box">
@@ -242,129 +254,206 @@
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var canIO = 'IntersectionObserver' in window;
   var STATIC = /[?&]static\b/.test(Q);
-  var OFF = +((Q.match(/[?&]t=(\d+(?:\.\d+)?)/) || [])[1] || 0);      // jen pro náhledy
-  var ANIM = !reduce && canIO && !STATIC;
-  if(ANIM) root.classList.add('is-pre');                               // pruhy skryté hned, žádné probliknutí
-  if(STATIC) root.classList.add('is-static');
+  var FIXT = +((Q.match(/[?&]t=([\d.]+)/) || [])[1] || 1);              // jen pro náhledy: podíl dne
 
-  /* ===== D: texty a data podle zadání v2 (20. 11. 2026) ===== */
+  /* ===== D: texty a data (zadání v2 + úpravy 23. 11. 2026) ===== */
   var D = {
-    title: 'Data od chvíle, kdy jste článek otevřeli',
-    l1: 'Platforma SentinelOne zpracovala',
-    l2: 'Mobilní sítě v Česku přenesly',
-    avg: 'V průměru 127 GB za sekundu proti 68 GB za sekundu.',
-    rate1: 11e6 / 86400,                 // GB za sekundu: 11 PB denně (SentinelOne, říjen 2026)
-    rate2: 2160e6 / (365 * 86400),       // GB za sekundu: přibližně 2 160 PB za rok 2025 (ČTÚ)
-    info: ['Počítáno z průměrů. Platforma SentinelOne zpracuje 11 petabajtů dat denně (údaj firmy, říjen 2026).',
-           'Mobilní sítě v Česku přenesly za rok 2025 přibližně 2 160 petabajtů (odhad ČTÚ, bez provozu mezi stroji a bez pevného připojení přes LTE a 5G).'],
-    src: 'Zdroje: SentinelOne, ČTÚ (výroční zpráva za rok 2025).',
-    sr: 'Data od chvíle, kdy jste článek otevřeli. Počítáno z průměrů. Platforma SentinelOne zpracuje v průměru 11 petabajtů dat denně, tedy 127 GB za sekundu. '
-      + 'Mobilní sítě v Česku přenesly za rok 2025 přibližně 2 160 petabajtů, tedy v průměru 68 GB za sekundu. '
-      + 'Platforma SentinelOne tak zpracuje skoro dvakrát víc dat, než přenesou všechny mobilní sítě v Česku. Zdroje: SentinelOne, ČTÚ.'
+    title: 'Kolik dat proteče za jeden den',
+    l1: 'celosvětově',
+    l2: 'Mobilní sítě v Česku',
+    leg: '<b>Jeden obrys Česka</b> = objem veškerých dat, která mobilní sítě v Česku přenesou v průměru za 24 hodin.',
+    s1: 11,                               // PB za 24 hodin (SentinelOne, říjen 2026)
+    mob: 2160 / 365,                      // PB za 24 hodin: přibližně 2 160 PB za rok 2025 (ČTÚ)
+    info: ['<span class="lead">Platforma SentinelOne zpracuje za 24 hodin skoro dvakrát víc dat, než přenesou všechny mobilní sítě v Česku.</span>',
+           'Počítáno z průměrů. Platforma SentinelOne zpracuje celosvětově 11 petabajtů dat denně (údaj firmy, říjen 2026).',
+           'Mobilní sítě v Česku přenesly za rok 2025 přibližně 2 160 petabajtů (odhad ČTÚ, bez provozu mezi stroji a bez pevného připojení přes LTE a 5G), v průměru tedy 5,9 petabajtu za 24 hodin.',
+           '<span class="src">Zdroje: SentinelOne, ČTÚ (výroční zpráva za rok 2025).</span>'],
+    sr: 'Kolik dat proteče za jeden den. Animace s mapou Česka: jeden obrys Česka je objem veškerých dat, která mobilní sítě v Česku přenesou v průměru za 24 hodin, tedy 5,9 petabajtu. '
+      + 'Platforma SentinelOne zpracuje celosvětově 11 petabajtů dat denně, zaplní tedy jeden obrys celý a druhý z 86 procent, skoro dvakrát víc. '
+      + 'Počítáno z průměrů. Zdroje: SentinelOne (říjen 2026), ČTÚ (výroční zpráva za rok 2025).'
   };
+  var R = D.s1 / D.mob, DUR = 8000;
+  /* obrys Česka (Natural Earth 1:50m přes world-atlas, normováno na šířku 1) */
+  var CZ_ASPECT=0.5656, CZ=[[1,0.3506],[0.9963,0.351],[0.9877,0.3546],[0.9765,0.3558],[0.9648,0.3554],[0.9557,0.3614],[0.9471,0.3714],[0.9381,0.3781],[0.9333,0.3845],[0.9306,0.3909],[0.9002,0.4088],[0.8959,0.4164],[0.8927,0.4268],[0.8911,0.4408],[0.8889,0.4531],[0.8841,0.4599],[0.8676,0.4655],[0.8633,0.4683],[0.8607,0.4747],[0.851,0.4846],[0.8404,0.4938],[0.8206,0.5046],[0.7998,0.5078],[0.772,0.5042],[0.756,0.5002],[0.748,0.5046],[0.7373,0.5185],[0.7261,0.5425],[0.7213,0.5604],[0.7176,0.5552],[0.7106,0.5361],[0.7032,0.5337],[0.693,0.5321],[0.6855,0.5293],[0.669,0.5181],[0.6604,0.5149],[0.6508,0.5142],[0.6412,0.5205],[0.6343,0.5281],[0.6124,0.5281],[0.5884,0.5245],[0.5537,0.4994],[0.5451,0.499],[0.5355,0.5002],[0.5206,0.4942],[0.4912,0.4779],[0.4773,0.4743],[0.4688,0.4763],[0.4613,0.4798],[0.4554,0.4806],[0.4522,0.4751],[0.4415,0.4687],[0.4303,0.4679],[0.4271,0.4719],[0.4239,0.5078],[0.4202,0.5205],[0.4052,0.5201],[0.3999,0.5261],[0.3881,0.5437],[0.3855,0.56],[0.3652,0.5568],[0.3556,0.554],[0.347,0.5564],[0.3374,0.5656],[0.3113,0.5648],[0.2904,0.5596],[0.2814,0.5389],[0.2718,0.5305],[0.26,0.5233],[0.2557,0.5217],[0.2488,0.5106],[0.2365,0.4966],[0.2162,0.4775],[0.2002,0.4783],[0.1943,0.4735],[0.1917,0.4663],[0.1853,0.4543],[0.1778,0.4455],[0.1687,0.4424],[0.1559,0.4316],[0.1383,0.4084],[0.1223,0.3921],[0.1073,0.3925],[0.0977,0.3841],[0.0876,0.3729],[0.0801,0.3622],[0.0689,0.3359],[0.0609,0.3211],[0.0545,0.3119],[0.047,0.3043],[0.0443,0.2984],[0.0534,0.2844],[0.0566,0.2772],[0.0603,0.272],[0.0625,0.2664],[0.0625,0.2625],[0.0545,0.2485],[0.0438,0.2385],[0.0278,0.2286],[0.0176,0.2158],[0.0133,0.2042],[0.0123,0.1978],[0.0053,0.1895],[0,0.1767],[0,0.1691],[0.0011,0.1667],[0.0064,0.1667],[0.0123,0.1719],[0.0208,0.1823],[0.0278,0.1966],[0.032,0.1911],[0.0395,0.1755],[0.0539,0.158],[0.0678,0.148],[0.0806,0.1472],[0.0913,0.1444],[0.0998,0.1392],[0.1153,0.1412],[0.1265,0.1448],[0.1297,0.1428],[0.1345,0.1336],[0.1372,0.1256],[0.1618,0.1213],[0.1703,0.1057],[0.1746,0.1061],[0.1805,0.1037],[0.1853,0.0977],[0.1906,0.0953],[0.1943,0.0985],[0.1997,0.1001],[0.205,0.0965],[0.213,0.079],[0.2173,0.0766],[0.2387,0.0738],[0.268,0.0634],[0.283,0.0542],[0.2974,0.0495],[0.3129,0.0403],[0.338,0.0319],[0.339,0.0283],[0.3278,0.0195],[0.3235,0.014],[0.3209,0.008],[0.3251,0.002],[0.3305,0],[0.3374,0.0024],[0.3582,0.0064],[0.3641,0.01],[0.3663,0.0191],[0.3716,0.0271],[0.3759,0.0283],[0.3743,0.0419],[0.3807,0.0471],[0.3903,0.0511],[0.3967,0.0503],[0.4015,0.0447],[0.4031,0.0411],[0.4159,0.0403],[0.4287,0.0347],[0.4298,0.0251],[0.4293,0.008],[0.4303,0.0052],[0.4501,0.0104],[0.4698,0.0179],[0.4725,0.0355],[0.4778,0.0439],[0.4842,0.0519],[0.4901,0.0554],[0.5003,0.0558],[0.527,0.0662],[0.5398,0.0682],[0.5531,0.0754],[0.5638,0.083],[0.5723,0.0842],[0.5761,0.0925],[0.5809,0.0977],[0.5894,0.0937],[0.6215,0.0878],[0.6332,0.0957],[0.6407,0.1041],[0.6418,0.1065],[0.638,0.1141],[0.6359,0.1197],[0.6327,0.1233],[0.6215,0.1272],[0.6156,0.134],[0.6108,0.1408],[0.614,0.148],[0.6231,0.1528],[0.6295,0.154],[0.6316,0.1592],[0.6519,0.1811],[0.6684,0.2102],[0.6743,0.215],[0.6807,0.2158],[0.6871,0.2118],[0.6951,0.2022],[0.7048,0.1954],[0.7128,0.1919],[0.7266,0.1839],[0.7272,0.1787],[0.7154,0.1592],[0.7085,0.1432],[0.7101,0.1404],[0.725,0.1428],[0.7507,0.1516],[0.7896,0.1799],[0.7966,0.1799],[0.8105,0.1775],[0.8254,0.1731],[0.8324,0.1679],[0.835,0.1699],[0.8372,0.1855],[0.8334,0.1939],[0.8153,0.2022],[0.8163,0.2062],[0.8211,0.2118],[0.8292,0.2154],[0.8388,0.2254],[0.8457,0.2369],[0.8516,0.2421],[0.858,0.2449],[0.874,0.2385],[0.8788,0.2337],[0.8804,0.2302],[0.8836,0.2309],[0.8895,0.2365],[0.8911,0.2401],[0.9066,0.2465],[0.9156,0.2545],[0.9215,0.2581],[0.9279,0.2545],[0.953,0.2609],[0.96,0.2661],[0.9621,0.2748],[0.9605,0.28],[0.9648,0.294],[0.9963,0.3271],[0.9995,0.3438],[1,0.3506]];
 
   var NB = ' ';
-  var nb = function(t){ return t.replace(/(^| )([vzsaoikuVZSAOIKU]) /g, '$1$2'+NB).replace(/(\d) (GB|TB|PB|petabajt)/g, '$1'+NB+'$2').replace(/(\d) (\d{3})/g, '$1'+NB+'$2'); };
+  var nb = function(t){ return t.replace(/(^| )([vzsaoikuVZSAOIKU]) /g, '$1$2'+NB).replace(/(\d) (PB|petabajt|procent|hodin)/g, '$1'+NB+'$2').replace(/(\d) (\d{3})/g, '$1'+NB+'$2'); };
   var $ = function(s){ return root.querySelector(s); };
   $('[data-title]').textContent = nb(D.title);
-  $('[data-l1]').textContent = nb(D.l1);
+  $('[data-l1]').textContent = D.l1;
   $('[data-l2]').textContent = nb(D.l2);
-  $('[data-avg]').textContent = nb(D.avg);
+  $('[data-leg]').innerHTML = nb(D.leg);
   $('[data-sr]').textContent = D.sr;
-  $('[data-pbody]').innerHTML = D.info.map(function(t){ return '<p>'+nb(t)+'</p>'; }).join('') + '<p class="src">'+nb(D.src)+'</p>';
+  $('[data-pbody]').innerHTML = D.info.map(function(t){ return '<p>'+nb(t)+'</p>'; }).join('');
 
-  /* pruhy ve stejném měřítku, delší = 100 % sloupce */
-  var b1 = $('[data-b1]'), b2 = $('[data-b2]');
-  b1.style.setProperty('--w', '100%');
-  b2.style.setProperty('--w', (D.rate2 / D.rate1 * 100).toFixed(2) + '%');
-  b2.style.setProperty('--d', '150ms');
+  /* ===== pomocníci ===== */
+  var cl = function(v,a,b){ return Math.max(a, Math.min(b, v)); };
+  function rnd(s){ return function(){ s = (s*16807) % 2147483647; return (s-1)/2147483646; }; }
+  function mix(a,b,t){ return [0,1,2].map(function(i){ return Math.round(a[i]+(b[i]-a[i])*t); }); }
+  var P0=[58,0,170], P1=[97,0,255], P2=[150,92,255], LIME=[143,255,8], G0=[150,159,168], G1=[196,203,210];
+  function purple(t){ return t<.5 ? mix(P0,P1,t*2) : mix(P1,P2,(t-.5)*2); }
+  var css = function(c){ return 'rgb('+c[0]+','+c[1]+','+c[2]+')'; };
+  function inPoly(x,y){ var c=false; for(var i=0,j=CZ.length-1;i<CZ.length;j=i++){ var a=CZ[i],b=CZ[j]; if(((a[1]>y)!=(b[1]>y))&&(x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])) c=!c; } return c; }
 
-  /* ===== běžící čísla: buňky pevné šířky, celá část aspoň na tři místa ===== */
-  var n1 = $('[data-n1]'), n2 = $('[data-n2]');
-  function build(el, intLen){
-    var h = '';
-    for(var k=0; k<intLen; k++){
-      var fromRight = intLen - k;
-      if(k > 0 && fromRight % 3 === 0) h += '<span class="g"></span>';
-      h += '<span class="d"></span>';
-    }
-    h += '<span class="k">,</span><span class="d"></span><span class="d"></span><span class="u">TB</span>';
+  /* ===== čísla s buňkami pevné šířky ===== */
+  function setNum(el, v){
+    var s = v.toFixed(1).replace('.', ','), h = '';
+    if(el._s === s) return; el._s = s;
+    var p = s.split(',');                                // celá část přirozeně, desetinná číslice v buňce pevné šířky (mění se nejrychleji)
+    el.innerHTML = p[0] + '<span class="k">,</span><span class="d">'+p[1]+'</span><span class="u">PB</span>';
+  }
+  function setTime(f){
+    var m = Math.round(cl(f,0,1)*1440), s = Math.floor(m/60)+':'+String(m%60).padStart(2,'0'), el = $('[data-time]'), h = '';
+    if(el._s === s) return; el._s = s;
+    if(s.length < 5) h += '<span class="d"></span>';
+    for(var i=0;i<s.length;i++) h += s[i]===':' ? '<span class="k">:</span>' : '<span class="d">'+s[i]+'</span>';
     el.innerHTML = h;
-    el._cells = [].slice.call(el.querySelectorAll('.d'));
-    el._len = intLen; el._last = '';
   }
-  function show(el, tb){
-    var s = tb.toFixed(2), p = s.split('.'), ip = p[0], len = Math.max(3, ip.length);
-    if(el._len !== len) build(el, len);
-    var full = new Array(len - ip.length + 1).join('0') + ip + p[1];
-    if(full === el._last) return;
-    var lead = len - ip.length;                  // nuly navíc vpředu jsou tlumené
-    for(var k=0; k<full.length; k++){
-      var c = el._cells[k];
-      if(c.textContent !== full[k]) c.textContent = full[k];
-      var z = k < lead;
-      if(c._z !== z){ c.classList.toggle('z', z); c._z = z; }
-    }
-    el._last = full;
-  }
-  function secs(){ return STATIC ? OFF : performance.now() / 1000 + OFF; }
-  function render(){
-    var t = secs();
-    show(n1, D.rate1 * t / 1000);
-    show(n2, D.rate2 * t / 1000);
-  }
-  build(n1, 3); build(n2, 3); render();
 
-  /* šířka buňky = nejširší číslice v Poppinsu (Poppins na cc.cz nemá tabulární číslice) */
+  /* ===== mapy ===== */
+  var DPR = Math.min(3, Math.max(1, window.devicePixelRatio || 1));
+  var maps = [].slice.call(root.querySelectorAll('[data-map]')).map(function(c, i){ return {c:c, x:c.getContext('2d'), s1:i<2, seed:[7,11,13][i]}; });
+  var HEAD = 14;                                         // místo nad obrysem, odkud padají data
+  function layoutMap(m){
+    var w = m.c.clientWidth, h = m.c.clientHeight;
+    if(!w || !h){ m.ok = false; return; }
+    m.c.width = Math.round(w*DPR); m.c.height = Math.round(h*DPR);
+    var cw = Math.min(w, (h - HEAD) / CZ_ASPECT), ch = cw*CZ_ASPECT;
+    m.ox = (w - cw)/2; m.oy = h - ch; m.cw = cw; m.ch = ch; m.w = w; m.h = h;
+    var pitch = cl(cw/80, 1.9, 3), sq = pitch*.76, r = rnd(m.seed), cells = [];
+    for(var y=0;y<ch;y+=pitch) for(var x=0;x<cw;x+=pitch){
+      if(inPoly((x+sq/2)/cw, (y+sq/2)/cw)) cells.push({x:m.ox+x, y:m.oy+y, k:(ch-y)+Math.abs(x-cw*.52)*.32+r()*9*cw/200, c:r()});
+    }
+    cells.sort(function(a,b){ return a.k-b.k; });
+    m.cells = cells; m.sq = sq; m.ok = true;
+    var p = new Path2D();
+    CZ.forEach(function(q,i){ var px=m.ox+q[0]*cw, py=m.oy+q[1]*cw; i ? p.lineTo(px,py) : p.moveTo(px,py); });
+    p.closePath(); m.path = p;
+  }
+  function drawMap(m, f, rate){
+    if(!m.ok) return;
+    var X = m.x; X.setTransform(DPR,0,0,DPR,0,0); X.clearRect(0,0,m.w,m.h);
+    X.fillStyle = m.s1 ? '#f6f2ff' : '#f4f5f7'; X.fill(m.path);
+    X.strokeStyle = m.s1 ? '#ddd0ff' : '#d6dbdf'; X.lineWidth = 1; X.stroke(m.path);
+    var n = m.cells.length, done = Math.floor(n*cl(f,0,1)), sq = m.sq;
+    for(var i=0;i<done;i++){
+      var c = m.cells[i];
+      if(m.s1){ var age = rate>0 ? (done-i)/(n*rate*.5) : 9; X.fillStyle = css(age<1 ? mix(LIME, purple(c.c), age) : purple(c.c)); }
+      else X.fillStyle = css(mix(G0, G1, c.c));
+      X.fillRect(c.x, c.y, sq, sq);
+    }
+    if(f<1 && rate>0){                                    // padající data: buňky, které dopadnou v příštích ~0,45 s
+      var ahead = Math.floor(n*rate*.45);
+      for(var j=0;j<ahead && done+j<n;j++){
+        var c2 = m.cells[done+j], p = 1-j/ahead, yy = m.oy-HEAD+(c2.y-m.oy+HEAD)*p*p;
+        X.globalAlpha = .2+.8*p; X.fillStyle = m.s1 ? '#7be000' : css(mix(G0,G1,c2.c*.4)); X.fillRect(c2.x, yy, sq, sq);
+      }
+      X.globalAlpha = 1;
+    }
+  }
+
+  /* ===== ciferník: jedna otáčka = 24 hodin ===== */
+  var dial = $('[data-dial]'), DX = dial.getContext('2d');
+  function drawDial(f, done){
+    var s = dial.clientWidth; if(!s) return;
+    if(dial.width !== Math.round(s*DPR)){ dial.width = dial.height = Math.round(s*DPR); }
+    DX.setTransform(DPR,0,0,DPR,0,0); DX.clearRect(0,0,s,s);
+    var c = s/2, r = s/2-1, a0 = -Math.PI/2;
+    DX.beginPath(); DX.arc(c,c,r,0,2*Math.PI); DX.fillStyle = '#f5f1ff'; DX.fill(); DX.lineWidth = 1.2; DX.strokeStyle = '#ddd2ff'; DX.stroke();
+    if(f>0){ DX.beginPath(); DX.moveTo(c,c); DX.arc(c,c,r-3,a0,a0+2*Math.PI*cl(f,0,1)); DX.closePath(); DX.fillStyle = 'rgba(97,0,255,.18)'; DX.fill(); }
+    for(var i=0;i<24;i++){ var a=a0+i/24*2*Math.PI, big=i%6===0, r1=r-(big?r*.26:r*.15);
+      DX.beginPath(); DX.moveTo(c+Math.cos(a)*r1, c+Math.sin(a)*r1); DX.lineTo(c+Math.cos(a)*(r-1.5), c+Math.sin(a)*(r-1.5));
+      DX.lineWidth = big?1.4:.8; DX.strokeStyle = big?'#8b7fb8':'#c7bde6'; DX.stroke(); }
+    if(done){                                             // po doběhnutí: šipka „přehrát znovu“
+      var rr = r*.42; DX.beginPath(); DX.arc(c,c,rr,-Math.PI*.15,Math.PI*1.45); DX.lineWidth = 2; DX.strokeStyle = '#6100ff'; DX.lineCap = 'round'; DX.stroke();
+      var ax = c+Math.cos(-Math.PI*.15)*rr, ay = c+Math.sin(-Math.PI*.15)*rr;
+      DX.beginPath(); DX.moveTo(ax+3.2,ay-4.2); DX.lineTo(ax,ay); DX.lineTo(ax-4.4,ay-1.8); DX.stroke(); DX.lineCap = 'butt';
+      return;
+    }
+    var a2 = a0+2*Math.PI*cl(f,0,1);
+    DX.beginPath(); DX.moveTo(c,c); DX.lineTo(c+Math.cos(a2)*(r-r*.3), c+Math.sin(a2)*(r-r*.3)); DX.lineWidth = 2.2; DX.lineCap = 'round'; DX.strokeStyle = '#6100ff'; DX.stroke(); DX.lineCap = 'butt';
+    DX.beginPath(); DX.arc(c,c,2.4,0,2*Math.PI); DX.fillStyle = '#6100ff'; DX.fill();
+  }
+
+  /* ===== stav a přehrávání ===== */
+  var n1 = $('[data-n1]'), n2 = $('[data-n2]'), clk = $('[data-clk]');
+  var F = 0, playing = false, t0 = 0, raf = 0;
+  function setClk(on){ clk.setAttribute('aria-disabled', on ? 'false' : 'true'); clk.classList.toggle('is-done', on); }   // ne disabled: fokus z klávesnice při přehrávání nezmizí
+  if(reduce) clk.tabIndex = -1;
+  /* rychlost plnění (podíl obrysu za sekundu) – pro padající data a limetkový dozvuk */
+  var RS = R/(DUR/1000), RM = 1/(DUR/1000);
+  function render(f, live){
+    F = f; var done = f >= 1 && !live;
+    drawMap(maps[0], f*R, live && f < 1/R ? RS : 0);
+    drawMap(maps[1], f*R-1, live && f >= 1/R && f < 1 ? RS : 0);
+    drawMap(maps[2], f, live && f < 1 ? RM : 0);
+    setNum(n1, D.s1*f); setNum(n2, D.mob*f); setTime(f);
+    drawDial(f, done && !reduce);
+  }
+  function tick(now){
+    var f = cl((now - t0)/DUR, 0, 1);
+    render(f, f < 1);
+    if(f < 1){ raf = requestAnimationFrame(tick); }
+    else { playing = false; raf = 0; render(1, false); setClk(!reduce); }
+  }
+  function play(){
+    if(playing) return;
+    if(reduce){ render(1, false); return; }
+    playing = true; setClk(false);
+    t0 = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(tick);
+  }
+  function finish(){ playing = false; cancelAnimationFrame(raf); raf = 0; render(1, false); setClk(!reduce); }
+
+  /* ===== rozměry: šířka číslic, mapy, zmenšení textu ===== */
   function measure(){
     var probe = document.createElement('span');
     probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font:600 100px/1 '+getComputedStyle(n1).fontFamily;
-    root.appendChild(probe);
-    var mx = 0;
+    root.appendChild(probe); var mx = 0;
     for(var d=0; d<10; d++){ probe.textContent = String(d); mx = Math.max(mx, probe.getBoundingClientRect().width); }
     root.removeChild(probe);
-    if(mx > 0) root.style.setProperty('--dw', (mx/100 - .05).toFixed(3) + 'em');   // bez bočního dovybavení písma, kresba se nedotkne
+    if(mx > 0) root.style.setProperty('--dw', (mx/100 - .05).toFixed(3) + 'em');
   }
-
-  /* ===== smyčka: běží jen, když je prvek vidět a záložka aktivní ===== */
-  var inView = !canIO, raf = 0, iv = 0;
-  function running(){ return !STATIC && inView && !document.hidden; }
-  function loop(){ render(); raf = requestAnimationFrame(loop); }
-  function sync(){
-    var on = running();
-    if(reduce){
-      if(on && !iv){ render(); iv = setInterval(render, 1000); }
-      if(!on && iv){ clearInterval(iv); iv = 0; }
-    } else {
-      if(on && !raf){ loop(); }
-      if(!on && raf){ cancelAnimationFrame(raf); raf = 0; }
-    }
+  var bd = $('.bd'), leg = $('[data-leg]');
+  function over(){
+    var r = bd.getBoundingClientRect(), bad = false;
+    [].forEach.call(bd.children, function(el){ var b = el.getBoundingClientRect(); if(b.bottom > r.bottom + .5 || el.scrollWidth > el.clientWidth + 1) bad = true; });
+    var mh = Math.min.apply(null, maps.map(function(m){ return m.c.clientHeight; }));
+    return bad || mh < 46 || root.scrollWidth > root.clientWidth + 1;
   }
-  document.addEventListener('visibilitychange', sync);
+  function fit(){
+    measure();
+    var sc = 1; root.style.setProperty('--sc', 1);
+    for(var k=0; k<14 && over() && sc > .66; k++){ sc *= .95; root.style.setProperty('--sc', sc.toFixed(3)); }
+    maps.forEach(layoutMap); render(F, playing);
+  }
+  var rt;
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  if(window.ResizeObserver) new ResizeObserver(function(){ clearTimeout(rt); rt = setTimeout(fit, 90); }).observe(root);
+  fit();
 
-  /* ===== nástup pruhů a viditelnost ===== */
-  function enter(){ root.classList.add('is-in'); }
-  if(canIO){
-    var alive = false;
-    new IntersectionObserver(function(en){
+  /* ===== spuštění ===== */
+  if(STATIC){ render(cl(FIXT,0,1), FIXT < 1); if(FIXT >= 1) finish(); }
+  else if(/[?&]rec\b/.test(Q)){ render(0, false); }
+  else if(reduce){ finish(); }
+  else if(canIO){
+    var alive = false, io = new IntersectionObserver(function(en){
       alive = true;
-      var e = en[en.length - 1];
-      inView = e.isIntersecting;
-      if(e.intersectionRatio >= .4) enter();
-      sync();
-    }, {threshold:[0, .4]}).observe(root);
-    setTimeout(function(){ if(!alive){ inView = true; enter(); sync(); } }, 6000);   // záloha pro nefunkční IO
-  } else { enter(); }
-  if(!ANIM) enter();
-  sync();
+      if(en[en.length-1].intersectionRatio >= .5){ io.disconnect(); play(); }
+    }, {threshold:[0, .5]});
+    io.observe(root);
+    setTimeout(function(){ if(!alive && !playing && F === 0) finish(); }, 6000);   // záloha pro nefunkční IO
+  } else { finish(); }
 
-  /* ===== panel (i) ===== */
+  /* ===== ovládání ===== */
   function bindTap(el, fn){   // pointerdown kvůli mobilu, click jen pro čtečky, klávesy zvlášť
     var last = 0;
     el.addEventListener('pointerdown', function(e){ if(e.button > 0) return; e.preventDefault(); last = Date.now(); fn(e); });
     el.addEventListener('click', function(e){ e.preventDefault(); if(Date.now() - last > 600) fn(e); });
     el.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); last = Date.now(); fn(e); } });
   }
+  bindTap(clk, function(){ if(clk.getAttribute('aria-disabled') !== 'true') play(); });
   var info = $('[data-info]'), panel = $('[data-panel]'), closeBtn = $('[data-close]');
   function openP(){ panel.hidden = false; info.setAttribute('aria-expanded', 'true'); closeBtn.focus({preventScroll:true}); }
   function closeP(){ if(panel.hidden) return; panel.hidden = true; info.setAttribute('aria-expanded', 'false'); info.focus({preventScroll:true}); }
@@ -373,28 +462,10 @@
   panel.addEventListener('pointerdown', function(e){ if(e.target === panel){ e.preventDefault(); closeP(); } });   // preventDefault: fokus zůstane na (i)
   document.addEventListener('keydown', function(e){
     if(e.key === 'Escape') closeP();
-    if(e.key === 'Tab' && !panel.hidden){ e.preventDefault(); closeBtn.focus(); }   // v otevřeném panelu je jediný ovládací prvek
+    if(e.key === 'Tab' && !panel.hidden){ e.preventDefault(); closeBtn.focus(); }
   });
-
-  /* ===== vyplnění rámu ===== */
-  var avg = $('[data-avg]');
-  function over(){
-    var r = root.getBoundingClientRect(), pb = parseFloat(getComputedStyle(root).paddingBottom) || 0;
-    return avg.getBoundingClientRect().bottom > r.bottom - pb + .5 || root.scrollWidth > root.clientWidth + 1
-      || n1.scrollWidth > n1.clientWidth + 1 || n2.scrollWidth > n2.clientWidth + 1;
-  }
-  function fit(){
-    measure();
-    var sc = 1; root.style.setProperty('--sc', 1);
-    for(var k=0; k<16 && over() && sc > .6; k++){ sc *= .95; root.style.setProperty('--sc', sc.toFixed(3)); }
-  }
-  var rt;
-  window.addEventListener('resize', fit);
-  window.addEventListener('load', fit);
-  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
-  if(window.ResizeObserver) new ResizeObserver(function(){ clearTimeout(rt); rt = setTimeout(fit, 90); }).observe(root);
-  fit();
   if(/[?&]info\b/.test(Q)) openP();
+  if(/[?&]rec\b/.test(Q)) window.__ccS1 = function(f){ render(f, f < 1); if(f >= 1) finish(); };   // jen pro export videa
 })();
 </script>
 </body>
