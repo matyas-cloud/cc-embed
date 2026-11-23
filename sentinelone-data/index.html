@@ -3,20 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kolik dat proteče za jeden den: platforma SentinelOne a mobilní sítě v Česku</title>
+<title>Objem dat za jeden den: platforma SentinelOne a mobilní sítě v Česku</title>
 <meta name="robots" content="noindex">
-<!-- CzechCrunch × SentinelOne – animace „Kolik dat proteče za jeden den“ do nativního článku (Google Doc „SentinelOne - draft NTV“).
+<!-- CzechCrunch × SentinelOne – animace „Objem dat za jeden den“ do nativního článku (Google Doc „SentinelOne - draft NTV“).
      Místo: pod mezititulkem „Skoro dvakrát víc dat než české mobilní sítě“, za odstavcem „Její práce začíná tam,
        kde končí Kretovova…“, před odstavcem „Tým Militsyny staví…“.
      Vložení: sentinelone-data-vlozeni.html, obalový div (aspect-ratio + min-height) s iframem.
      Nasazení: matyas-cloud/cc-embed/sentinelone-data/ (index.html, logo-sentinelone.svg), Poppins ze sdílené ../fonts/.
-     Formát: bílá karta s linkou #e0e0e0. Za 8 s proběhne 24 hodin (ciferník = jedna otáčka za den). Data padají do obrysů
+     Formát: bílá karta s linkou #e0e0e0. Za 8 s proběhne 24 hodin (počítadlo „0 / 24 h“ vpravo nahoře). Data padají do obrysů
        Česka. Jeden obrys = všechno, co za 24 hodin v průměru přenesou mobilní sítě v Česku (5,9 PB). SentinelOne zaplní
        jeden obrys a druhý z 86 %. Od 480 px šířky řádky vedle sebe, pod 480 px pod sebou, SentinelOne vždy první.
      Barvy SentinelOne podle sentinelone.com (23. 11. 2026): fialová #6100FF, tmavá #140D33, limetková #8FFF08 (padající data).
        Logo: sentinelone.com/next-assets/webui/logos/logo-sentinelone-dark.svg, beze změny.
      Spuštění: jednou při vstupu do zorného pole (IntersectionObserver, pre-stav hned, záloha 6 s = rovnou konečný stav).
-       Po doběhnutí je na ciferníku šipka, klik na hodiny den přehraje znovu. S omezeným pohybem rovnou konečný stav.
+       Pak zůstane konečný stav. S omezeným pohybem rovnou konečný stav.
      Data: SentinelOne 11 PB denně (údaj firmy, říjen 2026); ČTÚ, výroční zpráva za rok 2025, str. 19: přibližně 2 160 PB
        za rok 2025 (odhad úřadu) → dopočet 5,9 PB za 24 hodin, poměr 1,86 (v textu jen „skoro dvakrát“).
      Jen pro náhledy: ?static&t=0.5 (podíl dne 0–1, bez animace), ?info otevře (i).
@@ -24,7 +24,9 @@
        2026-11-20  v1 dvě běžící počítadla od otevření článku (zadání v2, varianta A).
        2026-11-23  v2 předěláno podle Matta: místo počítadel sypání dat do mapy Česka za 24 hodin (směr A), barvy a logo
                    SentinelOne s „celosvětově“, hodiny s popiskem „24 hodin“, legenda „Jeden obrys Česka = objem veškerých dat,
-                   která mobilní sítě v Česku přenesou v průměru za 24 hodin.“, závěrečná věta přesunuta do (i). -->
+                   která mobilní sítě v Česku přenesou v průměru za 24 hodin.“, závěrečná věta přesunuta do (i).
+       2026-11-23  v3 podle Matta: nadpis „Objem dat za jeden den“, místo ciferníku a popisku „24 hodin“ jen počítadlo
+                   „16 / 24 h“, pryč přehrávání znovu, legenda vystředěná k obrysu Česka a na šířku horní mapy. -->
 <style>
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
@@ -144,20 +146,15 @@
 .cc-s1data *{box-sizing:border-box;}
 .cc-s1data button{font:inherit;color:inherit;margin:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 
-/* záhlaví: nadpis, hodiny, (i) */
+/* záhlaví: nadpis, počítadlo hodin, (i) */
 .cc-s1data .hd{flex:0 0 auto;display:flex;align-items:center;gap:12px;}
 .cc-s1data .cc-s1data__title{flex:1 1 auto;min-width:0;margin:0;color:#000;font:600 var(--tf)/1.25 var(--cc-display);letter-spacing:-.01em;text-wrap:balance;}
-.cc-s1data .clk{flex:none;display:flex;align-items:center;gap:10px;padding:0;border:0;background:none;cursor:default;border-radius:12px;}
-.cc-s1data .clk.is-done{cursor:pointer;}
-.cc-s1data .clk__t{display:flex;flex-direction:column;align-items:flex-end;line-height:1;}
-.cc-s1data .clk__l{font:500 11px/1.2 var(--cc-display);color:#8a8fa3;}
-.cc-s1data .clk__v{margin-top:3px;font:600 calc(var(--tf)*1.02)/1 var(--cc-display);color:var(--s1d);white-space:nowrap;}
-.cc-s1data .clk__v .d{display:inline-block;width:var(--dw,.61em);text-align:center;}
-.cc-s1data .clk__v .k{display:inline-block;width:.3em;text-align:center;}
-.cc-s1data .clk canvas{display:block;width:46px;height:46px;}
+.cc-s1data .hrs{flex:none;display:flex;align-items:baseline;white-space:nowrap;color:var(--s1d);}
+.cc-s1data .hrs__v{display:inline-block;min-width:1.25em;text-align:right;font:600 calc(var(--tf)*1.15)/1 var(--cc-display);}
+.cc-s1data .hrs__u{margin-left:.3em;font:500 var(--lf)/1 var(--cc-display);color:#8a8fa3;}
 .cc-s1data .info{flex:none;align-self:flex-start;width:26px;height:26px;border-radius:50%;border:1.5px solid #b9c0c6;background:#fff;color:var(--ink3);
   cursor:pointer;display:grid;place-items:center;font:600 13px/1 var(--cc-display);transition:border-color .15s,color .15s;}
-@media (hover:hover){.cc-s1data .info:hover{border-color:var(--ink);color:var(--ink);}.cc-s1data .clk.is-done:hover canvas{filter:brightness(.96);}}
+@media (hover:hover){.cc-s1data .info:hover{border-color:var(--ink);color:var(--ink);}}
 
 /* tělo: dva řádky – popisky vlevo, obrysy Česka vpravo */
 .cc-s1data .bd{flex:1 1 auto;min-height:0;display:grid;margin-top:calc(clamp(6px,1.6vw,12px)*var(--sc));
@@ -177,7 +174,7 @@
 .cc-s1data .map{position:relative;min-width:0;min-height:0;}
 .cc-s1data .map canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
 .cc-s1data .m1{grid-area:m1;} .cc-s1data .m2{grid-area:m2;} .cc-s1data .m3{grid-area:m3;}
-.cc-s1data .leg{grid-area:lg;align-self:center;margin:0;color:var(--ink3);font:400 var(--gf)/1.45 var(--cc-display);}
+.cc-s1data .leg{grid-area:lg;align-self:center;justify-self:center;max-width:var(--lgw,100%);margin:0;padding-top:var(--lgo,0px);text-align:center;text-wrap:balance;color:var(--ink3);font:400 var(--gf)/1.45 var(--cc-display);}
 .cc-s1data .leg b{font-weight:600;color:var(--ink2);}
 
 /* panel (i) */
@@ -195,14 +192,10 @@
 .cc-s1data .panel__body .lead{font-weight:500;color:var(--ink);}
 .cc-s1data .panel__body .src{color:var(--ink3);}
 
-/* pod 480 px: popisek nad každým řádkem, dva obrysy vedle sebe, hodiny pod nadpisem */
+/* pod 480 px: popisek nad každým řádkem, dva obrysy vedle sebe */
 @media (max-width:479px){
-  .cc-s1data .hd{flex-wrap:wrap;row-gap:8px;}
-  .cc-s1data .cc-s1data__title{flex-basis:calc(100% - 38px);order:1;}
-  .cc-s1data .info{order:2;}
-  .cc-s1data .clk{order:3;flex-direction:row-reverse;}
-  .cc-s1data .clk__t{align-items:flex-start;}
-  .cc-s1data .clk canvas{width:38px;height:38px;}
+  .cc-s1data .hd{align-items:flex-start;}
+  .cc-s1data .hrs{margin-top:2px;}
   .cc-s1data .bd{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto minmax(0,1fr);
     grid-template-areas:"l1 l1" "m1 m2" "l2 l2" "m3 lg";row-gap:calc(6px*var(--sc));}
   .cc-s1data .lab{flex-direction:row;align-items:flex-end;justify-content:space-between;gap:10px;}
@@ -210,6 +203,9 @@
   .cc-s1data .lab--mob .lab__n{align-self:flex-end;}
   .cc-s1data .num{margin-top:0;}
   .cc-s1data .logo{width:clamp(96px,30vw,112px);}
+  .cc-s1data .panel{padding:10px;}
+  .cc-s1data .panel__box{padding:14px 16px;}
+  .cc-s1data .panel__body p{font-size:12px;line-height:1.45;margin-bottom:6px;}
 }
 </style>
 
@@ -217,10 +213,7 @@
   <p class="cc-sr" data-sr></p>
   <div class="hd">
     <h3 class="cc-s1data__title" data-title></h3>
-    <button type="button" class="clk" data-clk aria-label="Přehrát 24 hodin znovu" aria-disabled="true">
-      <span class="clk__t" aria-hidden="true"><span class="clk__l">24 hodin</span><span class="clk__v" data-time></span></span>
-      <canvas data-dial aria-hidden="true"></canvas>
-    </button>
+    <div class="hrs" aria-hidden="true"><span class="hrs__v" data-h>0</span><span class="hrs__u">/ 24 h</span></div>
     <button type="button" class="info" data-info aria-label="Jak počítáme a zdroje" aria-expanded="false" aria-controls="s1-panel">i</button>
   </div>
   <div class="bd" aria-hidden="true">
@@ -258,7 +251,7 @@
 
   /* ===== D: texty a data (zadání v2 + úpravy 23. 11. 2026) ===== */
   var D = {
-    title: 'Kolik dat proteče za jeden den',
+    title: 'Objem dat za jeden den',
     l1: 'celosvětově',
     l2: 'Mobilní sítě v Česku',
     leg: '<b>Jeden obrys Česka</b> = objem veškerých dat, která mobilní sítě v Česku přenesou v průměru za 24 hodin.',
@@ -268,7 +261,7 @@
            'Počítáno z průměrů. Platforma SentinelOne zpracuje celosvětově 11 petabajtů dat denně (údaj firmy, říjen 2026).',
            'Mobilní sítě v Česku přenesly za rok 2025 přibližně 2 160 petabajtů (odhad ČTÚ, bez provozu mezi stroji a bez pevného připojení přes LTE a 5G), v průměru tedy 5,9 petabajtu za 24 hodin.',
            '<span class="src">Zdroje: SentinelOne, ČTÚ (výroční zpráva za rok 2025).</span>'],
-    sr: 'Kolik dat proteče za jeden den. Animace s mapou Česka: jeden obrys Česka je objem veškerých dat, která mobilní sítě v Česku přenesou v průměru za 24 hodin, tedy 5,9 petabajtu. '
+    sr: 'Objem dat za jeden den. Animace s mapou Česka: jeden obrys Česka je objem veškerých dat, která mobilní sítě v Česku přenesou v průměru za 24 hodin, tedy 5,9 petabajtu. '
       + 'Platforma SentinelOne zpracuje celosvětově 11 petabajtů dat denně, zaplní tedy jeden obrys celý a druhý z 86 procent, skoro dvakrát víc. '
       + 'Počítáno z průměrů. Zdroje: SentinelOne (říjen 2026), ČTÚ (výroční zpráva za rok 2025).'
   };
@@ -302,13 +295,8 @@
     var p = s.split(',');                                // celá část přirozeně, desetinná číslice v buňce pevné šířky (mění se nejrychleji)
     el.innerHTML = p[0] + '<span class="k">,</span><span class="d">'+p[1]+'</span><span class="u">PB</span>';
   }
-  function setTime(f){
-    var m = Math.round(cl(f,0,1)*1440), s = Math.floor(m/60)+':'+String(m%60).padStart(2,'0'), el = $('[data-time]'), h = '';
-    if(el._s === s) return; el._s = s;
-    if(s.length < 5) h += '<span class="d"></span>';
-    for(var i=0;i<s.length;i++) h += s[i]===':' ? '<span class="k">:</span>' : '<span class="d">'+s[i]+'</span>';
-    el.innerHTML = h;
-  }
+  var hEl = $('[data-h]');
+  function setHours(f){ var h = String(Math.floor(cl(f,0,1)*24 + 1e-9)); if(hEl.textContent !== h) hEl.textContent = h; }
 
   /* ===== mapy ===== */
   var DPR = Math.min(3, Math.max(1, window.devicePixelRatio || 1));
@@ -319,7 +307,7 @@
     if(!w || !h){ m.ok = false; return; }
     m.c.width = Math.round(w*DPR); m.c.height = Math.round(h*DPR);
     var cw = Math.min(w, (h - HEAD) / CZ_ASPECT), ch = cw*CZ_ASPECT;
-    m.ox = (w - cw)/2; m.oy = h - ch; m.cw = cw; m.ch = ch; m.w = w; m.h = h;
+    m.ox = (w - cw)/2; m.oy = HEAD + (h - HEAD - ch)/2; m.cw = cw; m.ch = ch; m.w = w; m.h = h;   // obrys na střed buňky, nad ním místo na padající data
     var pitch = cl(cw/80, 1.9, 3), sq = pitch*.76, r = rnd(m.seed), cells = [];
     for(var y=0;y<ch;y+=pitch) for(var x=0;x<cw;x+=pitch){
       if(inPoly((x+sq/2)/cw, (y+sq/2)/cw)) cells.push({x:m.ox+x, y:m.oy+y, k:(ch-y)+Math.abs(x-cw*.52)*.32+r()*9*cw/200, c:r()});
@@ -352,57 +340,31 @@
     }
   }
 
-  /* ===== ciferník: jedna otáčka = 24 hodin ===== */
-  var dial = $('[data-dial]'), DX = dial.getContext('2d');
-  function drawDial(f, done){
-    var s = dial.clientWidth; if(!s) return;
-    if(dial.width !== Math.round(s*DPR)){ dial.width = dial.height = Math.round(s*DPR); }
-    DX.setTransform(DPR,0,0,DPR,0,0); DX.clearRect(0,0,s,s);
-    var c = s/2, r = s/2-1, a0 = -Math.PI/2;
-    DX.beginPath(); DX.arc(c,c,r,0,2*Math.PI); DX.fillStyle = '#f5f1ff'; DX.fill(); DX.lineWidth = 1.2; DX.strokeStyle = '#ddd2ff'; DX.stroke();
-    if(f>0){ DX.beginPath(); DX.moveTo(c,c); DX.arc(c,c,r-3,a0,a0+2*Math.PI*cl(f,0,1)); DX.closePath(); DX.fillStyle = 'rgba(97,0,255,.18)'; DX.fill(); }
-    for(var i=0;i<24;i++){ var a=a0+i/24*2*Math.PI, big=i%6===0, r1=r-(big?r*.26:r*.15);
-      DX.beginPath(); DX.moveTo(c+Math.cos(a)*r1, c+Math.sin(a)*r1); DX.lineTo(c+Math.cos(a)*(r-1.5), c+Math.sin(a)*(r-1.5));
-      DX.lineWidth = big?1.4:.8; DX.strokeStyle = big?'#8b7fb8':'#c7bde6'; DX.stroke(); }
-    if(done){                                             // po doběhnutí: šipka „přehrát znovu“
-      var rr = r*.42; DX.beginPath(); DX.arc(c,c,rr,-Math.PI*.15,Math.PI*1.45); DX.lineWidth = 2; DX.strokeStyle = '#6100ff'; DX.lineCap = 'round'; DX.stroke();
-      var ax = c+Math.cos(-Math.PI*.15)*rr, ay = c+Math.sin(-Math.PI*.15)*rr;
-      DX.beginPath(); DX.moveTo(ax+3.2,ay-4.2); DX.lineTo(ax,ay); DX.lineTo(ax-4.4,ay-1.8); DX.stroke(); DX.lineCap = 'butt';
-      return;
-    }
-    var a2 = a0+2*Math.PI*cl(f,0,1);
-    DX.beginPath(); DX.moveTo(c,c); DX.lineTo(c+Math.cos(a2)*(r-r*.3), c+Math.sin(a2)*(r-r*.3)); DX.lineWidth = 2.2; DX.lineCap = 'round'; DX.strokeStyle = '#6100ff'; DX.stroke(); DX.lineCap = 'butt';
-    DX.beginPath(); DX.arc(c,c,2.4,0,2*Math.PI); DX.fillStyle = '#6100ff'; DX.fill();
-  }
-
   /* ===== stav a přehrávání ===== */
-  var n1 = $('[data-n1]'), n2 = $('[data-n2]'), clk = $('[data-clk]');
+  var n1 = $('[data-n1]'), n2 = $('[data-n2]');
   var F = 0, playing = false, t0 = 0, raf = 0;
-  function setClk(on){ clk.setAttribute('aria-disabled', on ? 'false' : 'true'); clk.classList.toggle('is-done', on); }   // ne disabled: fokus z klávesnice při přehrávání nezmizí
-  if(reduce) clk.tabIndex = -1;
   /* rychlost plnění (podíl obrysu za sekundu) – pro padající data a limetkový dozvuk */
   var RS = R/(DUR/1000), RM = 1/(DUR/1000);
   function render(f, live){
-    F = f; var done = f >= 1 && !live;
+    F = f;
     drawMap(maps[0], f*R, live && f < 1/R ? RS : 0);
     drawMap(maps[1], f*R-1, live && f >= 1/R && f < 1 ? RS : 0);
     drawMap(maps[2], f, live && f < 1 ? RM : 0);
-    setNum(n1, D.s1*f); setNum(n2, D.mob*f); setTime(f);
-    drawDial(f, done && !reduce);
+    setNum(n1, D.s1*f); setNum(n2, D.mob*f); setHours(f);
   }
   function tick(now){
     var f = cl((now - t0)/DUR, 0, 1);
     render(f, f < 1);
     if(f < 1){ raf = requestAnimationFrame(tick); }
-    else { playing = false; raf = 0; render(1, false); setClk(!reduce); }
+    else { playing = false; raf = 0; render(1, false); }
   }
   function play(){
     if(playing) return;
     if(reduce){ render(1, false); return; }
-    playing = true; setClk(false);
+    playing = true;
     t0 = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(tick);
   }
-  function finish(){ playing = false; cancelAnimationFrame(raf); raf = 0; render(1, false); setClk(!reduce); }
+  function finish(){ playing = false; cancelAnimationFrame(raf); raf = 0; render(1, false); }
 
   /* ===== rozměry: šířka číslic, mapy, zmenšení textu ===== */
   function measure(){
@@ -425,6 +387,7 @@
     var sc = 1; root.style.setProperty('--sc', 1);
     for(var k=0; k<14 && over() && sc > .66; k++){ sc *= .95; root.style.setProperty('--sc', sc.toFixed(3)); }
     maps.forEach(layoutMap); render(F, playing);
+    var m3 = maps[2]; if(m3.ok){ leg.style.setProperty('--lgo', HEAD+'px'); leg.style.setProperty('--lgw', Math.round(m3.cw)+'px'); }   // legenda na výšku obrysu a na šířku horní mapy
   }
   var rt;
   window.addEventListener('resize', fit);
@@ -453,7 +416,6 @@
     el.addEventListener('click', function(e){ e.preventDefault(); if(Date.now() - last > 600) fn(e); });
     el.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); last = Date.now(); fn(e); } });
   }
-  bindTap(clk, function(){ if(clk.getAttribute('aria-disabled') !== 'true') play(); });
   var info = $('[data-info]'), panel = $('[data-panel]'), closeBtn = $('[data-close]');
   function openP(){ panel.hidden = false; info.setAttribute('aria-expanded', 'true'); closeBtn.focus({preventScroll:true}); }
   function closeP(){ if(panel.hidden) return; panel.hidden = true; info.setAttribute('aria-expanded', 'false'); info.focus({preventScroll:true}); }
