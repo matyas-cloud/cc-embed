@@ -32,7 +32,8 @@
                    ovládání jako legenda pod okny; horko „lidí má v létě doma aspoň občas horko“; příjmy jako tři sloupce
                    (do 25 000 Kč / všichni / vysoké) místo čáry průměru; bez dopočítávání čísel, hodnoty jen jemně naběhnou.
        2026-11-23  v6 připomínka klienta: u „jinak“ doplněno 26,2 % (dopočet do 100 %, uvedeno v (i)); čísla v legendě
-                   zarovnaná pod sebe podle desetinné čárky. -->
+                   zarovnaná pod sebe podle desetinné čárky.
+       2026-11-23  v7 podle Matta: ovládání zaokrouhleno na 70 / 4 / 26 %, bez desetinných míst; poznámka v (i). -->
 <style>
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
   @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
@@ -380,14 +381,14 @@
   var D = {
     title: 'Stínění a chytrá domácnost v číslech',
     a: {v:26, t:'lidí má doma venkovní stínění', cap:'Jak ho ovládají',
-        man:{v:70, t:'ručně', n:18}, auto:{v:3.8, t:'automaticky', n:1}, rest:{v:26.2, t:'jinak', n:7}},
+        man:{v:70, t:'ručně', n:18}, auto:{v:4, t:'automaticky', n:1}, rest:{v:26, t:'jinak', n:7}},
     b: {v:4.7, of:10, f:4.74, t:'Čechů si pod chytrou domácností představí ovládání z mobilu', cap:'Jako první by v chytré domácnosti řešili',
         items:[['správu energií',28.3],['chytré vytápění a termostaty',18.9],['hlasové ovládání',8.1]]},
     c: {cap:'Novostavby se stíněním podle Somfy', items:[['Česko',38,1],['Polsko',10],['Francie',75]]},
     d: {v1:64.4, t1:'lidí má v létě doma aspoň občas horko', v2:21.9, t2:'plánuje opatření proti horku'},
     e: {cap:'Koho chytré technologie nezajímají', items:[['příjem do 25 000 Kč',38],['všichni',21.9,'all'],['vysoké příjmy',12.2]], max:40},
     info:['Průzkum STEM/MARK pro Somfy, březen 2026, 511 respondentů.',
-          'Podíl „jinak“ (26,2 %) je dopočet do 100 % z podílů ručního (70 %) a automatického (3,8 %) ovládání.',
+          'Podíly ovládání jsou zaokrouhlené na celá procenta (v průzkumu skoro 70 % ručně a 3,8 % automaticky, „jinak“ je dopočet do 100 %).',
           '4,7 z 10 odpovídá 47,4 % dotázaných.',
           'Podíl novostaveb se stíněním je odhad Somfy (Česko zhruba 38 %, Polsko asi 10 %, Francie 75 %).']
   };
@@ -409,7 +410,7 @@
   var pc = function(n, t){ return fmt(n, dec(n))+' procent '+t+'.'; };
   root.querySelector('[data-sr]').textContent = [
     D.title,
-    pc(D.a.v, D.a.t)+' Z těch, kdo ho mají, ho '+D.a.man.v+' procent ovládá ručně, '+fmt(D.a.auto.v, 1)+' procenta automaticky a '+fmt(D.a.rest.v, 1)+' procenta jinak.',
+    pc(D.a.v, D.a.t)+' Z těch, kdo ho mají, ho '+D.a.man.v+' procent ovládá ručně, '+D.a.auto.v+' procenta automaticky a '+D.a.rest.v+' procent jinak.',
     fmt(D.b.v, 1)+' z 10 '+D.b.t+'. Jako první by ale pořídili '+D.b.items.map(function(r){ return r[0]+' '+fmt(r[1], 1)+' procenta'; }).join(', ')+'.',
     'Podle Somfy má stínění '+D.c.items.map(function(r){ return r[1]+' procent novostaveb v zemi '+r[0]; }).join(', ')+'.',
     pc(D.d.v1, D.d.t1), pc(D.d.v2, D.d.t2),
