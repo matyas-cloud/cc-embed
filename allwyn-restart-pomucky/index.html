@@ -22,8 +22,13 @@
                        Šířka prvku je nejvýš 1,5násobek výšky (při otevření mimo rám).
      Texty a karty:    objekt CFG ve skriptu. Nová karta = nový blok v CFG.cards + obrázek do img/.
                        Hodnoty v [hranatých závorkách] se zobrazí šedě jako chybějící údaj.
-     Data:             ceny a úhrady viz CFG.info; chybí ceny prkna, zvedáku, schodolezu, elektrostimulace,
-                       úhrada prkna a elektrostimulace, limit pojišťovny u vozíku.
+     Data:             ceny a úhrady z veřejných zdrojů, přehled v CFG.info (panel pod „i“): příspěvek na zvláštní
+                       pomůcku MPSV (aktualizace 16. 6. 2026: nejvýš 350 000 Kč, spoluúčast 10 %), elektrostimulace
+                       2move.cz (ALFESS 108 890 Kč, pojišťovny nehradí), přesedací prkno DMA Praha (1 450–1 800 Kč,
+                       nehrazeno), stropní zvedák Vecom (od 80 000, systém přes místnost 150 000–350 000 Kč),
+                       schodolez Dobrá šance a Vecom (57 800–200 000 Kč), vozík Donio (Quickie Nitrum), exoskelet
+                       ReWalk (New Mobility 2014), bionická ruka text speciálu a Novinky.cz 2017. Žádný údaj nečeká
+                       na doplnění; u vozíku se neuvádí výše limitu pojišťovny, jen že se nad limit doplácí.
      Ilustrace:        3D clay, vygenerováno (Nano Banana 2); výřez 3 : 2 (900 × 600 px JPG) s celým předmětem,
                        chybějící šířka dokreslena pozadím. V kartě se vkládají celé (contain).
      Pohyb:            vstup – karty se jednou rozjedou ze středu (IntersectionObserver, pojistka 6 s,
@@ -31,6 +36,9 @@
      Historie:         10. 11. 2026 první ostrá verze podle mockupu v7
                        10. 11. 2026 opravená perspektiva (karty jsou opravdu natočené), karty s odstupem,
                        nekonečný kolotoč, ilustrace celé (nové výřezy 3 : 2), na šířku ovládání pod kartami
+                       23. 11. 2026 doplněny všechny chybějící ceny a úhrady z veřejných zdrojů (elektrostimulace,
+                       přesedací prkno, stropní zvedák, schodolez), u exoskeletu a vozíku přepsáno „kdo hradí“
+                       tak, aby nic nečekalo na doplnění
      ============================================================ -->
 <style>
   /* sdílené fonty repa cc-embed (složka /fonts v kořeni), Poppins 400/500/600/700 */
@@ -256,32 +264,35 @@ var CFG = {
   cards: [
     { cat: 'part', img: 'img/elektrostimulace.jpg', name: 'Elektrostimulace',
       text: 'Malý přístroj pod kolenem posílá impulzy do svalu a při kroku zvedne špičku chodidla. Člověk nezakopává a zvládne chůzi s holemi.',
-      price: '[doplnit cenu]', payer: '[doplnit]' },
+      price: 'například 108 890 Kč', payer: 'Zdravotní pojišťovny ji nehradí, s penězi pomáhají nadace a veřejné sbírky' },
     { cat: 'part', img: 'img/exoskelet.jpg', name: 'Exoskelet',
       text: 'Motorizovaná konstrukce na nohy. Motory v kyčlích a kolenou vedou pohyb a pomáhají nacvičit přirozený krok.',
-      price: 'kolem 1,6 milionu Kč', payer: 'Používají ho hlavně rehabilitační centra, úhradu pro domácí použití [ověřit]' },
+      price: 'kolem 1,6 milionu Kč', payer: 'Hlavně rehabilitační centra, kde se s ním chodí s terapeutem' },
     { cat: 'full', img: 'img/vozik.jpg', name: 'Vozík na míru',
       text: 'Lehký aktivní vozík postavený přesně na tělo. Čím je lehčí, tím víc sil zbude na zbytek dne.',
-      price: 'například 109 000 Kč', payer: 'Zdravotní pojišťovna na poukaz do limitu, zbytek doplácí člověk [doplnit limit]' },
+      price: 'například 109 000 Kč', payer: 'Zdravotní pojišťovna na poukaz do úhradového limitu, zbytek ceny doplácí člověk sám' },
     { cat: 'full', img: 'img/prkno.jpg', name: 'Přesedací prkno',
       text: 'Hladké prkno jako most mezi postelí a vozíkem. Člověk po něm přesedne sám, bez pomoci druhého.',
-      price: '[doplnit cenu]', payer: '[doplnit]' },
+      price: 'kolem 1 500 Kč', payer: 'Pojišťovna ho nehradí, člověk si ho kupuje sám' },
     { cat: 'full', img: 'img/zvedak.jpg', name: 'Stropní zvedák',
       text: 'Kolejnice ve stropě a motor se závěsem. Přenese člověka z postele do koupelny bez zvedání.',
-      price: '[doplnit cenu]', payer: 'Úřad práce přispívá až 90 % ceny, nejvýš 350 000 Kč' },
+      price: 'od 80 000 do 350 000 Kč', payer: 'Úřad práce přispívá až 90 % ceny, nejvýš 350 000 Kč' },
     { cat: 'full', img: 'img/schodolez.jpg', name: 'Schodolez',
       text: 'Elektrický pomocník, který vyveze vozík po schodech tam, kde chybí výtah.',
-      price: '[doplnit cenu]', payer: 'Úřad práce přispívá až 90 % ceny, nejvýš 350 000 Kč' },
+      price: 'od 60 000 do 200 000 Kč', payer: 'Úřad práce přispívá až 90 % ceny, nejvýš 350 000 Kč' },
     { cat: 'limb', img: 'img/bionicka-ruka.jpg', name: 'Bionická ruka',
       text: 'Ovládá se jemnými svalovými impulzy v předloktí. Jonáš Kešnar s ní krájí, zapíná pásek a v tramvaji drží madlo.',
       price: 'kolem 750 000 Kč', payer: 'Pojišťovna jen výjimečně, když chybí obě ruce nebo druhá nefunguje' }
   ],
   infoLabel: 'Ceny a úhrady',
   info: [
-    'Ceny jsou orientační a liší se podle modelu a výrobce. O úhradě rozhoduje zdravotní pojišťovna nebo úřad práce vždy individuálně.',
-    '<b>Příspěvek na zvláštní pomůcku:</b> Ministerstvo práce a sociálních věcí, 2026.',
-    '<b>Vozík:</b> konkrétní model Quickie Nitrum, veřejná sbírka na Donio.cz.',
+    'Ceny jsou orientační a liší se podle modelu a výrobce. O úhradě rozhoduje zdravotní pojišťovna nebo úřad práce vždy individuálně.',
+    '<b>Příspěvek na zvláštní pomůcku:</b> Ministerstvo práce a sociálních věcí, 2026. Člověk doplácí 10 % ceny.',
+    '<b>Elektrostimulace:</b> český neurostimulátor ALFESS, ceník a informace o úhradě od výrobce (2move.cz, 2026).',
     '<b>Exoskelet:</b> ReWalk, kolem 70 000 dolarů (New Mobility, 2014).',
+    '<b>Vozík:</b> konkrétní model Quickie Nitrum, veřejná sbírka na Donio.cz.',
+    '<b>Přesedací prkno:</b> ceník DMA Praha, 2026.',
+    '<b>Stropní zvedák a schodolez:</b> orientační ceny dodavatelů Vecom a Dobrá šance, 2026. Stropní zvedák od jednoduché přímé dráhy po systém přes celou místnost.',
     '<b>Bionická ruka:</b> text speciálu; úhrada podle Novinky.cz (2017).'
   ]
 };
