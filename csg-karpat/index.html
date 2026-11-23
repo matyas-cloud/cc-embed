@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Karpat v číslech</title>
+<meta name="robots" content="noindex">
+<!-- CzechCrunch – infografika „Karpat v číslech“ místo parametrů tanku v próze.
+     Cíl: nativní článek CC pro CSG o středním tanku CFL-120 Karpat (kostra 01-uhel-kostra.md, sekce 3),
+       za odstavec o FNSS, Leonardu a MSM Land Systems, před sekci o nabídce CSG. Sourozenec: csg-meander (Meander v číslech).
+     Vložení: csg-karpat-vlozeni.html, obalový div s výškou podle šířky okna (vzorec a ověřené šířky jsou ve vložení).
+     Nasazení: matyas-cloud/cc-embed/csg-karpat/index.html + karpat-bok.jpg + karpat-zepredu.jpg, Poppins a Inter ze sdílené složky ../fonts/.
+     Formát: tmavá karta jako Meander. Nahoře fotka z terénu s čísly u vozidla (34 t u korby, 120 mm u ústí hlavně,
+       70 km/h u pásů, 450 km u zádě), (i) v pravém horním rohu fotky. Pod ní nadpis a srovnání „Stejná ráže 120 mm, zhruba poloviční hmotnost“:
+       Karpat a Leopard 2A8 stojí na podstavcích, výška podstavce odpovídá hmotnosti (34 : 70, stejné měřítko v obou sloupcích).
+       Tanky jsou jednoduché kresby v šikmém pohledu (stejný úhel jako fotka z boku), ne ve stejném měřítku; hlavně v poměru
+       délek 45 : 55 ráží (Hitfact MkII 120/45, Leopard 2A8 120/55). Pod podstavci názvy a vlajky (Karpat: TR podvozek, IT věž, SK výroba; Leopard: DE).
+       Rám užší než 540 px: fotka zepředu s čísly 34 t a 120 mm, 70 km/h a 450 km v řádku pod ní, srovnání stejné, jen menší.
+     Nástup: fotka se jemně přiblíží, linky se dokreslí a čísla napočítají (Inter, tabulární číslice), až je fotka vidět.
+       Podstavce vyrostou stejnou rychlostí zespodu a zvednou tanky, Karpat se zastaví v polovině; tuny se napočítají.
+       Žádný pohyb naprázdno. Bez IO, s omezeným pohybem nebo s ?static rovnou konečný stav. ?info otevře panel (i) – jen pro náhledy.
+     Data (závazná, nic nedoplňovat): zadání „Karpat v číslech (CSG)“ v1 z 20. 11. 2026. Údaje výrobce podle TZ CSG z 12. 5. 2026 (IDEB)
+       a z 19. 11. 2026. Leopard 2A8 kolem 70 t podle Militär Aktuell a slovenského ministerstva obrany.
+       Posádku, rozměry, výkon motoru, pancéřování ani cenu prvek neuvádí.
+       Jméno Leopard 2A8 závisí na rozhodnutí 1 v kostře – přepínač JMENO_MBT níže
+       (false = „Hlavní bojový tank“ bez vlajky a z (i) zmizí řádek o zdroji hmotnosti Leopardu).
+     Fotografie: CSG (CFL-120_Karpat_3.jpg = karpat-bok.jpg, CFL-120_Karpat_1.jpg = karpat-zepredu.jpg, zmenšeno na 1600 px).
+     Změny obsahu:
+       2026-11-20  v1 podle zadání v1 (moduly Hmotnost a Kdo co dodává).
+       2026-11-23  v2 podle Mattovy zpětné vazby: modul Kdo co dodává pryč, místo modulů srovnání Karpat × Leopard 2A8 na podstavcích
+                   s vlajkami, věta o kanónu přepsaná do nadpisu srovnání, (i) přesunuté na fotku. -->
+<style>
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/poppins-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-500.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/poppins-latin-ext-500.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-ext-600.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(../fonts/inter-latin-opsz-normal.woff2) format('woff2-variations');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(../fonts/inter-latin-ext-opsz-normal.woff2) format('woff2-variations');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;}
+  .cc-embed{margin:0!important;}
+</style>
+</head>
+<body>
+<!-- .cc-embed základ (verbatim ze skillu) -->
+<style>
+.cc-embed{
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}
+.cc-embed--bare{background:none;border:0;padding:0;}
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:700 12px/1.2 var(--cc-ui);letter-spacing:.06em;
+  text-transform:uppercase;color:var(--cc-muted);}
+.cc-embed .cc-num{font:800 clamp(28px,5vw,40px)/1 var(--cc-display);color:var(--cc-ink);}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+
+<style>
+.cc-embed.cc-karpat{
+  --bg:#0b0e10; --w:#fff; --w2:rgba(255,255,255,.62); --w3:rgba(255,255,255,.4); --hair:rgba(255,255,255,.12); --cream:#e6dca8;
+  --sc:1; --ease:cubic-bezier(.2,.7,.2,1); --rise:cubic-bezier(.3,.1,.25,1);
+  --num:"Inter",-apple-system,"Segoe UI",sans-serif;
+  box-sizing:border-box;position:relative;display:flex;flex-direction:column;
+  height:100vh;margin:0;padding:0;overflow:hidden;
+  background:var(--bg);border:0;border-radius:16px;color:var(--w);
+  font-family:var(--cc-display);
+}
+.cc-karpat .kt-stage{position:relative;flex:0 0 auto;overflow:hidden}
+.cc-karpat .kt-ph{display:block;width:100%;height:auto}
+.cc-karpat .kt-ph--n{display:none}
+.cc-karpat .kt-ph text{font-variant-numeric:tabular-nums}
+.cc-karpat .kt-img{transform-box:fill-box;transform-origin:50% 55%;transition:transform 2.2s var(--ease)}
+.cc-karpat .kt-ln{transition:stroke-dashoffset .9s var(--ease)}
+.cc-karpat .kt-lb{transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.cc-karpat .kt-pt{transition:opacity .4s var(--ease)}
+
+/* (i) v rohu fotky, jako u Meandru */
+.cc-karpat .kt-info{position:absolute;top:12px;right:12px;z-index:4;width:26px;height:26px;padding:0;border:1px solid rgba(255,255,255,.4);border-radius:50%;
+  background:rgba(11,14,16,.3);color:#fff;font:500 12px/1 var(--cc-display);cursor:pointer;touch-action:manipulation;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+@media (hover:hover){.cc-karpat .kt-info:hover{background:rgba(255,255,255,.18)}}
+
+/* čísla v řádku pod fotkou (jen úzký rám) */
+.cc-karpat .kt-row{display:none}
+.cc-karpat .n{font:600 calc(23px*var(--sc))/1 var(--num);font-variant-numeric:tabular-nums;letter-spacing:-.02em;white-space:nowrap;display:inline-block}
+.cc-karpat .n small{font-size:.5em;font-weight:500;letter-spacing:0;margin-left:.2em;color:var(--w2)}
+.cc-karpat .lb{font:400 12px/1.35 var(--cc-display);color:var(--w2);margin-bottom:5px}
+
+/* nadpis a srovnání */
+.cc-karpat .kt-mods{position:relative;z-index:2;flex:1 1 auto;min-height:0;display:flex;flex-direction:column;padding:calc(8px*var(--sc)) 22px 20px}
+.cc-karpat .kt-title{margin:0;color:#fff;font:600 clamp(18px,3.5vw,22px)/1.15 var(--cc-display);letter-spacing:-.01em}
+.cc-karpat .kt-cmp{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center}
+.cc-karpat .cm-h{margin:calc(6px*var(--sc)) 0 calc(4px*var(--sc));font:500 max(14px,calc(16px*var(--sc)))/1.3 var(--cc-display);color:var(--w2)}
+.cc-karpat .cm-h span{color:var(--cream)}
+.cc-karpat .cm{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 calc(22px*var(--sc));align-items:end;margin-top:calc(6px*var(--sc))}
+.cc-karpat .cm__c{position:relative;min-width:0}
+.cc-karpat .cm__c svg{display:block;width:100%;height:auto;overflow:visible}
+.cc-karpat .base{grid-column:1/-1;height:1px;background:rgba(255,255,255,.2)}
+/* název a vlajky na střed pod podstavcem (podstavec zabírá 30,7–98,3 % šířky sloupce) */
+.cc-karpat .cm__nm{display:flex;flex-direction:column;align-items:center;gap:calc(7px*var(--sc));margin:calc(12px*var(--sc)) 0 0 30.7%;width:67.6%}
+.cc-karpat .cm__nm b{font:600 max(14px,calc(20px*var(--sc)))/1.1 var(--cc-display);color:#fff;letter-spacing:-.01em;white-space:nowrap}
+.cc-karpat .fl{display:flex;gap:5px}
+.cc-karpat .fl svg{display:block;width:21px;height:14px;border-radius:2px;box-shadow:0 0 0 1px rgba(255,255,255,.16)}
+/* tuny na čelní stěně podstavce */
+.cc-karpat .tn{position:absolute;left:30.7%;width:67.6%;transform:translateY(-50%);display:flex;justify-content:center;align-items:baseline;gap:5px;white-space:nowrap;
+  font:400 max(12px,calc(13px*var(--sc)))/1 var(--cc-display);color:rgba(255,255,255,.72);transition:opacity .5s var(--ease)}
+.cc-karpat .tn b{font:600 max(17px,calc(24px*var(--sc)))/1 var(--num);font-variant-numeric:tabular-nums;color:#fff;letter-spacing:-.02em}
+.cc-karpat .tn b small{font:500 .58em/1 var(--num);margin-left:.15em;color:rgba(255,255,255,.8)}
+.cc-karpat .pd{transform-box:fill-box;transform-origin:50% 100%;transition:transform var(--d) var(--rise)}
+.cc-karpat .tk{transition:transform var(--d) var(--rise)}
+
+/* skrytý výchozí stav (jen když se bude animovat) */
+.cc-karpat.is-pre .kt-stage:not(.is-on) .kt-img{transform:scale(1.06)}
+.cc-karpat.is-pre .kt-stage:not(.is-on) .kt-ln{stroke-dashoffset:1}
+.cc-karpat.is-pre .kt-stage:not(.is-on) .kt-lb{opacity:0;transform:translateY(6px)}
+.cc-karpat.is-pre .kt-stage:not(.is-on) .kt-pt{opacity:0}
+.cc-karpat.is-pre .kt-row:not(.is-on) .kt-lb{opacity:0;transform:translateY(6px)}
+.cc-karpat.is-pre .mod:not(.is-on) .pd{transform:scaleY(0)}
+.cc-karpat.is-pre .mod:not(.is-on) .tk{transform:translateY(var(--lift))}
+.cc-karpat.is-pre .mod:not(.is-on) .tn{opacity:0}
+.cc-karpat.is-static *{transition:none!important}
+
+/* panel (i) */
+.cc-karpat .panel{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vw,24px);
+  background:rgba(11,14,16,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-radius:inherit}
+.cc-karpat .panel[hidden]{display:none}
+.cc-karpat .panel__box{position:relative;width:100%;max-width:460px;max-height:100%;display:flex;flex-direction:column;background:#fff;
+  border-radius:14px;box-shadow:0 18px 40px -18px rgba(0,0,0,.6);padding:clamp(16px,3.6vw,22px) clamp(16px,3.6vw,24px);color:#16181c}
+.cc-karpat .panel__hd{display:flex;align-items:flex-start;gap:12px}
+.cc-karpat .panel__t{margin:0;font:600 15px/1.3 var(--cc-display);color:#16181c}
+.cc-karpat .panel__x{margin-left:auto;flex:none;width:28px;height:28px;padding:0;border:0;border-radius:50%;background:#f1f2f5;cursor:pointer;font:400 18px/1 var(--cc-display);color:#16181c;touch-action:manipulation}
+.cc-karpat .panel__body{margin-top:10px;overflow-y:auto;min-height:0}
+.cc-karpat .panel__body p{margin:0 0 9px;font:400 13px/1.5 var(--cc-display);color:#3c3c3c}
+.cc-karpat .panel__body p:last-child{margin-bottom:0}
+
+/* úzký rám: fotka zepředu, dvě čísla v řádku pod ní */
+@media (max-width:539px){
+  .cc-karpat .kt-ph--w{display:none}
+  .cc-karpat .kt-ph--n{display:block}
+  .cc-karpat .kt-row{display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:2;padding:0 16px;margin-top:-2px}
+  .cc-karpat .kt-title{font-size:19px}
+  .cc-karpat .kt-mods{padding:calc(14px*var(--sc)) 0 16px;margin:calc(14px*var(--sc)) 16px 0;border-top:1px solid var(--hair)}
+  .cc-karpat .cm{gap:0 12px}
+  .cc-karpat .fl{gap:4px}
+  .cc-karpat .fl svg{width:18px;height:12px}
+  .cc-karpat .tn--m{flex-direction:column;align-items:center;gap:4px}
+  .cc-karpat .cm__nm{margin-left:0;width:100%}
+  .cc-karpat .cm__nm b{font-size:clamp(13px,4.6vw,17px)}
+}
+@media (prefers-reduced-motion:reduce){.cc-karpat *{transition:none!important}}
+</style>
+
+<div class="cc-embed cc-karpat" data-cc-karpat>
+  <p class="cc-sr" data-sr></p>
+  <div class="kt-stage" data-stage aria-hidden="true">
+    <svg class="kt-ph kt-ph--w" viewBox="0 230 1600 836" data-ph="w"></svg>
+    <svg class="kt-ph kt-ph--n" viewBox="400 40 1020 860" data-ph="n"></svg>
+  </div>
+  <button type="button" class="kt-info" data-info aria-label="Zdroj a vysvětlivky" aria-expanded="false" aria-controls="kt-panel">i</button>
+  <div class="kt-row" data-row aria-hidden="true">
+    <div class="kt-lb"><div class="lb">max. rychlost</div><div class="n"><span data-cnt="70">70</span><small>km/h</small></div></div>
+    <div class="kt-lb" style="text-align:right"><div class="lb">dojezd přibližně</div><div class="n"><span data-cnt="450">450</span><small>km</small></div></div>
+  </div>
+  <div class="kt-mods">
+    <h3 class="cc-title kt-title">Karpat v číslech</h3>
+    <div class="mod kt-cmp" data-mod data-cmp aria-hidden="true"></div>
+  </div>
+  <div class="panel" id="kt-panel" role="dialog" aria-modal="true" aria-labelledby="kt-panel-t" data-panel hidden>
+    <div class="panel__box">
+      <div class="panel__hd"><p class="panel__t" id="kt-panel-t">Zdroj a vysvětlivky</p><button type="button" class="panel__x" data-close aria-label="Zavřít">×</button></div>
+      <div class="panel__body" data-pbody></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var root = document.querySelector('[data-cc-karpat]');
+  if(!root || root.dataset.ccInit) return;
+  root.dataset.ccInit = '1';
+  var Q = location.search;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canIO = 'IntersectionObserver' in window;
+  var STATIC = /[?&]static\b/.test(Q);
+  var ANIM = !reduce && canIO && !STATIC;
+  if(ANIM) root.classList.add('is-pre');                 // skrytý výchozí stav hned, žádné probliknutí
+  if(STATIC) root.classList.add('is-static');
+
+  /* Rozhodnutí 1 v kostře: true = Leopard 2A8 jménem a s vlajkou, false = „Hlavní bojový tank“ bez jména */
+  var JMENO_MBT = true;
+  var MBT = JMENO_MBT ? 'Leopard 2A8' : 'Hlavní bojový tank';
+
+  /* ===== texty ===== */
+  function nb(t){ return t.replace(/(\d) (mm|t|km|%)/g, '$1 $2').replace(/(\d)\. /g, '$1. ').replace(/(^|[\s(])([vVsSzZkKoOuUaAiI]) /g, '$1$2 '); }
+  var PANEL = [
+    'Údaje o Karpatu uvádí výrobce, skupina CSG, v tiskových zprávách z 12. května 2026 (veletrh IDEB) a z 19. listopadu 2026.',
+    'Posádku, rozměry ani výkon motoru CSG neuvádí.',
+    JMENO_MBT ? 'Hmotnost tanku Leopard 2A8 kolem 70 tun uvádí Militär Aktuell a slovenské ministerstvo obrany.' : '',
+    'Výška podstavců odpovídá hmotnosti. Tanky jsou ilustrativní kresby, nejsou ve stejném měřítku.',
+    'Vlajky u Karpatu ukazují, kdo ho dodává. Podvozek je od turecké FNSS, věž od italského Leonarda a vyrábět se má na Slovensku.',
+    'Foto: CSG'
+  ].filter(Boolean).map(nb);
+  root.querySelector('[data-sr]').textContent =
+    'Karpat v číslech. Střední tank CFL-120 Karpat má bojovou hmotnost až 34 tun, kanón ráže 120 mm, maximální rychlost 70 km/h a dojezd přibližně 450 km. ' +
+    'Stejná ráže 120 mm, zhruba poloviční hmotnost. CFL-120 Karpat s podvozkem z Turecka, věží z Itálie a výrobou na Slovensku váží až 34 tun, ' +
+    (JMENO_MBT ? 'německý Leopard 2A8 kolem 70 tun.' : 'hlavní bojový tank kolem 70 tun.');
+  root.querySelector('[data-pbody]').innerHTML = PANEL.map(function(p){ return '<p>'+p+'</p>'; }).join('');
+
+  /* ===== fotka s čísly ===== */
+  var NS = 'vector-effect="non-scaling-stroke"';
+  function line(d, w){ return '<path class="kt-ln" pathLength="1" stroke-dasharray="1" d="'+d+'" fill="none" stroke="#fff" stroke-width="'+(w||1.4)+'" '+NS+'/>'; }
+  function point(x, y){ return '<g class="kt-pt"><circle cx="'+x+'" cy="'+y+'" r="7" fill="none" stroke="#fff" stroke-width="1.5" '+NS+'/><circle cx="'+x+'" cy="'+y+'" r="3" fill="#fff"/></g>'; }
+  // popisek nad číslem: cap = „bojová hmotnost až“, pod ním „34 t“
+  function label(x, y, cap, cnt, unit, fs, cfs, anchor){
+    var a = anchor ? ' text-anchor="'+anchor+'"' : '';
+    return '<g class="kt-lb">'
+      + '<text x="'+x+'" y="'+(y - fs*1.02)+'"'+a+' font-family="Poppins,sans-serif" font-size="'+cfs+'" fill-opacity=".82">'+cap+'</text>'
+      + '<text x="'+x+'" y="'+y+'"'+a+' font-family="Inter,sans-serif" font-size="'+fs+'" font-weight="600" letter-spacing="-1">'
+      + '<tspan data-cnt="'+cnt+'">'+cnt+'</tspan><tspan font-size="'+(fs*.5)+'" font-weight="500" dx="'+(fs*.12)+'" fill-opacity=".8">'+unit+'</tspan></text></g>';
+  }
+  function grads(id, top, bot){
+    return '<defs><linearGradient id="'+id+'a" x1="0" y1="0" x2="0" y2="1"><stop offset="'+bot+'" stop-color="#0b0e10" stop-opacity="0"/><stop offset="1" stop-color="#0b0e10"/></linearGradient>'
+      + '<linearGradient id="'+id+'t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b0e10" stop-opacity=".6"/><stop offset="'+top+'" stop-color="#0b0e10" stop-opacity="0"/></linearGradient>'
+      + '<filter id="'+id+'s" x="-20%" y="-30%" width="140%" height="160%"><feDropShadow dx="0" dy="1" stdDeviation="4" flood-color="#000" flood-opacity=".7"/></filter></defs>';
+  }
+  /* bok (pixely fotky 1600 × 1066, výřez y 230–1066); 450 km níž, aby nahoře vpravo bylo místo pro (i) */
+  var W = grads('kw', .42, .5) + '<image class="kt-img" href="karpat-bok.jpg" x="0" y="0" width="1600" height="1066"/>'
+    + '<rect x="0" y="230" width="1600" height="836" fill="#0b0e10" fill-opacity=".14"/>'
+    + '<rect x="0" y="230" width="1600" height="836" fill="url(#kwt)"/><rect x="0" y="230" width="1600" height="836" fill="url(#kwa)"/>'
+    + '<g filter="url(#kws)" fill="#fff">'
+    + point(186, 552) + line('M186 543 V462')                                  + label(60, 446, 'ráže kanónu', 120, 'mm', 62, 36)
+    + point(1504, 566) + line('M1504 557 V488')                               + label(1556, 472, 'dojezd přibližně', 450, 'km', 62, 36, 'end')
+    + point(590, 700) + line('M590 709 V928')                                  + label(590, 1032, 'bojová hmotnost až', 34, 't', 62, 36, 'middle')
+    + point(1150, 842) + line('M1150 851 V928')                                + label(1150, 1032, 'max. rychlost', 70, 'km/h', 62, 36, 'middle')
+    + '</g>';
+  /* zepředu pro úzký rám (pixely fotky 1600 × 1066, výřez 400–1420 × 40–900); popisky níž kvůli (i) */
+  var N = grads('kn', .4, .55) + '<image class="kt-img" href="karpat-zepredu.jpg" x="0" y="0" width="1600" height="1066"/>'
+    + '<rect x="400" y="40" width="1020" height="860" fill="#0b0e10" fill-opacity=".1"/>'
+    + '<rect x="400" y="40" width="1020" height="860" fill="url(#knt)"/><rect x="400" y="40" width="1020" height="860" fill="url(#kna)"/>'
+    + '<g filter="url(#kns)" fill="#fff">'
+    + point(560, 530) + line('M560 521 V344')                                  + label(426, 320, 'bojová hmotnost až', 34, 't', 68, 40)
+    + point(1186, 424) + line('M1193 417 L1268 344 H1400')                     + label(1400, 320, 'ráže kanónu', 120, 'mm', 68, 40, 'end')
+    + '</g>';
+  root.querySelector('[data-ph="w"]').innerHTML = W;
+  root.querySelector('[data-ph="n"]').innerHTML = N;
+
+  /* ===== srovnání: Karpat × hlavní bojový tank na podstavcích ===== */
+  var K = 34, M = 70;
+  /* šikmá projekce ve stejném úhlu jako fotka z boku: příď vlevo, vidíme bok, střechu a čelo */
+  var KX = .42, KY = .26, LGT = [-.35, .85, -.4];
+  function P(x, y, z){ return [x - z*KX, -y - z*KY]; }
+  function rgb(h){ return [parseInt(h.substr(1,2),16), parseInt(h.substr(3,2),16), parseInt(h.substr(5,2),16)]; }
+  function shade(h, f){ return 'rgb(' + rgb(h).map(function(c){ return Math.max(0, Math.min(255, Math.round(c*f))); }).join(',') + ')'; }
+  function lit(n){ var l = Math.hypot(LGT[0], LGT[1], LGT[2]), d = (n[0]*LGT[0] + n[1]*LGT[1] + n[2]*LGT[2])/l; return .62 + .42*Math.max(0, d); }
+  function pts(a){ return a.map(function(p){ return p[0].toFixed(1)+','+p[1].toFixed(1); }).join(' '); }
+  var ED = ' stroke="rgba(0,0,0,.28)" stroke-width=".8" stroke-linejoin="round" '+NS;
+  // hranol: profil v rovině x–y (y nahoru), vytažený po z od z0 do z1; kreslí jen stěny otočené k divákovi
+  function prism(prof, z0, z1, col){
+    var A = 0, i;
+    for(i = 0; i < prof.length; i++){ var p = prof[i], q = prof[(i+1)%prof.length]; A += p[0]*q[1] - q[0]*p[1]; }
+    if(A < 0) prof = prof.slice().reverse();
+    var out = '';
+    for(i = 0; i < prof.length; i++){
+      var a = prof[i], b = prof[(i+1)%prof.length], dx = b[0]-a[0], dy = b[1]-a[1], L = Math.hypot(dx, dy) || 1, n = [dy/L, -dx/L, 0];
+      if(-KX*n[0] + KY*n[1] <= .001) continue;
+      out += '<polygon points="'+pts([P(a[0],a[1],z0), P(b[0],b[1],z0), P(b[0],b[1],z1), P(a[0],a[1],z1)])+'" fill="'+shade(col, lit(n))+'"'+ED+'/>';
+    }
+    return out + '<polygon points="'+pts(prof.map(function(p){ return P(p[0], p[1], z0); }))+'" fill="'+shade(col, lit([0,0,-1]))+'"'+ED+'/>';
+  }
+  function box(x0, x1, y0, y1, z0, z1, col){ return prism([[x0,y0],[x1,y0],[x1,y1],[x0,y1]], z0, z1, col); }
+  function track(x0, x1, y0, y1){ var r = (y1-y0)/2, c = (y0+y1)/2, p = [], k;     // pás se zakulacenými konci
+    for(k = 0; k <= 8; k++){ var t = Math.PI/2 + Math.PI*k/8; p.push([x0 + r + r*Math.cos(t), c + r*Math.sin(t)]); }
+    for(k = 0; k <= 8; k++){ var u = -Math.PI/2 + Math.PI*k/8; p.push([x1 - r + r*Math.cos(u), c + r*Math.sin(u)]); }
+    return p; }
+  function wheels(xs, y, r){ return xs.map(function(x){ var c = P(x, y, 0);
+    return '<circle cx="'+c[0].toFixed(1)+'" cy="'+c[1].toFixed(1)+'" r="'+r+'" fill="rgba(0,0,0,.22)" stroke="rgba(0,0,0,.35)" stroke-width="1" '+NS+'/>'
+      + '<circle cx="'+c[0].toFixed(1)+'" cy="'+c[1].toFixed(1)+'" r="'+(r*.34).toFixed(1)+'" fill="rgba(0,0,0,.3)"/>'; }).join(''); }
+  /* Karpat: plochá věž Hitfact MkII, hlaveň 120/45 s úsťovou brzdou, 8 pojezdových kol */
+  function tankK(c){
+    return prism(track(16, 252, 0, 26), 86, 108, c)
+      + prism([[0,40],[34,58],[262,58],[268,52],[268,28],[254,20],[22,20],[4,30]], 8, 102, c)
+      + prism([[70,58],[80,77],[104,86],[196,86],[208,80],[210,58]], 22, 88, c)
+      + box(150, 168, 86, 98, 58, 74, c) + box(118, 130, 86, 92, 30, 40, c)
+      + box(-40, 84, 70, 77, 52, 59, c) + box(10, 32, 68, 79, 50, 61, c) + box(-54, -38, 67, 80, 49, 62, c)
+      + prism(track(16, 252, 0, 26), 0, 22, c) + wheels([38,66,94,122,150,178,206,234], 12, 9);
+  }
+  /* Leopard 2A8: klínová věž, hlaveň 120/55 bez úsťové brzdy, 7 pojezdových kol */
+  function tankM(c){
+    return prism(track(16, 276, 0, 28), 92, 116, c)
+      + prism([[0,42],[36,62],[286,62],[294,55],[294,28],[280,21],[22,21],[4,31]], 8, 108, c)
+      + prism([[50,62],[60,72],[92,96],[118,100],[222,100],[240,94],[244,62]], 16, 100, c)
+      + box(186, 206, 100, 116, 66, 82, c) + box(122, 142, 100, 106, 24, 38, c)
+      + box(-100, 70, 80, 87, 55, 62, c) + box(-20, 6, 78, 89, 53, 64, c)
+      + prism(track(16, 276, 0, 28), 0, 24, c) + wheels([42,76,110,144,178,212,246], 13, 11);
+  }
+  // oba sloupce mají stejný viewBox na šířku, takže i stejné měřítko podstavců; čelo podstavce leží v 30,7–98,3 % šířky
+  var VX = -134, VW = 444, TOP = 140, PH = 200, PEDC = '#4a4f55';
+  function column(tank, col, ped, dur){
+    var h = TOP + ped + 4;
+    return '<svg viewBox="'+VX+' '+(-TOP)+' '+VW+' '+h.toFixed(1)+'" style="--d:'+dur+'s">'
+      + '<g class="pd">'+box(0, 300, -ped, 0, -6, 120, PEDC)+'</g>'
+      + '<g class="tk" style="--lift:'+ped.toFixed(1)+'px">'+tank(col)+'</g></svg>';
+  }
+  function flag(c){
+    var F = {
+      de: '<rect width="30" height="6.67" fill="#000"/><rect y="6.67" width="30" height="6.67" fill="#dd0000"/><rect y="13.33" width="30" height="6.67" fill="#ffce00"/>',
+      it: '<rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/>',
+      tr: '<rect width="30" height="20" fill="#e30a17"/><circle cx="11.5" cy="10" r="5" fill="#fff"/><circle cx="12.8" cy="10" r="4" fill="#e30a17"/><polygon fill="#fff" points="15.6,10 18.9,8.9 18.9,11.1"/><polygon fill="#fff" points="19.6,7.3 18.2,10.2 20.4,10.9"/><polygon fill="#fff" points="19.6,12.7 18.2,9.8 20.4,9.1"/>',
+      sk: '<rect width="30" height="6.67" fill="#fff"/><rect y="6.67" width="30" height="6.67" fill="#0b4ea2"/><rect y="13.33" width="30" height="6.67" fill="#ee1c25"/><path d="M6.5 4.5 H15.5 V11 Q15.5 15 11 16.5 Q6.5 15 6.5 11 Z" fill="#ee1c25" stroke="#fff" stroke-width=".8"/><path d="M10.4 6 H11.6 V7.4 H13 V8.4 H11.6 V9.4 H13.6 V10.4 H11.6 V12.5 H10.4 V10.4 H8.4 V9.4 H10.4 V8.4 H9 V7.4 H10.4 Z" fill="#fff"/><path d="M7.4 13.2 Q9 11.8 11 12.8 Q13 11.8 14.6 13.2 Q13 15.4 11 16.1 Q9 15.4 7.4 13.2 Z" fill="#0b4ea2"/>'
+    }[c];
+    return '<svg viewBox="0 0 30 20">'+F+'</svg>';
+  }
+  var pk = PH*K/M, D = 1.5;                                     // stejná rychlost růstu: Karpat dojede v polovině času
+  function tn(cls, pre, n, ped){ return '<span class="tn '+cls+'" style="top:'+((TOP + ped/2)/(TOP + ped + 4)*100).toFixed(2)+'%">'+pre+'<b><span data-cnt="'+n+'">'+n+'</span><small>t</small></b></span>'; }
+  root.querySelector('[data-cmp]').innerHTML =
+      '<p class="cm-h">Stejná ráže <span>120&nbsp;mm</span>, zhruba poloviční hmotnost</p>'
+    + '<div class="cm">'
+    + '<div class="cm__c">'+column(tankK, '#e6dca8', pk, (D*K/M).toFixed(3))+tn('tn--k', 'až', 34, pk)+'</div>'
+    + '<div class="cm__c">'+column(tankM, '#c9ced3', PH, D)+tn('tn--m', 'kolem', 70, PH)+'</div>'
+    + '<div class="base"></div>'
+    + '<div class="cm__nm"><b>CFL-120 Karpat</b><span class="fl">'+flag('tr')+flag('it')+flag('sk')+'</span></div>'
+    + '<div class="cm__nm"><b>'+MBT+'</b>'+(JMENO_MBT ? '<span class="fl">'+flag('de')+'</span>' : '')+'</div>'
+    + '</div>';
+  var mods = root.querySelector('.kt-mods');
+  var stage = root.querySelector('[data-stage]');
+  var row = root.querySelector('[data-row]');
+  var modEls = [].slice.call(mods.querySelectorAll('[data-mod]'));
+
+  /* ===== počítání čísel (Inter, tabulární číslice, doplněno číslicovou mezerou na konečnou délku) ===== */
+  function ease(k){ return 1 - Math.pow(1 - k, 3); }
+  function count(scope, delay, dur){
+    [].slice.call(scope.querySelectorAll('[data-cnt]')).forEach(function(el, i){
+      var n = parseFloat(el.dataset.cnt), L = String(n).length, t0 = null, dl = typeof delay === 'function' ? delay(i) : delay;
+      function fmt(v){ var s = String(Math.round(v)); while(s.length < L) s = ' ' + s; return s; }
+      el.textContent = fmt(0);
+      setTimeout(function(){
+        function step(t){ if(t0 === null) t0 = t; var k = Math.min(1, (t - t0)/(dur || 1100)); el.textContent = fmt(n*ease(k)); if(k < 1) requestAnimationFrame(step); else el.textContent = String(n); }
+        requestAnimationFrame(step);
+      }, dl || 0);
+    });
+  }
+
+  /* ===== panel (i) ===== */
+  function bindTap(el, fn){
+    var last = 0;
+    el.style.touchAction = 'manipulation';
+    el.addEventListener('pointerdown', function(e){ if(e.button > 0) return; e.preventDefault(); last = Date.now(); fn(e); });
+    el.addEventListener('click', function(e){ e.preventDefault(); if(Date.now() - last > 600) fn(e); });
+    el.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); last = Date.now(); fn(e); } });
+  }
+  var info = root.querySelector('[data-info]'), panel = root.querySelector('[data-panel]'), closeBtn = root.querySelector('[data-close]');
+  function openP(){ panel.hidden = false; info.setAttribute('aria-expanded', 'true'); closeBtn.focus({preventScroll:true}); }
+  function closeP(){ if(panel.hidden) return; panel.hidden = true; info.setAttribute('aria-expanded', 'false'); info.focus({preventScroll:true}); }
+  bindTap(info, function(){ panel.hidden ? openP() : closeP(); });
+  bindTap(closeBtn, closeP);
+  panel.addEventListener('pointerdown', function(e){ if(e.target === panel) closeP(); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeP();
+    if(e.key === 'Tab' && !panel.hidden){ e.preventDefault(); closeBtn.focus(); }
+  });
+
+  /* ===== vyplnění rámu: srovnání se zmenší, když se nevejde ===== */
+  function over(){
+    var rb = root.getBoundingClientRect().bottom - 8, mx = 0;
+    [].slice.call(mods.querySelectorAll('.cm__nm, .cm')).forEach(function(m){ mx = Math.max(mx, m.getBoundingClientRect().bottom); });
+    return mx > rb;
+  }
+  function fit(){
+    var sc = 1; root.style.setProperty('--sc', 1);
+    for(var k = 0; k < 16 && over() && sc > .7; k++){ sc *= .95; root.style.setProperty('--sc', sc.toFixed(3)); }
+  }
+  var rt;
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  if(window.ResizeObserver) new ResizeObserver(function(){ clearTimeout(rt); rt = setTimeout(fit, 90); }).observe(root);
+  fit();
+
+  /* ===== nástup ===== */
+  function playStage(anim){
+    if(stage.classList.contains('is-on')) return;
+    stage.classList.add('is-on'); row.classList.add('is-on');
+    if(!anim) return;
+    [].slice.call(root.querySelectorAll('[data-ph]')).forEach(function(svg){
+      [].slice.call(svg.querySelectorAll('.kt-pt')).forEach(function(p, i){ p.style.transitionDelay = (300 + i*160)+'ms'; });
+      [].slice.call(svg.querySelectorAll('.kt-ln')).forEach(function(l, i){ l.style.transitionDelay = (350 + i*160)+'ms'; });
+      [].slice.call(svg.querySelectorAll('.kt-lb')).forEach(function(l, i){ l.style.transitionDelay = (650 + i*110)+'ms'; });
+    });
+    [].slice.call(row.querySelectorAll('.kt-lb')).forEach(function(l, i){ l.style.transitionDelay = (700 + i*140)+'ms'; });
+    count(stage, 650);
+    count(row, 750);
+  }
+  function playMod(m, anim){
+    if(m.classList.contains('is-on')) return;
+    m.classList.add('is-on');
+    if(!anim) return;
+    // podstavce rostou od 200 ms, tuny naskočí a napočítají se, až se podstavec zastaví
+    var T0 = 200, ends = [T0 + D*K/M*1000, T0 + D*1000];
+    [].slice.call(m.querySelectorAll('.pd, .tk')).forEach(function(g){ g.style.transitionDelay = T0+'ms'; });
+    [].slice.call(m.querySelectorAll('.tn')).forEach(function(t, i){ t.style.transitionDelay = (ends[i] - 250)+'ms'; });
+    count(m, function(i){ return ends[i] - 250; }, 700);
+  }
+  if(!ANIM){ playStage(false); modEls.forEach(function(m){ playMod(m, false); }); }
+  else {
+    var alive = false;
+    var io = new IntersectionObserver(function(en){
+      alive = true;
+      en.forEach(function(x){
+        if(!x.isIntersecting) return;
+        io.unobserve(x.target);
+        if(x.target === stage) playStage(true); else playMod(x.target, true);
+      });
+    }, {threshold:.4});
+    io.observe(stage); modEls.forEach(function(m){ io.observe(m); });
+    setTimeout(function(){ if(!alive){ playStage(false); modEls.forEach(function(m){ playMod(m, false); }); } }, 6000);   // záloha pro nefunkční IO
+  }
+  if(/[?&]info\b/.test(Q)) openP();
+})();
+</script>
+</body>
+</html>
