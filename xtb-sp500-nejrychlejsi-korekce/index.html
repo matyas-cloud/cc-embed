@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nejrychlejší propady S&P 500 o 10 %</title>
+<meta name="robots" content="noindex">
+<!-- Prvek: 15 nejrychlejších propadů S&P 500 o 10 %. Cíl: nativní článek CC, komentář T. Vranky (XTB), 11/2026. Formát: vysoký seznam, aspect-ratio 1/1, min-height 600px. Data: Yahoo Finance ^GSPC denní závěry 1927–20. 11. 2026. Log: 2026-11-24 v1 náhled; v2 redesign (akcent XTB #ce1410, bez sloupce hloubky poklesu, zdroj v (i), animace). -->
+<style>
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-ext-600.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-700.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-ext-700.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(../fonts/inter-latin-opsz-normal.woff2) format('woff2-variations');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(../fonts/inter-latin-ext-opsz-normal.woff2) format('woff2-variations');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+</style>
+<style>html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;}</style>
+</head>
+<body>
+<style>
+.cc-embed{
+  /* --- barvy --- */
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  /* --- shape --- */
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  /* --- font --- */
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}      /* prvek do krajů (fotka, mapa) */
+.cc-embed--bare{background:none;border:0;padding:0;} /* bez rámečku */
+/* --- typo --- */
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{margin:12px 0 0;font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);
+  letter-spacing:.02em;text-transform:uppercase;}
+.cc-embed .cc-num{font-family:var(--cc-display);font-weight:700;
+  font-size:clamp(22px,4vw,32px);color:var(--cc-blue);font-variant-numeric:tabular-nums;}
+.cc-embed a{color:var(--cc-blue);}
+/* --- UI --- */
+.cc-embed .cc-btn{
+  display:inline-block;padding:10px 20px;
+  border:1px solid var(--cc-blue);border-radius:var(--cc-radius);
+  background:var(--cc-blue);color:#fff;text-decoration:none;
+  font:700 18px/26px var(--cc-display);cursor:pointer;
+  transition:background .18s,color .18s;}
+.cc-embed .cc-btn:hover{background:var(--cc-blue-dark);border-color:var(--cc-blue-dark);}
+.cc-embed .cc-btn--ghost{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-btn--ghost:hover{background:var(--cc-blue);color:#fff;}
+.cc-embed .cc-btn--sm{padding:7px 14px;font-size:15px;line-height:22px;}
+.cc-embed .cc-btn[aria-pressed="true"]{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-card{background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);padding:14px 16px;}
+.cc-embed .cc-badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  background:var(--cc-blue);color:#fff;font:700 12px/18px var(--cc-ui);}
+.cc-embed .cc-badge--red{background:var(--cc-red);}
+.cc-embed .cc-badge--soft{background:#eaf3fd;color:var(--cc-blue-dark);}
+.cc-embed input,.cc-embed select,.cc-embed textarea{
+  font:400 16px/24px var(--cc-ui);color:var(--cc-ink);
+  padding:9px 12px;background:#fff;border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);}
+.cc-embed input[type=range]{padding:0;border:0;background:none;accent-color:var(--cc-blue);width:100%;}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed table{width:100%;border-collapse:collapse;font:400 15px/1.4 var(--cc-ui);}
+.cc-embed th{text-align:left;font-weight:700;color:var(--cc-muted);
+  text-transform:uppercase;font-size:12px;letter-spacing:.05em;padding:8px 10px;}
+.cc-embed td{padding:10px;border-top:1px solid var(--cc-line);}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-grid{display:grid;gap:var(--cc-gap);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.cc-embed .cc-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--cc-gap);}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+<div class="cc-embed cc-xtb-sp500-nejrychlejsi-korekce" data-cc-xtb-sp500-nejrychlejsi-korekce>
+  <p class="cc-sr" data-sr></p>
+  <div class="cc-xtb-sp500-nejrychlejsi-korekce__head">
+    <h3 class="cc-title cc-xtb-sp500-nejrychlejsi-korekce__title">Nejrychlejší propady S&amp;P 500 o 10 %. <em>Letošní je jedenáctý</em></h3>
+    <button type="button" class="cc-xtb-sp500-nejrychlejsi-korekce__info" data-open aria-expanded="false" aria-label="Zdroje a metodika">i</button>
+  </div>
+  <div class="cc-xtb-sp500-nejrychlejsi-korekce__unit" aria-hidden="true">obchodních dní od rekordu do poklesu o 10 %</div>
+  <ol class="cc-xtb-sp500-nejrychlejsi-korekce__list is-pre" data-list aria-hidden="true"></ol>
+  <div class="cc-xtb-sp500-nejrychlejsi-korekce__overlay" data-overlay hidden>
+    <div class="cc-xtb-sp500-nejrychlejsi-korekce__panel" role="dialog" aria-modal="true" aria-labelledby="dlg-K">
+      <button type="button" class="cc-xtb-sp500-nejrychlejsi-korekce__close" data-close aria-label="Zavřít">×</button>
+      <h4 class="cc-xtb-sp500-nejrychlejsi-korekce__ptitle" id="dlg-K">Zdroje a metodika</h4>
+      <div class="cc-xtb-sp500-nejrychlejsi-korekce__pbody"><p>Kolik obchodních dní trvalo, než index S&amp;P 500 klesl z historického maxima o deset procent. Od roku 1928 se to stalo 27krát včetně letošního roku, v grafu je patnáct nejrychlejších. Letošní pokles začal na rekordu 6. října 2026 a deseti procent dosáhl 20. listopadu.</p><p>Data: Yahoo Finance, denní závěrečné hodnoty indexu. Výpočet: CzechCrunch.</p></div>
+    </div>
+  </div>
+</div>
+<style>
+.cc-embed.cc-xtb-sp500-nejrychlejsi-korekce{--bg:#fff;--line:#e0e0e0;--ink:#111417;--ink2:#6b7079;--mute:#a3a8b0;--grid:#eef0f2;--xtb:#ce1410;--sc:1;
+  box-sizing:border-box;position:relative;display:flex;flex-direction:column;height:100vh;margin:0;overflow:hidden;
+  background:var(--bg);border:1px solid var(--line);border-radius:var(--cc-radius);color:var(--ink);
+  padding:clamp(18px,3.4vw,28px) clamp(18px,3.6vw,30px) clamp(14px,2.6vw,22px);}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__head{flex:0 0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:calc(16px*var(--sc));}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__title{margin:0;color:var(--ink);letter-spacing:-.015em;line-height:1.18;font-weight:700;
+  font-size:max(17px,calc(clamp(18px,3.1vw,23px)*var(--sc)));text-wrap:balance;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__title em{font-style:normal;color:var(--xtb);}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__info{flex:0 0 auto;width:26px;height:26px;margin-top:2px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink2);
+  font:600 13px/1 var(--cc-display);cursor:pointer;touch-action:manipulation;transition:border-color .2s,color .2s;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__info:hover{border-color:var(--ink);color:var(--ink);}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__overlay{position:absolute;inset:0;z-index:5;background:rgba(17,20,23,.28);display:flex;padding:10px;border-radius:inherit;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__overlay[hidden]{display:none;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__panel{position:relative;flex:1;display:flex;flex-direction:column;min-height:0;background:#fff;border-radius:var(--cc-radius-sm);padding:20px 20px 14px;box-shadow:0 10px 34px rgba(0,0,0,.16);}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__close{position:absolute;top:10px;right:10px;width:32px;height:32px;border:0;border-radius:50%;background:#f2f3f5;font:400 20px/1 var(--cc-ui);cursor:pointer;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__ptitle{margin:0 40px 10px 0;font-size:16px;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__pbody{flex:1 1 auto;min-height:0;overflow-y:auto;font:400 13.5px/1.6 var(--cc-ui);color:var(--ink2);}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__pbody p{margin:0 0 .8em;}
+.cc-xtb-sp500-nejrychlejsi-korekce .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;}
+
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__unit{flex:0 0 auto;font:500 12.5px/1.3 var(--cc-ui);color:var(--ink2);margin-bottom:calc(10px*var(--sc));}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__list{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:space-between;margin:0;padding:0;list-style:none;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__row{display:grid;grid-template-columns:minmax(0,7.8em) 1fr;gap:12px;align-items:center;
+  font:500 max(13px,calc(13.5px*var(--sc)))/1.15 var(--cc-ui);color:var(--ink2);transition:opacity .25s;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__lab{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__track{display:flex;align-items:center;gap:9px;min-width:0;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__bar{flex:0 0 auto;display:block;height:calc(10px*var(--sc));min-width:4px;max-width:calc(100% - 3em);background:#dfe2e6;border-radius:99px;
+  transform-origin:left center;transition:transform .9s cubic-bezier(.2,.75,.2,1),background-color .25s;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__n{font-weight:600;color:var(--ink);transition:opacity .4s;}
+.cc-xtb-sp500-nejrychlejsi-korekce .is-now{color:var(--ink);font-weight:700;}
+.cc-xtb-sp500-nejrychlejsi-korekce .is-now .cc-xtb-sp500-nejrychlejsi-korekce__bar{background:var(--xtb);}
+.cc-xtb-sp500-nejrychlejsi-korekce .is-now .cc-xtb-sp500-nejrychlejsi-korekce__n{color:var(--xtb);font-weight:700;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__list.is-pre .cc-xtb-sp500-nejrychlejsi-korekce__bar{transform:scaleX(0);}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__list.is-pre .cc-xtb-sp500-nejrychlejsi-korekce__n{opacity:0;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__list:hover .cc-xtb-sp500-nejrychlejsi-korekce__row{opacity:.42;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__list:hover .cc-xtb-sp500-nejrychlejsi-korekce__row:hover,.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__list .cc-xtb-sp500-nejrychlejsi-korekce__row.is-now{opacity:1;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__row:hover .cc-xtb-sp500-nejrychlejsi-korekce__bar{background:#9aa0a8;}
+.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__row.is-now:hover .cc-xtb-sp500-nejrychlejsi-korekce__bar{background:var(--xtb);}
+@media (prefers-reduced-motion:reduce){.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__bar,.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__n,.cc-xtb-sp500-nejrychlejsi-korekce .cc-xtb-sp500-nejrychlejsi-korekce__row{transition:none;}}
+</style>
+<script>
+(function(){
+  var root=document.querySelector('[data-cc-xtb-sp500-nejrychlejsi-korekce]');
+  if(!root||root.dataset.ccInit)return;root.dataset.ccInit='1';
+  var $=function(s){return root.querySelector(s);};
+
+  var ov=$('[data-overlay]'),ob=$('[data-open]');
+  ob.addEventListener('click',function(){ov.hidden=false;ob.setAttribute('aria-expanded','true');$('[data-close]').focus();});
+  function closeOv(){if(ov.hidden)return;ov.hidden=true;ob.setAttribute('aria-expanded','false');ob.focus();}
+  $('[data-close]').addEventListener('click',closeOv);
+  ov.addEventListener('click',function(e){if(e.target===ov)closeOv();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeOv();});
+  function pct(v,sign){var s=Math.abs(v).toFixed(1).replace('.',',');return (v<0?'−':(sign&&v>0?'+':''))+s+' %';}
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function onVisible(fn){ if(reduce||!('IntersectionObserver' in window)){fn(true);return;}
+    var done=false,io=new IntersectionObserver(function(es){if(es[0].isIntersecting&&!done){done=true;io.disconnect();fn(false);}},{threshold:.3});
+    io.observe(root); setTimeout(function(){if(!done){done=true;io.disconnect();fn(true);}},6000); }
+
+  var D=[["únor 2020", 6, 0], ["leden 2018", 9, 0], ["září 1955", 12, 0], ["září 1929", 14, 0], ["říjen 1997", 14, 0], ["březen 2000", 15, 0], ["únor 2025", 16, 0], ["červenec 1998", 20, 0], ["květen 1928", 20, 0], ["červenec 1990", 24, 0], ["říjen 2026", 33, 1], ["říjen 2007", 33, 0], ["leden 2022", 34, 0], ["srpen 1987", 36, 0], ["září 2018", 45, 0]];
+  var max=Math.max.apply(null,D.map(function(d){return d[1];}));
+  function dni(n){return n===1?'den':(n>=2&&n<=4?'dny':'dní');}
+  var ul=$('[data-list]');
+  ul.innerHTML=D.map(function(d,i){return '<li class="cc-xtb-sp500-nejrychlejsi-korekce__row'+(d[2]?' is-now':'')+'"><span class="cc-xtb-sp500-nejrychlejsi-korekce__lab">'+d[0]+'</span><span class="cc-xtb-sp500-nejrychlejsi-korekce__track"><span class="cc-xtb-sp500-nejrychlejsi-korekce__bar" style="width:'+(d[1]/max*100).toFixed(1)+'%;transition-delay:'+(i*45)+'ms"></span><span class="cc-xtb-sp500-nejrychlejsi-korekce__n num" style="transition-delay:'+(250+i*45)+'ms">'+d[1]+'</span></span></li>';}).join('');
+  $('[data-sr]').textContent='Patnáct nejrychlejších poklesů indexu S&P 500 o deset procent od rekordu od roku 1928, podle počtu obchodních dní. Letošní je jedenáctý nejrychlejší. '+D.map(function(d,i){return (i+1)+'. '+d[0]+': '+d[1]+' '+dni(d[1]);}).join('; ')+'.';
+  function fit(){var sc=1;root.style.setProperty('--sc',1);for(var k=0;k<14&&ul.scrollHeight>ul.clientHeight+1;k++){sc*=.93;root.style.setProperty('--sc',sc.toFixed(3));}}
+  window.addEventListener('resize',fit);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);fit();
+  onVisible(function(){ul.classList.remove('is-pre');});
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S&P 500 spadne skoro každý rok</title>
+<meta name="robots" content="noindex">
+<!-- Prvek: S&P 500 spadne skoro každý rok (propad během roku vs. výsledek roku). Cíl: nativní článek CC, komentář T. Vranky (XTB), 11/2026. Formát: široký graf, aspect-ratio 16/10, min-height 520px. Data: Damodaran histretSP 1928–2025 (vč. dividend), Yahoo Finance ^GSPC denní závěry (propady, 2026 YTD do 20. 11.). Log: 2026-11-24 v1 náhled; v2 redesign (akcent XTB #ce1410, méně informací, zdroj v (i), animace); v3 bez spojnice: šedý sloupec výsledek, červená tečka propad. -->
+<style>
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/poppins-latin-ext-600.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-700.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC;}
+  @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/poppins-latin-ext-700.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF;}
+  @font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(../fonts/inter-latin-opsz-normal.woff2) format('woff2-variations');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(../fonts/inter-latin-ext-opsz-normal.woff2) format('woff2-variations');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+</style>
+<style>html,body{margin:0;padding:0;background:transparent;height:100%;overflow:hidden;}</style>
+</head>
+<body>
+<style>
+.cc-embed{
+  /* --- barvy --- */
+  --cc-blue:#087eeb;      --cc-blue-dark:#0668c2;
+  --cc-red:#d40b3e;
+  --cc-ink:#222;          --cc-ink-soft:#3c3c3c;
+  --cc-muted:#84929b;
+  --cc-line:#ececec;
+  --cc-surface:#f8f9fa;   --cc-white:#fff;
+  --cc-ok:#29cc6a;        --cc-warn:#f58a18;
+  /* --- shape --- */
+  --cc-radius:15px;       --cc-radius-sm:10px;
+  --cc-pad:clamp(16px,3vw,26px);
+  --cc-gap:12px;
+  /* --- font --- */
+  --cc-serif:Georgia,Times,"Times New Roman",serif;
+  --cc-display:Poppins,-apple-system,"Segoe UI",sans-serif;
+  --cc-ui:Inter,-apple-system,"Segoe UI",sans-serif;
+  display:block;
+  margin:2.4rem 0;
+  padding:var(--cc-pad);
+  background:var(--cc-surface);
+  border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius);
+  color:var(--cc-ink);
+  font:18px/1.66667 var(--cc-serif);
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-embed *{box-sizing:border-box;}
+.cc-embed--flush{padding:0;overflow:hidden;}      /* prvek do krajů (fotka, mapa) */
+.cc-embed--bare{background:none;border:0;padding:0;} /* bez rámečku */
+/* --- typo --- */
+.cc-embed .cc-kicker{margin:0 0 6px;font:700 12px/1.25 var(--cc-ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cc-red);}
+.cc-embed h2,.cc-embed h3,.cc-embed h4,.cc-embed .cc-title{
+  margin:0 0 8px;font-family:var(--cc-display);font-weight:700;line-height:1.25;color:#000;}
+.cc-embed h3,.cc-embed .cc-title{font-size:clamp(20px,3.4vw,26px);}
+.cc-embed h4{font-size:19px;}
+.cc-embed p{margin:0 0 10px;}
+.cc-embed .cc-lede{font-size:clamp(16px,2.2vw,18px);line-height:1.6;color:var(--cc-ink-soft);}
+.cc-embed .cc-note{margin:12px 0 0;font:400 13px/1.5 var(--cc-ui);color:var(--cc-muted);}
+.cc-embed .cc-label{font:500 12px/1.2 var(--cc-ui);color:var(--cc-muted);
+  letter-spacing:.02em;text-transform:uppercase;}
+.cc-embed .cc-num{font-family:var(--cc-display);font-weight:700;
+  font-size:clamp(22px,4vw,32px);color:var(--cc-blue);font-variant-numeric:tabular-nums;}
+.cc-embed a{color:var(--cc-blue);}
+/* --- UI --- */
+.cc-embed .cc-btn{
+  display:inline-block;padding:10px 20px;
+  border:1px solid var(--cc-blue);border-radius:var(--cc-radius);
+  background:var(--cc-blue);color:#fff;text-decoration:none;
+  font:700 18px/26px var(--cc-display);cursor:pointer;
+  transition:background .18s,color .18s;}
+.cc-embed .cc-btn:hover{background:var(--cc-blue-dark);border-color:var(--cc-blue-dark);}
+.cc-embed .cc-btn--ghost{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-btn--ghost:hover{background:var(--cc-blue);color:#fff;}
+.cc-embed .cc-btn--sm{padding:7px 14px;font-size:15px;line-height:22px;}
+.cc-embed .cc-btn[aria-pressed="true"]{background:#fff;color:var(--cc-blue);}
+.cc-embed .cc-card{background:var(--cc-white);border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);padding:14px 16px;}
+.cc-embed .cc-badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  background:var(--cc-blue);color:#fff;font:700 12px/18px var(--cc-ui);}
+.cc-embed .cc-badge--red{background:var(--cc-red);}
+.cc-embed .cc-badge--soft{background:#eaf3fd;color:var(--cc-blue-dark);}
+.cc-embed input,.cc-embed select,.cc-embed textarea{
+  font:400 16px/24px var(--cc-ui);color:var(--cc-ink);
+  padding:9px 12px;background:#fff;border:1px solid var(--cc-line);
+  border-radius:var(--cc-radius-sm);}
+.cc-embed input[type=range]{padding:0;border:0;background:none;accent-color:var(--cc-blue);width:100%;}
+.cc-embed :focus-visible{outline:3px solid var(--cc-blue);outline-offset:2px;}
+.cc-embed table{width:100%;border-collapse:collapse;font:400 15px/1.4 var(--cc-ui);}
+.cc-embed th{text-align:left;font-weight:700;color:var(--cc-muted);
+  text-transform:uppercase;font-size:12px;letter-spacing:.05em;padding:8px 10px;}
+.cc-embed td{padding:10px;border-top:1px solid var(--cc-line);}
+.cc-embed img,.cc-embed svg,.cc-embed canvas{max-width:100%;}
+.cc-embed .cc-grid{display:grid;gap:var(--cc-gap);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.cc-embed .cc-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--cc-gap);}
+.cc-embed .cc-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion:reduce){.cc-embed *{transition:none!important;animation:none!important;}}
+</style>
+<div class="cc-embed cc-xtb-sp500-propady-behem-roku" data-cc-xtb-sp500-propady-behem-roku>
+  <p class="cc-sr" data-sr></p>
+  <div class="cc-xtb-sp500-propady-behem-roku__head">
+    <h3 class="cc-title cc-xtb-sp500-propady-behem-roku__title">S&amp;P 500 spadne skoro každý rok. <em>V průměru o 16 %</em></h3>
+    <button type="button" class="cc-xtb-sp500-propady-behem-roku__info" data-open aria-expanded="false" aria-label="Zdroje a metodika">i</button>
+  </div>
+  <div class="cc-xtb-sp500-propady-behem-roku__key" aria-hidden="true"><span><i class="k dot"></i>největší propad během roku</span><span><i class="k bar"></i>výsledek za celý rok</span></div>
+  <div class="cc-xtb-sp500-propady-behem-roku__fig" data-fig aria-hidden="true"><svg data-svg></svg><div class="cc-xtb-sp500-propady-behem-roku__tip" data-tip></div></div>
+  <div class="cc-xtb-sp500-propady-behem-roku__overlay" data-overlay hidden>
+    <div class="cc-xtb-sp500-propady-behem-roku__panel" role="dialog" aria-modal="true" aria-labelledby="dlg-K">
+      <button type="button" class="cc-xtb-sp500-propady-behem-roku__close" data-close aria-label="Zavřít">×</button>
+      <h4 class="cc-xtb-sp500-propady-behem-roku__ptitle" id="dlg-K">Zdroje a metodika</h4>
+      <div class="cc-xtb-sp500-propady-behem-roku__pbody"><p>Červená tečka ukazuje největší propad indexu S&amp;P 500 během kalendářního roku od dosavadního vrcholu, šedý sloupec výsledek za celý rok. Propad se měří od vrcholu, výsledek od začátku roku. Průměrný propad během roku byl v letech 1928–2025 16,3 procenta, 72 z 98 let přesto skončilo v plusu.</p><p>Výsledek za rok je výnos včetně reinvestovaných dividend podle databáze Aswatha Damodarana (NYU Stern). Rok 2026 ukazuje změnu ceny od začátku roku do 20. listopadu 2026, bez dividend. Propady jsou spočítané z denních závěrečných hodnot indexu podle Yahoo Finance. Na mobilu graf začíná rokem 1980.</p><p>Výpočet: CzechCrunch.</p></div>
+    </div>
+  </div>
+</div>
+<style>
+.cc-embed.cc-xtb-sp500-propady-behem-roku{--bg:#fff;--line:#e0e0e0;--ink:#111417;--ink2:#6b7079;--mute:#a3a8b0;--grid:#eef0f2;--xtb:#ce1410;--sc:1;
+  box-sizing:border-box;position:relative;display:flex;flex-direction:column;height:100vh;margin:0;overflow:hidden;
+  background:var(--bg);border:1px solid var(--line);border-radius:var(--cc-radius);color:var(--ink);
+  padding:clamp(18px,3.4vw,28px) clamp(18px,3.6vw,30px) clamp(14px,2.6vw,22px);}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__head{flex:0 0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:calc(16px*var(--sc));}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__title{margin:0;color:var(--ink);letter-spacing:-.015em;line-height:1.18;font-weight:700;
+  font-size:max(17px,calc(clamp(18px,3.1vw,23px)*var(--sc)));text-wrap:balance;}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__title em{font-style:normal;color:var(--xtb);}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__info{flex:0 0 auto;width:26px;height:26px;margin-top:2px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink2);
+  font:600 13px/1 var(--cc-display);cursor:pointer;touch-action:manipulation;transition:border-color .2s,color .2s;}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__info:hover{border-color:var(--ink);color:var(--ink);}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__overlay{position:absolute;inset:0;z-index:5;background:rgba(17,20,23,.28);display:flex;padding:10px;border-radius:inherit;}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__overlay[hidden]{display:none;}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__panel{position:relative;flex:1;display:flex;flex-direction:column;min-height:0;background:#fff;border-radius:var(--cc-radius-sm);padding:20px 20px 14px;box-shadow:0 10px 34px rgba(0,0,0,.16);}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__close{position:absolute;top:10px;right:10px;width:32px;height:32px;border:0;border-radius:50%;background:#f2f3f5;font:400 20px/1 var(--cc-ui);cursor:pointer;}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__ptitle{margin:0 40px 10px 0;font-size:16px;}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__pbody{flex:1 1 auto;min-height:0;overflow-y:auto;font:400 13.5px/1.6 var(--cc-ui);color:var(--ink2);}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__pbody p{margin:0 0 .8em;}
+.cc-xtb-sp500-propady-behem-roku .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;}
+
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__key{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:4px 18px;font:500 12.5px/1.3 var(--cc-ui);color:var(--ink2);margin-bottom:calc(6px*var(--sc));}
+.cc-xtb-sp500-propady-behem-roku .k{display:inline-block;vertical-align:1px;margin-right:7px;}
+.cc-xtb-sp500-propady-behem-roku .k.dot{width:9px;height:9px;border-radius:50%;background:var(--xtb);}
+.cc-xtb-sp500-propady-behem-roku .k.bar{width:6px;height:12px;border-radius:2px;background:#a9b0b8;vertical-align:-1px;}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__fig{flex:1 1 auto;min-height:0;position:relative;}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__fig svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;touch-action:manipulation;cursor:crosshair;}
+.cc-xtb-sp500-propady-behem-roku svg text{font:500 10.5px var(--cc-ui);fill:var(--mute);}
+.cc-xtb-sp500-propady-behem-roku svg .avgt{font-weight:600;fill:var(--xtb);}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__tip{position:absolute;top:0;left:0;pointer-events:none;background:var(--ink);color:#fff;border-radius:8px;padding:8px 12px;min-width:132px;
+  font:500 12px/1.4 var(--cc-ui);white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.16);opacity:0;transition:opacity .18s,transform .18s;transform:translateY(4px);}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__tip.on{opacity:1;transform:none;}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__tip b{font-weight:700;font-size:13px;display:block;margin-bottom:1px;}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__tip .r{color:#ff8a80;}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__tip .l{display:flex;justify-content:space-between;gap:14px;}
+.cc-xtb-sp500-propady-behem-roku .cc-xtb-sp500-propady-behem-roku__tip .l .num{font-weight:700;}
+</style>
+<script>
+(function(){
+  var root=document.querySelector('[data-cc-xtb-sp500-propady-behem-roku]');
+  if(!root||root.dataset.ccInit)return;root.dataset.ccInit='1';
+  var $=function(s){return root.querySelector(s);};
+
+  var ov=$('[data-overlay]'),ob=$('[data-open]');
+  ob.addEventListener('click',function(){ov.hidden=false;ob.setAttribute('aria-expanded','true');$('[data-close]').focus();});
+  function closeOv(){if(ov.hidden)return;ov.hidden=true;ob.setAttribute('aria-expanded','false');ob.focus();}
+  $('[data-close]').addEventListener('click',closeOv);
+  ov.addEventListener('click',function(e){if(e.target===ov)closeOv();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeOv();});
+  function pct(v,sign){var s=Math.abs(v).toFixed(1).replace('.',',');return (v<0?'−':(sign&&v>0?'+':''))+s+' %';}
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function onVisible(fn){ if(reduce||!('IntersectionObserver' in window)){fn(true);return;}
+    var done=false,io=new IntersectionObserver(function(es){if(es[0].isIntersecting&&!done){done=true;io.disconnect();fn(false);}},{threshold:.3});
+    io.observe(root); setTimeout(function(){if(!done){done=true;io.disconnect();fn(true);}},6000); }
+
+  var D=[[1928, 43.8, -10.3, 0], [1929, -8.3, -44.6, 0], [1930, -25.1, -44.3, 0], [1931, -43.8, -57.5, 0], [1932, -8.6, -51.0, 0], [1933, 50.0, -29.4, 0], [1934, -1.2, -29.3, 0], [1935, 46.7, -15.9, 0], [1936, 31.9, -12.8, 0], [1937, -35.3, -45.5, 0], [1938, 29.3, -28.9, 0], [1939, -1.1, -21.2, 0], [1940, -10.7, -29.6, 0], [1941, -12.8, -22.9, 0], [1942, 19.2, -17.8, 0], [1943, 25.1, -13.1, 0], [1944, 19.0, -6.9, 0], [1945, 35.8, -6.9, 0], [1946, -8.4, -26.6, 0], [1947, 5.2, -14.7, 0], [1948, 5.7, -13.5, 0], [1949, 18.3, -13.2, 0], [1950, 30.8, -14.0, 0], [1951, 23.7, -8.1, 0], [1952, 18.2, -6.8, 0], [1953, -1.2, -14.8, 0], [1954, 52.6, -4.4, 0], [1955, 32.6, -10.6, 0], [1956, 7.4, -10.6, 0], [1957, -10.5, -20.7, 0], [1958, 43.7, -4.4, 0], [1959, 12.1, -9.2, 0], [1960, 0.3, -13.6, 0], [1961, 26.6, -6.2, 0], [1962, -8.8, -26.9, 0], [1963, 22.6, -6.5, 0], [1964, 16.4, -3.5, 0], [1965, 12.4, -9.6, 0], [1966, -10.0, -22.2, 0], [1967, 23.8, -6.6, 0], [1968, 10.8, -9.3, 0], [1969, -8.2, -16.0, 0], [1970, 3.6, -25.9, 0], [1971, 14.2, -13.9, 0], [1972, 18.8, -5.1, 0], [1973, -14.3, -23.4, 0], [1974, -25.9, -37.6, 0], [1975, 37.0, -14.1, 0], [1976, 23.8, -8.4, 0], [1977, -7.0, -15.6, 0], [1978, 6.5, -13.6, 0], [1979, 18.5, -10.2, 0], [1980, 31.7, -17.1, 0], [1981, -4.7, -18.4, 0], [1982, 20.4, -16.6, 0], [1983, 22.3, -6.9, 0], [1984, 6.1, -12.7, 0], [1985, 31.2, -7.7, 0], [1986, 18.5, -9.4, 0], [1987, 5.8, -33.5, 0], [1988, 16.5, -7.6, 0], [1989, 31.5, -7.6, 0], [1990, -3.1, -19.9, 0], [1991, 30.2, -5.7, 0], [1992, 7.5, -6.2, 0], [1993, 10.0, -5.0, 0], [1994, 1.3, -8.9, 0], [1995, 37.2, -2.5, 0], [1996, 22.7, -7.6, 0], [1997, 33.1, -10.8, 0], [1998, 28.3, -19.3, 0], [1999, 20.9, -12.1, 0], [2000, -9.0, -17.2, 0], [2001, -11.8, -29.7, 0], [2002, -22.0, -33.8, 0], [2003, 28.4, -14.1, 0], [2004, 10.7, -8.2, 0], [2005, 4.8, -7.2, 0], [2006, 15.6, -7.7, 0], [2007, 5.5, -10.1, 0], [2008, -36.6, -48.8, 0], [2009, 25.9, -27.6, 0], [2010, 14.8, -16.0, 0], [2011, 2.1, -19.4, 0], [2012, 15.9, -9.9, 0], [2013, 32.1, -5.8, 0], [2014, 13.5, -7.4, 0], [2015, 1.4, -12.4, 0], [2016, 11.8, -10.5, 0], [2017, 21.6, -2.8, 0], [2018, -4.2, -19.8, 0], [2019, 31.2, -6.8, 0], [2020, 18.0, -33.9, 0], [2021, 28.5, -5.2, 0], [2022, -18.0, -25.4, 0], [2023, 26.1, -10.3, 0], [2024, 24.9, -8.5, 0], [2025, 17.7, -18.9, 0], [2026, 0.9, -11.6, 1]];
+  var AVG=-16.3,svg=$('[data-svg]'),fig=$('[data-fig]'),tip=$('[data-tip]'),hover=null,prog=0,geo=null;
+  $('[data-sr]').textContent='Index S&P 500 během roku spadne skoro vždy, v průměru o 16,3 procenta, a přesto většinu let končí v plusu. Graf ukazuje pro každý rok od 1928 do 20. listopadu 2026 největší propad během roku a výsledek za celý rok včetně dividend. '+D.map(function(d){return d[0]+': propad '+pct(d[2])+', výsledek '+pct(d[1],1);}).join('; ')+'.';
+  function ease(t){return 1-Math.pow(1-t,3);}
+  function draw(){
+    var W=fig.clientWidth,H=fig.clientHeight;if(!W||!H)return;
+    var from=W<480?1980:1928,data=D.filter(function(d){return d[0]>=from;}),n=data.length;
+    var L=30,R=58,T=4,B=16,pw=W-L-R,ph=H-T-B,lo=-60,hi=55,y=function(v){return T+(hi-v)/(hi-lo)*ph;},bw=pw/n;
+    geo={L:L,bw:bw,data:data,y:y,T:T,ph:ph};
+    var s='',r=Math.max(3,Math.min(4.6,bw*.62));
+    [-40,-20,0,20,40].forEach(function(t){s+='<line x1="'+L+'" x2="'+(W-R+8)+'" y1="'+y(t)+'" y2="'+y(t)+'" stroke="'+(t===0?'#c9cdd2':'#eef0f2')+'"/><text x="'+(L-7)+'" y="'+(y(t)+3.5)+'" text-anchor="end">'+(t>0?'+':t<0?'−':'')+Math.abs(t)+' %</text>';});
+    var ya=y(AVG);s+='<line x1="'+L+'" x2="'+(W-R+8)+'" y1="'+ya+'" y2="'+ya+'" stroke="#ce1410" stroke-width="1" stroke-dasharray="3 3" opacity="'+Math.min(1,prog*1.4)+'"/>';
+    s+='<text class="avgt" x="'+(W-R+12)+'" y="'+(ya-2)+'" opacity="'+Math.min(1,prog*1.4)+'">průměr</text><text class="avgt" x="'+(W-R+12)+'" y="'+(ya+11)+'" opacity="'+Math.min(1,prog*1.4)+'">−16,3 %</text>';
+    var step=n>60?20:10;
+    data.forEach(function(d,i){
+      var x=L+i*bw+bw/2,p=ease(Math.max(0,Math.min(1,prog*1.6-(i/n)*.6))),on=hover===d[0],dim=hover!==null&&!on;
+      var y0=y(0),yd=y0+(y(d[2])-y0)*p,yr=y0+(y(d[1])-y0)*p;
+      if(on)s+='<rect x="'+(x-bw/2)+'" y="'+T+'" width="'+bw+'" height="'+ph+'" fill="#111417" opacity=".045" rx="3"/>';
+      var bwid=Math.max(2,bw*.62),top=Math.min(y0,yr),hh=Math.max(1,Math.abs(yr-y0)),rx=Math.min(2,bwid/2);
+      s+='<rect x="'+(x-bwid/2)+'" y="'+top+'" width="'+bwid+'" height="'+hh+'" rx="'+rx+'" fill="'+(on?'#111417':'#a9b0b8')+'" opacity="'+(dim?.35:d[3]?.5:1)+'"/>';
+      s+='<circle cx="'+x+'" cy="'+yd+'" r="'+(on?r+1.5:r)+'" fill="#ce1410" stroke="#fff" stroke-width="1.2" opacity="'+(dim?.3:1)+'"/>';
+      if(d[0]%step===0)s+='<text x="'+x+'" y="'+(H-2)+'" text-anchor="middle">'+d[0]+'</text>';
+    });
+    s+='<rect x="'+L+'" y="'+T+'" width="'+pw+'" height="'+ph+'" fill="transparent" data-hit/>';
+    svg.innerHTML=s;
+  }
+  function setHover(yr){hover=yr;draw();var d=null;if(yr!==null)D.forEach(function(x){if(x[0]===yr)d=x;});
+    if(!d||!geo){tip.classList.remove('on');return;}
+    var i=geo.data.indexOf(d),x=geo.L+i*geo.bw+geo.bw/2;
+    tip.innerHTML='<b class="num">'+d[0]+(d[3]?' do 20. 11.':'')+'</b><span class="l">Propad <span class="r num">'+pct(d[2])+'</span></span><span class="l">Výsledek <span class="num">'+pct(d[1],1)+'</span></span>';
+    tip.classList.add('on');var tw=tip.offsetWidth,W=fig.clientWidth;
+    tip.style.left=Math.max(0,Math.min(W-tw,x-tw/2))+'px';tip.style.top=Math.max(0,geo.y(Math.max(d[1],0))-tip.offsetHeight-12)+'px';}
+  function pick(e){if(!geo)return null;var b=svg.getBoundingClientRect(),i=Math.floor((e.clientX-b.left-geo.L)/geo.bw);return (i>=0&&i<geo.data.length)?geo.data[i][0]:null;}
+  svg.addEventListener('pointermove',function(e){var yr=pick(e);if(yr!==hover)setHover(yr);});
+  svg.addEventListener('pointerdown',function(e){e.preventDefault();setHover(pick(e));});
+  svg.addEventListener('pointerleave',function(e){if(e.pointerType==='mouse')setHover(null);});
+  root.addEventListener('keydown',function(e){if(e.key!=='ArrowLeft'&&e.key!=='ArrowRight')return;var cur=hover===null?2026:hover+(e.key==='ArrowLeft'?-1:1);
+    if(geo&&cur>=geo.data[0][0]&&cur<=2026){e.preventDefault();setHover(cur);}});
+  root.tabIndex=0;root.setAttribute('aria-label','Graf propadů S&P 500, šipkami vlevo a vpravo procházíte roky');
+  if(window.ResizeObserver)new ResizeObserver(function(){draw();}).observe(fig);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(draw);
+  draw();
+  onVisible(function(instant){ if(instant){prog=1;draw();return;} var t0=null;
+    (function tick(ts){if(t0===null)t0=ts;prog=Math.min(1,(ts-t0)/1400);draw();if(prog<1)requestAnimationFrame(tick);})(performance.now()); });
+  if(!reduce&&'IntersectionObserver' in window){prog=0;draw();}else{prog=1;draw();}
+
+})();
+</script>
+</body>
+</html>
